@@ -10,7 +10,7 @@
     <string name="dummytext">Wow, Cool, How are you! I am very pleased to meet you!</string>
     <string name="dummyname">Jack Lee Corporation of Korea</string>
 
-    <string name="search">Search</string>
+
 
 
     <!--Google Terminology-->
@@ -219,7 +219,7 @@
     <string name="wanttopay_sentence">주기를 원합니다.</string>
     <string name="requesttoget_sentence">수령할 것인지 묻습니다.</string>
 
-
+    search
 
     <string name="getter">받는 사람</string>
     <string name="payer">주는 사람</string>
@@ -227,9 +227,12 @@
     <string name="count_ppl">명</string>
     <string name="empty">없음</string>
 
-    <string name="recent_profiles">최근 대상</string>
+    <string name="recent_profiles">최근</string>
     <string name="show_all">전체보기</string>
     <string name="invite">초대하기</string>
-    <string name="my_contacts">내 연락처</string>
+    <string name="contacts">연락처</string>
+
+
+    <string name="search">검색</string>
 
 </resources>

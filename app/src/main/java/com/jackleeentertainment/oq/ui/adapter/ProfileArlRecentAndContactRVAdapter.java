@@ -27,8 +27,6 @@ import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameEmailChkViewHo
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.jackleeentertainment.oq.App.token;
-
 /**
  * Created by jaehaklee on 2016. 10. 2..
  */
@@ -151,7 +149,7 @@ public class ProfileArlRecentAndContactRVAdapter extends RecyclerView.Adapter<Re
 
         } else if (position == numRecent + 1) {
 
-            ((SectionViewHolder) viewHolder).tvTitle__lo_sectionviewholder.setText(JM.strById(R.string.my_contacts));
+            ((SectionViewHolder) viewHolder).tvTitle__lo_sectionviewholder.setText(JM.strById(R.string.contacts));
             ((SectionViewHolder) viewHolder).tvAsRightButton__lo_sectionviewholder.setText(JM.strById(R.string.invite));
             ((SectionViewHolder) viewHolder).tvAsRightButton__lo_sectionviewholder.setOnClickListener(new View.OnClickListener() {
                 @Override

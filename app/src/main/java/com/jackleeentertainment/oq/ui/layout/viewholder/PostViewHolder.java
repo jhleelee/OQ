@@ -56,7 +56,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         v_scrim_gradient_bottom__ro_media = (View) ro_media.findViewById(R.id.v_scrim_gradient_bottom__ro_media);
         v_scrim_solid__ro_media = (View) ro_media.findViewById(R.id.v_scrim_solid__ro_media);
 
-        lo_feed_alarm = (LinearLayout) mView.findViewById(R.id.lo_feed_alarm);
         tvTitle__lo_feed_alarm = (TextView) lo_feed_alarm.findViewById(R.id.tvTitle__lo_feed_alarm);
         tvSubTitle__lo_feed_alarm = (TextView) lo_feed_alarm.findViewById(R.id.tvSubTitle__lo_feed_alarm);
         ibAlarm__lo_feed_alarm = (ImageButton) lo_feed_alarm.findViewById(R.id.ibAlarm__lo_feed_alarm);

@@ -11,6 +11,8 @@ public class FBaseNode0 {
 
     public final static String MyContacts = "my_contacts";
     public final static String MyRecent = "my_recent";
+    public final static String MyPContacts = "my_p_contacts";
+
 
     public final static String MyOqItemSums = "my_oqisum";
     public final static String MyOqItems = "my_oqi";
