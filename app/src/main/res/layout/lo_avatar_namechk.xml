@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/md_48dip"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="@dimen/md_72dip"
+        android:layout_height="match_parent"
+        android:gravity="left|center_vertical">
+
+        <include
+            android:id="@+id/ro_person_photo_48dip__lo_avatar_namechk"
+            layout="@layout/ro_person_photo_48dip"
+            android:layout_width="@dimen/md_48dip"
+            android:layout_height="@dimen/md_48dip"
+            android:layout_margin="@dimen/md_12dip" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTitle__lo_avatar_namechk"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/md_16dip"
+        android:layout_weight="1"
+        android:gravity="center_vertical|left"
+        android:text="@string/dummyname"
+        android:textColor="@color/white"
+        android:textSize="@dimen/md_13sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <com.jackleeentertainment.jackclock.ui.widget.CheckBoxJack
+            android:id="@+id/checkboxJack__lo_avatar_namechk"
+            android:layout_marginLeft="@dimen/md_16dip"
+            android:layout_marginRight="@dimen/md_16dip"
+            android:layout_width="@dimen/chkboxWH__i_person_namechk"
+            android:layout_height="@dimen/chkboxWH__i_person_namechk" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+

@@ -1,0 +1,391 @@
+<resources>
+
+    <!-- Base application theme. -->
+
+    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <!--GoogleDev - extend NoActionBar because we are using Toolbar-->
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="Button">
+    </style>
+
+    <style name="Button.TwoButtonForMainFrag">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingTop">4dip</item>
+        <item name="android:paddingBottom">4dip</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/slt_twoputtonforfriendship_primary</item>
+
+    </style>
+
+    <style name="Button.TwoButtonForAction">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">96dip</item>
+        <item name="android:layout_marginRight">8dip</item>
+        <item name="android:paddingTop">4dip</item>
+        <item name="android:paddingBottom">4dip</item>
+    </style>
+
+    <style name="Button.TwoButtonForAction.Primary">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/slt_twoputtonforfriendship_primary</item>
+    </style>
+
+    <style name="Button.TwoButtonForAction.Secondary">
+        <item name="android:textColor">@color/text_black_54</item>
+        <item name="android:background">@drawable/slt_twoputtonforfriendship_secondary</item>
+    </style>
+
+    <style name="Button.TwoButtonForAction.WantToGet">
+        <item name="android:textColor">@color/getPrimary</item>
+        <item name="android:background">@drawable/slt_twobuttonforaction_getprimary</item>
+    </style>
+
+
+    <style name="Button.TwoButtonForAction.WantToPay">
+        <item name="android:textColor">@color/payPrimary</item>
+        <item name="android:background">@drawable/slt_twobuttonforaction_payprimary</item>
+    </style>
+
+
+
+
+
+
+
+    <style name="ImageButton">
+    </style>
+
+    <style name="ImageButton.WhiteImageSrcTransparentBg">
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="ImageButton.WhiteImageSrcTransparentBg.40">
+        <item name="android:layout_width">40dip</item>
+        <item name="android:layout_height">40dip</item>
+        <item name="android:padding">4dip</item>
+    </style>
+
+
+
+
+
+
+
+
+
+
+    <style name="ImageView">
+    </style>
+
+    <style name="ImageView.WhiteImageSrcTransparentBg">
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="ImageView.WhiteImageSrcTransparentBg.12">
+        <item name="android:layout_width">12dip</item>
+        <item name="android:layout_height">12dip</item>
+        <item name="android:padding">2dip</item>
+    </style>
+
+
+    <style name="ImageView.WhiteImageSrcTransparentBg.16">
+        <item name="android:layout_width">16dip</item>
+        <item name="android:layout_height">16dip</item>
+        <item name="android:padding">2dip</item>
+    </style>
+
+
+
+
+
+
+
+
+    <style name="TextView">
+    </style>
+
+    <style name="TextView.InCardView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextView.InCardView.Content">
+        <item name="android:textSize">@dimen/md_14sp</item>
+        <item name="android:paddingLeft">@dimen/md_16dip</item>
+        <item name="android:paddingRight">@dimen/md_16dip</item>
+        <item name="android:paddingTop">@dimen/md_16dip</item>
+        <item name="android:paddingBottom">@dimen/md_24dip</item>
+    </style>
+
+    <style name="TextView.WhiteTextJoinedRepeatMute">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+
+    <style name="TextView.WhiteTextJoinedRepeatMute.12">
+        <item name="android:textSize">12dip</item>
+        <item name="android:padding">2dip</item>
+    </style>
+
+    <style name="TextView.WhiteTextJoinedRepeatMute.14">
+        <item name="android:textSize">14dip</item>
+        <item name="android:padding">2dip</item>
+    </style>
+
+
+
+
+    <style name="TextView.WhiteTextTitle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="TextView.WhiteTextTitle.14">
+        <item name="android:textSize">14dip</item>
+        <item name="android:padding">4dip</item>
+    </style>
+
+    <style name="TextView.JoinedNumber">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="TextView.JoinedNumber.12">
+        <item name="android:textSize">12dip</item>
+        <item name="android:padding">2dip</item>
+    </style>
+
+    <style name="TextView.ChatUnreadNum">
+    </style>
+
+
+    <style name="TextView.ChatUnreadNum.12">
+        <item name="android:textSize">12dip</item>
+        <item name="android:padding">2dip</item>
+        <item name="android:background">@drawable/cir_nostr_mdred500</item>
+    </style>
+
+
+
+
+
+
+    <style name="ListView">
+        <item name="android:textFilterEnabled">true</item>
+        <item name="android:background">@color/material_grey_50</item>
+    </style>
+
+    <style name="ListView.NoDivider">
+        <item name="android:dividerHeight">0dip</item>
+
+    </style>
+
+
+
+
+
+
+
+    <style name="lo_sendmessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dip</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+
+    </style>
+
+    <style name="iv_attach">
+        <item name="android:layout_width">36dip</item>
+        <item name="android:layout_height">36dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/ic_add_white_48dp</item>
+        <item name="android:padding">4dip</item>
+
+    </style>
+
+
+    <style name="iv_emoji">
+        <item name="android:layout_width">36dip</item>
+        <item name="android:layout_height">36dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/ic_insert_emoticon_white_48dp</item>
+        <item name="android:padding">4dip</item>
+
+    </style>
+
+
+    <style name="et_sendmessage">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">40dip</item>
+        <item name="android:layout_weight">100</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:background">@color/transparent</item>
+
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">3</item>
+
+        <item name="android:minLines">1</item>
+        <item name="android:paddingBottom">3dip</item>
+        <item name="android:paddingTop">3dip</item>
+        <item name="android:scrollbars">vertical</item>
+
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16dip</item>
+    </style>
+
+    <style name="iv_sendmessage">
+        <item name="android:layout_width">36dip</item>
+        <item name="android:layout_height">36dip</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/ic_send_white_48dp</item>
+        <item name="android:padding">4dip</item>
+
+
+    </style>
+
+
+
+    <style name="lv_chat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <!--<item name="android:background">@color/color_base_a</item>-->
+
+
+        <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">0dip</item>
+        <item name="android:listSelector">@android:color/transparent</item>
+
+        <item name="android:padding">0dip</item>
+        <item name="android:stackFromBottom">true</item>
+        <item name="android:transcriptMode">alwaysScroll</item>
+    </style>
+
+
+    <style name="tvAlarmClockAMPM">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:gravity">top</item>
+        <item name="android:textSize">24dip</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_marginLeft">4dip</item>
+
+    </style>
+
+    <style name="tvAlarmClock">
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">"00:00"</item>
+        <item name="android:textSize">48dip</item>
+
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:typeface">monospace</item>
+
+        <!--<item name="android:layout_centerInParent">true</item>-->
+
+    </style>
+
+
+
+    <!--Jack Follows Material Design Guideline For DialogFragment-->
+
+
+    <style name="loDiaFragWrap">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginLeft">64dip</item>
+        <item name="android:layout_marginRight">64dip</item>
+        <item name="android:layout_marginTop">64dip</item>
+        <item name="android:layout_marginBottom">64dip</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+
+
+
+    <style name="loDiaFragWrapTop">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingBottom">@dimen/material_component_dialogs_padding_around_content_area</item>
+        <item name="android:paddingLeft">@dimen/material_component_dialogs_padding_around_content_area</item>
+        <item name="android:paddingRight">@dimen/material_component_dialogs_padding_around_content_area</item>
+        <item name="android:paddingTop">@dimen/material_component_dialogs_padding_between_title_and_body_text</item>
+    </style>
+
+    <style name="roDiaFragOkCancel">
+        <item name="android:padding">8dip</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">52dip</item>
+    </style>
+
+    <style name="DiafragTextViewAsButton">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="DiafragTextViewAsButton.OkCancel">
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/rec_norad_nostr_white</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:paddingLeft">8dip</item>
+        <item name="android:paddingRight">8dip</item>
+        <item name="android:textColor">@color/green8</item>
+        <item name="android:textSize">16dip</item>
+
+    </style>
+
+    <style name="DiafragTextViewAsButton.OkCancel.Ok">
+        <item name="android:text">@string/google_ok</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+
+    <style name="DiafragTextViewAsButton.OkCancel.Cancel">
+        <item name="android:text">@string/google_cancel</item>
+        <item name="android:layout_marginRight">8dip</item>
+
+    </style>
+
+
+
+</resources>

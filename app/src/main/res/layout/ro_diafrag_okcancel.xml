@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/roDiaFragOkCancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/tvOk__ro_diafrag_okcancel"
+        style="@style/DiafragTextViewAsButton.OkCancel.Ok"/>
+
+    <TextView
+        android:id="@+id/tvCancel__ro_diafrag_okcancel"
+        style="@style/DiafragTextViewAsButton.OkCancel.Cancel"
+        android:layout_toLeftOf="@+id/tvOk__ro_diafrag_okcancel"/>
+
+
+</RelativeLayout>

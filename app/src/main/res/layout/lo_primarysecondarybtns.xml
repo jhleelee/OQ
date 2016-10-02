@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        style="@style/Button.TwoButtonForAction.Primary"
+        android:textSize="@dimen/md_14sp"
+        android:text="@string/confirm_allcap"
+        android:layout_width="96dip"
+        android:layout_height="wrap_content" />
+
+    <Button
+        style="@style/Button.TwoButtonForAction.Secondary"
+        android:text="@string/delete_allcap"
+        android:textSize="@dimen/md_14sp"
+        android:layout_width="96dip"
+        android:layout_height="wrap_content" />
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="bottom"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/_tvTs__lo_textts__lo_chat_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="@dimen/marginWideOftvTs__lo_chat_message"
+        android:layout_marginRight="@dimen/marginThinOftvTs__lo_chat_message"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:text="12:32"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeOftvTs__lo_chat_message" />
+
+    <TextView
+        android:id="@+id/tvText__lo_textts__lo_chat_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rec_rad12_nostr_middlegrey"
+        android:padding="6dp"
+        android:text="Hello, how are you? Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/textSizeOftvText__lo_chat_message" />
+
+    <TextView
+        android:id="@+id/tvTs__lo_textts__lo_chat_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="@dimen/marginThinOftvTs__lo_chat_message"
+        android:layout_marginRight="@dimen/marginWideOftvTs__lo_chat_message"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:text="12:32"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeOftvTs__lo_chat_message" />
+
+</LinearLayout>

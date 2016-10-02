@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lo_chat_message"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="left"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <include
+        android:id="@+id/ro_person_photo_48dip__lo_chat_message"
+        layout="@layout/ro_person_photo_48dip" />
+
+    <LinearLayout
+        android:id="@+id/loBody__lo_chat_message"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="100"
+        android:gravity="left"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvSenderName__lo_chat_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:maxWidth="180dip"
+            android:text="AUTHOR"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSizeOftvSenderName__lo_chat_message" />
+
+        <include
+            android:id="@+id/lo_textts__lo_chat_message"
+            layout="@layout/lo_textts__lo_chat_message"/>
+
+        <include
+            android:id="@+id/lo_attachts__lo_chat_message"
+            layout="@layout/lo_attachts__lo_chat_message"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+

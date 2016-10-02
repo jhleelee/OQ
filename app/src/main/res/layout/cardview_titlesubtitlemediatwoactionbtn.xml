@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/cardview__cardview_titlesubtitlemediatwoactionbtn"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:cardElevation="4dp"
+    android:cardUseCompatPadding="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/lo_titlesubtitlerectangle48_incardview__cardview_titlesubtitlemediatwoactionbtn"
+            layout="@layout/lo_titlesubtitlerectangle48_incardview"/>
+
+        <TextView
+            android:id="@+id/tvContent__cardview_titlesubtitlemediatwoactionbtn"
+            style="@style/TextView.InCardView.Content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <include
+            android:id="@+id/lo_twoactionbuttons__cardview_titlesubtitlemediatwoactionbtn"
+            layout="@layout/lo_twoactionbuttons"/>
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

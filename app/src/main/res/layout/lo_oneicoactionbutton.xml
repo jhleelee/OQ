@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:padding="@dimen/md_8dip"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <ImageButton
+        android:id="@+id/btActionOne__lo_twoactionbuttons"
+        style="@style/Base.Widget.AppCompat.ImageButton"
+        android:src="@drawable/ic_more_vert_white_48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btActionTwo__lo_twoactionbuttons"
+        style="@style/Button.TwoButtonForAction.WantToPay"
+        android:text="@string/willpay"
+        android:textSize="@dimen/md_14sp"
+        android:layout_width="96dip"
+        android:layout_height="wrap_content" />
+</LinearLayout>

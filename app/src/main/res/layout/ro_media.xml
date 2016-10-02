@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/vBackGround__ro_media"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/vbasicalarmbackgroundwithprimarycolor" />
+
+    <VideoView
+        android:id="@+id/vvBackGround__ro_media"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/ivBackGround__ro_media"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/v_scrim_gradient_bottom__ro_media"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/v_scrim_gradient_bottom"/>
+
+    <include
+        android:id="@+id/v_scrim_solid__ro_media"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/v_scrim_solid"/>
+
+</RelativeLayout>

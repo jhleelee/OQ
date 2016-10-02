@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/md_8dip"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include
+        android:id="@+id/lo_liked__lo_feed_action"
+        layout="@layout/lo_liked"/>
+
+    <include
+        android:id="@+id/lo_commented__lo_feed_action"
+        layout="@layout/lo_commented"/>
+
+    <include
+        android:id="@+id/lo_shared__lo_feed_action"
+        layout="@layout/lo_shared"/>
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"/>
+
+    <com.jackleeentertainment.jackclock.ui.widget.FavoriteBoxJack
+        android:id="@+id/favoriteboxjack__lo_feed_action"
+        android:layout_marginRight="8dip"
+        android:scaleType="centerCrop"
+        style="@style/Base.Widget.AppCompat.ImageButton"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="40dip"
+        android:layout_height="40dip" />
+
+    <ImageButton
+        android:id="@+id/ibComment__lo_feed_action"
+        android:layout_marginRight="8dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_check_white_48dp"
+        style="@style/Base.Widget.AppCompat.ImageButton"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="40dip"
+        android:layout_height="40dip" />
+
+    <ImageButton
+        android:id="@+id/ibShare__lo_feed_action"
+        android:layout_marginRight="8dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_check_white_48dp"
+        style="@style/Base.Widget.AppCompat.ImageButton"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="40dip"
+        android:layout_height="40dip" />
+
+
+
+</LinearLayout>

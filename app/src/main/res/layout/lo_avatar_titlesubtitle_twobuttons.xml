@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dip"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="@dimen/md_72dip"
+        android:layout_height="72dip"
+        android:gravity="left|center_vertical">
+
+        <include
+            android:id="@+id/ro_person_photo_64dip__lo_avatar_titlesubtitle_twobuttons"
+             layout="@layout/ro_person_photo_64dip"
+            android:layout_width="64dip"
+            android:layout_height="64dip"
+            android:layout_margin="8dip" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_width="0dip"
+        android:layout_height="72dip"
+        >
+
+        <TextView
+            android:id="@+id/tvTitle__lo_avatar_titlesubtitle_twobuttons"
+            android:gravity="center_vertical|left"
+            android:text="Jack"
+            android:textColor="@color/text_black_87"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tvSubTitle__lo_avatar_titlesubtitle_twobuttons"
+            android:gravity="center_vertical|left"
+            android:text="Cool Alarm"
+            android:textSize="14sp"
+            android:textColor="@color/text_black_54"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <include
+
+            android:id="@+id/lo_twobuttons__lo_avatar_titlesubtitle_twobuttons"
+
+
+             layout="@layout/lo_primarysecondarybtns"
+            android:layout_width="match_parent"
+            android:layout_height="24dip"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+             />
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+</LinearLayout>
+

@@ -1,0 +1,227 @@
+<resources>
+    <string name="app_name">OQ</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="slogan">오케이가 아니야, 오큐!</string>
+
+    <!--Dummy Text-->
+    <string name="dummydate">12/06/2015</string>
+    <string name="dummytext">Wow, Cool, How are you! I am very pleased to meet you!</string>
+    <string name="dummyname">Jack Lee Corporation of Korea</string>
+
+    <string name="search">Search</string>
+
+
+    <!--Google Terminology-->
+
+    <!--Allows multi-step processes-->
+    <string name="google_back">Back</string>
+
+
+    Cancels an action
+    <string name="google_cancel">Cancel</string>
+
+
+    Causes a message or dialog to disappear without any consequences
+    <string name="google_dismiss">Dismiss</string>
+
+
+    Confirms the completion of a multi-step process
+    <string name="google_done">Done</string>
+
+
+    Causes a message or dialog to disappear without any consequences (similar to OK)
+    <string name="google_gotit">Got it</string>
+
+
+    Takes the user to additional content
+    <string name="google_learnmore">Learn more</string>
+
+
+    Takes the user to the next step of a multi-step process
+    <string name="google_next">Next</string>
+
+
+    Allows a user to decline
+    <string name="google_nothanks">No thanks</string>
+
+
+    Let’s a user postpone an action or decision. Use only when the call to action in the dialog is essential to the functionality of the product, for legal reasons, or for another urgent reason.
+    Do not use “Not now” as a mechanism to avoid providing a “No thanks” option.
+    <string name="google_notnow">Not now</string>
+
+
+    Allows the user to confirm an action that’s relevant to the task at hand
+    <string name="google_ok">OK</string>
+
+
+    Gives the user a way to avoid an interruption and proceed with a task
+    <string name="google_skip">Skip</string>
+
+
+
+    <!--Clock and Alarm Terminology-->
+
+
+
+
+    <!--Notification-->
+    <string name="sent">sent</string>
+    <string name="message">message</string>
+
+    <string name="post">post</string>
+    <string name="posted">posted</string>
+    <string name="photo">photo</string>
+    <string name="video">video</string>
+
+
+    <!--FirstVisitActivity-->
+
+
+    <!--MainActivity-->
+    <string name="search_chatroom">Search Chatroom</string>
+    <string name="search_friend">Search Friend</string>
+
+
+
+    <!--    MainActivity Frag0-->
+
+    <string name="youreceivedaninvationforthisalarm_youcaneitheracceptordecline">You received an invation for this alarm. You can either accept or decline.</string>
+    <string name="preview">Preview</string>
+
+    <!--    MainActivity Frag0 i_alarm_more_action-->
+    <string name="detail">Detail</string>
+    <string name="recent_post">Recent post</string>
+
+    <!--    MainActivity Frag1 i_alarm_more_action-->
+    <string name="deploy">DEPLOY</string>
+
+    <!--PrefFrag-->
+    <string name="basic_allcap">BASIC</string>
+    <string name="snooze_allcap">SNOOZE</string>
+    <string name="interval">Interval</string>
+    <string name="repeat">Repeat</string>
+    <string name="pref_summary_snooze_interval">pref_summary_snooze_interval</string>
+    <string name="pref_summary_snooze_repeat">pref_summary_snooze_repeat</string>
+
+
+    <!--FriendShip-->
+    <string name="add_friends_allcap">ADD FRIEND</string>
+    <string name="remove_allcap">REMOVE</string>
+    <string name="confirm_allcap">CONFIRM</string>
+    <string name="delete_allcap">DELETE</string>
+    <string name="block_allcap">BLOCK</string>
+    <string name="unfriend_allcap">UNFRIEND</string>
+    <string name="undo_allcap">UNDO</string>
+
+
+
+
+    <!--Google -->
+
+    <!-- General settings -->
+
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_general_1224">Add friends to messages</string>
+    <string-array name="pref_general_1224_titles">
+        <item>24:00</item>
+        <item>12:00 AM/PM</item>
+    </string-array>
+    <string-array name="pref_general_1224_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+
+
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+
+    <!--Settings for Snooze-->
+    <string name="pref_header_snooze">Snooze</string>
+
+    <string name="pref_title_snooze_interval">Snooze interval</string>
+    <string-array name="pref_snooze_interval_titles">
+        <item>1 min</item>
+        <item>3 min</item>
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>15 min</item>
+    </string-array>
+    <string-array name="pref_snooze_interval_values">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
+
+    <!--Korean-->
+    <string name="willget">받겠습니다</string>
+    <string name="wanttoget_sentence">받기를 원합니다.</string>
+    <string name="requesttopay_sentence">청구합니다.</string>
+
+    <string name="willpay">주겠습니다</string>
+    <string name="wanttopay_sentence">주기를 원합니다.</string>
+    <string name="requesttoget_sentence">수령할 것인지 묻습니다.</string>
+
+
+
+    <string name="getter">받는 사람</string>
+    <string name="payer">주는 사람</string>
+
+</resources>

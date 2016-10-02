@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:padding="@dimen/md_8dip"
+    android:layout_height="wrap_content"
+    >
+
+
+    <Button
+        android:id="@+id/btAccept__lo_alarm_action"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/google_ok"
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_marginLeft="@dimen/md_8dip"
+        />
+
+    <Button
+        android:id="@+id/btDecline__lo_alarm_action"
+        android:layout_toLeftOf="@+id/btAccept__lo_alarm_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/google_nothanks"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        />
+
+
+
+</RelativeLayout>

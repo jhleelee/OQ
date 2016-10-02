@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/H__ro_alarm_clock">
+
+    <TextView
+        android:id="@+id/tvAlarmClock__ro_alarm_clock"
+        style="@style/tvAlarmClock"
+        android:text="07:00" />
+
+    <TextView
+        android:id="@+id/tvAlarmClockAMPM__ro_alarm_clock"
+        style="@style/tvAlarmClockAMPM"
+        android:layout_alignBaseline="@+id/tvAlarmClock__ro_alarm_clock"
+        android:layout_toRightOf="@+id/tvAlarmClock__ro_alarm_clock"
+        android:text="AM" />
+
+
+</RelativeLayout>

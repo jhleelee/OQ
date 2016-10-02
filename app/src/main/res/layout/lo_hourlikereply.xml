@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:gravity="left|center_vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvHourAgo__lo_hourlikereply"
+        android:text="8 hours ago"
+        android:textSize="@dimen/textSizeOfHourAgoFavoriteReply_lohourlikereply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text=" \u2022 "
+        android:textSize="@dimen/textSizeOfHourAgoFavoriteReply_lohourlikereply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvFavorite__lo_hourlikereply"
+        android:text="Favorite"
+        android:textSize="@dimen/textSizeOfHourAgoFavoriteReply_lohourlikereply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text=" \u2022 "
+        android:textSize="@dimen/textSizeOfHourAgoFavoriteReply_lohourlikereply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/tvReply__lo_hourlikereply"
+        android:text="Reply"
+        android:textSize="@dimen/textSizeOfHourAgoFavoriteReply_lohourlikereply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

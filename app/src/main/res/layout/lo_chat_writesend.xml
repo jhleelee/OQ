@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:padding="4dip"
+    android:background="@drawable/rec_rad10_white"
+    android:layout_margin="8dip"
+    android:id="@+id/lo_chat_writesend"
+    style="@style/lo_sendmessage">
+
+    <ImageView
+        android:id="@+id/ivAttach__lo_chat_writesend"
+        style="@style/iv_attach" />
+
+
+    <ImageView
+        android:id="@+id/ivEmoji__lo_chat_writesend"
+        style="@style/iv_emoji" />
+
+
+    <EditText
+        android:id="@+id/etSend__lo_chat_writesend"
+        style="@style/et_sendmessage"
+
+        />
+
+    <ImageView
+        android:id="@+id/ivSend__lo_chat_writesend"
+        style="@style/iv_sendmessage" />
+
+</LinearLayout>

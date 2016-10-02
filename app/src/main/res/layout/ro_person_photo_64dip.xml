@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ro_person_photo"
+    android:layout_width="64dip"
+    android:layout_height="64dip">
+
+    <VideoView
+        android:layout_centerInParent="true"
+        android:id="@+id/ro_person_photo_vv"
+        android:layout_width="@dimen/photoHW_ro_person_photo_64dip"
+        android:layout_height="@dimen/photoHW_ro_person_photo_64dip" />
+
+    <ImageView
+        android:layout_centerInParent="true"
+        android:id="@+id/ro_person_photo_iv"
+        android:layout_width="@dimen/photoHW_ro_person_photo_64dip"
+        android:layout_height="@dimen/photoHW_ro_person_photo_64dip"
+        android:scaleType="centerCrop" />
+
+</RelativeLayout>

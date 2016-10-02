@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="bottom"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/_tvTs__lo_attachts__lo_chat_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="@dimen/marginWideOftvTs__lo_chat_message"
+        android:layout_marginRight="@dimen/marginThinOftvTs__lo_chat_message"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:text="12:32"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeOftvTs__lo_chat_message" />
+
+    <RelativeLayout
+        android:id="@+id/roAttach__lo_attachts__lo_chat_message"
+        android:background="@drawable/rec_rad12_nostr_middlegrey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <include
+            android:id="@+id/ro_media__lo_attachts__lo_chat_message"
+            layout="@layout/ro_media"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dip"
+            android:maxWidth="240dip"
+            />
+
+        <TextView
+            android:id="@+id/tvTextCenter__lo_attachts__lo_chat_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOftvText__lo_chat_message"
+            android:layout_centerInParent="true"
+            android:text="AM07:00" />
+
+        <TextView
+            android:id="@+id/tvTextBelow__lo_attachts__lo_chat_message"
+            android:layout_below="@+id/ro_media__lo_attachts__lo_chat_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOftvText__lo_chat_message"
+            android:text="text text text" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tvTs__lo_attachts__lo_chat_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="@dimen/marginThinOftvTs__lo_chat_message"
+        android:layout_marginRight="@dimen/marginWideOftvTs__lo_chat_message"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:text="12:32"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeOftvTs__lo_chat_message" />
+
+</LinearLayout>

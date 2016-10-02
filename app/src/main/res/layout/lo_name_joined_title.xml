@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/lo_name_joined"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lonamejoinedh__i_alarm" />
+
+    <TextView
+        android:id="@+id/lo_name_joined_title__tvTitle"
+        android:text="TitleHere"
+        android:textColor="@color/white"
+        android:maxLines="2"
+        android:layout_marginRight="@dimen/profilephotoHW_powerbtnHW__i_alarm"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dip"
+        style="@style/TextView.WhiteTextTitle.14"
+        />
+
+</LinearLayout>

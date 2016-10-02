@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/lo__lo_titlesubtitlerectangle48_incardview"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="top"
+              android:orientation="horizontal"
+              android:padding="16dip">
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/md_8dip"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvTitle__lo_titlesubtitlerectangle48_incardview"
+            android:textSize="@dimen/md_24sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tvSubTitle__lo_titlesubtitlerectangle48_incardview"
+            android:textSize="@dimen/md_14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/ro_person_photo_48dip__lessmargin__lo_titlesubtitlerectangle48_incardview"
+        layout="@layout/ro_person_photo_48dip__lessmargin"/>
+
+</LinearLayout>

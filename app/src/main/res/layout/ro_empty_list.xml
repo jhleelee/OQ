@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/loEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:padding="24dip">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:paddingLeft="24dip"
+            android:paddingRight="24dip">
+
+            <TextView
+                android:id="@+id/tvEmptyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dip"
+                android:text="Create Your First Alarm"
+                android:textColor="@color/black"
+                android:textSize="18dip" />
+
+            <TextView
+                android:id="@+id/tvEmptyDetail"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvEmptyTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="32dip"
+                android:layout_marginLeft="18dip"
+                android:layout_marginRight="18dip"
+                android:gravity="center"
+                android:text="You can create your first alarm by clicking buton right left. You can invite friends or publify your alarm by creating Social Alarm "
+                android:textColor="@color/translucent_grey_dark"
+                android:textSize="16dip" />
+
+            <TextView
+                android:id="@+id/tvEmptyLearnMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvEmptyDetail"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dip"
+                android:gravity="center"
+                android:text="Learn More"
+                android:textColor="@color/primary"
+                android:textSize="18dip" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

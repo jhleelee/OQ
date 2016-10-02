@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.layout.activity.MainActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/ro_media" />
+
+        <!--Header-->
+        <include
+            layout="@layout/lo_avatar_titlesubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/md_72dip"
+            android:layout_alignParentTop="true" />
+
+        <!--Clock and Title-->
+        <LinearLayout
+            android:layout_marginTop="96dip"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/H__ro_alarm_clock"
+                layout="@layout/ro_alarm_clock" />
+
+            <TextView
+                android:textColor="@color/white"
+                android:layout_marginTop="16dip"
+                android:layout_marginLeft="24dip"
+                android:layout_marginRight="24dip"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textSize="@dimen/md_24sp"
+                android:maxLines="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_alignParentBottom="true"
+            android:text="Snooze 5 min"
+            android:id="@+id/tvSnzOrSet"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tvSnzOrSetH" />
+
+        <ImageButton
+            android:elevation="4dip"
+            android:layout_centerInParent="true"
+            android:padding="24dip"
+            android:scaleType="centerCrop"
+            android:background="@drawable/slt_ib_alarm"
+            android:src="@drawable/ic_access_alarms_white_48dp"
+            android:layout_width="80dip"
+            android:layout_height="80dip" />
+
+    </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

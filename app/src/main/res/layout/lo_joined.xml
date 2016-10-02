@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/rec_rad8_nostr_alpha50darkgrey"
+    android:paddingLeft="2dip"
+    android:paddingRight="4dip"
+    >
+
+
+    <ImageView
+        android:id="@+id/ivIco__lo_joined"
+        android:src="@drawable/ic_person_white"
+        android:paddingRight="0dip"
+        style="@style/ImageView.WhiteImageSrcTransparentBg.16"/>
+
+    <TextView
+        android:id="@+id/tvJoinedNum__lo_joined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="0dip"
+        android:text="+0"
+        style="@style/TextView.JoinedNumber.12"/>
+
+
+</LinearLayout>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "319021370276",
+    "firebase_url": "https://oqmoney-93ff2.firebaseio.com",
+    "project_id": "oqmoney-93ff2",
+    "storage_bucket": "oqmoney-93ff2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319021370276:android:411081a9f8a6973d",
+        "android_client_info": {
+          "package_name": "com.jackleeentertainment.oq"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319021370276-s64omnidu15bvag4sj3hem1lrm6pk80b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jackleeentertainment.oq",
+            "certificate_hash": "C345422500707A455B2B708FB81EB9429B6F34B4"
+          }
+        },
+        {
+          "client_id": "319021370276-o67995ueng5cictlpp8hkluuchb5kjku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjfAXvsTOniKTMfxVhKb13Bwjgiw80AK4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319021370276-o67995ueng5cictlpp8hkluuchb5kjku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
