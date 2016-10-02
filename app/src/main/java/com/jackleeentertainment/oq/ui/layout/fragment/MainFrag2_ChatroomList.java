@@ -320,10 +320,10 @@ public class MainFrag2_ChatroomList extends Fragment implements
                  * Room Photo
                  */
 
-                JM.loadMultipleProfilePhotoFromFbase(
-                        arlChatMemberUids,
-                        viewHolder.ro_person_photo_iv
-                );
+//                JM.loadMultipleProfilePhotoFromFbase(
+//                        arlChatMemberUids,
+//                        viewHolder.ro_person_photo_iv
+//                );
 
                 /**
                  * Last Chat Message

@@ -7,5 +7,5 @@ package com.jackleeentertainment.oq.ui.layout.diafrag;
 public class DiaFragT {
 
     public final static String ChatroomAttr_atChatRoomList="a";
-
+    public final static String SelectedFriendsAndMore ="b";
 }

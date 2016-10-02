@@ -9,13 +9,10 @@ import android.os.Bundle;
 
 public class ChatroomAttrDiaFrag extends BaseDiaFrag{
 
-
-
      public static ChatroomAttrDiaFrag newInstance(Bundle bundle, Context context) {
         ChatroomAttrDiaFrag frag = new ChatroomAttrDiaFrag();
         frag.setArguments(bundle);
         mContext = context;
         return frag;
     }
-
 }

@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.ui.adapter;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.gson.Gson;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
@@ -23,6 +25,7 @@ import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.ui.layout.activity.BaseActivity;
+import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,15 +125,15 @@ public class SetCardViewRVAdapter extends RecyclerView.Adapter<RecyclerView.View
             tvTitle__lo_titlesubtitlerectangle48_incardview =
                     (TextView)
                             lo_titlesubtitlerectangle48_incardview__cardview_titlesubtitlemediatwoactionbtn
-                                    .findViewById(R.id.tvTitle__lo_titlesubtitlerectangle48_incardview)
+                                    .findViewById(R.id.tvTitle__lo_titlesubtitlerectangle48_incardview);
             tvSubTitle__lo_titlesubtitlerectangle48_incardview =
                     (TextView)
                             lo_titlesubtitlerectangle48_incardview__cardview_titlesubtitlemediatwoactionbtn
-                                    .findViewById(R.id.tvSubTitle__lo_titlesubtitlerectangle48_incardview)
+                                    .findViewById(R.id.tvSubTitle__lo_titlesubtitlerectangle48_incardview);
             ro_person_photo_48dip__lessmargin__lo_titlesubtitlerectangle48_incardview =
                     (RelativeLayout)
                             lo_titlesubtitlerectangle48_incardview__cardview_titlesubtitlemediatwoactionbtn
-                                    .findViewById(R.id.ro_person_photo_48dip__lessmargin__lo_titlesubtitlerectangle48_incardview)
+                                    .findViewById(R.id.ro_person_photo_48dip__lessmargin__lo_titlesubtitlerectangle48_incardview);
 
             ////ro_person_photo_48dip__lessmargin__lo_titlesubtitlerectangle48_incardview
 
@@ -403,7 +406,13 @@ public class SetCardViewRVAdapter extends RecyclerView.Adapter<RecyclerView.View
                     public void onClick(View v) {
                         switch (v.getId()) {
                             case R.id.btActionOne__lo_twoactionbuttons:
-                                BaseActivity.showSelectedFriendsAndMoreDiaFrag(profileObjects);
+                                Gson gson = new Gson();
+                                String jsonSelectedProfilesArrayList
+                                         = gson.toJson(profileObjects);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("diaFragT", DiaFragT.SelectedFriendsAndMore);
+                                bundle.putString("jsonSelectedProfilesArrayList", jsonSelectedProfilesArrayList);
+                                ((BaseActivity)mFragment.getActivity()).showDialogFragment(bundle);
                                 break;
 
                         }

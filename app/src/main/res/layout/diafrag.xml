@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lo"
     style="@style/loDiaFragWrap"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/lo_numselectedprofiles_add__lo_diafrag"
+        layout="@layout/lo_numselectedprofiles_add"
+        android:visibility="gone" />
+
     <ListView
-        android:id="@+id/lv__lo_diafragwithiconlist"
+        android:id="@+id/lv__lo_diafrag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
 
+
     <include
-        android:id="@+id/ro_diafrag_okcancel__lo_diafragwithiconlist"
-        layout="@layout/ro_diafrag_okcancel"
-        />
+        android:id="@+id/ro_diafrag_okcancel__lo_diafrag"
+        layout="@layout/ro_diafrag_okcancel" />
 
 </LinearLayout>
 

@@ -13,7 +13,7 @@ import com.jackleeentertainment.oq.R;
 /**
  * Created by Jacklee on 2016. 9. 4..
  */
-public class PeopleActivity extends AppCompatActivity
+public class PeopleActivity extends BaseActivity
 {
 
     @Override

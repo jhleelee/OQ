@@ -7,6 +7,7 @@ import com.jackleeentertainment.oq.object.Post;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.types.PostT;
+import com.jackleeentertainment.oq.object.util.ProfileUtil;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,19 @@ public class StringGenerator {
     }
 
 
+    public static String xPeople(ArrayList<Profile> arl) {
+
+        if (arl!=null && arl.size()>0){
+                return arl.get(0).getFull_name() + JM.strById(R.string.count_ppl);
+        }
+
+        return null;
+
+    }
+
+
+
+
     public static String xAndXPeople(ArrayList<Profile> arl) {
 
         if (arl!=null && arl.size()>0){
@@ -69,6 +83,18 @@ public class StringGenerator {
         return null;
 
     }
+
+
+    public static String xPeopleColonPeopleNamesWithComma(ArrayList<Profile> arl) {
+
+        ArrayList<String> arlNames = ProfileUtil.getArlName(arl);
+        String namesComma = J.stFromArlWithComma(arlNames);
+        if (arl!=null && arl.size()>0){
+            return  xPeople(arl) + " : " + namesComma;
+        }
+        return null;
+    }
+
 
 
     public static String xSentMessage(String name, int msgNum, Context context) {

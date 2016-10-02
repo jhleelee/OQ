@@ -1,7 +1,5 @@
 package com.jackleeentertainment.oq.ui.layout.diafrag;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -28,9 +26,13 @@ public class BaseDiaFrag extends android.support.v4.app.DialogFragment {
     static String mAId;
 
     //UI
+    LinearLayout lo_numselectedprofiles_add__lo_diafrag;
     ListView lv__lo_diafragwithiconlist;
     RelativeLayout ro_diafrag_okcancel__lo_diafragwithiconlist;
     TextView tvOk__ro_diafrag_okcancel, tvCancel__ro_diafrag_okcancel;
+    TextView tvNumSelectedProfiles__lo_numselectedprofiles_add;
+    ImageButton ibAdd__lo_numselectedprofiles_add;
+
     public BaseDiaFrag() {
         super();
     }
@@ -56,12 +58,23 @@ public class BaseDiaFrag extends android.support.v4.app.DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        lo_numselectedprofiles_add__lo_diafrag= (LinearLayout) view.findViewById(R.id
+                .lo_numselectedprofiles_add__lo_diafrag);
+
+        tvNumSelectedProfiles__lo_numselectedprofiles_add = (TextView)lo_numselectedprofiles_add__lo_diafrag.findViewById(R.id.tvNumSelectedProfiles__lo_numselectedprofiles_add);
+        ibAdd__lo_numselectedprofiles_add= (ImageButton)lo_numselectedprofiles_add__lo_diafrag.findViewById(R.id.ibAdd__lo_numselectedprofiles_add);
 
         lv__lo_diafragwithiconlist = (ListView) view.findViewById(R.id
-                .lv__lo_diafragwithiconlist);
-        ro_diafrag_okcancel__lo_diafragwithiconlist= (RelativeLayout) view.findViewById(R.id.ro_diafrag_okcancel__lo_diafragwithiconlist);
+                .lv__lo_diafrag);
+        ro_diafrag_okcancel__lo_diafragwithiconlist= (RelativeLayout) view.findViewById(R.id.ro_diafrag_okcancel__lo_diafrag);
         tvOk__ro_diafrag_okcancel = (TextView )ro_diafrag_okcancel__lo_diafragwithiconlist
                 .findViewById(R.id.tvOk__ro_diafrag_okcancel);
+        tvOk__ro_diafrag_okcancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickOk();
+            }
+        });
         tvCancel__ro_diafrag_okcancel = (TextView )ro_diafrag_okcancel__lo_diafragwithiconlist
                 .findViewById(R.id.tvCancel__ro_diafrag_okcancel);
         tvCancel__ro_diafrag_okcancel.setOnClickListener(new View.OnClickListener() {
@@ -88,5 +101,9 @@ public class BaseDiaFrag extends android.support.v4.app.DialogFragment {
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
         super.onResume();
+    }
+
+    void onClickOk(){
+
     }
 }

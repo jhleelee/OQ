@@ -224,4 +224,12 @@
     <string name="getter">받는 사람</string>
     <string name="payer">주는 사람</string>
 
+    <string name="count_ppl">명</string>
+    <string name="empty">없음</string>
+
+    <string name="recent_profiles">최근 대상</string>
+    <string name="show_all">전체보기</string>
+    <string name="invite">초대하기</string>
+    <string name="my_contacts">내 연락처</string>
+
 </resources>

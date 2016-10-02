@@ -6,11 +6,11 @@ package com.jackleeentertainment.oq.firebase.database;
 public class FBaseNode0 {
 
     public final static String ProfileToMe = "my_prof";
-    public final static String ProfileToFriend = "prof_fri";
+    public final static String ProfileToContactsSharedPeople = "prof_contacts";
     public final static String ProfileToPublic = "prof_pub";
 
-        public final static String Friend = "friend";
-    public final static String FriendReq = "friend_req";
+    public final static String MyContacts = "my_contacts";
+    public final static String MyRecent = "my_recent";
 
     public final static String MyOqItemSums = "my_oqisum";
     public final static String MyOqItems = "my_oqi";

@@ -1,27 +1,42 @@
 package com.jackleeentertainment.oq.object;
 
+import com.google.firebase.database.Query;
+import com.jackleeentertainment.oq.App;
+import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
+
 /**
  * Created by Jacklee on 2016. 9. 29..
  */
 
 public class Profile {
 
+    /**
+     * search people is done by email or full_name.
+     * (1) query by email
+     * (2) query by name
+     * (3) merge & show
+     *
+     */
+
+
+
     String uid;
+    String email;
+    String full_name;
     String first_name;
     String middle_name;
     String last_name;
-    String full_name;
     String birthday;
     String interested_in;
     String timezone;
     String locale;
     String gender;
     String age;
-    String email;
     String phone;
     String updated_time;
 
     public String getUid() {
+
         return uid;
     }
 
