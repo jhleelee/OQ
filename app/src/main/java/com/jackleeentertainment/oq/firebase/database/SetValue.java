@@ -9,11 +9,34 @@ import com.jackleeentertainment.oq.object.Chat;
 import com.jackleeentertainment.oq.object.Post;
 import com.jackleeentertainment.oq.object.Profile;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jacklee on 2016. 9. 24..
  */
 
 public class SetValue {
+
+    public static void myPossibleContactsWithPhoneOrEmail(ArrayList<String> arlPhoneOrEmail) {
+
+        //arl or HashMap? or UpdateChildren?
+
+        App.fbaseDbRef
+                .child(FBaseNode0.MyPContacts)
+                .child(App.getUID())
+                .setValue(arlPhoneOrEmail, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if (databaseError == null) {
+
+
+                            LBR.send(FBaseNode0.MyPContacts + LBR.SendSuffixT.SENT, null);
+
+                        }
+                    }
+                });
+    }
+
 
     /*
     Profile.class
@@ -97,7 +120,7 @@ public class SetValue {
     }
 
     public static void cache(final Chat chat,
-                                      final boolean toRamLBR) {
+                             final boolean toRamLBR) {
 
     }
 }

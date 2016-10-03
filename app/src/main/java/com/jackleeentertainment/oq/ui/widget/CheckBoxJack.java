@@ -315,20 +315,8 @@ public class CheckBoxJack extends ImageButton {
         super.setImageAlpha(alpha);
     }
 
-    @Override
-    public void setAlpha(int alpha) {
-        super.setAlpha(alpha);
-    }
 
-    @Override
-    public boolean isOpaque() {
-        return super.isOpaque();
-    }
 
-    @Override
-    public void onVisibilityAggregated(boolean isVisible) {
-        super.onVisibilityAggregated(isVisible);
-    }
 
     @Override
     public void setOnClickListener(OnClickListener l) {
