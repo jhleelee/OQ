@@ -211,6 +211,20 @@
     </string-array>
 
     <!--Korean-->
+
+    <!--FirstVisitActiity-->
+    <string name="nicetomeetyou">반갑습니다!</string>
+    <string name="welcome">환영합니다!</string>
+    <string name="modify">변경</string>
+    <string name="tabtochangename">탭하여 이름 변경</string>
+    <string name="verifywithsms">SMS 인증번호 받기</string>
+    <string name="verify">인증</string>
+    <string name="korea">대한민국</string>
+
+    verifywithsms
+
+
+
     <string name="willget">받겠습니다</string>
     <string name="wanttoget_sentence">받기를 원합니다.</string>
     <string name="requesttopay_sentence">청구합니다.</string>

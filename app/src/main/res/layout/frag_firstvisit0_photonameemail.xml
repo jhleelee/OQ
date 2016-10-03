@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dip"
+        android:text="@string/nicetomeetyou"
+        android:textColor="@color/text_black_87"
+        android:textSize="48sp" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:background="@color/alphadarkgrey_20"
+            android:layout_width="96dip"
+            android:layout_height="96dip"
+            android:layout_marginBottom="32dip">
+
+            <ImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="96dip"
+                android:layout_height="96dip"
+                android:padding="24dip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_person_white_48dp" />
+
+            <TextView
+                android:padding="4dip"
+                android:id="@+id/tvPhotoChange"
+                android:layout_alignParentBottom="true"
+                android:background="@color/alphadarkgrey_30"
+                android:textColor="@color/white"
+                android:text="@string/modify"
+                android:gravity="center"
+                android:textSize="@dimen/md_13sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dip"
+            android:text="email"
+            android:textColor="@color/text_black_87"
+            android:textSize="@dimen/md_24sp" />
+
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dip"
+            android:maxWidth="160dip"
+            android:text="mname"
+            android:textColor="@color/text_black_87"
+            android:textSize="@dimen/md_24sp" />
+
+
+        <TextView
+            android:id="@+id/tvNameChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tabtochangename"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/md_14sp" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

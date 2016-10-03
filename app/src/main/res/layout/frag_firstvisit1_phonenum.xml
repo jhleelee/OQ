@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="32dip">
+
+    <LinearLayout
+        android:id="@+id/loInputPhoneNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dip"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+
+                android:layout_height="48dip"
+                android:layout_marginRight="8dip"
+                android:gravity="center_vertical"
+                android:text="+"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24dip" />
+
+            <EditText
+                android:id="@+id/edittext_nationalcode"
+                android:layout_width="72dip"
+                android:layout_height="48dip"
+                android:background="@drawable/rec_radmd2_str1_primarydark"
+                android:digits="1234567890"
+                android:inputType="phone"
+                android:textSize="24dip" />
+
+            <TextView
+                android:id="@+id/textview_countryname"
+                android:layout_width="0dip"
+                android:layout_height="48dip"
+                android:layout_marginLeft="16dip"
+                android:layout_weight="1"
+                android:gravity="center_vertical|left"
+                android:text="@string/korea"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24dip" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dip"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+
+                android:layout_height="48dip"
+                android:layout_marginRight="8dip"
+                android:gravity="center_vertical"
+                android:text="+"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24dip" />
+
+            <EditText
+                android:id="@+id/edittext_phonenumber"
+                android:layout_width="match_parent"
+                android:layout_height="48dip"
+                android:background="@drawable/rec_radmd2_str1_primarydark"
+                android:digits="1234567890"
+                android:inputType="phone"
+                android:textSize="24dip" />
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/button_verifycode"
+            style="@style/Button.TwoButtonForAction.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dip"
+            android:text="@string/verifywithsms"
+            android:textSize="@dimen/md_14sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/loInputVerifyCode"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dip"
+            android:layout_marginTop="32dip"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etVerifyNum0"
+                style="@style/EditText.VerifyNumItem" />
+
+            <EditText
+                android:id="@+id/etVerifyNum1"
+                style="@style/EditText.VerifyNumItem" />
+
+            <EditText
+                android:id="@+id/etVerifyNum2"
+                style="@style/EditText.VerifyNumItem" />
+
+            <EditText
+                android:id="@+id/etVerifyNum3"
+                style="@style/EditText.VerifyNumItem" />
+
+            <EditText
+                android:id="@+id/etVerifyNum4"
+                style="@style/EditText.VerifyNumItem" />
+
+            <EditText
+                android:id="@+id/etVerifyNum5"
+                style="@style/EditText.VerifyNumItem"
+                android:layout_marginRight="0dip" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btTryCode"
+            style="@style/Button.TwoButtonForAction.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dip"
+            android:text="@string/verify"
+            android:textSize="@dimen/md_14sp" />
+
+        <TextView
+            android:id="@+id/textview_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_black_54"
+            android:textSize="@dimen/md_13sp" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

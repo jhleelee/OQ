@@ -88,6 +88,12 @@
         <item name="android:padding">4dip</item>
     </style>
 
+    <style name="ImageButton.WhiteImageSrcTransparentBg.24">
+        <item name="android:layout_width">24dip</item>
+        <item name="android:layout_height">24dip</item>
+        <item name="android:padding">2dip</item>
+    </style>
+
     <style name="ImageView">
     </style>
 
@@ -109,7 +115,19 @@
     </style>
 
 
+    <style name="EditText">
+    </style>
 
+    <style name="EditText.VerifyNumItem">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/rec_radmd2_str1_primarydark</item>
+        <item name="android:layout_width">32dip</item>
+        <item name="android:textSize">18dip</item>
+
+        <item name="android:layout_height">48dip</item>
+        <item name="android:layout_marginRight">16dip</item>
+
+    </style>
 
 
 

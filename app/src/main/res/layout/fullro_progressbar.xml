@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/scrim_solid"
+    android:layout_height="match_parent">
+
+
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <ProgressBar
+                android:id="@+id/pgCircleSmall"
+                android:layout_marginBottom="16dip"
+                style="@style/Base.Widget.AppCompat.ProgressBar"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv"
+                android:text="Test"
+                android:textColor="@color/white"
+                android:textSize="@dimen/md_13sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+</RelativeLayout>
