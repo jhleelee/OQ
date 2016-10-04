@@ -8,4 +8,6 @@ public class DiaFragT {
 
     public final static String ChatroomAttr_atChatRoomList="a";
     public final static String SelectedFriendsAndMore ="b";
+    public final static String OneLineInput="c";
+    public final static String GalleryOrCamera="d";
 }

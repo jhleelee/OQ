@@ -16,7 +16,8 @@ public class LBR {
   public   static class SendSuffixT {
        public  final static String SENT = "s";
       public final static String RECEIVED = "r";
-    }
+
+  }
 
 
 
@@ -33,7 +34,8 @@ public class LBR {
          *
          * @param action The Intent action, such as ACTION_VIEW.
          */
-        Intent intent = new Intent("com.jackleeentertainment.oq." + reason);
+        Intent intent = new Intent();
+        intent.putExtra("origin", "com.jackleeentertainment.oq." + reason);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
     }
 
@@ -50,7 +52,9 @@ public class LBR {
          *
          * @param action The Intent action, such as ACTION_VIEW.
          */
-        Intent intent = new Intent("com.jackleeentertainment.oq." + reason);
+
+        Intent intent = new Intent();
+        intent.putExtra("origin", "com.jackleeentertainment.oq." + reason);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(object);
         intent.putExtra("data", jsonStr);

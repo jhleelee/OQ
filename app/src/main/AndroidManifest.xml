@@ -21,10 +21,6 @@
         </activity>
 
 
-
-
-
-
         <activity
             android:name=".ui.layout.activity.MainActivity"
             android:label="@string/app_name"
@@ -45,6 +41,9 @@
                        android:resource="@xml/searchable" />
 
         </activity>
+
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
 
         <service android:name=".firebase.fcm.MyFirebaseMessagingService" >
             <intent-filter>

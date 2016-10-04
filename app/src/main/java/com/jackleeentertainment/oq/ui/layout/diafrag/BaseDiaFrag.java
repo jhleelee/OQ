@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -32,6 +33,7 @@ public class BaseDiaFrag extends android.support.v4.app.DialogFragment {
     TextView tvOk__ro_diafrag_okcancel, tvCancel__ro_diafrag_okcancel;
     TextView tvNumSelectedProfiles__lo_numselectedprofiles_add;
     ImageButton ibAdd__lo_numselectedprofiles_add;
+    EditText et__lo_diafrag;
 
     public BaseDiaFrag() {
         super();
@@ -66,6 +68,9 @@ public class BaseDiaFrag extends android.support.v4.app.DialogFragment {
 
         lv__lo_diafragwithiconlist = (ListView) view.findViewById(R.id
                 .lv__lo_diafrag);
+
+
+        et__lo_diafrag= (EditText) view.findViewById(R.id.et__lo_diafrag);
         ro_diafrag_okcancel__lo_diafragwithiconlist= (RelativeLayout) view.findViewById(R.id.ro_diafrag_okcancel__lo_diafrag);
         tvOk__ro_diafrag_okcancel = (TextView )ro_diafrag_okcancel__lo_diafragwithiconlist
                 .findViewById(R.id.tvOk__ro_diafrag_okcancel);

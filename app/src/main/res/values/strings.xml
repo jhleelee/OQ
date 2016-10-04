@@ -220,8 +220,11 @@
     <string name="verifywithsms">SMS 인증번호 받기</string>
     <string name="verify">인증</string>
     <string name="korea">대한민국</string>
+    <string name="chooseatgallery">갤러리에서 사진 선택</string>
+    <string name="takephoto">카메라로 사진 찍기</string>
 
-    verifywithsms
+
+
 
 
 

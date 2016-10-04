@@ -373,7 +373,7 @@
     <style name="DiafragTextViewAsButton.OkCancel">
 
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/rec_norad_nostr_white</item>
         <item name="android:minWidth">64dip</item>
         <item name="android:paddingLeft">8dip</item>

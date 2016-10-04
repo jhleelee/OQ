@@ -3,7 +3,7 @@
     android:id="@+id/lo"
     style="@style/loDiaFragWrap"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <include
@@ -12,13 +12,28 @@
         android:visibility="gone" />
 
     <ListView
+        android:visibility="gone"
         android:id="@+id/lv__lo_diafrag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
 
+    <EditText
+        android:id="@+id/et__lo_diafrag"
+        style="@android:style/Widget.Material.EditText"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/md_14sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--https://material.google.com/components/dialogs.html#dialogs-specs-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/md_24dip"/>
 
     <include
         android:id="@+id/ro_diafrag_okcancel__lo_diafrag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         layout="@layout/ro_diafrag_okcancel" />
 
 </LinearLayout>

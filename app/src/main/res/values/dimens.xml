@@ -17,6 +17,8 @@
     <dimen name="md_8dip">8dp</dimen>
     <dimen name="md_12dip">12dp</dimen>
     <dimen name="md_16dip">16dp</dimen>
+    <dimen name="md_20dip">20dp</dimen>
+
     <dimen name="md_24dip">24dp</dimen>
     <dimen name="md_40dip">40dp</dimen>
     <dimen name="md_48dip">48dp</dimen>

@@ -40,8 +40,8 @@
                 android:src="@drawable/ic_person_white_48dp" />
 
             <TextView
-                android:padding="4dip"
                 android:id="@+id/tvPhotoChange"
+                android:padding="4dip"
                 android:layout_alignParentBottom="true"
                 android:background="@color/alphadarkgrey_30"
                 android:textColor="@color/white"
