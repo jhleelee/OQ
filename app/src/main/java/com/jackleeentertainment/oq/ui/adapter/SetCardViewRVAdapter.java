@@ -318,10 +318,9 @@ public class SetCardViewRVAdapter extends RecyclerView.Adapter<RecyclerView.View
                         .load(App.fbaseStorageRef
                                 .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
                                 .child(profileSubject.getUid())
-                                .child(FStorageNode.createFileName(
+                                .child(FStorageNode.createMediaFileNameToDownload(
                                         FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                        profileSubject.getUid(),
-                                        JM.getSuffixOfImgWithDeviceDpi(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                        profileSubject.getUid()
                                 )))
                         .crossFade()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -384,10 +383,9 @@ public class SetCardViewRVAdapter extends RecyclerView.Adapter<RecyclerView.View
                         .load(App.fbaseStorageRef
                                 .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
                                 .child(profileSubject.getUid())
-                                .child(FStorageNode.createFileName(
+                                .child(FStorageNode.createMediaFileNameToDownload(
                                         FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                        profileSubject.getUid(),
-                                        JM.getSuffixOfImgWithDeviceDpi(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                        profileSubject.getUid()
                                 )))
                         .crossFade()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)

@@ -12,19 +12,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/lo_titlesubtitlerectangle48_incardview__cardview_titlesubtitlemediaoneicoactionbtn"
-            layout="@layout/lo_titlesubtitlerectangle48_incardview" />
-
-        <TextView
-            android:id="@+id/tvContent__cardview_titlesubtitlemediaoneicoactionbtn"
-            style="@style/TextView.InCardView.Content"
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-        <include
-            android:id="@+id/lo_oneicoactionbutton__cardview_titlesubtitlemediaoneicoactionbtn"
-            layout="@layout/lo_oneicoactionbutton" />
+        </ListView>
+
     </LinearLayout>
 
     <RelativeLayout

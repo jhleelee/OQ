@@ -13,6 +13,14 @@ public class NotificationBody {
     Profile profile;
     Object obj;
 
+
+
+    public NotificationBody() {
+        super();
+    }
+
+
+
     public String getObjId() {
         return objId;
     }
@@ -27,11 +35,6 @@ public class NotificationBody {
 
     public void setObj(Object obj) {
         this.obj = obj;
-    }
-
-
-    public NotificationBody() {
-        super();
     }
 
     public Profile getProfile() {

@@ -104,13 +104,19 @@
     <style name="ImageView.WhiteImageSrcTransparentBg.12">
         <item name="android:layout_width">12dip</item>
         <item name="android:layout_height">12dip</item>
-        <item name="android:padding">2dip</item>
+        <item name="android:padding">3dip</item>
     </style>
 
 
     <style name="ImageView.WhiteImageSrcTransparentBg.16">
         <item name="android:layout_width">16dip</item>
         <item name="android:layout_height">16dip</item>
+        <item name="android:padding">2dip</item>
+    </style>
+
+    <style name="ImageView.WhiteImageSrcTransparentBg.24">
+        <item name="android:layout_width">24dip</item>
+        <item name="android:layout_height">24dip</item>
         <item name="android:padding">2dip</item>
     </style>
 

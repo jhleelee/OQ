@@ -23,8 +23,6 @@ public class AvatarNameDetailViewHolder extends RecyclerView.ViewHolder {
     View mView;
     RelativeLayout ro_person_photo_48dip__lo_avatartitlesubtitle;
     TextView tvTitle__lo_avatartitlesubtitle;
-
-
     TextView tvSubTitle__lo_avatartitlesubtitle;
     ImageView ro_person_photo_iv;
 

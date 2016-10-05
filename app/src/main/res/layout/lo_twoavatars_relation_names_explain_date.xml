@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/md_72dip"
+    android:gravity="center_vertical">
+
+    <include
+        android:id="@+id/lo_twoavatars_relation__lo_twoavatars_relation_names_explain_date"
+        layout="@layout/lo_twoavatars_relation"
+        android:layout_width="96dip"
+        android:layout_height="48dip"
+        android:layout_marginLeft="@dimen/md_12dip"/>
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/md_16dip"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="4"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTitle__lo_twoavatars_relation_names_explain_date"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|left"
+                android:singleLine="true"
+                android:text="Jack"
+                android:textColor="@color/text_black_87"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvDate__lo_twoavatars_relation_names_explain_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dip"
+                android:text="@string/dummydate"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="6"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvSubTitle__lo_twoavatars_relation_names_explain_date"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|left"
+                android:singleLine="true"
+                android:text="Cool Alarm"
+                android:textColor="@color/text_black_87"
+                android:textSize="16sp"/>
+
+            <!--<TextView-->
+                <!--android:id="@+id/tvUnread__lo_avatar_namedate_chatread"-->
+                <!--style="@style/TextView.ChatUnreadNum.12"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="8dip"/>-->
+
+            <ImageView
+                android:id="@+id/ivMore__lo_twoavatars_relation_names_explain_date"
+                android:src="@drawable/ic_expand_more_white_48dp"
+                style="@style/ImageView.WhiteImageSrcTransparentBg.24"
+
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

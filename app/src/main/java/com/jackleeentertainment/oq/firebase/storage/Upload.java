@@ -21,15 +21,17 @@ import com.jackleeentertainment.oq.generalutil.LBR;
 public class Upload {
     static String TAG = "Upload";
 
+
+
     public static void uploadBitmap(Bitmap bitmap,
                                     final String firstpath,
                                     final String secondpathAkaMyUid,
-                                    final String filenameAkaResolution) {
+                                    final String suffix) {
 
         UploadTask uploadTask = App.fbaseStorageRef
                 .child(firstpath)
                 .child(secondpathAkaMyUid)
-                .child(filenameAkaResolution + ".jpg")
+                .child(FStorageNode.createMediaFileNameToUpload(firstpath,secondpathAkaMyUid,suffix))
                 .putStream(JM.getByteArrayInputStreamFromBitmap(bitmap));
 
         uploadTask

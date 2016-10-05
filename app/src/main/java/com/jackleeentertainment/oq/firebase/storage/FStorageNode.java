@@ -73,18 +73,51 @@ public class FStorageNode {
 
 
     @DebugLog
-    public static String createFileNameToUpload(Uri fileUri, Context context) {
-        String dotExtention = fileUri.toString().substring(fileUri.toString().lastIndexOf("."));
-        String filename = App.getUID() + "_" + J.st(System.currentTimeMillis()) + dotExtention;
-        return filename;
+    public static String createMediaFileNameToUpload(String firstPart,
+                                                     String secondPart,
+                                                     String suffix){
+        if (firstPart.equals(FirstT.PROFILE_PHOTO) ||
+                firstPart.equals(FirstT.POST_PHOTO) ||
+                firstPart.equals(FirstT.CHATATTACH_PHOTO)
+                ) {
+            return
+                    firstPart + "__" //firstNode
+                            + secondPart +  //uid or oid
+
+                            ".jpg";
+        } else if (firstPart.equals(FirstT.PROFILE_VIDEO) ||
+                firstPart.equals(FirstT.POST_VIDEO) ||
+                firstPart.equals(FirstT.CHATATTACH_VIDEO)
+                ) {
+            return
+                    firstPart + "__" //firstNode
+                            + secondPart + //uid
+
+                            ".mp4";
+        } else if (firstPart.equals(FirstT.PROFILE_PHOTO_THUMB) ||
+                firstPart.equals(FirstT.PROFILE_VIDEO_THUMB) ||
+                firstPart.equals(FirstT.POST_PHOTO_THUMB) ||
+                firstPart.equals(FirstT.POST_VIDEO_THUMB) ||
+                firstPart.equals(FirstT.CHATATTACH_PHOTO_THUMB) ||
+                firstPart.equals(FirstT.CHATATTACH_VIDEO_THUMB)
+                ) {
+
+            return
+                    firstPart + "__" //firstNode
+                            + secondPart + "__"  //uid
+                            + suffix +
+                            ".jpg";
+        }
+
+
+        return null;
     }
 
 
     @DebugLog
-    public static String createFileName(
+    public static String createMediaFileNameToDownload(
                                         String firstPart,
-                                        String secondPart,
-                                        String suffix
+                                        String secondPart
     ) {
 
 

@@ -12,6 +12,17 @@ import java.util.List;
 public class ProfileUtil {
 
 
+    public static Profile getProfileToPublic(Profile profileToMe) {
+        Profile profileToPublic = new Profile();
+        profileToPublic.setLast_name(profileToMe.getLast_name());
+        profileToPublic.setMiddle_name(profileToMe.getMiddle_name());
+        profileToPublic.setFirst_name(profileToMe.getFirst_name());
+        profileToPublic.setFull_name(profileToMe.getFull_name());
+        profileToPublic.setEmail(profileToMe.getEmail());
+        profileToPublic.setUid(profileToMe.getUid());
+        return profileToPublic;
+    }
+
     public static ArrayList<String> getArlUid(List<Profile> arlProfiles) {
 
         ArrayList<String> arlProfileUids = new ArrayList<>();

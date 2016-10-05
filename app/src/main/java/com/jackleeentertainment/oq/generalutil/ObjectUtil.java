@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -25,5 +27,14 @@ public class ObjectUtil {
         return map;
     }
 
+    public static Map<String, Object> getHashMapValueOfTrueFromArrayListOfString(ArrayList<String> arl) {
 
+        Map<String, Object> map = new HashMap<>();
+
+        for (int i = 0 ; i < arl.size() ; i++){
+            map.put(arl.get(i), true);
+        }
+
+        return map;
+    }
 }

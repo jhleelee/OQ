@@ -64,7 +64,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.orhanobut:logger:1.15'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
-
+    compile 'com.googlecode.libphonenumber:libphonenumber:7.7.1'
 
 }
 apply plugin: 'com.google.gms.google-services'

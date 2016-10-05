@@ -62,10 +62,9 @@ public class MyOqItemSumPerPersonRVAdapter extends
                 .load(App.fbaseStorageRef
                         .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
                         .child(oqItemSumForPerson.getProfile().getUid())
-                        .child(FStorageNode.createFileName(
+                        .child(FStorageNode.createMediaFileNameToDownload(
                                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                oqItemSumForPerson.getProfile().getUid(),
-                                JM.getSuffixOfImgWithDeviceDpi(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                oqItemSumForPerson.getProfile().getUid()
                         )))
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

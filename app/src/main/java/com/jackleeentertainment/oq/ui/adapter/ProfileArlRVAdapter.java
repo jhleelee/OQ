@@ -67,10 +67,10 @@ public class ProfileArlRVAdapter extends RecyclerView.Adapter<AvatarNameEmailChk
                 .load(App.fbaseStorageRef
                         .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
                         .child(profile.getUid())
-                        .child(FStorageNode.createFileName(
+                        .child(FStorageNode.createMediaFileNameToDownload(
                                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                profile.getUid(),
-                                JM.getSuffixOfImgWithDeviceDpi(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                profile.getUid()
+
                         )))
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

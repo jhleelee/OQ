@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
@@ -14,9 +13,7 @@ import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.object.Profile;
@@ -24,9 +21,7 @@ import com.jackleeentertainment.oq.object.Profile;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 
 public class JM {
@@ -342,10 +337,10 @@ public class JM {
                         .load(App.fbaseStorageRef
                                 .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
                                 .child(uid)
-                                .child(FStorageNode.createFileName(
+                                .child(FStorageNode.createMediaFileNameToDownload(
                                         FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                        uid,
-                                        JM.getSuffixOfImgWithDeviceDpi(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                        uid
+
                                 )))
                         .asBitmap()
                         .into(JM.getHalfProfileSizeOfImgWithDeviceDpi(), JM.getHalfProfileSizeOfImgWithDeviceDpi())

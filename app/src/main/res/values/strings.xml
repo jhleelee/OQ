@@ -213,6 +213,10 @@
     <!--Korean-->
 
     <!--FirstVisitActiity-->
+
+
+    <string name="nationalcode">KR</string>
+
     <string name="nicetomeetyou">반갑습니다!</string>
     <string name="welcome">환영합니다!</string>
     <string name="modify">변경</string>
@@ -225,7 +229,7 @@
 
 
 
-
+    you_can_change_money_after_choose
 
 
     <string name="willget">받겠습니다</string>
@@ -235,8 +239,16 @@
     <string name="willpay">주겠습니다</string>
     <string name="wanttopay_sentence">주기를 원합니다.</string>
     <string name="requesttoget_sentence">수령할 것인지 묻습니다.</string>
+    <string name="tab_to_add_opposite">탭하여 상대방 추가</string>
+
+    tabtoaddfriends
 
     search
+    <string name="you_can_change_money_after_choose">(선택 후 금액 변경 가능)</string>
+    <string name="foreach_">각각을 위해 </string>
+
+
+
 
     <string name="getter">받는 사람</string>
     <string name="payer">주는 사람</string>

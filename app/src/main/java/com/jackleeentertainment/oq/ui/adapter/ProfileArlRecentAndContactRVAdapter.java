@@ -19,7 +19,7 @@ import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
-import com.jackleeentertainment.oq.generalutil.ContactUtil;
+import com.jackleeentertainment.oq.generalutil.ContactsUtil;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameEmailChkViewHolder;
@@ -168,7 +168,7 @@ public class ProfileArlRecentAndContactRVAdapter extends RecyclerView.Adapter<Re
             //set Phone Or Email
             ((AvatarNameEmailChkViewHolder) viewHolder)
                     .tvSubTitle__lo_avatartitlesubtitle_chk.setText(
-                    ContactUtil.strPhoneTwoSpaceEmail(profile)
+                    ContactsUtil.strPhoneTwoSpaceEmail(profile)
             );
 
             //set Image
@@ -177,10 +177,10 @@ public class ProfileArlRecentAndContactRVAdapter extends RecyclerView.Adapter<Re
                     .load(App.fbaseStorageRef
                             .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
                             .child(profile.getUid())
-                            .child(FStorageNode.createFileName(
+                            .child(FStorageNode.createMediaFileNameToDownload(
                                     FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                    profile.getUid(),
-                                    JM.getSuffixOfImgWithDeviceDpi(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                    profile.getUid()
+
                             )))
                     .crossFade()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
