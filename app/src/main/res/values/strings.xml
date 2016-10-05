@@ -1,4 +1,14 @@
 <resources>
+    <string name="facebook_app_id" translatable="false">503174453224789</string>
+
+    <!--FirebaseUI values-->
+    <string name="facebook_application_id" translatable="false">503174453224789</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">503174453224789</string>
+    <string name="idp_name_facebook">Facebook</string>
+    <string name="sign_in_with_facebook">Facebook으로 로그인</string>
+    <string name="sign_in_with_google">Google로 로그인</string>
+
+
     <string name="app_name">OQ</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

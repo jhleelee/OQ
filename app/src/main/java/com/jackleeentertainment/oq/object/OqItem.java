@@ -1,7 +1,5 @@
 package com.jackleeentertainment.oq.object;
 
-import java.util.List;
-
 /**
  * Created by Jacklee on 2016. 9. 29..
  */
@@ -9,9 +7,14 @@ import java.util.List;
 public class OqItem {
 
     String oid;
-    String uidgiver;
-    List<String> listuidbenefit;
+    String uidpayer;
     String uidgettor;
+
+
+    String uidgavebnf;
+    String uidreceivedbnf;
+
+
     long ts;
     long ammount;
     String currency;
@@ -29,21 +32,14 @@ public class OqItem {
         this.oid = oid;
     }
 
-    public String getUidgiver() {
-        return uidgiver;
+    public String getUidpayer() {
+        return uidpayer;
     }
 
-    public void setUidgiver(String uidgiver) {
-        this.uidgiver = uidgiver;
+    public void setUidpayer(String uidpayer) {
+        this.uidpayer = uidpayer;
     }
 
-    public List<String> getListuidbenefit() {
-        return listuidbenefit;
-    }
-
-    public void setListuidbenefit(List<String> listuidbenefit) {
-        this.listuidbenefit = listuidbenefit;
-    }
 
     public String getUidgettor() {
         return uidgettor;
@@ -85,5 +81,20 @@ public class OqItem {
         this.duedate = duedate;
     }
 
+    public String getUidgavebnf() {
+        return uidgavebnf;
+    }
+
+    public void setUidgavebnf(String uidgavebnf) {
+        this.uidgavebnf = uidgavebnf;
+    }
+
+    public String getUidreceivedbnf() {
+        return uidreceivedbnf;
+    }
+
+    public void setUidreceivedbnf(String uidreceivedbnf) {
+        this.uidreceivedbnf = uidreceivedbnf;
+    }
 
 }

@@ -11,6 +11,8 @@ import com.jackleeentertainment.oq.object.OqItemSumForPerson;
 import com.jackleeentertainment.oq.ui.adapter.MyOqItemSumPerPersonRVAdapter;
 import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameDetailViewHolder;
 
+import hugo.weaving.DebugLog;
+
 /**
  * Created by Jacklee on 2016. 9. 14..
  */
@@ -28,6 +30,7 @@ public class MainFrag0 extends ListFrag {
         return new MainFrag0();
     }
 
+    @DebugLog
     @Override
     void initAdapter() {
         super.initAdapter();

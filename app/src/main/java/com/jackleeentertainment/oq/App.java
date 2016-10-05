@@ -9,9 +9,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.util.Log;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
@@ -51,6 +54,7 @@ public class App extends Application {
     public static boolean GIVEN_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGES = false;
     public static int CURRENTFRAGMENT_MAINACTIVITY = 0;
 
+    static  boolean isJackDebug = true;
 
 
 
@@ -65,7 +69,14 @@ public class App extends Application {
         super.onCreate();
         appContext = getApplicationContext();
         myProfile = new Profile();
+        FirebaseApp.initializeApp(appContext);
+
         initFbaseDatabase();
+
+        //Facebook Logger
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
         initApplicationLifecycleHandler();
         Log.d(TAG, "Application.onCreate - Application initialized OK");
     }
@@ -221,6 +232,11 @@ public class App extends Application {
 
 
     public static String getUID(){
+
+        if (isJackDebug){
+            return "mockuid";
+        }
+
 
         if (App.myProfile.getUid()!=null){
             return  App.myProfile.getUid();

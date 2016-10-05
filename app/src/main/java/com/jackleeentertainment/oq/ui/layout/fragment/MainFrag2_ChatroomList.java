@@ -109,6 +109,11 @@ public class MainFrag2_ChatroomList extends Fragment implements
     public MainFrag2_ChatroomList() {
     }
 
+    @NonNull
+    public static MainFrag2_ChatroomList newInstance() {
+        return new MainFrag2_ChatroomList();
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

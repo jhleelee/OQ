@@ -100,6 +100,8 @@ public class SignInCatcherActivity extends AppCompatActivity {
 //            startActivity(SignedInActivity.createIntent(this));
             Log.d(TAG, "SignIn - Successful");
             App.initFirebaseUser();
+            App.initFbaseDatabaseRef();
+            App.initFbaseStorage();
             goMainActivity();
             return;
         }
