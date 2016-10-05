@@ -180,7 +180,6 @@ public class StringGenerator {
                         nameX + "가 총무로서 " +
                         J.stFromArlWithComma(arlNameYZ) + "에게서 " +
                         "회비를 걷으려고 하기 때문입니다.";
-
     }
 
 
@@ -193,6 +192,45 @@ public class StringGenerator {
                         "합계 " + J.st(moneyAll) + "은 " +
                         nameX + "," + J.stFromArlWithComma(arlNameYZ) + " " +
                         "모두를 위해 사용될 것입니다.";
+    }
+
+
+    public static String xWantToPayAAToY(String xName, String yName, double moneyToPay) {
+
+        // [A]는 [B]에게 [XX]원의 돈을 주기를 원합니다.
+        return xName + "은 " +
+                yName + "에게 " +
+                J.st(moneyToPay) + "원을 " +
+                "주기를 원합니다 ";
+    }
+
+    public static String itIsBecauseYSpentAAToX(String xName, String yName, double moneyToPay) {
+
+        // 그 이유는 [B]가 [A]를 위하여 [XX]원을 대신 지출하였기 때문입니다.
+        return "그 이유는 " +
+                yName + "가 " +
+                xName + "를 위하여 " +
+                J.st(moneyToPay) + "원을 " +
+                "대신 지출하였기 때문입니다.";
+    }
+
+
+    public static String itIsBecauseYIsGoingToCollectHoebiFromXOrElseMembers(String xName, String yName) {
+
+        // 그 이유는 [B]가 총무로서 [A] 또는 그 외의 회원들으로부터  회비를 걷으려고 하기 때문입니다.
+        return "그 이유는 " +
+                yName + "가 총무로서" +
+                xName + " 또는 그 외의 회원들로부터 " +
+                "회비를 걷으려고 하기 때문입니다.";
+    }
+
+    public static String sumHoebiYIsGoingToCollectWillBeUsedForXYOrElseMembers(String xName, String yName) {
+
+        //  [B]가 걷게 될 회비 총액은 [A],[B] 또는 그 외의 회원들 모두를 위해 사용될 것입니다.
+        return yName + "가 걷게 될 회비 총액은 " +
+                xName + "," + yName +
+                " 또는 그 외의 회원들 모두를 위하여 " +
+                "사용될 것입니다.";
     }
 
 
