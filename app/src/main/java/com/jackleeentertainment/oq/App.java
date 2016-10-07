@@ -1,11 +1,9 @@
 package com.jackleeentertainment.oq;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.util.Log;
 
@@ -22,7 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.object.Profile;
 
 import java.util.ArrayList;
@@ -85,38 +82,6 @@ public class App extends Application {
         mAuth = FirebaseAuth.getInstance();
     }
 
-
-    public static void initFirebaseAuthStateListener(final Activity context) {
-        App.mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    App.initFirebaseUser(user);
-
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    App.nullifyUser();
-
-                    context.startActivityForResult(
-                            AuthUI.getInstance().createSignInIntentBuilder()
-                                    .setTheme(R.style.AppTheme)
-                                    .setProviders(getSelectedProviders())
-                                    .setTosUrl(getSelectedTosUrl())
-                                    .build(),
-                            RC_SIGN_IN);
-                    context.finish();
-                }
-
-                // ...
-            }
-        };
-    }
-
-
     public static final int RC_SIGN_IN = 100;
 
     @MainThread
@@ -169,11 +134,12 @@ public class App extends Application {
     public static void initFbaseDatabaseRef() {
         Log.d(TAG, "initFbaseDatabaseRef()");
         fbaseDbRef = firebaseDatabase.getReference();
+        fbaseDbRef.keepSynced(true);
     }
 
     public static void initFbaseStorage() {
         firebaseStorage = FirebaseStorage.getInstance();
-        fbaseStorageRef = firebaseStorage.getReferenceFromUrl("gs://project-5788136259447833395.appspot.com");
+        fbaseStorageRef = firebaseStorage.getReferenceFromUrl("gs://oqmoney-93ff2.appspot.com");
         Log.d(TAG, "firebaseStorage.getApp().getMname() :"+firebaseStorage.getApp().getName());
 
     }
@@ -290,6 +256,9 @@ public class App extends Application {
 
 
     public static void firebaseUserToMyProfile(FirebaseUser firebaseUser){
+        Log.d(TAG, firebaseUser.getUid());
+        if (myProfile == null)
+            myProfile = new Profile();
         myProfile.setUid(firebaseUser.getUid());
         myProfile.setFull_name(firebaseUser.getDisplayName());
         myProfile.setEmail(firebaseUser.getEmail());
