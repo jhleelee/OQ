@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.object.util;
 
+import com.google.gson.Gson;
 import com.jackleeentertainment.oq.object.OqItem;
 
 import java.util.ArrayList;
@@ -19,6 +20,14 @@ public class OqItemUtil {
         public final static String UID_GAVE_BENEFIT = "uidgavebnf";
         public final static String UID_RECEIVED_BENEFIT = "uidreceivedbnf";
 
+    }
+
+
+    public static OqItem copyOqItemValues(OqItem oqItem) {
+        Gson gson = new Gson();
+        String strItem = gson.toJson(oqItem);
+        OqItem oqItem1 = gson.fromJson(strItem, OqItem.class);
+        return oqItem1;
     }
 
 
@@ -59,6 +68,18 @@ public class OqItemUtil {
     }
 
 
+    public static long getSumOqItemAmmounts(ArrayList<OqItem> arlOqItems) {
+
+        long returnVal = 0;
+
+        for (int i = 0; i < arlOqItems.size(); i++) {
+            returnVal +=arlOqItems.get(i).getAmmount();
+        }
+
+        return returnVal;
+    }
+
+
 //    public static OqItem mergeOqItemsPivotPerson(ArrayList<OqItem> arlOqItems, String oqItemPivotT) {
 //
 //        ArrayList<ArrayList<OqItem>> arlReturn = new ArrayList<>();
@@ -66,8 +87,33 @@ public class OqItemUtil {
 //        /**
 //         * Get uids without Duplication
 //         */
-//        ArrayList<String> arlUids = getUnduplacatedArlUidsFromArlOqItems(arlOqItems, oqItemPivotT);
+//        ArrayList<String> arlUidsByPivot = getUnduplacatedArlUidsFromArlOqItems(
+//                arlOqItems,
+//                oqItemPivotT);
 //
+//        ArrayList<OqItem> arl = new ArrayList<OqItem>();
+//
+//        for (int i = 0; i < arlUidsByPivot.size(); i++) {
+//
+//            for (int j = 0; j < arlOqItems.size(); j++) {
+//
+//                long ammountPerPerson = 0;
+//
+//                if (arlOqItems.get(j).getUidreceivedbnf().equals(arlUidsByPivot.get(i))) {
+//
+//                    ammountPerPerson = ammountPerPerson + arlOqItems.get(j).getAmmount();
+//
+//                    if (arl.get(i) == null) {
+//                        OqItem newOqItem = arlOqItems.get(0);
+//                        newOqItem.setAmmount(0);
+//                        arl.set(i, newOqItem);
+//                    }
+//                    arl.get(i).setAmmount(ammountPerPerson);
+//                }
+//
+//            }
+//
+//        }
 //
 //    }
 

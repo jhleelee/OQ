@@ -16,6 +16,9 @@
     <string name="slogan">오케이가 아니야, 오큐!</string>
 
     <!--Dummy Text-->
+    <string name="dummymoney">300,000</string>
+    <string name="dummyperiod">7월 1일 ~ 30일</string>
+
     <string name="dummydate">12/06/2015</string>
     <string name="dummytext">Wow, Cool, How are you! I am very pleased to meet you!</string>
     <string name="dummyname">Jack Lee Corporation of Korea</string>
@@ -71,8 +74,14 @@
 
 
 
-    <!--Clock and Alarm Terminology-->
 
+
+    <!--Button-->
+    <string name="change">변경</string>
+    <string name="changeperiod">기간 변경</string>
+
+    <string name="money_sum">총액</string>
+    <string name="money_individual">각자</string>
 
 
 

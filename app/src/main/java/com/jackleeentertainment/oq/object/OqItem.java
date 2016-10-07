@@ -7,6 +7,9 @@ package com.jackleeentertainment.oq.object;
 public class OqItem {
 
     String oid;
+
+    String gid;
+
     String uidpayer;
     String uidgettor;
 
@@ -95,6 +98,15 @@ public class OqItem {
 
     public void setUidreceivedbnf(String uidreceivedbnf) {
         this.uidreceivedbnf = uidreceivedbnf;
+    }
+
+
+    public String getGid() {
+        return gid;
+    }
+
+    public void setGid(String gid) {
+        this.gid = gid;
     }
 
 }

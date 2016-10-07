@@ -16,6 +16,11 @@ public class FBaseNode0 {
 
     public final static String MyOqItemSums = "my_oqisum";
     public final static String MyOqItems = "my_oqi";
+
+    public final static String Group_OqItem = "group_oqitem";
+    public final static String Group_People = "group_oqitem";
+
+
     public final static String MyReceivedPosts = "my_r_post";
     public final static String MySentPosts = "my_s_post";
 
