@@ -105,7 +105,6 @@ public class ApplicationLifecycleHandler implements android.app.Application.Acti
     private void setFirebaseIamLeaving_DoNeedPush() {
         Log.d(TAG, "setFirebaseIamLeaving_DoNeedPush");
         if (App.fbaseDbRef != null && App.getUID() != null)
-
             App.fbaseDbRef.child("p").child(App.getUID()).setValue(null);
     }
 

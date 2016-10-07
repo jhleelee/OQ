@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "319021370276-6tkahdm18pp08qrcode97v67te4dt0hl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jackleeentertainment.oq",
+            "certificate_hash": "E591EF4F62D34137D05078BFBC4C3F2E31E55E06"
+          }
+        },
+        {
           "client_id": "319021370276-s64omnidu15bvag4sj3hem1lrm6pk80b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

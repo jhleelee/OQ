@@ -24,22 +24,33 @@ import com.jackleeentertainment.oq.R;
 public class SignInCatcherActivity extends AppCompatActivity {
 
     private final static String TAG = SignInCatcherActivity.class.getSimpleName();
-    RelativeLayout roRoot;
+    private RelativeLayout roRoot;
+    private boolean flag = true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in_catcher);
         roRoot = (RelativeLayout)findViewById(R.id.roRoot);
         App.initFirebaseAuth();
-        App. mAuthListener = new FirebaseAuth.AuthStateListener() {
+        App.mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    App.initFirebaseUser(user);
-                    goMainActivity();
+                    if (flag) {
+
+                        // User is signed in
+                        Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+                        App.initFirebaseUser(user);
+                        App.initFbaseDatabaseRef();
+                        App.initFbaseStorage();
+
+                        flag = false;
+                        goMainActivity();
+
+                    }
 
                 } else {
                     // User is signed out
@@ -49,9 +60,9 @@ public class SignInCatcherActivity extends AppCompatActivity {
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
                                     .setTheme(R.style.AppTheme)
                                     .setProviders(App.getSelectedProviders())
-                                    .setTosUrl(App.getSelectedTosUrl())
                                     .build(),
                             App.RC_SIGN_IN);
                 }
@@ -73,16 +84,15 @@ public class SignInCatcherActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        App.mAuth.removeAuthStateListener(App.mAuthListener);
+        if (App.mAuthListener != null)
+            App.mAuth.removeAuthStateListener(App.mAuthListener);
 
     }
-
-    private static final int RC_SIGN_IN = 100;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == App.RC_SIGN_IN) {
             handleSignInResponse(resultCode, data);
             return;
         }
@@ -97,12 +107,7 @@ public class SignInCatcherActivity extends AppCompatActivity {
     @MainThread
     private void handleSignInResponse(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-//            startActivity(SignedInActivity.createIntent(this));
             Log.d(TAG, "SignIn - Successful");
-            App.initFirebaseUser();
-            App.initFbaseDatabaseRef();
-            App.initFbaseStorage();
-            goMainActivity();
             return;
         }
 

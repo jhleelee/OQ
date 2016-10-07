@@ -274,4 +274,24 @@
 
     <string name="search">검색</string>
 
+    <!--
+    For a list of all scopes, see:
+    https://developers.google.com/identity/protocols/googlescopes
+    -->
+    <string-array name="google_permissions">
+        <!-- Request permission to read the user's Google Drive files -->
+        <item>https://www.googleapis.com/auth/drive.readonly</item>
+    </string-array>
+
+    <!--
+    See:
+    https://developers.facebook.com/docs/facebook-login/android
+    https://developers.facebook.com/docs/facebook-login/permissions
+    -->
+    <string-array name="facebook_permissions">
+        <!-- Request permission to know the user's birthday -->
+        <item>user_birthday</item>
+    </string-array>
+
+
 </resources>
