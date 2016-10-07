@@ -23,7 +23,6 @@ android {
         versionName "1.0"
     }
     buildTypes {
-
         debug {
             minifyEnabled true
             useProguard false
@@ -74,7 +73,6 @@ dependencies {
     compile 'com.googlecode.libphonenumber:libphonenumber:7.7.1'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     testCompile 'junit:junit:4.12'
-    compile project(path: ':backendgcm', configuration: 'android-endpoints')
 }
 apply plugin: 'com.google.gms.google-services'
 

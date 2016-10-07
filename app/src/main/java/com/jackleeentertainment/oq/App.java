@@ -51,7 +51,6 @@ public class App extends Application {
     public static boolean GIVEN_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGES = false;
     public static int CURRENTFRAGMENT_MAINACTIVITY = 0;
 
-    static  boolean isJackDebug = true;
 
 
 
@@ -199,19 +198,16 @@ public class App extends Application {
 
     public static String getUID(){
 
-        if (isJackDebug){
-            return "mockuid";
-        }
-
 
         if (App.myProfile.getUid()!=null){
+            Log.d(TAG, App.myProfile.getUid());
             return  App.myProfile.getUid();
         } else {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 // User is signed in
-
                 myProfile.setUid( user.getUid());
+                Log.d(TAG, App.myProfile.getUid());
                 return user.getUid();
             } else {
                 // No user is signed in
