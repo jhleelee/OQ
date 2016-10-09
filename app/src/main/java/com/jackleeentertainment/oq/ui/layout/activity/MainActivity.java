@@ -25,7 +25,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag0;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag1;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag2_ChatroomList;
@@ -73,6 +75,13 @@ public class MainActivity extends BaseActivity
         viewPager.setAdapter(mainActivityPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        J.TOAST(App.getUID());
     }
 
     @Override
