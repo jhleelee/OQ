@@ -19,19 +19,19 @@ import java.util.ArrayList;
 /**
  * Created by Jacklee on 2016. 9. 14..
  */
-public class MainFrag1 extends ListFrag {
+public class MainFrag1_Feeds extends ListFrag {
     String TAG = this.getClass().getSimpleName();
     View view;
 
     int dxArlPostsToUpdate = 0;
 
-    public MainFrag1() {
+    public MainFrag1_Feeds() {
         super();
     }
 
     @NonNull
-    public static MainFrag1 newInstance() {
-        return new MainFrag1();
+    public static MainFrag1_Feeds newInstance() {
+        return new MainFrag1_Feeds();
     }
 
 

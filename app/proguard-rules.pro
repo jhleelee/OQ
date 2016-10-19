@@ -34,3 +34,18 @@
 -keepclassmembers class com.jackleeentertainment.oq.object.** {
   *;
 }
+
+# stackOverflow - http://stackoverflow.com/questions/16047937/using-proguard-on-app-engine-connected-android-client
+# To take care of GAE error.
+# Needed to keep generic types and @Key annotations accessed via reflection
+-keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
+
+-keepclassmembers class * {
+  @com.google.api.client.util.Key <fields>;
+}
+
+# Needed by google-http-client-android when linking against an older platform version
+-dontwarn com.google.api.client.extensions.android.**
+
+# Needed by google-api-client-android when linking against an older platform version
+-dontwarn com.google.api.client.googleapis.extensions.android.**

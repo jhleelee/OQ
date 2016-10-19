@@ -16,25 +16,26 @@ import hugo.weaving.DebugLog;
 /**
  * Created by Jacklee on 2016. 9. 14..
  */
-public class MainFrag0 extends ListFrag {
+public class MainFrag0_OQItems extends ListFrag {
     String TAG = this.getClass().getSimpleName();
     View view;
 
 
-    public MainFrag0() {
+    public MainFrag0_OQItems() {
         super();
     }
 
     @NonNull
-    public static MainFrag0 newInstance() {
-        return new MainFrag0();
+    public static MainFrag0_OQItems newInstance() {
+        return new MainFrag0_OQItems();
     }
 
     @DebugLog
     @Override
     void initAdapter() {
         super.initAdapter();
-        Query query = App.fbaseDbRef.child(FBaseNode0.MyOqItemSums)
+        Query query = App.fbaseDbRef
+                .child(FBaseNode0.MyOqItemSums)
                 .child(App.getUID())
                 .orderByChild("ts");
         firebaseRecyclerAdapter = new MyOqItemSumPerPersonRVAdapter(

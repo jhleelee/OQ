@@ -1,7 +1,5 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,9 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
@@ -19,26 +15,37 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.generalutil.J;
-import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag0;
-import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag1;
+import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
+import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag0_OQItems;
+import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag1_Feeds;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag2_ChatroomList;
+import com.jackleeentertainment.oq.ui.widget.SlidingTabLayout;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     String TAG = this.getClass().getSimpleName();
 
+    //Drawer
+    TextView tvTitleDrawerHeader;
+    TextView tvSubTitleDrawerHeader;
+    ImageView ivUserProfile;
+
+    //ViewPager
     MainActivityPagerAdapter mainActivityPagerAdapter;
     ViewPager viewPager;
+    SlidingTabLayout slidingTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,12 @@ public class MainActivity extends BaseActivity
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        tvTitleDrawerHeader = (TextView) drawer.findViewById(R.id.tvTitle_DrawerHeader);
+        tvSubTitleDrawerHeader = (TextView) drawer.findViewById(R.id
+                .tvSubTitle_DrawerHeader);
+        ivUserProfile = (ImageView) drawer.findViewById(R.id
+                .ivUserProfile);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -68,20 +81,37 @@ public class MainActivity extends BaseActivity
         // Instantiate a ViewPager and a PagerAdapter.
         mainActivityPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_white_48dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_white_48dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_white_48dp));
         viewPager.setAdapter(mainActivityPagerAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+//        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_white_48dp));
+//        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_white_48dp));
+//        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_white_48dp));
+//        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+//        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+
+        // Assiging the Sliding Tab Layout View
+        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.slidingTabLayout);
+        slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+
+        // Setting Custom Color for the Scroll bar indicator of the Tab View
+        slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.white);
+            }
+        });
+
+        // Setting the ViewPager For the SlidingTabsLayout
+        slidingTabLayout.setViewPager(viewPager);
+
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        J.TOAST(App.getUID());
+        initUiDataDrawer();
     }
 
     @Override
@@ -142,6 +172,26 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
+    void initUiDataDrawer() {
+        tvTitleDrawerHeader.setText(App.getFirebaseUser().getDisplayName());
+        tvSubTitleDrawerHeader.setText(App.getFirebaseUser().getDisplayName());
+
+        //set Image
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(App.fbaseStorageRef
+                        .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                        .child(App.getFirebaseUser().getUid())
+                        .child(FStorageNode.createMediaFileNameToDownload(
+                                FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                                App.getFirebaseUser().getUid()
+                        )))
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(ivUserProfile);
+
+    }
+
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
@@ -152,20 +202,19 @@ public class MainActivity extends BaseActivity
         }
 
 
-
         @Override
         public Fragment getItem(int position) {
 
-            Log.d(TAG, "position : " +String.valueOf(position));
+            Log.d(TAG, "position : " + String.valueOf(position));
 
             switch (position) {
 
 
                 case 0:
-                    return MainFrag0.newInstance();
+                    return MainFrag0_OQItems.newInstance();
 
                 case 1:
-                    return MainFrag1.newInstance();
+                    return MainFrag1_Feeds.newInstance();
 
                 case 2:
 
@@ -182,6 +231,8 @@ public class MainActivity extends BaseActivity
         public int getCount() {
             return 3;
         }
+
+
     }
 
 }

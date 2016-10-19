@@ -196,18 +196,38 @@ public class App extends Application {
     }
 
 
+//    public static String getUID(){
+//
+//
+//        if (App.myProfile.getUid()!=null){
+//            Log.d(TAG, App.myProfile.getUid());
+//            return  App.myProfile.getUid();
+//        } else {
+//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//            if (user != null) {
+//                // User is signed in
+//                myProfile.setUid( user.getUid());
+//                Log.d(TAG, App.myProfile.getUid());
+//                return user.getUid();
+//            } else {
+//                // No user is signed in
+//                nullifyUser();
+//                return null;
+//            }
+//        }
+//
+//    }
+
+
     public static String getUID(){
-
-
-        if (App.myProfile.getUid()!=null){
+        if (App.firebaseUser.getUid()!=null){
             Log.d(TAG, App.myProfile.getUid());
             return  App.myProfile.getUid();
         } else {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 // User is signed in
-                myProfile.setUid( user.getUid());
-                Log.d(TAG, App.myProfile.getUid());
                 return user.getUid();
             } else {
                 // No user is signed in
@@ -215,8 +235,16 @@ public class App extends Application {
                 return null;
             }
         }
+    }
+
+
+    public static FirebaseUser getFirebaseUser(){
+
+            return FirebaseAuth.getInstance().getCurrentUser();
+
 
     }
+
 
     public static void setUID(String UID){
         myProfile.setUid(UID);

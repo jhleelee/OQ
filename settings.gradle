@@ -1,1 +1,1 @@
-include ':app', ':backendfcm', ':backendgcm'
+include ':app', ':backendgcm'

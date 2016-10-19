@@ -25,12 +25,7 @@ public class FBaseNode0 {
     public final static String MySentPosts = "my_s_post";
 
 
-    public final static String AlarmWithFriends = "alarm_fri";
-    public final static String AlarmWithPublic = "alarm_pub";
 
-    public final static String AlarmSound = "alarm_sound";
-    public final static String AlarmVibe = "alarm_vibe";
-    public final static String AlarmVideo = "alarm_video";
 
     public final static String Post = "post";
 

@@ -8,25 +8,21 @@ package com.jackleeentertainment.oq.backendgcm;
 
 import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.MulticastResult;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
+import com.google.appengine.repackaged.com.google.gson.Gson;
+import com.google.appengine.repackaged.com.google.gson.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.tasks.OnSuccessListener;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -62,89 +58,109 @@ public class MessagingEndpoint {
      */
     private static final String API_KEY = System.getProperty("gcm.api.key");
 
+    @ApiMethod
+    public void checkTokenSendMessageToSingleReceiver(
+            @Named("token") final String token, // includes senderUid
+            @Named("rid") final String rid,     // includes receiverUid (single)
+            @Named("meta") final String meta,     // includes type
+            @Named("txt") final String txt       //includes type, content
+    ) throws IOException {
 
-    FirebaseApp firebaseApp = null;
-
-
-    private void initFirebaseApp() {
-
-        try {
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setServiceAccount(
-                            new ByteArrayInputStream(
-                                    Constant.cred.getBytes())
-                    )
-                    .setDatabaseUrl("https://oqmoney-93ff2.firebaseio.com/")
-                    .build();
-
-            firebaseApp = FirebaseApp.initializeApp(options);
-
-            log.info("initFirebaseApp() : done");
-
-        } catch (Exception e) {
-            log.warning("Exception initFirebaseApp : " + e.toString());
-
-        }
-    }
-
-    /**
-     * Send to the first 10 devices (You can modify this to send to any number of devices or a specific device)
-     *
-     * @param message The message to send
-     */
-    public void sendMessage(@Named("message") String message) throws IOException {
-        if (message == null || message.trim().length() == 0) {
-            log.warning("Not sending message because it is empty");
+        // (0) check if there is meta, txt
+        if (meta == null || meta.trim().length() == 0) {
+            log.warning("Not sending message because meta is empty");
             return;
         }
-        // crop longer messages
-        if (message.length() > 1000) {
-            message = message.substring(0, 1000) + "[...]";
+
+        if (txt == null || txt.trim().length() == 0) {
+            log.warning("Not sending message because txt is empty");
+            return;
         }
-        Sender sender = new Sender(API_KEY);
-        Message msg = new Message.Builder().addData("message", message).build();
-        List<RegistrationRecord> records = ofy()
-                .load()
-                .type(RegistrationRecord.class)
-                .limit(10).list();
 
-        for (RegistrationRecord record : records) {
 
-            Result result = sender.send(msg, record.getRegId(), 5);
+        // (1) check token and get uid, uname
+        FirebaseAuth.getInstance().verifyIdToken(token)
+                .addOnSuccessListener(new OnSuccessListener<FirebaseToken>() {
+                    @Override
+                    public void onSuccess(FirebaseToken decodedToken) {
+                        String senderUid = decodedToken.getUid();
+                        String senderName = decodedToken.getName();
 
-            if (result.getMessageId() != null) {
-                log.info("Message sent to " + record.getRegId());
-                String canonicalRegId = result.getCanonicalRegistrationId();
-                if (canonicalRegId != null) {
-                    // if the regId changed, we have to update the datastore
-                    log.info("Registration Id changed for " + record.getRegId() + " updating to " + canonicalRegId);
-                    record.setRegId(canonicalRegId);
-                    ofy().save().entity(record).now();
-                }
-            } else {
-                String error = result.getErrorCodeName();
-                if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
-                    log.warning("Registration Id " + record.getRegId() + " no longer registered with GCM, removing from datastore");
-                    // if the device is no longer registered with Gcm, remove it from the datastore
-                    ofy().delete().entity(record).now();
-                } else {
-                    log.warning("Error when sending message : " + error);
-                }
-            }
-        }
+                        // (2) get receiver's uid, regId
+                        UserObj receiverUserObj = ofy()
+                                .deadline(2.0)
+                                .cache(true)
+                                .load()
+                                .type(UserObj.class)
+                                .id(rid)
+                                .now();
+
+                        if (receiverUserObj == null) {
+                            return;
+                        } else {
+                            // (3) build a message instance
+                            Message msg = new Message.Builder()
+                                    .addData("sid", senderUid) //SenderId
+                                    .addData("sname", senderName) //SenderName
+                                    .addData("meta", meta) //SenderName
+                                    .addData("txt", cropText(txt, 1000)) //Text
+                                    .build();
+
+                            // (4) send it!
+                            trySendMessage(msg, receiverUserObj);
+
+                        }
+                    }
+                });
     }
 
 
-    private void trySendSingleMessage(String rg, Message msg) {
+    private void trySendMessage(Message msg, UserObj receiverUserObj) {
+
         Sender sender = new Sender(API_KEY);
 
         try {
-
             Result result = sender.send(
                     msg,
-                    rg,
-                    1);
-            updateReceiverRegId(result, rg);
+                    receiverUserObj.regId,
+                    0);
+
+            if (result.getCanonicalRegistrationId() != null) {
+                updateReceiverRegId(result, receiverUserObj);
+            }
+            ;
+
+        } catch (Exception e) {
+            log.warning("Exception when Message sening : " + e.toString());
+        }
+
+    }
+
+    private void trySendMessage(Message msg, Map<String, UserObj> mapReciverUidUserObj) {
+
+        Sender sender = new Sender(API_KEY);
+        ArrayList<UserObj> arlReceiverUserObj = new ArrayList<>();
+        ArrayList<String> arlReceiverRegId = new ArrayList<>();
+
+        Iterator it = mapReciverUidUserObj.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            arlReceiverUserObj.add((UserObj) pair.getValue());
+            arlReceiverRegId.add(((UserObj) pair.getValue()).regId);
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+
+        try {
+            MulticastResult multicastResult = sender.send(
+                    msg,
+                    arlReceiverRegId,
+                    0);
+
+            if (multicastResult.getResults() != null) {
+                updateReceiverRegId(multicastResult, arlReceiverUserObj);
+            }
+            ;
+
         } catch (Exception e) {
             log.warning("Exception when Message sening : " + e.toString());
         }
@@ -152,165 +168,114 @@ public class MessagingEndpoint {
     }
 
 
-    private void updateReceiverRegId(final Result result, final String rg) {
+    @ApiMethod
+    public void checkTokenSendMessageToMultipleReceiver(
+            @Named("token") final String token, // includes senderUid
+            @Named("gsonrids") final String gsonrids,     // includes receiverUid (single)
+            @Named("meta") final String meta,     // includes type
+            @Named("txt") final String txt       //includes type, content
+    ) throws IOException {
 
+        // (0) check if there is meta, txt
+        if (meta == null || meta.trim().length() == 0) {
+            log.warning("Not sending message because meta is empty");
+            return;
+        }
+
+        if (txt == null || txt.trim().length() == 0) {
+            log.warning("Not sending message because txt is empty");
+            return;
+        }
+
+
+        // (1) check token and get uid, uname
+        FirebaseAuth.getInstance().verifyIdToken(token)
+                .addOnSuccessListener(new OnSuccessListener<FirebaseToken>() {
+                    @Override
+                    public void onSuccess(FirebaseToken decodedToken) {
+                        String senderUid = decodedToken.getUid();
+                        String senderName = decodedToken.getName();
+
+                        // (2) get receivers' uid, regId
+                        Gson gson = new Gson();
+                        String[] arReceiverUids = gson.fromJson(gsonrids, new
+                                TypeToken<ArrayList<String>>() {
+                                }.getType());
+
+                        Map<String, UserObj> mapReciverUidUserObj = ofy()
+                                .load()
+                                .type(UserObj.class)
+                                .ids(arReceiverUids);
+
+                        if (mapReciverUidUserObj == null || mapReciverUidUserObj.size() == 0) {
+                            return;
+                        } else {
+                            // (3) build a message instance
+                            Message msg = new Message.Builder()
+                                    .addData("sid", senderUid) //SenderId
+                                    .addData("sname", senderName) //SenderName
+                                    .addData("meta", meta) //SenderName
+                                    .addData("txt", cropText(txt, 1000)) //Text
+                                    .build();
+
+                            // (4) send it!
+                            trySendMessage(msg, mapReciverUidUserObj);
+
+                        }
+                    }
+                });
+    }
+
+
+    private void updateReceiverRegId(final Result result, final UserObj receiverUserObjOld
+    ) {
 
         if (result.getMessageId() != null) {
-            log.info("Message sent to " + rg);
+            log.info("Message sent to " + receiverUserObjOld.uid);
+
             final String canonicalRegId = result.getCanonicalRegistrationId(); //JHE : of Receiver
-
-            if (canonicalRegId != null) {
+            if (canonicalRegId != null && !receiverUserObjOld.regId.equals(canonicalRegId)) {
                 // if the regId changed, we have to update the datastore
-                log.info("Registration Id changed for " + rg + " updating to " + canonicalRegId);
-
-                FirebaseDatabase.getInstance(firebaseApp).getReference()
-                        .child("FCM")
-                        .child(rg)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                String prevRg = dataSnapshot.getKey();
-                                String Uid = dataSnapshot.getValue().toString();
-
-                                log.info("onDataChange prevRg, Uid: " + prevRg + ", " + Uid);
-
-                                //A
-                                FirebaseDatabase.getInstance(firebaseApp).getReference()
-                                        .child("P").child(Uid).child("rg").setValue(canonicalRegId);
-
-
-                                //B
-                                FirebaseDatabase.getInstance(firebaseApp).getReference()
-                                        .child("FCM").child(canonicalRegId).setValue(Uid);
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-
+                log.info("Registration Id changed for " + receiverUserObjOld.uid + " updating to " +
+                        canonicalRegId);
+                UserObj userObj = new UserObj();
+                userObj.uid = receiverUserObjOld.uid;
+                userObj.regId = canonicalRegId;
+                ofy()
+                        .deadline(2.0)
+                        .save()
+                        .entity(userObj); // asynchronous
             }
         } else {
             String error = result.getErrorCodeName();
             if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
-                log.warning("Registration Id " + rg + " no longer registered with GCM, removing from datastore");
+                log.warning("Registration Id " + receiverUserObjOld.uid + " no longer registered with GCM, removing from datastore");
                 // if the device is no longer registered with Gcm, remove it from the datastore
-
-                FirebaseDatabase.getInstance(firebaseApp).getReference()
-                        .child("FCM").child(rg).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String prevRg = dataSnapshot.getKey();
-                        String Uid = dataSnapshot.getValue().toString();
-                        log.info("onDataChange prevRg, Uid: " + prevRg + ", " + Uid);
-
-                        //A
-                        FirebaseDatabase.getInstance(firebaseApp).getReference()
-                                .child("P").child(Uid).child("rg").setValue(null);
-
-
-                        //B
-                        FirebaseDatabase.getInstance(firebaseApp).getReference()
-                                .child("FCM").child(prevRg).setValue(null);
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                ofy().delete().type(UserObj.class).id(receiverUserObjOld.uid); // asynchronous
             } else {
                 log.warning("Error when sending message : " + error); //InvalidRegistration
             }
         }
-
-
     }
 
 
-    @ApiMethod
-    public void sendSingleChat(
-            @Named("rg") final String rg,
-            @Named("nm") final String nm,
-            @Named("tx") final String tx,
-            @Named("token") final String token
-
+    private void updateReceiverRegId(final MulticastResult multicastResult,
+                                     ArrayList<UserObj> arlReceiverUserObj
     ) {
 
-        log.info("rg : " + rg);
-        log.info("nm : " + nm);
-        log.info("tx : " + tx);
-        log.info("token : " + token);
+    }
 
+    private String cropText(String tx, int limit) {
 
-        if (firebaseApp == null) {
-            initFirebaseApp();
+        String _tx = "";
+
+        if (tx.length() > limit) {
+            _tx = tx.substring(0, limit) + "[...]";
         } else {
-
-            FirebaseAuth.getInstance(firebaseApp).verifyIdToken(token)
-                    .addOnSuccessListener(new OnSuccessListener<FirebaseToken>() {
-                        @Override
-                        public void onSuccess(FirebaseToken decodedToken) {
-
-                            String snd = decodedToken.getUid();
-                            log.info("onSuccess() senderUid : " + snd);
-
-
-                            if (tx == null || tx.trim().length() == 0) {
-                                log.warning("Not sending message because it is empty");
-                                return;
-                            }
-
-                            Message msg = new Message.Builder()
-                                    .addData("z", "c") //CONTEXT
-                                    .addData("i", snd) //SenderId
-                                    .addData("n", nm) //SenderName
-                                    .addData("t", cropText(tx, 1000)) //Text
-                                    .build();
-
-                            trySendSingleMessage(rg, msg);
-                        }
-                    });
-
+            _tx = tx;
         }
-    }
 
-    private Message getMessageFromPOJO(Object obj) {
-
-
-        Message msg = new Message.Builder()
-                .setData(getMapWithStringedValueFromPOJO(obj))
-                .addData("z", obj.getClass().getSimpleName())
-                .build();
-        return msg;
-    }
-
-
-    private void setMessageDataFromPOJO(Message msg, Object obj) {
-
-        msg = new Message.Builder()
-                .setData(getMapWithStringedValueFromPOJO(obj))
-                .addData("z", obj.getClass().getSimpleName())
-                .build();
-    }
-
-
-    public static Map<String, String> getMapWithStringedValueFromPOJO(Object obj) {
-        Map<String, String> map = new HashMap<>();
-        Field[] fields = obj.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            try {
-                String dataType = field.get(obj).getClass().getSimpleName();
-                map.put(field.getName().toString(), dataType.charAt(0) + "__" + String.valueOf(field.get(obj)));
-            } catch (IllegalArgumentException e1) {
-            } catch (IllegalAccessException e1) {
-            }
-        }
-        return map;
+        return _tx;
     }
 }
+
