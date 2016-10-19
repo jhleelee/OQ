@@ -89,13 +89,6 @@ public class MainActivity extends BaseActivity
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(mainActivityPagerAdapter);
 
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-//        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_white_48dp));
-//        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_white_48dp));
-//        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_white_48dp));
-//        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-//        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-
         // Assiging the Sliding Tab Layout View
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.slidingTabLayout);
         slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
