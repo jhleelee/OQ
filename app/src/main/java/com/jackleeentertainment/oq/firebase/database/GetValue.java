@@ -1,5 +1,7 @@
 package com.jackleeentertainment.oq.firebase.database;
 
+import android.app.Activity;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -20,10 +22,10 @@ public class GetValue {
     Profile.class
      */
 
-    public static void myProfileCls(final boolean isRamLBR) {
+    public static void myProfileCls(final boolean isRamLBR, Activity activity) {
         App.fbaseDbRef
                 .child(FBaseNode0.ProfileToMe)
-                .child(App.getUID())
+                .child(App.getUid(activity))
                 .addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override

@@ -36,21 +36,25 @@ public class FirstVisitActivity extends BaseActivity {
         SetValue.profile(
                 FBaseNode0.ProfileToPublic,
                 ProfileUtil.getProfileToPublic(profileToMe),
-                true);
+                true,
+                this);
 
         SetValue.profile(
                 FBaseNode0.ProfileToMe,
                 profileToMe,
-                true);
+                true,
+                this);
 
         uploadMyProfileImagesToFirebaseStorage(uri);
 
         SetValue.myPossibleContactsWithPhoneOrEmail(
-                getArlPhoneNumFromMyDevice()
+                getArlPhoneNumFromMyDevice(),
+                this
         );
 
         SetValue.myPossibleContactsWithPhoneOrEmail(
-                getArlEmailFromMyDevice()
+                getArlEmailFromMyDevice(),
+                this
         );
 
         // end showing dialog
@@ -63,7 +67,7 @@ public class FirstVisitActivity extends BaseActivity {
 
         App.fbaseDbRef
                 .child(FBaseNode0.ProfileToMe)
-                .child(App.getUID())
+                .child(App.getUid(this))
                 .setValue(profile)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -80,7 +84,7 @@ public class FirstVisitActivity extends BaseActivity {
 
         App.fbaseDbRef
                 .child(FBaseNode0.ProfileToPublic)
-                .child(App.getUID())
+                .child(App.getUid(this))
                 .setValue(profile2)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -131,14 +135,14 @@ public class FirstVisitActivity extends BaseActivity {
         Upload.uploadBitmap(
                 thumbnail_320,
                 FStorageNode.FirstT.PROFILE_PHOTO,
-                App.getUID(),
+                App.getUid(this),
                 null
         );
 
         Upload.uploadBitmap(
                 thumbnail_036,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                App.getUID(),
+                App.getUid(this),
                 FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px36
         );
 
@@ -146,7 +150,7 @@ public class FirstVisitActivity extends BaseActivity {
         Upload.uploadBitmap(
                 thumbnail_048,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                App.getUID(),
+                App.getUid(this),
                 FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px48
         );
 
@@ -154,7 +158,7 @@ public class FirstVisitActivity extends BaseActivity {
         Upload.uploadBitmap(
                 thumbnail_072,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                App.getUID(),
+                App.getUid(this),
                 FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px72
         );
 
@@ -162,7 +166,7 @@ public class FirstVisitActivity extends BaseActivity {
         Upload.uploadBitmap(
                 thumbnail_096,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                App.getUID(),
+                App.getUid(this),
                 FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px96
         );
 
@@ -170,7 +174,7 @@ public class FirstVisitActivity extends BaseActivity {
         Upload.uploadBitmap(
                 thumbnail_144,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                App.getUID(),
+                App.getUid(this),
                 FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px144
         );
     }

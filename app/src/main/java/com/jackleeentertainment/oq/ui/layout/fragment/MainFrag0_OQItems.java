@@ -36,7 +36,7 @@ public class MainFrag0_OQItems extends ListFrag {
         super.initAdapter();
         Query query = App.fbaseDbRef
                 .child(FBaseNode0.MyOqItemSums)
-                .child(App.getUID())
+                .child(App.getUid(getActivity()))
                 .orderByChild("ts");
         firebaseRecyclerAdapter = new MyOqItemSumPerPersonRVAdapter(
                 OqItemSumForPerson.class,

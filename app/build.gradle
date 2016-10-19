@@ -34,11 +34,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    lintOptions {
-        abortOnError false
-    }
+
     dexOptions {
-        incremental true
         jumboMode true
         maxProcessCount 2
         javaMaxHeapSize "12g"

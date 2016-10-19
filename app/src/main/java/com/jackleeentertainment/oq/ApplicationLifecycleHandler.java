@@ -37,13 +37,13 @@ public class ApplicationLifecycleHandler implements android.app.Application.Acti
     @Override
     public void onActivityResumed(Activity activity) {
         Log.d(TAG, "onActivityResumed");
-        initFirebaseMyZListener();
-        setFirebaseIamHere_NoNeedPush();
+//        initFirebaseMyZListener();
+//        setFirebaseIamHere_NoNeedPush();
 
         if (isInBackground) {
             Log.d(TAG, "appBarLayout went to foreground");
             isInBackground = false;
-            setFirebaseIamHere_NoNeedPush();
+//            setFirebaseIamHere_NoNeedPush();
         }
     }
 
@@ -90,80 +90,14 @@ public class ApplicationLifecycleHandler implements android.app.Application.Acti
         if (i == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
             Log.d(TAG, "appBarLayout went to background");
             isInBackground = true;
-            setFirebaseIamLeaving_DoNeedPush();
+            //setFirebaseIamLeaving_DoNeedPush();
             quitFirebaseMyZListener();
         }
     }
 
 
-    private void setFirebaseIamHere_NoNeedPush() {
-        Log.d(TAG, "setFirebaseIamHere_NoNeedPush");
-        if (App.fbaseDbRef != null && App.getUID() != null)
-            App.fbaseDbRef.child("p").child(App.getUID()).setValue(true);
-    }
-
-    private void setFirebaseIamLeaving_DoNeedPush() {
-        Log.d(TAG, "setFirebaseIamLeaving_DoNeedPush");
-        if (App.fbaseDbRef != null && App.getUID() != null)
-            App.fbaseDbRef.child("p").child(App.getUID()).setValue(null);
-    }
-
     ChildEventListener cELMyZ;
 
-    private void initFirebaseMyZListener() {
-        Log.d(TAG, "initFirebaseMyZListener()");
-
-        if (App.fbaseDbRef != null && App.getUID() != null) {
-            Log.d(TAG, "Application.fbaseDbRef != null && Application.UID != null");
-
-            /********
-             * EventListenerObj
-             */
-            if (cELMyZ == null) {
-                Log.d(TAG, "cELMyZ == null");
-
-                cELMyZ = new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
-                        Log.d(TAG, "dataSnapshot " + dataSnapshot.getKey()); //JHE : PushKey
-                        Log.d(TAG, "dataSnapshot " + dataSnapshot.getValue().toString());
-                        //{i=Jp25BJbpc0, n=BB, t=ㅇㄱ, r=NEMCaVaB2z, p=1447160223082}
-
-//                        FbaseSet.set_Z_MyUid_PushKey_Null(dataSnapshot.getKey());
-//                        DealWithReceivedMsg.deal(dataSnapshot);
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError firebaseError) {
-
-                    }
-                };
-            }
-            zref = App.fbaseDbRef.child("z").child(App.getUID());
-            queryZref = zref.orderByKey();
-
-            if (!isQueryZrefEVAttached) {
-                queryZref.addChildEventListener(cELMyZ);
-                isQueryZrefEVAttached = true;
-                zref.keepSynced(true);
-            }
-        }
-    }
 
     DatabaseReference zref;
     Query queryZref;

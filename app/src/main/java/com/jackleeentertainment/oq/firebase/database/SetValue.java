@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.firebase.database;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,13 +25,14 @@ import static com.jackleeentertainment.oq.generalutil.ObjectUtil.getHashMapValue
 
 public class SetValue {
 
-    public static void myPossibleContactsWithPhoneOrEmail(ArrayList<String> arlPhoneOrEmail) {
+    public static void myPossibleContactsWithPhoneOrEmail(ArrayList<String> arlPhoneOrEmail,
+                                                          Activity activity) {
 
         final Map<String, Object> map = getHashMapValueOfTrueFromArrayListOfString(arlPhoneOrEmail);
 
         App.fbaseDbRef
                 .child(FBaseNode0.MyPContacts)
-                .child(App.getUID())
+                .child(App.getUid(activity))
                 .updateChildren(map)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -51,10 +53,11 @@ public class SetValue {
 
     public static void profile(final String FBaseNode0T,
                                final Profile myProfile,
-                               final boolean toRamLBR) {
+                               final boolean toRamLBR,
+                               Activity activity) {
         App.fbaseDbRef
                 .child(FBaseNode0T)
-                .child(App.getUID())
+                .child(App.getUid(activity))
                 .setValue(myProfile, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

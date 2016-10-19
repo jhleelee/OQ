@@ -231,6 +231,33 @@
 
     <!--Korean-->
 
+
+
+    <!--Drawer-->
+    <!--GET-->
+    <string name="transaction_i_get">내가 받는 거래</string>
+    <string name="take_receipt">영수증 사진 찍기</string>
+    <string name="load_receipt">영수증 사진 가져오기</string>
+    <string name="load_sms">문자메시지 가져오기</string>
+    <string name="input_manually">직접 입력하기</string>
+    <!--PAY-->
+    <string name="transaction_i_pay">내가 주는 거래</string>
+    <string name="choose_from_list">기존 목록에서 선택</string>
+    <!--<string name="input_manually">직접 입력하기</string>-->
+
+    <!--GROUP-->
+    <string name="group">그룹</string>
+    <string name="new_group">새 그룹 만들기</string>
+    <string name="list_i_am_master">내가 회장인 그룹 목록</string>
+    <string name="list_i_am_member">내가 회원인 그룹 목록</string>
+
+
+    <!--ACCOUNT-->
+    <string name="my_account">나의 계정</string>
+    <string name="account_setting">계정 설정</string>
+    <string name="logout">로그아웃</string>
+
+
     <!--FirstVisitActiity-->
 
 

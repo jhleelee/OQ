@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
@@ -196,34 +197,13 @@ public class App extends Application {
     }
 
 
-//    public static String getUID(){
-//
-//
-//        if (App.myProfile.getUid()!=null){
-//            Log.d(TAG, App.myProfile.getUid());
-//            return  App.myProfile.getUid();
-//        } else {
-//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//            if (user != null) {
-//                // User is signed in
-//                myProfile.setUid( user.getUid());
-//                Log.d(TAG, App.myProfile.getUid());
-//                return user.getUid();
-//            } else {
-//                // No user is signed in
-//                nullifyUser();
-//                return null;
-//            }
-//        }
-//
-//    }
+
+    public static String getUid(Activity activity){
 
 
-    public static String getUID(){
-        if (App.firebaseUser.getUid()!=null){
-            Log.d(TAG, App.myProfile.getUid());
-            return  App.myProfile.getUid();
+        if (App.firebaseUser!=null&&
+                App.firebaseUser.getUid()!=null){
+            return  App.firebaseUser.getUid();
         } else {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
@@ -232,25 +212,81 @@ public class App extends Application {
             } else {
                 // No user is signed in
                 nullifyUser();
+
+                activity.startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setTheme(R.style.AppTheme)
+                                .setProviders(App.getSelectedProviders())
+                                .build(),
+                        App.RC_SIGN_IN);
+
                 return null;
             }
         }
     }
 
 
-    public static FirebaseUser getFirebaseUser(){
-
-            return FirebaseAuth.getInstance().getCurrentUser();
+    public static String getUname(Activity activity){
 
 
+        if (App.firebaseUser!=null&&
+                App.firebaseUser.getUid()!=null){
+            return  App.firebaseUser.getDisplayName();
+
+        } else {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                return user.getDisplayName();
+            } else {
+                // No user is signed in
+                nullifyUser();
+
+                activity.startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setTheme(R.style.AppTheme)
+                                .setProviders(App.getSelectedProviders())
+                                .build(),
+                        App.RC_SIGN_IN);
+
+                return null;
+            }
+        }
     }
 
+    public static String getUemail(Activity activity){
 
-    public static void setUID(String UID){
-        myProfile.setUid(UID);
 
+        if (App.firebaseUser!=null&&
+                App.firebaseUser.getUid()!=null){
+            return  App.firebaseUser.getEmail();
+
+        } else {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                return user.getEmail();
+            } else {
+                // No user is signed in
+                nullifyUser();
+
+                activity.startActivityForResult(
+                        AuthUI.getInstance()
+                                .createSignInIntentBuilder()
+                                .setIsSmartLockEnabled(false)
+                                .setTheme(R.style.AppTheme)
+                                .setProviders(App.getSelectedProviders())
+                                .build(),
+                        App.RC_SIGN_IN);
+
+                return null;
+            }
+        }
     }
-
     /*
     User
      */

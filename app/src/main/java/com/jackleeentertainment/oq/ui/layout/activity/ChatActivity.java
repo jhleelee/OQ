@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -130,7 +131,7 @@ public class ChatActivity
                 //Create Obj
                 Chat chat = new Chat();
                 chat.setRid(rid);
-                chat.setSid(App.getUID());
+                chat.setSid(App.getUid(this));
                 chat.setTxt(etSend__lo_chat_writesend.getText().toString());
                 chat.setTs(System.currentTimeMillis());
                 chat.setAtcht(ChatAtchT.NONE);
@@ -266,7 +267,7 @@ public class ChatActivity
                 Handle Left Right
                  */
 
-                if (senderId.equals(App.getUID())) {
+                if (senderId.equals(App.getUid((Activity) context))) {
 
                     // it's me!
 

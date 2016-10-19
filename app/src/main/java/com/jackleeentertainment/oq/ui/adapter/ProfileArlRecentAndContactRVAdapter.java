@@ -214,7 +214,7 @@ public class ProfileArlRecentAndContactRVAdapter extends RecyclerView.Adapter<Re
     void getAllRecentProfilesFirebase() {
         App.fbaseDbRef
                 .child(FBaseNode0.MyRecent)
-                .child(App.getUID())
+                .child(App.getUid(mFragment.getActivity()))
                 .addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
@@ -253,7 +253,7 @@ public class ProfileArlRecentAndContactRVAdapter extends RecyclerView.Adapter<Re
         if (!hasAllRecentRetrievedLeastOnce) {
             Query query = App.fbaseDbRef
                     .child(FBaseNode0.MyRecent)
-                    .child(App.getUID())
+                    .child(App.getUid(mFragment.getActivity()))
                     .limitToLast(5);
 
             query.addListenerForSingleValueEvent(
@@ -292,7 +292,7 @@ public class ProfileArlRecentAndContactRVAdapter extends RecyclerView.Adapter<Re
     void getMyContactsProfilesFirebase() {
         Query query = App.fbaseDbRef
                 .child(FBaseNode0.MyContacts)
-                .child(App.getUID())
+                .child(App.getUid(mFragment.getActivity()))
                 .orderByChild("full_name");
 
         query.addListenerForSingleValueEvent(

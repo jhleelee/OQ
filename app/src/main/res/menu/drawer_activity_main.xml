@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Import"/>
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Gallery"/>
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Slideshow"/>
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools"/>
+    </group>
+
+    <!--GET-->
+
+    <item android:title="@string/transaction_i_get">
+        <menu>
+            <item
+                android:id="@+id/nav_take_receipt"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/take_receipt"/>
+            <item
+                android:id="@+id/nav_load_receipt"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/load_receipt"/>
+            <item
+                android:id="@+id/nav_load_sms"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/load_sms"/>
+
+            <item
+                android:id="@+id/nav_choose_from_list_get"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/choose_from_list"/>
+            <item
+                android:id="@+id/nav_input_manually_get"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/input_manually"/>
+        </menu>
+    </item>
+
+    <!--PAY-->
+
+    <item android:title="@string/transaction_i_pay">
+        <menu>
+            <item
+                android:id="@+id/nav_choose_from_list_pay"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/choose_from_list"/>
+            <item
+                android:id="@+id/nav_input_manually_pay"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/input_manually"/>
+
+        </menu>
+    </item>
+
+    <!--GROUP-->
+
+    <item android:title="@string/group">
+        <menu>
+            <item
+                android:id="@+id/nav_new_group"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/new_group"/>
+            <item
+                android:id="@+id/nav_list_i_am_master"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/list_i_am_master"/>
+            <item
+                android:id="@+id/nav_list_i_am_member"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/list_i_am_member"/>
+        </menu>
+    </item>
+
+
+
+
+
+
+    <!--ACCOUNT-->
+
+    <item android:title="@string/my_account">
+        <menu>
+            <item
+                android:id="@+id/nav_account_setting"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/account_setting"/>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/logout"/>
+        </menu>
+    </item>
+
+</menu>

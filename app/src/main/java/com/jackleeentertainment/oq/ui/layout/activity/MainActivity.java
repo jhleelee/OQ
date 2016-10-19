@@ -3,12 +3,12 @@ package com.jackleeentertainment.oq.ui.layout.activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -64,11 +64,8 @@ public class MainActivity extends BaseActivity
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        tvTitleDrawerHeader = (TextView) drawer.findViewById(R.id.tvTitle_DrawerHeader);
-        tvSubTitleDrawerHeader = (TextView) drawer.findViewById(R.id
-                .tvSubTitle_DrawerHeader);
-        ivUserProfile = (ImageView) drawer.findViewById(R.id
-                .ivUserProfile);
+
+
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -77,6 +74,15 @@ public class MainActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = LayoutInflater.from(this).inflate(R.layout.nav_header_main, null);
+        navigationView.addHeaderView(header);
+
+
+        tvTitleDrawerHeader = (TextView) header.findViewById(R.id.tvTitle_DrawerHeader);
+        tvSubTitleDrawerHeader = (TextView) header.findViewById(R.id
+                .tvSubTitle_DrawerHeader);
+        ivUserProfile = (ImageView)header. findViewById(R.id
+                .ivUserProfile);
 
         // Instantiate a ViewPager and a PagerAdapter.
         mainActivityPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
@@ -94,7 +100,9 @@ public class MainActivity extends BaseActivity
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.slidingTabLayout);
         slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
-        // Setting Custom Color for the Scroll bar indicator of the Tab View
+                slidingTabLayout.setCustomTabView(
+                R.layout.tab0_mainactivity, R.id.textView
+        );
         slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
@@ -153,19 +161,82 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        switch (id){
 
-        } else if (id == R.id.nav_slideshow) {
+            // I Get
 
-        } else if (id == R.id.nav_manage) {
+            case R.id.nav_take_receipt:
 
-        } else if (id == R.id.nav_share) {
+                break;
 
-        } else if (id == R.id.nav_send) {
+            case R.id.nav_load_receipt:
+
+                break;
+
+            case R.id.nav_load_sms:
+
+                break;
+
+            case R.id.nav_choose_from_list_get:
+
+                break;
+
+            case R.id.nav_input_manually_get:
+
+                break;
+
+
+
+            // I Pay
+
+            case R.id.nav_choose_from_list_pay:
+
+                break;
+
+            case R.id.nav_input_manually_pay:
+
+                break;
+
+
+            // I Hoibi
+
+            case R.id.nav_new_group:
+
+                break;
+
+            case R.id.nav_list_i_am_master:
+
+                break;
+
+            case R.id.nav_list_i_am_member:
+
+                break;
+
+            // Account
+
+
+            case R.id.nav_account_setting:
+
+                break;
+
+            case R.id.nav_logout:
+
+                break;
 
         }
+
+//
+//        if (id == R.id.nav_camera) {
+//            // Handle the camera action
+//        } else if (id == R.id.nav_gallery) {
+//
+//        } else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_logout) {
+//
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -173,18 +244,18 @@ public class MainActivity extends BaseActivity
     }
 
     void initUiDataDrawer() {
-        tvTitleDrawerHeader.setText(App.getFirebaseUser().getDisplayName());
-        tvSubTitleDrawerHeader.setText(App.getFirebaseUser().getDisplayName());
+        tvTitleDrawerHeader.setText(App.getUname(this));
+        tvSubTitleDrawerHeader.setText(App.getUemail(this));
 
         //set Image
         Glide.with(this)
                 .using(new FirebaseImageLoader())
                 .load(App.fbaseStorageRef
                         .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                        .child(App.getFirebaseUser().getUid())
+                        .child(App.getUid(this))
                         .child(FStorageNode.createMediaFileNameToDownload(
                                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                App.getFirebaseUser().getUid()
+                                App.getUid(this)
                         )))
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

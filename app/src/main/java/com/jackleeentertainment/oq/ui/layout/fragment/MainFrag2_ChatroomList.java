@@ -474,7 +474,8 @@ public class MainFrag2_ChatroomList extends Fragment implements
 //                    break;
 //                }
 
-                if (!cursor.isClosed()) {
+                if (cursor!=null&&
+                        !cursor.isClosed()) {
 
                     if (cursor.getCount() == 0) {
                         JM.G(lvChatroomList);

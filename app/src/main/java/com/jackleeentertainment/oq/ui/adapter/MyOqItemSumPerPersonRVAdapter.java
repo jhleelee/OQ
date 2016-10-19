@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.ui.adapter;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,6 @@ import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
-import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.object.OqItemSumForPerson;
 import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameDetailViewHolder;
 
@@ -70,7 +70,7 @@ public class MyOqItemSumPerPersonRVAdapter extends
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(viewHolder.getRo_person_photo_iv());
 
-        checkOqItemSum(oqItemSumForPerson.getProfile().getUid());
+        checkOqItemSum(oqItemSumForPerson.getProfile().getUid(), mFragment.getActivity());
     }
 
 
@@ -79,10 +79,10 @@ public class MyOqItemSumPerPersonRVAdapter extends
 
     }
 
-    void checkOqItemSum(String uid) {
+    void checkOqItemSum(String uid, Activity activity) {
         App.fbaseDbRef
                 .child(FBaseNode0.MyOqItemSums)
-                .child(App.getUID())
+                .child(App.getUid(activity))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

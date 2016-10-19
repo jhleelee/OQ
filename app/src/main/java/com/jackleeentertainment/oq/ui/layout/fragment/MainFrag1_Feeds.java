@@ -64,7 +64,7 @@ public class MainFrag1_Feeds extends ListFrag {
 
         Query query = App.fbaseDbRef
                 .child("m_fd")
-                .child(App.getUID())
+                .child(App.getUid(getActivity()))
                 .startAt(lastLoadedObjIdDx + 1)
                 .endAt(lastLoadedObjIdDx + 1 + 100);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
