@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="match_parent"
+          android:textSize="16dip"
+          android:text="@string/google_next"
+          android:background="@color/colorAccent"
+          android:textColor="@color/white"
+          android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+          android:gravity="center"
+          android:layout_height="56dip">
+
+</TextView>

@@ -199,7 +199,7 @@ public class MessagingEndpoint {
                         // (2) get receivers' uid, regId
                         Gson gson = new Gson();
                         String[] arReceiverUids = gson.fromJson(gsonrids, new
-                                TypeToken<ArrayList<String>>() {
+                                TypeToken<String[]>() {
                                 }.getType());
 
                         Map<String, UserObj> mapReciverUidUserObj = ofy()

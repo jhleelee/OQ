@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.jackleeentertainment.oq.App;
+import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.object.Profile;
 
@@ -297,9 +298,23 @@ public class JM {
 
     }
 
+    /********************************
+     * Ui
+     ********************************/
+    public static void uiTextViewPosiNega(TextView textView, boolean bool){
+        if (bool){
+            BGC(textView, R.color.colorAccent);
+            TC(textView, R.color.white);
+        } else {
+            BGC(textView, R.color.material_grey500);
+            TC(textView, R.color.text_black_87);
+        }
+    }
+
+
 
     /********************************
-     * data manipulation
+     * data manipulation for Bitmap
      ********************************/
 
     public static ByteArrayInputStream getByteArrayInputStreamFromBitmap(Bitmap bitmap) {
