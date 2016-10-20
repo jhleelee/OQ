@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.JSMS;
 import com.jackleeentertainment.oq.object.SMSHighlight;
+import com.jackleeentertainment.oq.object.types.SMSHighlightT;
 import com.jackleeentertainment.oq.ui.widget.CheckBoxJack;
 
 import java.util.ArrayList;
@@ -159,8 +160,9 @@ public class SMSListActivity extends BaseActivity
                 vh.tvDate.setText(strDate);
 
                 // if size is larger than 1, it is a problem.
-                ArrayList<SMSHighlight> arlSMSHighlight = JSMS.getArlSMSHighlight(body);
-                JSMS.highlight(tvContent, arlSMSHighlight);
+                ArrayList<SMSHighlight> arlSMSHighlight = JSMS.getArlSMSHighlight(body,
+                        SMSHighlightT.SUM);
+                JSMS.highlight(vh.tvContent, arlSMSHighlight);
 
                 if (arlSelectedSmsId.contains(_id)) {
                     vh.checkBoxJack.setChecked(true);

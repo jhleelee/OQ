@@ -26,24 +26,24 @@
         <menu>
             <item
                 android:id="@+id/nav_take_receipt"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_photo_camera_black_48dp"
                 android:title="@string/take_receipt"/>
             <item
                 android:id="@+id/nav_load_receipt"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_photo_library_black_48dp"
                 android:title="@string/load_receipt"/>
             <item
                 android:id="@+id/nav_load_sms"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_credit_card_black_48dp"
                 android:title="@string/load_sms"/>
 
             <item
                 android:id="@+id/nav_choose_from_list_get"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_format_list_bulleted_black_48dp"
                 android:title="@string/choose_from_list"/>
             <item
                 android:id="@+id/nav_input_manually_get"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_create_black_48dp"
                 android:title="@string/input_manually"/>
         </menu>
     </item>
@@ -54,11 +54,11 @@
         <menu>
             <item
                 android:id="@+id/nav_choose_from_list_pay"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_format_list_bulleted_black_48dp"
                 android:title="@string/choose_from_list"/>
             <item
                 android:id="@+id/nav_input_manually_pay"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_create_black_48dp"
                 android:title="@string/input_manually"/>
 
         </menu>
@@ -70,15 +70,15 @@
         <menu>
             <item
                 android:id="@+id/nav_new_group"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_group_add_black_48dp"
                 android:title="@string/new_group"/>
             <item
                 android:id="@+id/nav_list_i_am_master"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_format_list_bulleted_black_48dp"
                 android:title="@string/list_i_am_master"/>
             <item
                 android:id="@+id/nav_list_i_am_member"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_format_list_bulleted_black_48dp"
                 android:title="@string/list_i_am_member"/>
         </menu>
     </item>
@@ -94,11 +94,11 @@
         <menu>
             <item
                 android:id="@+id/nav_account_setting"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_settings_black_48dp"
                 android:title="@string/account_setting"/>
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_power_settings_new_black_48dp"
                 android:title="@string/logout"/>
         </menu>
     </item>

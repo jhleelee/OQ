@@ -1,6 +1,10 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -32,11 +36,13 @@ import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag1_Feeds;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag2_ChatroomList;
 import com.jackleeentertainment.oq.ui.widget.SlidingTabLayout;
 
+import java.io.IOException;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     String TAG = this.getClass().getSimpleName();
-
+    final int REQ_PICK_IMAGE = 99;
     //Drawer
     TextView tvTitleDrawerHeader;
     TextView tvSubTitleDrawerHeader;
@@ -66,7 +72,6 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -81,7 +86,7 @@ public class MainActivity extends BaseActivity
         tvTitleDrawerHeader = (TextView) header.findViewById(R.id.tvTitle_DrawerHeader);
         tvSubTitleDrawerHeader = (TextView) header.findViewById(R.id
                 .tvSubTitle_DrawerHeader);
-        ivUserProfile = (ImageView)header. findViewById(R.id
+        ivUserProfile = (ImageView) header.findViewById(R.id
                 .ivUserProfile);
 
         // Instantiate a ViewPager and a PagerAdapter.
@@ -93,7 +98,7 @@ public class MainActivity extends BaseActivity
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.slidingTabLayout);
         slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
-                slidingTabLayout.setCustomTabView(
+        slidingTabLayout.setCustomTabView(
                 R.layout.tab0_mainactivity, R.id.textView
         );
         slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -154,7 +159,7 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
 
             // I Get
 
@@ -163,6 +168,14 @@ public class MainActivity extends BaseActivity
                 break;
 
             case R.id.nav_load_receipt:
+                Intent intent = new Intent();
+                intent.setType("image/*");
+
+                if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                }
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQ_PICK_IMAGE);
 
                 break;
 
@@ -177,7 +190,6 @@ public class MainActivity extends BaseActivity
             case R.id.nav_input_manually_get:
 
                 break;
-
 
 
             // I Pay
@@ -253,6 +265,35 @@ public class MainActivity extends BaseActivity
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(ivUserProfile);
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_PICK_IMAGE
+                && resultCode == RESULT_OK
+                && data != null
+                && data.getData() != null) {
+
+            if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
+                //Intent.EXTRA_ALLOW_MULTIPLE
+            } else {
+                Uri uri = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    // Log.d(TAG, String.valueOf(bitmap));
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
 
     }
 

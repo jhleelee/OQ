@@ -543,4 +543,26 @@ public class JM {
         }
     }
 
+    /********************************
+     * Pixel Calc
+     ********************************/
+
+    public static float dpFromPx(@NonNull final Context context, final float px) {
+        return px / context.getResources().getDisplayMetrics().density;
+    }
+
+    public static float dpFromPx(final float px) {
+        return px / App.getContext().getResources().getDisplayMetrics().density;
+    }
+
+
+    public static int pxFromDp(@NonNull final Context context, final float dp) {
+        return Math.round(dp * context.getResources().getDisplayMetrics().density);
+    }
+
+
+    public static int pxFromDp(final float dp) {
+        return Math.round(dp * App.getContext().getResources().getDisplayMetrics().density);
+    }
+
 }
