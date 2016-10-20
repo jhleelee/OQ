@@ -231,9 +231,17 @@
 
     <!--Korean-->
 
+    <string name="app_slogan">OK보다 OQ</string>
+    <string name="app_slogan_long">OK는 우정입니다</string>
 
-
+    app_slogan
     <!--Drawer-->
+
+    <!--TOP-->
+    <string name="share_this_app">이 앱을 공유하기</string>
+    <string name="choose_from_messengers">메신저앱에서 선택</string>
+
+    choose_from_messengers
     <!--GET-->
     <string name="transaction_i_get">내가 받는 거래</string>
     <string name="take_receipt">영수증 사진 찍기</string>
@@ -257,12 +265,12 @@
     <string name="account_setting">계정 설정</string>
     <string name="logout">로그아웃</string>
 
+    <!--FooterToolbar-->
+    <string name="quickstart">빠른 시작</string>
+
 
     <!--FirstVisitActiity-->
-
-
     <string name="nationalcode">KR</string>
-
     <string name="nicetomeetyou">반갑습니다!</string>
     <string name="welcome">환영합니다!</string>
     <string name="modify">변경</string>

@@ -19,9 +19,11 @@ public class LBR {
 
   }
 
+    public static class IntentFilterT{
+        public  final static String MainActivityDrawerMenu = "MainActivityDrawerMenu";
+    }
 
-
-    public static void send(String reason) {
+    public static void send(String intentfilterT) {
         Log.d(TAG, "send()");
 
         /**
@@ -34,12 +36,11 @@ public class LBR {
          *
          * @param action The Intent action, such as ACTION_VIEW.
          */
-        Intent intent = new Intent();
-        intent.putExtra("origin", "com.jackleeentertainment.oq." + reason);
+        Intent intent = new Intent("com.jackleeentertainment.oq." + intentfilterT);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
     }
 
-    public static void send(String reason, Object object) {
+    public static void send(String intentfilterT, Object object) {
         Log.d(TAG, "send()");
 
         /**
@@ -54,12 +55,18 @@ public class LBR {
          */
 
         Intent intent = new Intent();
-        intent.putExtra("origin", "com.jackleeentertainment.oq." + reason);
+        intent.putExtra("origin", "com.jackleeentertainment.oq." + intentfilterT);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(object);
         intent.putExtra("data", jsonStr);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
     }
 
-
+    public static void send(String intentfilterT, String str) {
+        Log.d(TAG, "send()");
+        Intent intent = new Intent();
+        intent.putExtra("origin", "com.jackleeentertainment.oq." + intentfilterT);
+        intent.putExtra("data", str);
+        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    }
 }

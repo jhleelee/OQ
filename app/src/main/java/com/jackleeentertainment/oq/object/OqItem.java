@@ -6,22 +6,23 @@ package com.jackleeentertainment.oq.object;
 
 public class OqItem {
 
-    String oid;
-
-    String gid;
-
+    String oid; //this object's id
+    String gid; //human group's id
+    String qid; //oqitem group's id (in the case of case oqitem)
     String uidpayer;
     String uidgettor;
+    String oqgnltype;
 
 
-    String uidgavebnf;
-    String uidreceivedbnf;
 
-
+    String oqwnttype;
     long ts;
     long ammount;
     String currency;
     String duedate;
+
+
+
 
     public OqItem() {
         super();
@@ -84,21 +85,6 @@ public class OqItem {
         this.duedate = duedate;
     }
 
-    public String getUidgavebnf() {
-        return uidgavebnf;
-    }
-
-    public void setUidgavebnf(String uidgavebnf) {
-        this.uidgavebnf = uidgavebnf;
-    }
-
-    public String getUidreceivedbnf() {
-        return uidreceivedbnf;
-    }
-
-    public void setUidreceivedbnf(String uidreceivedbnf) {
-        this.uidreceivedbnf = uidreceivedbnf;
-    }
 
 
     public String getGid() {
@@ -109,4 +95,27 @@ public class OqItem {
         this.gid = gid;
     }
 
+    public String getOqwnttype() {
+        return oqwnttype;
+    }
+
+    public void setOqwnttype(String oqwnttype) {
+        this.oqwnttype = oqwnttype;
+    }
+
+    public String getOqgnltype() {
+        return oqgnltype;
+    }
+
+    public void setOqgnltype(String oqgnltype) {
+        this.oqgnltype = oqgnltype;
+    }
+
+    public String getQid() {
+        return qid;
+    }
+
+    public void setQid(String qid) {
+        this.qid = qid;
+    }
 }

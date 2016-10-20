@@ -2,22 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import"/>
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"/>
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share_white_48dp"
+            android:title="@string/share_this_app"
+            android:actionProviderClass=
+                "android.widget.ShareActionProvider"/>
     </group>
 
     <!--GET-->
@@ -39,7 +30,7 @@
 
             <item
                 android:id="@+id/nav_choose_from_list_get"
-                android:icon="@drawable/ic_format_list_bulleted_black_48dp"
+                android:icon="@drawable/ic_view_list_black_48dp"
                 android:title="@string/choose_from_list"/>
             <item
                 android:id="@+id/nav_input_manually_get"
@@ -54,7 +45,7 @@
         <menu>
             <item
                 android:id="@+id/nav_choose_from_list_pay"
-                android:icon="@drawable/ic_format_list_bulleted_black_48dp"
+                android:icon="@drawable/ic_view_list_black_48dp"
                 android:title="@string/choose_from_list"/>
             <item
                 android:id="@+id/nav_input_manually_pay"
@@ -74,11 +65,11 @@
                 android:title="@string/new_group"/>
             <item
                 android:id="@+id/nav_list_i_am_master"
-                android:icon="@drawable/ic_format_list_bulleted_black_48dp"
+                android:icon="@drawable/ic_view_list_black_48dp"
                 android:title="@string/list_i_am_master"/>
             <item
                 android:id="@+id/nav_list_i_am_member"
-                android:icon="@drawable/ic_format_list_bulleted_black_48dp"
+                android:icon="@drawable/ic_view_list_black_48dp"
                 android:title="@string/list_i_am_member"/>
         </menu>
     </item>

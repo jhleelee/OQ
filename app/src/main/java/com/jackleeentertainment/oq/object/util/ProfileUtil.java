@@ -1,5 +1,7 @@
 package com.jackleeentertainment.oq.object.util;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jackleeentertainment.oq.object.Profile;
 
 import java.util.ArrayList;
@@ -22,6 +24,18 @@ public class ProfileUtil {
         profileToPublic.setUid(profileToMe.getUid());
         return profileToPublic;
     }
+
+    public static ArrayList<Profile> getArlProfileFromJson(String json) {
+        ArrayList<Profile> arlReturn = new ArrayList();
+        if (json != null) {
+            arlReturn = new Gson().fromJson(json, new TypeToken<ArrayList<Profile>>(){}
+                    .getType());
+            return arlReturn;
+        } else {
+            return null;
+        }
+    }
+
 
     public static ArrayList<String> getArlUid(List<Profile> arlProfiles) {
 

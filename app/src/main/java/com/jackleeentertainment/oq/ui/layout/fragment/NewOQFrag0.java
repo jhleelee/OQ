@@ -22,8 +22,14 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.generalutil.J;
+import com.jackleeentertainment.oq.generalutil.JM;
+import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.util.ProfileUtil;
+import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.PeopleActivity;
 
 import java.util.ArrayList;
@@ -35,6 +41,9 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
 
     String TAG = this.getClass().getSimpleName();
     final int REQ_PEOPLE = 99;
+    final int REQ_SUMTYPE = 98;
+    boolean hasSumTypeEdited = false;
+
     View view;
     CardView cardview_cause_people__frag_newoq_0, cardview_cause_sumtype__frag_newoq_0,
             cardview_cause_breakdown__frag_newoq_0;
@@ -42,21 +51,20 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
     SelectedPeopleListAdapter selectedPeopleListAdapter;
     ArrayList<Profile> mArrayListProfile = new ArrayList<>();
 
-    LinearLayout loLv__PERSON,loLv__SUMTYPE, loLv__BREAKDOWN;
+    LinearLayout loLv__PERSON, loLv__SUMTYPE, loLv__BREAKDOWN;
     TextView tv_title__cardview_cause__PERSON, tvEmpty__cardview_cause__PERSON,
-            tv__lo_lefttext_rightoneaction__PERSON, tv_title__cardview_cause__SUMTYPE, tv__lo_lefttext_rightoneaction__SUMTYPE
-            ,tvEmpty__cardview_cause__SUMTYPE,tv_title__cardview_cause__BREAKDOWN, tv__lo_lefttext_rightoneaction__BREAKDOWN
-            ,tvEmpty__cardview_cause__BREAKDOWN
-            ;
-    ListView lv__cardview_cause__PERSON,lv__cardview_cause__SUMTYPE,lv__cardview_cause__BREAKDOWN;
+            tv__lo_lefttext_rightoneaction__PERSON, tv_title__cardview_cause__SUMTYPE, tv__lo_lefttext_rightoneaction__SUMTYPE, tvEmpty__cardview_cause__SUMTYPE, tv_title__cardview_cause__BREAKDOWN, tv__lo_lefttext_rightoneaction__BREAKDOWN, tvEmpty__cardview_cause__BREAKDOWN;
+    ListView lv__cardview_cause__PERSON, lv__cardview_cause__SUMTYPE, lv__cardview_cause__BREAKDOWN;
     LinearLayout lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__PERSON,
-            lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__SUMTYPE,lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__BREAKDOWN;
-    RelativeLayout roEmpty__cardview_cause__PERSON,roEmpty__cardview_cause__SUMTYPE, roEmpty__cardview_cause__BREAKDOWN;
-    Button bt__lo_lefttext_rightoneaction__PERSON,bt__lo_lefttext_rightoneaction__SUMTYPE,bt__lo_lefttext_rightoneaction__BREAKDOWN;
+            lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__SUMTYPE, lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__BREAKDOWN;
+    RelativeLayout roEmpty__cardview_cause__PERSON, roEmpty__cardview_cause__SUMTYPE, roEmpty__cardview_cause__BREAKDOWN;
+    Button bt__lo_lefttext_rightoneaction__PERSON, bt__lo_lefttext_rightoneaction__SUMTYPE, bt__lo_lefttext_rightoneaction__BREAKDOWN;
 
+    OqItem oqItem = new OqItem();
 
     public NewOQFrag0() {
         super();
+        oqItem.setAmmount(0);
     }
 
     @NonNull
@@ -71,6 +79,7 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
         Log.d(TAG, "onCreateView ...");
         view = inflater.inflate(R.layout.frag_newoq_0, container, false);
         initUI();
+        uiDependOnOQItemCardViewPeople(oqItem);
         return view;
     }
 
@@ -80,20 +89,29 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.cardview_cause_people__frag_newoq_0:
-                Intent i = new Intent(getActivity(), PeopleActivity.class);
-                startActivityForResult(i, REQ_PEOPLE);
+
 
                 break;
             case R.id.cardview_cause_sumtype__frag_newoq_0:
+
+                if (!hasSumTypeEdited) {
+                    Intent intent_cardview_cause_sumtype__frag_newoq_0 = new Intent(getActivity(), PeopleActivity.class);
+                    startActivityForResult(intent_cardview_cause_sumtype__frag_newoq_0, REQ_SUMTYPE);
+                }
 
                 break;
 
             case R.id.cardview_cause_breakdown__frag_newoq_0:
 
+                // no, deirect edit..
+
                 break;
 
 
             case R.id.tv_done__frag_newoq_0:
+
+                ((NewOQActivity) getActivity()).goToFragment(new NewOQFrag1(), R.id.lofragmentlayout);
+
 
                 break;
 
@@ -111,7 +129,7 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
         loLv__PERSON = (LinearLayout) cardview_cause_people__frag_newoq_0
                 .findViewById(R.id.loLv);
         tv_title__cardview_cause__PERSON = (TextView) cardview_cause_people__frag_newoq_0
-                .findViewById(R.id                .tv_title__cardview_cause);
+                .findViewById(R.id.tv_title__cardview_cause);
         lv__cardview_cause__PERSON = (ListView) cardview_cause_people__frag_newoq_0.findViewById(R.id
                 .lv__cardview_cause);
         ////lo_lefttext_rightoneaction_borderlesscolored__cardview_cause
@@ -142,15 +160,15 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
         loLv__SUMTYPE = (LinearLayout) cardview_cause_sumtype__frag_newoq_0
                 .findViewById(R.id.loLv);
         tv_title__cardview_cause__SUMTYPE = (TextView) cardview_cause_sumtype__frag_newoq_0
-                .findViewById(R.id                .tv_title__cardview_cause);
+                .findViewById(R.id.tv_title__cardview_cause);
         lv__cardview_cause__SUMTYPE = (ListView) cardview_cause_sumtype__frag_newoq_0
                 .findViewById(R.id
-                .lv__cardview_cause);
+                        .lv__cardview_cause);
         ////lo_lefttext_rightoneaction_borderlesscolored__cardview_cause
         lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__SUMTYPE = (LinearLayout)
                 cardview_cause_sumtype__frag_newoq_0
                         .findViewById(R.id
-                        .lo_lefttext_rightoneaction_borderlesscolored__cardview_cause);
+                                .lo_lefttext_rightoneaction_borderlesscolored__cardview_cause);
 
         tv__lo_lefttext_rightoneaction__SUMTYPE = (TextView)
                 lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__SUMTYPE.findViewById(R.id
@@ -166,7 +184,6 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
         tvEmpty__cardview_cause__SUMTYPE = (TextView)
                 cardview_cause_sumtype__frag_newoq_0.findViewById(R.id
                         .tvEmpty__cardview_cause);
-
 
 
         /**
@@ -210,13 +227,63 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
 
     }
 
-    void initUIData() {
+    void initAdapterData() {
         uiDataCardViewPeopleList(mArrayListProfile);
     }
 
 
     void initAdapter() {
         selectedPeopleListAdapter = new SelectedPeopleListAdapter(getActivity());
+    }
+
+    void uiDependOnOQItemCardViewPeople(OqItem oqItemEffect) {
+        if (oqItemEffect.getUidgettor() == null || oqItemEffect.getUidpayer() == null) {
+            JM.V(cardview_cause_people__frag_newoq_0);
+            JM.G(cardview_cause_sumtype__frag_newoq_0);
+            JM.G(cardview_cause_breakdown__frag_newoq_0);
+
+            JM.V(roEmpty__cardview_cause__PERSON);
+            View.OnClickListener onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getActivity(), PeopleActivity.class);
+                    startActivityForResult(i, REQ_PEOPLE);
+                }
+            };
+            roEmpty__cardview_cause__PERSON.setOnClickListener(onClickListener);
+            tvEmpty__cardview_cause__PERSON.setOnClickListener(onClickListener);
+        } else{
+            JM.G(roEmpty__cardview_cause__PERSON);
+            if (oqItemEffect.getUidpayer().equals(App.getUid(getActivity()))){
+                mArrayListProfile = ProfileUtil.getArlProfileFromJson(oqItemEffect.getUidgettor());
+                initAdapter();
+                initAdapterData();
+            } else if (oqItemEffect.getUidgettor().equals(App.getUid(getActivity()))){
+                mArrayListProfile =  ProfileUtil.getArlProfileFromJson(oqItemEffect.getUidpayer());
+                initAdapter();
+                initAdapterData();
+            }
+        }
+    }
+
+
+    void uiDependOnOQItemCardViewSumType(OqItem oqItemEffect) {
+
+        if (oqItemEffect.getAmmount()==0 ||oqItemEffect.getOqgnltype()==null||
+                oqItemEffect.getOqwnttype()==null) {
+
+        } else{
+
+        }
+
+    }
+
+
+
+    void uiDependOnOQItemCardViewBreakdown(OqItem oqItemEffect) {
+
+
+
     }
 
 

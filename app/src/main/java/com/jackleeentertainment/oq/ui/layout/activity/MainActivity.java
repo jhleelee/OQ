@@ -1,5 +1,7 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -7,9 +9,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -31,10 +36,14 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
+import com.jackleeentertainment.oq.generalutil.JM;
+import com.jackleeentertainment.oq.generalutil.LBR;
+import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag0_OQItems;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag1_Feeds;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag2_ChatroomList;
 import com.jackleeentertainment.oq.ui.widget.SlidingTabLayout;
+import com.konifar.fab_transformation.FabTransformation;
 
 import java.io.IOException;
 
@@ -51,23 +60,177 @@ public class MainActivity extends BaseActivity
     //ViewPager
     MainActivityPagerAdapter mainActivityPagerAdapter;
     ViewPager viewPager;
-    SlidingTabLayout slidingTabLayout;
+    TabLayout tabLayout;
+
+    //FAB
+    FloatingActionButton fab;
+    Toolbar toolbarFooter;
+
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String searchKey = intent.getStringExtra("data");
+
+            if (searchKey.equals("nav_choose_from_list_get")||
+                    searchKey.equals("nav_choose_from_list_pay")||
+                    searchKey.equals("nav_list_i_am_master")||
+                    searchKey.equals("nav_list_i_am_member")
+                    ){
+
+                //fragment0
+
+            }
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+
+        mainActivityPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(mainActivityPagerAdapter);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        final TabLayout.Tab tabLayoutHome = tabLayout.newTab();
+        final TabLayout.Tab tabLayoutFeed = tabLayout.newTab();
+        final TabLayout.Tab tabLayoutChat = tabLayout.newTab();
+
+        //Setting Icons to our respective tabs
+        tabLayoutHome.setIcon(R.drawable.ic_view_list_white_24dp);//white
+        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_white_24dp);//grey
+        tabLayoutChat.setIcon(R.drawable.ic_chat_white_24dp);//grey
+
+        /*
+        Adding the tab view to our tablayout at appropriate positions
+        As I want home at first position I am passing home and 0 as argument to
+        the tablayout and like wise for other tabs as well
+         */
+        tabLayout.addTab(tabLayoutHome, 0);
+        tabLayout.addTab(tabLayoutFeed, 1);
+        tabLayout.addTab(tabLayoutChat, 2);
+
+        /*
+        TabTextColor sets the color for the title of the tabs, passing a ColorStateList here makes
+        tab change colors in different situations such as selected, active, inactive etc
+
+        TabIndicatorColor sets the color for the indiactor below the tabs
+         */
+
+        tabLayout.setTabTextColors(ContextCompat.getColorStateList(this, R.color
+                .colorTabTextColor));
+        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.colorTabIndicator));
+        tabLayout.setSelectedTabIndicatorHeight(0);
+        /*
+        Adding a onPageChangeListener to the viewPager
+        1st we add the PageChangeListener and pass a TabLayoutPageChangeListener so that Tabs Selection
+        changes when a viewpager page changes.
+
+        2nd We add the onPageChangeListener to change the icon when the page changes in the view Pager
+         */
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        /*
+                        setting Home as White and rest grey
+                        and like wise for all other positions
+                         */
+                        tabLayoutHome.setIcon(R.drawable.ic_view_list_white_24dp);//white
+                        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_black_24dp); //grey
+                        tabLayoutChat.setIcon(R.drawable.ic_chat_black_24dp); //grey
+                        break;
+                    case 1:
+                        tabLayoutHome.setIcon(R.drawable.ic_view_list_black_24dp); //grey
+                        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_white_24dp); //white
+                        tabLayoutChat.setIcon(R.drawable.ic_chat_black_24dp); //grey
+                        break;
+                    case 2:
+                        tabLayoutHome.setIcon(R.drawable.ic_view_list_black_24dp); //grey
+                        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_black_24dp); //grey
+                        tabLayoutChat.setIcon(R.drawable.ic_chat_white_24dp); //white
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        /*
+                        setting Home as White and rest grey
+                        and like wise for all other positions
+                         */
+                        tabLayoutHome.setIcon(R.drawable.ic_view_list_white_24dp);//white
+                        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_black_24dp); //grey
+                        tabLayoutChat.setIcon(R.drawable.ic_chat_black_24dp); //grey
+                        break;
+                    case 1:
+                        tabLayoutHome.setIcon(R.drawable.ic_view_list_black_24dp); //grey
+                        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_white_24dp); //white
+                        tabLayoutChat.setIcon(R.drawable.ic_chat_black_24dp); //grey
+                        break;
+                    case 2:
+                        tabLayoutHome.setIcon(R.drawable.ic_view_list_black_24dp); //grey
+                        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_black_24dp); //grey
+                        tabLayoutChat.setIcon(R.drawable.ic_chat_white_24dp); //white
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        /**
+         * FAB
+         */
+        toolbarFooter = (Toolbar) findViewById(R.id.toolbar_footer);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FabTransformation.with(fab)
+                        .duration(300)
+                        .transformTo(toolbarFooter);
             }
         });
+
+        /**
+         * DrawerLayout
+         */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -89,27 +252,6 @@ public class MainActivity extends BaseActivity
         ivUserProfile = (ImageView) header.findViewById(R.id
                 .ivUserProfile);
 
-        // Instantiate a ViewPager and a PagerAdapter.
-        mainActivityPagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.setAdapter(mainActivityPagerAdapter);
-
-        // Assiging the Sliding Tab Layout View
-        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.slidingTabLayout);
-        slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
-
-        slidingTabLayout.setCustomTabView(
-                R.layout.tab0_mainactivity, R.id.textView
-        );
-        slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.white);
-            }
-        });
-
-        // Setting the ViewPager For the SlidingTabsLayout
-        slidingTabLayout.setViewPager(viewPager);
 
     }
 
@@ -153,6 +295,8 @@ public class MainActivity extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
+    ShareActionProvider  mShareActionProvider;
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -161,6 +305,23 @@ public class MainActivity extends BaseActivity
 
         switch (id) {
 
+            //TOP
+
+            case R.id.nav_share:
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/html");
+                i.putExtra(Intent.EXTRA_SUBJECT, JM.strById(R.string.app_name));
+                i.putExtra(Intent.EXTRA_TEXT, JM.strById(R.string.app_slogan) +
+                        "\n");
+                i.putExtra(Intent.EXTRA_HTML_TEXT,
+                        JM.strById(R.string.app_slogan_long) +  "\n" +
+
+                        Uri.parse("http://"));
+                startActivity(Intent.createChooser(i, JM.strById(R.string.choose_from_messengers)));
+
+                break;
+
+
             // I Get
 
             case R.id.nav_take_receipt:
@@ -168,9 +329,9 @@ public class MainActivity extends BaseActivity
                 break;
 
             case R.id.nav_load_receipt:
+
                 Intent intent = new Intent();
                 intent.setType("image/*");
-
                 if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
                     intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 }
@@ -181,25 +342,40 @@ public class MainActivity extends BaseActivity
 
             case R.id.nav_load_sms:
 
+                Intent intentLoadSMS = new Intent(this, SMSListActivity.class);
+                startActivity(intentLoadSMS);
+
+
                 break;
 
             case R.id.nav_choose_from_list_get:
+                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_choose_from_list_get");
 
                 break;
 
             case R.id.nav_input_manually_get:
 
+                Intent intentManualGet = new Intent(this, NewOQActivity.class);
+                intentManualGet.putExtra("GeneralT", OQT.GeneralT.CAUSE);
+                intentManualGet.putExtra("WantT", OQT.WantT.GET);
+                intentManualGet.putExtra("DoT", OQT.DoT.DIDDO); //delete?
+                startActivity(intentManualGet);
                 break;
 
 
             // I Pay
 
             case R.id.nav_choose_from_list_pay:
+                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_choose_from_list_pay");
 
                 break;
 
             case R.id.nav_input_manually_pay:
-
+                Intent intentManualPay = new Intent(this, NewOQActivity.class);
+                intentManualPay.putExtra("GeneralT", OQT.GeneralT.CAUSE);
+                intentManualPay.putExtra("WantT", OQT.WantT.PAY);
+                intentManualPay.putExtra("DoT", OQT.DoT.DIDDO); //delete?
+                startActivity(intentManualPay);
                 break;
 
 
@@ -210,11 +386,12 @@ public class MainActivity extends BaseActivity
                 break;
 
             case R.id.nav_list_i_am_master:
+                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_list_i_am_master");
 
                 break;
 
             case R.id.nav_list_i_am_member:
-
+                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_list_i_am_member");
                 break;
 
             // Account
@@ -230,18 +407,6 @@ public class MainActivity extends BaseActivity
 
         }
 
-//
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_logout) {
-//
-//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

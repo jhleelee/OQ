@@ -3,9 +3,11 @@ package com.jackleeentertainment.oq.ui.layout.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.ui.layout.diafrag.ChatroomAttrDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
@@ -85,5 +87,41 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
+
+
+    /********************************
+     * UI - Fragment
+     *******************************/
+
+    public void goToFragment(Fragment fragment, int layoutId) {
+        //Fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enterfromright, R.anim.exittoleft, R.anim.pop_enter, R.anim.pop_exit);
+        transaction.replace(layoutId, fragment, fragment.getClass().getSimpleName());
+//        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void backToFragment(Fragment fragment, int layoutId) {
+        //Fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enterfromleft, R.anim.exittoright, R.anim.pop_enter, R.anim.pop_exit);
+        transaction.replace(layoutId, fragment, fragment.getClass().getSimpleName());
+//        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void showFrag(Fragment frag, int layoutId) {
+
+        android.support.v4.app.FragmentTransaction transaction =
+                getSupportFragmentManager().beginTransaction();
+        transaction.replace(layoutId, frag, frag.getClass().getSimpleName());
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
 
 }

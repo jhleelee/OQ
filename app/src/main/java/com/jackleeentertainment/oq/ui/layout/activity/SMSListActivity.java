@@ -43,7 +43,7 @@ public class SMSListActivity extends BaseActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.app_bar_main);
+        setContentView(R.layout.activity_sms);
         initUI();
         initOnClickListeners();
         mCallbacks = this;
@@ -151,11 +151,10 @@ public class SMSListActivity extends BaseActivity
                  **/
 
                 final long _id = cursor.getLong(cursor.getColumnIndex("_id"));
-                final String person = cursor.getString(cursor.getColumnIndex("person"));
+                final String person = cursor.getString(cursor.getColumnIndex("address"));
                 final String body = cursor.getString(cursor.getColumnIndex("body"));
                 final long date = cursor.getLong(cursor.getColumnIndex("date"));
                 vh.tvSender.setText(person);
-                vh.tvContent.setText(body);
                 final String strDate = String.valueOf(date);
                 vh.tvDate.setText(strDate);
 
@@ -166,11 +165,13 @@ public class SMSListActivity extends BaseActivity
 
                 if (arlSelectedSmsId.contains(_id)) {
                     vh.checkBoxJack.setChecked(true);
+                    vh.tvContent.setText(body);
                     vh.tvContent
                             .setLayoutParams(new ViewGroup.LayoutParams(
                                     ViewGroup.LayoutParams.MATCH_PARENT,
                                     ViewGroup.LayoutParams.WRAP_CONTENT));
                 } else {
+                    vh.tvContent.setText(JSMS.replaceLinesToSpaces(body));
                     vh.tvContent
                             .setLines(2);
                     vh.checkBoxJack.setChecked(false);

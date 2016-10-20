@@ -21,7 +21,13 @@ import java.util.regex.PatternSyntaxException;
 
 public class JSMS {
 
-    public static String makePretty(String body, Context context){
+    public static String replaceLinesToSpaces(String body) {
+        String rtnStr = body.replace("\n", " ");
+        return rtnStr;
+    }
+
+
+    public static String makePretty(String body, Context context) {
 
         /**
          * Replaces each substring of this string that matches the given <a
@@ -52,7 +58,7 @@ public class JSMS {
          * @param   replacement
          *          the string to be substituted for each match
          *
-         * @return  The resulting <tt>String</tt>
+         * @return The resulting <tt>String</tt>
          *
          * @throws PatternSyntaxException
          *          if the regular expression's syntax is invalid
@@ -65,16 +71,13 @@ public class JSMS {
 
         //[Web발신]
         String[] arRemoveStr = context.getResources().getStringArray(R.array.sms_remove_string);
-        for (int i = 0 ; i < arRemoveStr.length ; i++){
-            body.replaceAll(arRemoveStr[i] , "");
+        for (int i = 0; i < arRemoveStr.length; i++) {
+            body.replaceAll(arRemoveStr[i], "");
         }
-
-
-
         return body;
     }
 
-    public static SMSObj getSMSObj(String body){
+    public static SMSObj getSMSObj(String body) {
 
         //(1)Assume that lines are in order.
 
@@ -84,16 +87,6 @@ public class JSMS {
 
         return smsObj;
     }
-
-
-
-
-
-
-
-
-
-
 
 
     public static ArrayList<SMSHighlight> getArlSMSHighlight(String body, String whattype) {
@@ -106,9 +99,7 @@ public class JSMS {
                 number = DecimalFormat.getCurrencyInstance(Locale.KOREA).parse(body);
 
 
-
-
-            } catch(ParseException pe) {
+            } catch (ParseException pe) {
                 // ignore
             }
 

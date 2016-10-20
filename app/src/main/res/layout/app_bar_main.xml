@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
     </android.support.design.widget.AppBarLayout>
@@ -30,6 +30,107 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email"/>
+        app:srcCompat="@drawable/ic_add_white_48dp"/>
+
+    <io.codetail.widget.RevealFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        >
+
+        <!-- Transform view -->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:padding="8dip"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/quickstart"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/md_13sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="48dip"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/roFootTab0"
+                     android:layout_weight="1"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent">
+
+
+                    <ImageView
+                        android:src="@drawable/ic_photo_camera_white_24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:scaleType="centerCrop"
+                        android:layout_centerInParent="true"
+                        />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/roFootTab1"
+                    android:layout_weight="1"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent">
+
+
+                    <ImageView
+                        android:src="@drawable/ic_credit_card_white_24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:scaleType="centerCrop"
+                        android:layout_centerInParent="true"
+                        />
+
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/roFootTab2"
+                    android:layout_weight="1"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:src="@drawable/ic_create_white_24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:scaleType="centerCrop"
+                        android:layout_centerInParent="true"
+                        />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+
+        </android.support.v7.widget.Toolbar>
+
+    </io.codetail.widget.RevealFrameLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

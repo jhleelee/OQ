@@ -32,6 +32,10 @@ import java.util.Map;
  */
 public class J {
 
+
+
+
+
     public static int countWords(String s) {
 
         int wordCount = 0;
@@ -310,19 +314,16 @@ public class J {
 
 //     Getting Error
 //
-//     public static ArrayList<Class<?>> arlJsonToArlObject( ArrayList<String> arljson, Class<?>
-//            clazz) {
-//        Gson gson = new Gson();
-//        ArrayList<clazz> arlReturn = new ArrayList();
-//        if (arljson != null) {
-//            for (int i = 0; i < arljson.size(); i++) {
-//                arlReturn.add(gson.fromJson(arljson.get(i), clazz));
-//            }
-//            return arlReturn;
-//        } else {
-//            return null;
-//        }
-//    }
+     public static ArrayList<String> arlStringFromjsonArlString(String jsonArlString) {
+         ArrayList<String> arlReturn = new ArrayList();
+        if (jsonArlString != null) {
+                 arlReturn = new Gson().fromJson(jsonArlString, new TypeToken<ArrayList<String>>(){}
+                         .getType());
+            return arlReturn;
+        } else {
+            return null;
+        }
+    }
 
     public static ArrayList<String> arlByChar(@Nullable String s) {
         ArrayList<String> arlReturn = new ArrayList();
