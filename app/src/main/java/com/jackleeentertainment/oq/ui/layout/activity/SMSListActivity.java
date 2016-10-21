@@ -1,13 +1,18 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.JSMS;
 import com.jackleeentertainment.oq.object.SMSHighlight;
 import com.jackleeentertainment.oq.object.types.SMSHighlightT;
@@ -36,9 +42,81 @@ public class SMSListActivity extends BaseActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
     final static String TAG = "SMSListActivity";
     final public static int LOADER_SMSLIST = 99;
+    final public static int REQUEST_PERSMISSIONS = 98;
+
     SMSCursorAdapter smsCursorAdapter;
     LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
     static ArrayList<Long> arlSelectedSmsId = new ArrayList<>();
+
+
+   void getPermissions(){
+
+        Log.d(TAG, String.valueOf(Build.VERSION.SDK_INT));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            /**************************
+             (0) Check Permission stat
+             ***************************/
+            ArrayList<String> arlPermissiionsToGet =new ArrayList<>();
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                arlPermissiionsToGet.add(Manifest.permission.READ_SMS);
+            }
+
+            if (arlPermissiionsToGet.size()>0){
+
+                Log.d(TAG, "arlPermissiionsToGet.size() : "+String.valueOf(arlPermissiionsToGet.size()));
+
+                /*********************
+                 (1) Need Explanations?
+                 **********************/
+                ArrayList<String> arlExplanations =new ArrayList<>();
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.READ_SMS)) {
+                    arlExplanations.add(JM.strById(R.string.why_need_sms_permission));
+                }
+
+
+                if (arlExplanations.size()>0){
+                    //show dialog for explanation
+                }
+
+                /************************
+                 (2) Request Permissions
+                 *************************/
+                ActivityCompat.requestPermissions(this,
+                        arlPermissiionsToGet.toArray(
+                                new String[arlPermissiionsToGet.size()]),
+                        REQUEST_PERSMISSIONS);
+
+            } else {
+
+
+            }
+        } else {
+
+        }
+    }
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == REQUEST_PERSMISSIONS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getSupportLoaderManager().initLoader(LOADER_SMSLIST, null, mCallbacks);
+            } else {
+                showAlertDialogWithOnlyOk(R.string.sms_read_permission_denied);
+            }
+        }
+
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +132,7 @@ public class SMSListActivity extends BaseActivity
         );
         lvSMS.setAdapter(smsCursorAdapter);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getPermissions();
     }
 
 
@@ -61,7 +140,6 @@ public class SMSListActivity extends BaseActivity
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart() ... ");
-        getSupportLoaderManager().initLoader(LOADER_SMSLIST, null, mCallbacks);
     }
 
 

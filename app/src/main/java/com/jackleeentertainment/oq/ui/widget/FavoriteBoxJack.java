@@ -33,11 +33,11 @@ public class FavoriteBoxJack extends ImageButton {
 
         if (checked) {
             setImageDrawable(
-                    JM.drawableById(R.drawable.ic_favorite_border_white_48dp, context));
+                    JM.drawableById(R.drawable.ic_favorite_border_white_48dp));
             JM.tint(this, R.color.black, context);
         } else {
             setImageDrawable(
-                    JM.drawableById(R.drawable.ic_favorite_white_48dp, context));
+                    JM.drawableById(R.drawable.ic_favorite_white_48dp));
             JM.tint(this, R.color.colorAccent, context);
 
         }

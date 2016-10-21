@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
@@ -197,12 +198,10 @@ public class JM {
         return ContextCompat.getColor(App.getContext(), intId);
     }
 
-    public static int colorById(int intId, Context context) {
-        return ContextCompat.getColor(context, intId);
-    }
 
-    public static Drawable drawableById(int intId, Context context) {
-        return ContextCompat.getDrawable(context, intId);
+
+    public static Drawable drawableById(int intId) {
+        return ContextCompat.getDrawable(App.getContext(), intId);
     }
 
 
@@ -541,6 +540,13 @@ public class JM {
         } else {
             iv.setColorFilter(ContextCompat.getColor(context, intFalseColor), android.graphics.PorterDuff.Mode.MULTIPLY);
         }
+    }
+
+    public static Drawable tintedDrawable(int drawableId, int colorId, Context context){
+        Drawable normalDrawable = context.getResources().getDrawable(drawableId);
+        Drawable wrapDrawable = DrawableCompat.wrap(normalDrawable);
+        DrawableCompat.setTint(wrapDrawable,context.getResources().getColor(colorId));
+        return  wrapDrawable;
     }
 
     /********************************

@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import com.jackleeentertainment.oq.object.Profile;
@@ -17,6 +18,11 @@ public class RecentAndContactProfileFrag extends Fragment {
     ArrayList<Profile> arlProfileMyRecent;
 
     ProfileArlRecentAndContactRVAdapter profileArlRecentAndContactRVAdapter;
+
+    @NonNull
+    public static RecentAndContactProfileFrag newInstance() {
+        return new RecentAndContactProfileFrag();
+    }
 
 
     /**

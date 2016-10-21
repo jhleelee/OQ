@@ -234,6 +234,11 @@
     <string name="app_slogan">OK보다 OQ</string>
     <string name="app_slogan_long">OK는 우정입니다</string>
 
+    <string name="ok_korean">확인</string>
+    <string name="why_need_sms_permission">OQ가 신용카드 사용내역 SMS로부터 당신의 지출 금액을
+        자동으로 입력할 수 있도록 SMS 읽기를 허용하여 주세요.</string>
+    <string name="sms_read_permission_denied">SMS 읽기가 거부되었습니다.</string>
+    sms_read_permission_denied
     app_slogan
     <!--Drawer-->
 

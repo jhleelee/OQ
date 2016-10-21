@@ -69,8 +69,8 @@ public class DiaFragAdapter extends BaseAdapter {
         // assign values if the object is not null
         if (itemDiaFragList != null) {
             // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
-            viewHolder.ro_person_photo_iv.setBackground(JM.drawableById(itemDiaFragList.getIdDrawableBg(), mContext));
-            viewHolder.ro_person_photo_iv.setImageDrawable(JM.drawableById(itemDiaFragList.getIdDrawableIco(), mContext));
+            viewHolder.ro_person_photo_iv.setBackground(JM.drawableById(itemDiaFragList.getIdDrawableBg()));
+            viewHolder.ro_person_photo_iv.setImageDrawable(JM.drawableById(itemDiaFragList.getIdDrawableIco()));
             viewHolder.tv__i_diafraglist.setText(itemDiaFragList.getText());
             viewHolder.ro__i_diafraglist.setOnClickListener(itemDiaFragList.getOnClickListener());
         }

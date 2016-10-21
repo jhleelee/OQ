@@ -46,8 +46,8 @@ public class SearchProfileFrag extends Fragment {
     }
 
     @NonNull
-    public static ListFrag newInstance() {
-        return new ListFrag();
+    public static SearchProfileFrag newInstance() {
+        return new SearchProfileFrag();
     }
 
     @Nullable

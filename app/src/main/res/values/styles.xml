@@ -121,6 +121,30 @@
     </style>
 
 
+
+    <style name="ImageView.ToolbarIcon">
+        <item name="android:layout_width">24dip</item>
+        <item name="android:layout_height">24dip</item>
+        <item name="android:layout_marginLeft">16dip</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_centerVertical">true</item>
+
+    </style>
+
+    <style name="ImageView.ToolbarIcon.Close">
+        <item name="android:background">@drawable/ic_close_white_48dp</item>
+
+    </style>
+
+
+    <style name="ImageView.ToolbarIcon.Back">
+        <item name="android:background">@drawable/ic_arrow_back_white_48dp</item>
+    </style>
+
+
+
+
     <style name="EditText">
     </style>
 

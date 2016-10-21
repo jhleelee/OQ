@@ -44,6 +44,7 @@ public class SignInCatcherActivity extends AppCompatActivity {
                         Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
                         App.initFirebaseUser(user);
+                        App.initFbaseDatabase();
                         App.initFbaseDatabaseRef();
                         App.initFbaseStorage();
 

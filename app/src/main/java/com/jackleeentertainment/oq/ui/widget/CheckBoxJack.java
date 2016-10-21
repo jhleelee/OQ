@@ -43,7 +43,7 @@ public class CheckBoxJack extends ImageButton {
 
         if (checked) {
             setImageDrawable(
-                    JM.drawableById(R.drawable.ic_check_white_48dp, context));
+                    JM.drawableById(R.drawable.ic_check_white_48dp));
             setBackgroundResource(R.drawable.jackcheckboxbg_checked);
         } else {
             setImageDrawable(null);

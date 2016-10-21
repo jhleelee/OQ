@@ -40,10 +40,14 @@ public class ListFrag extends Fragment {
         view = inflater.inflate(R.layout.frag_content_nodividerlist,
                 container, false);
         initUI();
-        initAdapter();
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initAdapter();
+    }
 
     void initUI(){
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -60,11 +61,9 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
     RelativeLayout roEmpty__cardview_cause__PERSON, roEmpty__cardview_cause__SUMTYPE, roEmpty__cardview_cause__BREAKDOWN;
     Button bt__lo_lefttext_rightoneaction__PERSON, bt__lo_lefttext_rightoneaction__SUMTYPE, bt__lo_lefttext_rightoneaction__BREAKDOWN;
 
-    OqItem oqItem = new OqItem();
 
     public NewOQFrag0() {
         super();
-        oqItem.setAmmount(0);
     }
 
     @NonNull
@@ -79,10 +78,15 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
         Log.d(TAG, "onCreateView ...");
         view = inflater.inflate(R.layout.frag_newoq_0, container, false);
         initUI();
-        uiDependOnOQItemCardViewPeople(oqItem);
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        uiDependOnOQItemCardViewPeople(((NewOQActivity)getActivity()).getOqItemEffect());
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -241,6 +245,8 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
             JM.V(cardview_cause_people__frag_newoq_0);
             JM.G(cardview_cause_sumtype__frag_newoq_0);
             JM.G(cardview_cause_breakdown__frag_newoq_0);
+            JM.G(tv_done__frag_newoq_0);
+
 
             JM.V(roEmpty__cardview_cause__PERSON);
             View.OnClickListener onClickListener = new View.OnClickListener() {

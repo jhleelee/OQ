@@ -17,11 +17,68 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:elevation="6dp"
-            />
+            android:elevation="6dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/material_layout_app_bar_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/roClose"
+                    android:layout_width="72dip"
+                    android:layout_height="match_parent">
+
+                    <ImageView style="@style/ImageView.ToolbarIcon.Close"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvToolbarTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/material_layout_app_bar_title_textSize"/>
+
+                <TextView
+                    android:id="@+id/tvToolbarPreview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBaseline="@+id/tvToolbarTitle"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="@string/preview"
+                    android:textColor="@color/white"
+                    android:textSize="14dip"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tvToolbarSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBaseline="@+id/tvToolbarTitle"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginRight="16dip"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="14dip"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
@@ -30,12 +87,33 @@
             android:background="@color/colorPrimary"
             android:elevation="6dp"/>
 
-
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
+
+    <android.support.v4.view.ViewPager
+        android:visibility="gone"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </android.support.v4.view.ViewPager>
+
+
+    <FrameLayout
+        android:id="@+id/fr_content"
+        android:visibility="gone"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </FrameLayout>
+
 
     <android.support.design.widget.FloatingActionButton
+        android:visibility="gone"
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -139,6 +217,4 @@
         </android.support.v7.widget.Toolbar>
 
     </io.codetail.widget.RevealFrameLayout>
-
-
 </android.support.design.widget.CoordinatorLayout>

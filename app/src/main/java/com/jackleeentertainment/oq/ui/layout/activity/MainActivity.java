@@ -73,18 +73,17 @@ public class MainActivity extends BaseActivity
             // Get extra data included in the Intent
             String searchKey = intent.getStringExtra("data");
 
-            if (searchKey.equals("nav_choose_from_list_get")||
-                    searchKey.equals("nav_choose_from_list_pay")||
-                    searchKey.equals("nav_list_i_am_master")||
+            if (searchKey.equals("nav_choose_from_list_get") ||
+                    searchKey.equals("nav_choose_from_list_pay") ||
+                    searchKey.equals("nav_list_i_am_master") ||
                     searchKey.equals("nav_list_i_am_member")
-                    ){
+                    ) {
 
                 //fragment0
 
             }
         }
     };
-
 
 
     @Override
@@ -106,9 +105,26 @@ public class MainActivity extends BaseActivity
         final TabLayout.Tab tabLayoutChat = tabLayout.newTab();
 
         //Setting Icons to our respective tabs
-        tabLayoutHome.setIcon(R.drawable.ic_view_list_white_24dp);//white
-        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_white_24dp);//grey
-        tabLayoutChat.setIcon(R.drawable.ic_chat_white_24dp);//grey
+        tabLayoutHome.setIcon(
+                JM.tintedDrawable(
+                        R.drawable.ic_view_list_white_24dp,
+                        R.color.colorTabTextColor,
+                        App.getContext())
+        ); //grey
+        tabLayoutFeed.setIcon(
+                JM.tintedDrawable(
+                        R.drawable.ic_web_asset_white_24dp,
+                        R.color.colorTabTextColorUnselected,
+                        App.getContext())
+        ); //white
+        tabLayoutChat.setIcon(
+                JM.tintedDrawable(
+                        R.drawable.ic_chat_white_24dp,
+                        R.color.colorTabTextColorUnselected,
+                        App.getContext())
+        ); //grey
+
+
 
         /*
         Adding the tab view to our tablayout at appropriate positions
@@ -126,10 +142,12 @@ public class MainActivity extends BaseActivity
         TabIndicatorColor sets the color for the indiactor below the tabs
          */
 
-        tabLayout.setTabTextColors(ContextCompat.getColorStateList(this, R.color
-                .colorTabTextColor));
+        tabLayout.setTabTextColors(
+                ContextCompat.getColorStateList(this, R.color.colorTabTextColor)
+        );
+
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.colorTabIndicator));
-        tabLayout.setSelectedTabIndicatorHeight(0);
+        tabLayout.setSelectedTabIndicatorHeight(JM.pxFromDp(this, 2));
         /*
         Adding a onPageChangeListener to the viewPager
         1st we add the PageChangeListener and pass a TabLayoutPageChangeListener so that Tabs Selection
@@ -146,19 +164,64 @@ public class MainActivity extends BaseActivity
                         setting Home as White and rest grey
                         and like wise for all other positions
                          */
-                        tabLayoutHome.setIcon(R.drawable.ic_view_list_white_24dp);//white
-                        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_black_24dp); //grey
-                        tabLayoutChat.setIcon(R.drawable.ic_chat_black_24dp); //grey
+                        tabLayoutHome.setIcon(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_view_list_white_24dp,
+                                        R.color.colorTabTextColor,
+                                        App.getContext())
+                        ); //grey
+                        tabLayoutFeed.setIcon(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_web_asset_white_24dp,
+                                        R.color.colorTabTextColorUnselected,
+                                        App.getContext())
+                        ); //white
+                        tabLayoutChat.setIcon(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_chat_white_24dp,
+                                        R.color.colorTabTextColorUnselected,
+                                        App.getContext())
+                        ); //grey
                         break;
                     case 1:
-                        tabLayoutHome.setIcon(R.drawable.ic_view_list_black_24dp); //grey
-                        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_white_24dp); //white
-                        tabLayoutChat.setIcon(R.drawable.ic_chat_black_24dp); //grey
+                        tabLayoutHome.setIcon(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_view_list_white_24dp,
+                                        R.color.colorTabTextColorUnselected,
+                                        App.getContext())
+                        ); //grey
+                        tabLayoutFeed.setIcon(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_web_asset_white_24dp,
+                                        R.color.colorTabTextColor,
+                                        App.getContext())
+                        ); //white
+                        tabLayoutChat.setIcon(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_chat_white_24dp,
+                                        R.color.colorTabTextColorUnselected,
+                                        App.getContext())
+                        ); //grey
                         break;
                     case 2:
-                        tabLayoutHome.setIcon(R.drawable.ic_view_list_black_24dp); //grey
-                        tabLayoutFeed.setIcon(R.drawable.ic_web_asset_black_24dp); //grey
-                        tabLayoutChat.setIcon(R.drawable.ic_chat_white_24dp); //white
+                        tabLayoutHome.setIcon(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_view_list_white_24dp,
+                                        R.color.colorTabTextColorUnselected,
+                                        App.getContext())
+                        ); //grey
+                        tabLayoutFeed.setIcon(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_web_asset_white_24dp,
+                                        R.color.colorTabTextColorUnselected,
+                                        App.getContext())
+                        ); //white
+                        tabLayoutChat.setIcon(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_chat_white_24dp,
+                                        R.color.colorTabTextColor,
+                                        App.getContext())
+                        ); //grey
                         break;
                 }
             }
@@ -175,7 +238,7 @@ public class MainActivity extends BaseActivity
         });
 
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -295,7 +358,7 @@ public class MainActivity extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
-    ShareActionProvider  mShareActionProvider;
+    ShareActionProvider mShareActionProvider;
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -314,9 +377,9 @@ public class MainActivity extends BaseActivity
                 i.putExtra(Intent.EXTRA_TEXT, JM.strById(R.string.app_slogan) +
                         "\n");
                 i.putExtra(Intent.EXTRA_HTML_TEXT,
-                        JM.strById(R.string.app_slogan_long) +  "\n" +
+                        JM.strById(R.string.app_slogan_long) + "\n" +
 
-                        Uri.parse("http://"));
+                                Uri.parse("http://"));
                 startActivity(Intent.createChooser(i, JM.strById(R.string.choose_from_messengers)));
 
                 break;
@@ -356,7 +419,7 @@ public class MainActivity extends BaseActivity
             case R.id.nav_input_manually_get:
 
                 Intent intentManualGet = new Intent(this, NewOQActivity.class);
-                intentManualGet.putExtra("GeneralT", OQT.GeneralT.CAUSE);
+                intentManualGet.putExtra("GeneralT", OQT.GeneralT.EFFECT);
                 intentManualGet.putExtra("WantT", OQT.WantT.GET);
                 intentManualGet.putExtra("DoT", OQT.DoT.DIDDO); //delete?
                 startActivity(intentManualGet);
@@ -372,7 +435,7 @@ public class MainActivity extends BaseActivity
 
             case R.id.nav_input_manually_pay:
                 Intent intentManualPay = new Intent(this, NewOQActivity.class);
-                intentManualPay.putExtra("GeneralT", OQT.GeneralT.CAUSE);
+                intentManualPay.putExtra("GeneralT", OQT.GeneralT.EFFECT);
                 intentManualPay.putExtra("WantT", OQT.WantT.PAY);
                 intentManualPay.putExtra("DoT", OQT.DoT.DIDDO); //delete?
                 startActivity(intentManualPay);

@@ -1,7 +1,11 @@
 package com.jackleeentertainment.oq.object.util;
 
+import android.app.Activity;
+
 import com.google.gson.Gson;
+import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.object.OqItem;
+import com.jackleeentertainment.oq.object.types.OQT;
 
 import java.util.ArrayList;
 
@@ -23,6 +27,40 @@ public class OqItemUtil {
     }
 
 
+    public static OqItem getInstance(){
+        OqItem oqItem = new OqItem();
+        oqItem.setAmmount(0);
+        return oqItem;
+    }
+
+
+    public static OqItem setMyUidToOneSide(OqItem oqItem, Activity activity){
+        if (oqItem.getOqgnltype()!=null&&
+                oqItem.getOqwnttype()!=null){
+
+            if (oqItem.getOqwnttype().equals(OQT.WantT.GET)){
+                oqItem.setUidgettor(
+                        App.getUid(activity)
+                );
+            } else
+
+            if (oqItem.getOqwnttype().equals(OQT.WantT.PAY))
+
+            {
+                oqItem.setUidpayer(
+                        App.getUid(activity)
+                );
+            }
+
+        }
+
+        return oqItem;
+    }
+
+
+
+
+
     public static OqItem copyOqItemValues(OqItem oqItem) {
         Gson gson = new Gson();
         String strItem = gson.toJson(oqItem);
@@ -31,41 +69,41 @@ public class OqItemUtil {
     }
 
 
-    public static ArrayList<String> getUnduplacatedArlUidsFromArlOqItems(
-            ArrayList<OqItem> arlOqItems, String oqItemPivotT) {
-        ArrayList<String> arlUids = new ArrayList<>();
-        if (oqItemPivotT.equals(OQItemPivotT.UID_RECEIVED_BENEFIT)) {
-            for (int i = 0; i < arlOqItems.size(); i++) {
-                String name = arlOqItems.get(i).getUidreceivedbnf();
-                if (!arlUids.contains(name)) {
-                    arlUids.add(name);
-                }
-            }
-        } else if (oqItemPivotT.equals(OQItemPivotT.UID_GAVE_BENEFIT)) {
-            for (int i = 0; i < arlOqItems.size(); i++) {
-                String name = arlOqItems.get(i).getUidgavebnf();
-                if (!arlUids.contains(name)) {
-                    arlUids.add(name);
-                }
-            }
-        } else if (oqItemPivotT.equals(OQItemPivotT.UID_GETTOR)) {
-            for (int i = 0; i < arlOqItems.size(); i++) {
-                String name = arlOqItems.get(i).getUidgettor();
-                if (!arlUids.contains(name)) {
-                    arlUids.add(name);
-                }
-            }
-        } else if (oqItemPivotT.equals(OQItemPivotT.UID_PAYER)) {
-            for (int i = 0; i < arlOqItems.size(); i++) {
-                String name = arlOqItems.get(i).getUidpayer();
-                if (!arlUids.contains(name)) {
-                    arlUids.add(name);
-                }
-            }
-        }
-
-        return arlUids;
-    }
+//    public static ArrayList<String> getUnduplacatedArlUidsFromArlOqItems(
+//            ArrayList<OqItem> arlOqItems, String oqItemPivotT) {
+//        ArrayList<String> arlUids = new ArrayList<>();
+//        if (oqItemPivotT.equals(OQItemPivotT.UID_RECEIVED_BENEFIT)) {
+//            for (int i = 0; i < arlOqItems.size(); i++) {
+//                String name = arlOqItems.get(i).getUidreceivedbnf();
+//                if (!arlUids.contains(name)) {
+//                    arlUids.add(name);
+//                }
+//            }
+//        } else if (oqItemPivotT.equals(OQItemPivotT.UID_GAVE_BENEFIT)) {
+//            for (int i = 0; i < arlOqItems.size(); i++) {
+//                String name = arlOqItems.get(i).getUidgavebnf();
+//                if (!arlUids.contains(name)) {
+//                    arlUids.add(name);
+//                }
+//            }
+//        } else if (oqItemPivotT.equals(OQItemPivotT.UID_GETTOR)) {
+//            for (int i = 0; i < arlOqItems.size(); i++) {
+//                String name = arlOqItems.get(i).getUidgettor();
+//                if (!arlUids.contains(name)) {
+//                    arlUids.add(name);
+//                }
+//            }
+//        } else if (oqItemPivotT.equals(OQItemPivotT.UID_PAYER)) {
+//            for (int i = 0; i < arlOqItems.size(); i++) {
+//                String name = arlOqItems.get(i).getUidpayer();
+//                if (!arlUids.contains(name)) {
+//                    arlUids.add(name);
+//                }
+//            }
+//        }
+//
+//        return arlUids;
+//    }
 
 
     public static long getSumOqItemAmmounts(ArrayList<OqItem> arlOqItems) {

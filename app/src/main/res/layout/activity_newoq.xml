@@ -13,12 +13,73 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
+        <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="6dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/material_layout_app_bar_height"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/roClose"
+                    android:layout_width="72dip"
+                    android:layout_height="match_parent">
+
+                    <ImageView style="@style/ImageView.ToolbarIcon.Close"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvToolbarTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/dummyname"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/material_layout_app_bar_title_textSize"/>
+
+                <TextView
+                    android:id="@+id/tvToolbarPreview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBaseline="@+id/tvToolbarTitle"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="@string/preview"
+                    android:textColor="@color/white"
+                    android:textSize="14dip"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tvToolbarSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBaseline="@+id/tvToolbarTitle"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginRight="16dip"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="14dip"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -37,3 +98,8 @@
 
 
 </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+

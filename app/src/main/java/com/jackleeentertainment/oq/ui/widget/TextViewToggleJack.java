@@ -39,12 +39,12 @@ public class TextViewToggleJack extends TextView {
 
         if (checked) {
             setBackgroundColor(
-                    JM.colorById(intCheckedColorBG, context));
-            setTextColor(JM.colorById(intCheckedColorText, context));
+                    JM.colorById(intCheckedColorBG));
+            setTextColor(JM.colorById(intCheckedColorText));
         } else {
             setBackgroundColor(
-                    JM.colorById(intUnCheckedColorBG, context));
-            setTextColor(JM.colorById(intUnCheckedColorText, context));
+                    JM.colorById(intUnCheckedColorBG));
+            setTextColor(JM.colorById(intUnCheckedColorText));
         }
     }
 
