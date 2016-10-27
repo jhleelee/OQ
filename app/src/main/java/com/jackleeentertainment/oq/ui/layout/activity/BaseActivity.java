@@ -4,10 +4,13 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,16 +19,21 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
+import com.jackleeentertainment.oq.object.Receipt;
 import com.jackleeentertainment.oq.ui.layout.diafrag.ChatroomAttrDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
 import com.jackleeentertainment.oq.ui.layout.diafrag.GalleryOrCameraDiaFrag;
+import com.jackleeentertainment.oq.ui.layout.diafrag.MyProfileBackgroundPhotoDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.OneLineInputDiaFrag;
+import com.jackleeentertainment.oq.ui.layout.diafrag.ReceiptBreakdownDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.SelectedFriendsAndMoreDiaFrag;
+import com.jackleeentertainment.oq.ui.layout.diafrag.TransactChatOrShowProfileDiaFrag;
 import com.soundcloud.android.crop.Crop;
 
 import java.util.ArrayList;
@@ -40,11 +48,24 @@ public class BaseActivity extends AppCompatActivity {
     public final static int RESULT_ACTION_IMAGE_CAPTURE = 91;
     Uri croppedUri;
 
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initUILayoutOnCreate();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         initUIDataOnResume();
         initOnClickListenerOnResume();
+    }
+
+
+
+    void initUILayoutOnCreate(){
+
     }
 
 
@@ -97,6 +118,8 @@ public class BaseActivity extends AppCompatActivity {
         String diaFragT = bundle.getString("diaFragT");
         FragmentManager fm = getSupportFragmentManager();
 
+
+
         if (diaFragT.equals(DiaFragT.ChatroomAttr_atChatRoomList)) {
             ChatroomAttrDiaFrag chatroomAttrDiaFrag = ChatroomAttrDiaFrag.newInstance(
                     bundle, this);
@@ -115,7 +138,28 @@ public class BaseActivity extends AppCompatActivity {
             GalleryOrCameraDiaFrag galleryOrCameraDiaFrag = GalleryOrCameraDiaFrag
                     .newInstance(
                             bundle, this);
-            galleryOrCameraDiaFrag.show(fm, "galleryOrCameraDiaFrag");
+            galleryOrCameraDiaFrag.show(fm, "ReceiptBreakdown");
+        } else if (diaFragT.equals(DiaFragT.ReceiptBreakdown)){
+           Receipt receipt = (Receipt) bundle.getSerializable("Receipt");
+            ReceiptBreakdownDiaFrag receiptBreakdownDiaFrag = ReceiptBreakdownDiaFrag
+                    .newInstance(
+                            bundle, this);
+            receiptBreakdownDiaFrag.show(fm, "ReceiptBreakdownDiaFrag");
+
+        }else if (diaFragT.equals(DiaFragT.TransactChatOrShowProfile)){
+            TransactChatOrShowProfileDiaFrag frag =
+                    TransactChatOrShowProfileDiaFrag
+                    .newInstance(
+                            bundle, this);
+            frag.show(fm, "TransactChatOrShowProfileDiaFrag");
+
+        }else if (diaFragT.equals(DiaFragT.MyProfileBackgroundPhoto)){
+            MyProfileBackgroundPhotoDiaFrag frag =
+                    MyProfileBackgroundPhotoDiaFrag
+                            .newInstance(
+                                    bundle, this);
+            frag.show(fm, "MyProfileBackgroundPhotoDiaFrag");
+
         }
 
     }
@@ -137,10 +181,84 @@ public class BaseActivity extends AppCompatActivity {
                             }
                         });
         AlertDialog alertDialog = alertDialogBuilder.create();
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
         alertDialog.show();
     }
 
 
+    public void showAlertDialogWithOkCancel(
+            int messageStrId,
+          final  AsyncTask asyncTask
+
+    ) {
+
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(JM.strById(messageStrId));
+
+        alertDialogBuilder.setPositiveButton(
+                JM.strById(R.string.ok_korean),
+                new
+                        DialogInterface
+                                .OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                asyncTask.execute();
+
+                            }
+                        });
+
+        alertDialogBuilder.setNegativeButton(JM.strById(R.string.cancel_korean),
+                new
+                        DialogInterface
+                                .OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                arg0.dismiss();
+                            }
+                        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+//        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+//        nbutton.setTextColor(JM.colorById(R.color.text_black_54));
+//        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+//        pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
+        alertDialog.show();
+    }
+
+
+
+    public void showAlertDialogWithOkCancel(
+            int messageStrId,
+            final DialogInterface
+                    .OnClickListener dialogOcl
+
+            ) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(JM.strById(messageStrId));
+
+        alertDialogBuilder.setPositiveButton(
+                JM.strById(R.string.ok_korean),
+                dialogOcl);
+
+        alertDialogBuilder.setNegativeButton(JM.strById(R.string.cancel_korean),
+                new
+                        DialogInterface
+                                .OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                arg0.dismiss();
+                            }
+                        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setTextColor(JM.colorById(R.color.text_black_54));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
+        alertDialog.show();
+    }
 
     /********************************
      * UI - Fragment

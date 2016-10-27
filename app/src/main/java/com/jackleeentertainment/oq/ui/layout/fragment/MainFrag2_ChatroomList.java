@@ -31,17 +31,15 @@ import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.generalutil.StringGenerator;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.ChatroomRingT;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
-import com.jackleeentertainment.oq.sql.ChatroomDBCP;
-import com.jackleeentertainment.oq.sql.ChatroomDB_OpenHelper;
+import com.jackleeentertainment.oq.sql.ChatroomSQL.ChatroomDBCP;
+import com.jackleeentertainment.oq.sql.ChatroomSQL.ChatroomDB_OpenHelper;
 import com.jackleeentertainment.oq.ui.layout.activity.ChatActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.MainActivity;
 import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -208,6 +206,7 @@ public class MainFrag2_ChatroomList extends Fragment implements
 
 
     private void initUI() {
+
         lvChatroomList = (ListView) view.findViewById(R.id.lvChatroomList);
         ro_empty_list__frag_main_2_chat = (RelativeLayout) view.findViewById(R.id.ro_empty_list__frag_main_2_chat);
     }

@@ -34,7 +34,7 @@
 
 
     <!--Avatar-->
-    <dimen name="avatar_lessmargin">2dp</dimen>
+    <dimen name="avatar_lessmargin">44dp</dimen>
 
 
 
@@ -42,6 +42,7 @@
 
     <!--Commom-->
     <dimen name="paddingLeftRight_smallitems">4dp</dimen>
+    <dimen name="textSizeOfTabToAdd">20sp</dimen>
 
 
     <!--MainActivity-->

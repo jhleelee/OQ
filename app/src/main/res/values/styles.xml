@@ -1,5 +1,60 @@
 <resources>
 
+    <!--<item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>-->
+    <!--<item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>-->
+    <style name="FullscreenTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@drawable/bg_login</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="searchTextHiglight">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ContactListView">
+        <item name="android:verticalScrollbarPosition">right</item>
+        <item name="android:fastScrollAlwaysVisible">true</item>
+        <item name="android:scrollbarStyle">outsideInset</item>
+    </style>
+
+    <style name="listViewActivatedStyle"/>
+
+    <style name="quickContactBadgeStyle">
+        <item name="android:background">@drawable/quickcontact_badge_small</item>
+    </style>
+
+
+
+    <style name="addressHeader" parent="@android:style/TextAppearance.Small">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="addressDetail" parent="@android:style/TextAppearance.Medium">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textIsSelectable">true</item>
+    </style>
+
+    <style name="contactNameTitle" parent="@android:style/TextAppearance.Large">
+        <item name="android:textSize">38sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textIsSelectable">true</item>
+    </style>
+
+    <style name="addressButton"/>
+
+
     <!-- Base application theme. -->
 
     <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
@@ -120,7 +175,11 @@
         <item name="android:padding">2dip</item>
     </style>
 
-
+    <style name="ImageView.WhiteImageSrcTransparentBg.36">
+        <item name="android:layout_width">36dip</item>
+        <item name="android:layout_height">36dip</item>
+        <item name="android:padding">3dip</item>
+    </style>
 
     <style name="ImageView.ToolbarIcon">
         <item name="android:layout_width">24dip</item>
@@ -159,12 +218,34 @@
 
     </style>
 
+    <style name="EditText.NewOQItemPhotoContent">
+        <item name="android:gravity">left|top</item>
+        <item name="android:background">@drawable/rec_radmd2_str2primarydark_solidalpha</item>
+        <item name="android:textSize">18dip</item>
+        <item name="android:lines">5</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">16dip</item>
+    </style>
+
+
+
 
 
 
 
     <style name="TextView">
     </style>
+    <style name="TextView.tabFoot">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12dip</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:layout_marginTop">4dip</item>
+    </style>
+
+
+
 
     <style name="TextView.InCardView">
         <item name="android:layout_width">wrap_content</item>
@@ -408,18 +489,20 @@
         <item name="android:minWidth">64dip</item>
         <item name="android:paddingLeft">8dip</item>
         <item name="android:paddingRight">8dip</item>
-        <item name="android:textColor">@color/green8</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">16dip</item>
 
     </style>
 
     <style name="DiafragTextViewAsButton.OkCancel.Ok">
         <item name="android:text">@string/google_ok</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:layout_alignParentRight">true</item>
     </style>
 
 
     <style name="DiafragTextViewAsButton.OkCancel.Cancel">
+        <item name="android:textColor">@color/text_black_54</item>
         <item name="android:text">@string/google_cancel</item>
         <item name="android:layout_marginRight">8dip</item>
 

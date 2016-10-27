@@ -7,9 +7,61 @@ package com.jackleeentertainment.oq.object;
 public class Group {
 
     String gid;
-    String bg;
+    String title;
     String ico;
-   long ts;
+    String bg;
+    String member;
+    String reqtype;
+    String reqammount;
+    String reqfrom;
+    long ts;
+
+    public Group() {
+        super();
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getMember() {
+        return member;
+    }
+
+    public void setMember(String member) {
+        this.member = member;
+    }
+
+    public String getReqtype() {
+        return reqtype;
+    }
+
+    public void setReqtype(String reqtype) {
+        this.reqtype = reqtype;
+    }
+
+    public String getReqammount() {
+        return reqammount;
+    }
+
+    public void setReqammount(String reqammount) {
+        this.reqammount = reqammount;
+    }
+
+    public String getReqfrom() {
+        return reqfrom;
+    }
+
+    public void setReqfrom(String reqfrom) {
+        this.reqfrom = reqfrom;
+    }
+
+
 
     public String getGid() {
         return gid;
@@ -33,9 +85,6 @@ public class Group {
 
     public void setIco(String ico) {
         this.ico = ico;
-    }
-    public Group() {
-        super();
     }
 
     public long getTs() {

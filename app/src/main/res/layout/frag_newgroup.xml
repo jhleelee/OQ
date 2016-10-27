@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardviewTitlePhoto"
+            android:visibility="gone"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            card_view:cardElevation="4dp"
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardUseCompatPadding="true">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dip"
+                        >
+
+
+                        <ImageView
+                            android:id="@+id/ivPhotoMain"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dip"/>
+
+
+                        <ImageButton
+                            android:id="@+id/ibChangePhoto"
+                            style="@style/ImageButton.WhiteImageSrcTransparentBg.40"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:src="@drawable/ic_photo_camera_white_48dp"
+                            />
+
+
+                        <RelativeLayout
+                            android:id="@+id/roEmpty"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dip"
+                            android:background="@color/white"
+                            >
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/scrim_solid"/>
+
+                            <TextView
+                                android:id="@+id/tvEmpty"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+                                android:text="@string/tab_to_add_photo"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/textSizeOfTabToAdd"/>
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dip"
+                        android:layout_marginLeft="@dimen/md_16dip"
+                        android:layout_marginRight="@dimen/md_16dip"
+                        android:layout_marginTop="@dimen/md_16dip"
+                        android:text="@string/title_group"
+                        android:textSize="@dimen/md_13sp"/>
+
+                    <EditText
+                        android:id="@+id/etTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dip"
+                        android:layout_marginBottom="@dimen/md_16dip"
+                        android:layout_marginLeft="@dimen/md_16dip"
+                        android:layout_marginRight="@dimen/md_16dip"
+                        android:lines="1"
+                        android:background="@drawable/rec_radmd2_str1_primarydark"
+                        android:gravity="left|top"
+                        android:hint="@string/ourfloor_group"
+                        android:textSize="@dimen/textSizeOfTabToAdd"/>
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardviewMember"
+            card_view:cardElevation="4dp"
+            android:visibility="gone"
+
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="300dip"
+            card_view:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dip"
+                    android:layout_marginLeft="@dimen/md_16dip"
+                    android:layout_marginRight="@dimen/md_16dip"
+                    android:layout_marginTop="@dimen/md_16dip"
+                    android:text="@string/member_group"
+                    android:textSize="@dimen/md_13sp"/>
+
+                <ListView
+                    android:id="@+id/lvMembers"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dip"
+                    android:layout_margin="16dip"
+                    android:layout_marginBottom="@dimen/md_16dip"
+
+                    android:layout_weight="1">
+                </ListView>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            card_view:cardElevation="4dp"
+            android:id="@+id/cardviewAmmount"
+
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dip"
+                    android:layout_marginLeft="@dimen/md_16dip"
+                    android:layout_marginRight="@dimen/md_16dip"
+                    android:layout_marginTop="@dimen/md_16dip"
+                    android:text="@string/ammount_by_period"
+                    android:textSize="@dimen/md_13sp"/>
+
+                <EditText
+                    android:hint="@string/won10000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dip"
+                    android:layout_marginBottom="@dimen/md_16dip"
+                    android:layout_marginLeft="@dimen/md_16dip"
+                    android:layout_marginRight="@dimen/md_16dip"
+                    android:background="@drawable/rec_radmd2_str1_primarydark"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:textSize="@dimen/md_24sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Switch
+                        android:layout_width="match_parent"
+                        android:layout_height="48dip"
+                        android:paddingLeft="16dip"
+                        android:paddingRight="16dip"
+                        android:text="@string/invoice_once"
+                        android:textSize="18dip"/>
+
+                    <LinearLayout
+                        android:id="@+id/lo_invoice_multi"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dip"
+                        android:orientation="horizontal">
+
+                        <TextView
+
+                            android:id="@+id/tvFirstDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingLeft="16dip"
+                            android:paddingRight="16dip"
+                            android:text="0000-00-00 부터"
+                            android:textSize="18dip"/>
+
+                        <View
+                            android:layout_width="0dip"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"/>
+
+                        <Spinner
+                            android:id="@+id/spinnerPeriod"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="16dip"
+                            android:layout_marginRight="16dip"
+                            android:text="@string/every_week"
+                            android:textSize="18dip"/>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <include
+            android:id="@+id/ro_tv_done"
+            layout="@layout/ro_tv_done"
+            android:layout_width="match_parent"
+            android:layout_height="56dip"/>
+
+
+    </LinearLayout>
+
+
+</ScrollView>
+
+
+
+
+
+

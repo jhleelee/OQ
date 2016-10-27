@@ -1,9 +1,11 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -39,8 +41,11 @@ import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.object.Chat;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.ChatAtchT;
-import com.jackleeentertainment.oq.sql.ChatDBCP;
-import com.jackleeentertainment.oq.sql.ChatDB_OpenHelper;
+import com.jackleeentertainment.oq.object.util.ProfileUtil;
+import com.jackleeentertainment.oq.sql.ChatSQL.ChatDBCP;
+import com.jackleeentertainment.oq.sql.ChatSQL.ChatDB_OpenHelper;
+import com.jackleeentertainment.oq.sql.ChatroomSQL.ChatroomDBCP;
+import com.jackleeentertainment.oq.sql.ChatroomSQL.ChatroomDB_OpenHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,8 +64,8 @@ public class ChatActivity
     final public static int LOADER_MESSAGESLIST = 99;
 
     String rid;
-    ArrayList<String> arlJsonProfilesInChat;
-    ArrayList<Profile> arlProfilesInChat;
+    ArrayList<String> arlJsonProfilesInChat = new ArrayList<>();
+    ArrayList<Profile> arlProfilesInChat = new ArrayList<>();
 
     Gson gson = new Gson();
     LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
@@ -107,16 +112,25 @@ public class ChatActivity
         super.onResume();
         rid = getIntent().getStringExtra("rid");
         arlJsonProfilesInChat = getIntent().getStringArrayListExtra("arlJsonProfilesInChat");
-        for (int i = 0 ; i < arlJsonProfilesInChat.size() ; i ++){
+        Log.d(TAG, "arlJsonProfilesInChat.size() : " + J.st(arlJsonProfilesInChat.size()));
+        for (int i = 0; i < arlJsonProfilesInChat.size(); i++) {
+            Log.d(TAG, "gson.fromJson(arlJsonProfilesInChat.get(i), Profile.class) : " + gson
+                    .fromJson(arlJsonProfilesInChat.get(i), Profile.class));
             arlProfilesInChat.add(gson.fromJson(arlJsonProfilesInChat.get(i), Profile.class));
         }
 
+        ivSend__lo_chat_writesend.setOnClickListener(this);
+        ivAttach__lo_chat_writesend.setOnClickListener(this);
+        ivEmoji__lo_chat_writesend.setOnClickListener(this);
+
+        //setChatRoomTitleAtToolBar
+        ArrayList<String> arlNames = ProfileUtil.getArlName(arlProfilesInChat);
+        arlNames.remove(App.getUname(this));
+        if (arlNames.size() == 1) {
+
+        }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 
     @Override
     public void finish() {
@@ -126,7 +140,7 @@ public class ChatActivity
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.ivSend__lo_chat_writesend:
                 //Create Obj
                 Chat chat = new Chat();
@@ -136,8 +150,45 @@ public class ChatActivity
                 chat.setTs(System.currentTimeMillis());
                 chat.setAtcht(ChatAtchT.NONE);
 
+
+                /*****************************/
+                // MY CHAT DB
+                /*****************************/
+
+                final Uri uri = ChatDBCP.insert(chat,
+                        -1, //sent stat
+                        App.getContext());
+                Log.d(TAG, "chat uri " + uri.toString());
+
+                /*****************************/
+                // MY CHATROOM DB
+                /*****************************/
+
+                tryUpdateOrInsertMessageIntoChatRoomDB(
+                        chat,
+                        new Gson().toJson(arlProfilesInChat)
+                );
+
+                /*****************************/
+                // FCMAsyncTask
+                /*****************************/
+
+
                 //FCM
                 FCMSend.send(chat);
+                etSend__lo_chat_writesend.setText("");
+
+
+
+//                setArlRgs(arlSelectedProfile);
+//
+//                new FCMATask(
+//                        chat,
+//                        arlFriendRgs.get(0)
+//                )
+//                        .execute();
+
+
 
 
                 break;
@@ -145,6 +196,63 @@ public class ChatActivity
 
         }
     }
+
+
+    private void tryUpdateOrInsertMessageIntoChatRoomDB(Chat chat, String StringJSONArrayFriendsInfo) {
+
+        Log.d(TAG, "tryUpdateOrInsertMessageIntoChatRoomDB");
+
+        ContentValues cvUpdate = new ContentValues();
+
+//        cvUpdate.put(ChatroomDB_OpenHelper.OppUidOrRoomId, OppUidOrRoomId);
+//        cvUpdate.put(ChatroomDB_OpenHelper.FRIEND_UIDS, J.stFromArlWithComma(arlFriendUids));
+//        cvUpdate.put(ChatroomDB_OpenHelper.JSONSTR_arlFriendshipSA, jsonArrayFriends.toString()); //{id, name}
+//        cvUpdate.put(ChatroomDB_OpenHelper.RING_ONOFF, RING_ONOFF);
+//        cvUpdate.put(ChatroomDB_OpenHelper.ROOMSTATUS, ROOMSTATUS);
+//        cvUpdate.put(ChatroomDB_OpenHelper.intMulti, J.in(intMulti));
+
+        cvUpdate.put(ChatroomDB_OpenHelper.LASTMESSAGE, chat.getTxt());
+        cvUpdate.put(ChatroomDB_OpenHelper.LASTMESSAGE_TIME, chat.getTs());
+
+
+//                        cv.put(ChatroomDB_OpenHelper.intNotReadMessageNum, chat.getAA());
+        int updatedRows = 0;
+        updatedRows = App.getContext().getContentResolver().update(
+                ChatroomDBCP.CONTENT_URI,
+                cvUpdate,
+                ChatroomDB_OpenHelper.RoomId + "= ?",
+                new String[]{chat.getRid()});
+
+        //(1-2-b) if fails then get room information and insert into cursor
+        if (updatedRows == 0) {
+
+            Log.d(TAG, "updatedRows == 0");
+            ContentValues cvInsert = new ContentValues();
+
+            //chat info
+            cvInsert.put(ChatroomDB_OpenHelper.LASTMESSAGE, chat.getTxt());
+            cvInsert.put(ChatroomDB_OpenHelper.LASTMESSAGE_TIME, chat.getTs());
+
+            //room info
+            cvInsert.put(ChatroomDB_OpenHelper.RoomId, chat.getRid());
+                        cvInsert.put(
+                    ChatroomDB_OpenHelper.ChatMemberProfilesJson,
+                    new Gson().toJson(arlJsonProfilesInChat)); //{id, name}
+
+//            cvInsert.put(ChatroomDB_OpenHelper.isMulti, intMulti);
+//            cvInsert.put(ChatroomDB_OpenHelper.RING_ONOFF, RING_ONOFF);
+//            cvInsert.put(ChatroomDB_OpenHelper.ROOMSTATUS, ROOMSTATUS);
+            Uri uriChatroom = App.getContext().getContentResolver().insert(
+                    ChatroomDBCP.CONTENT_URI,
+                    cvInsert
+            );
+
+            Log.d(TAG, "uriChatroom " + uriChatroom.toString());
+
+        }
+
+    }
+
 
     private static class ChatListCursorAdapter extends CursorAdapter {
 
@@ -338,7 +446,11 @@ public class ChatActivity
         Log.d(TAG, "onLoadFinished() ...");
         switch (loader.getId()) {
             case LOADER_MESSAGESLIST:
-                Log.d(TAG, "cursor.getCount() : " + J.st(cursor.getCount()));
+                if (cursor != null) {
+                    Log.d(TAG, "cursor.getCount() : " + J.st(cursor.getCount()));
+                } else {
+                    Log.d(TAG, "cursor==null");
+                }
                 chatCursorAdapter.changeCursor(cursor);
         }
     }
@@ -376,15 +488,19 @@ public class ChatActivity
     EditText etSend__lo_chat_writesend;
     ImageView ivSend__lo_chat_writesend, ivEmoji__lo_chat_writesend, ivAttach__lo_chat_writesend;
 
-    void initUI(){
-          toolbar = (Toolbar) findViewById(R.id.toolbar);
-         lv_chat = (ListView) findViewById(R.id.lv_chat);
+    void initUI() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        lv_chat = (ListView) findViewById(R.id.lv_chat);
         setSupportActionBar(toolbar);
-        lo_chat_writesend=  (LinearLayout)findViewById(R.id.lo_chat_writesend);
-        etSend__lo_chat_writesend=  (EditText)findViewById(R.id.etSend__lo_chat_writesend);
-        ivSend__lo_chat_writesend=  (ImageView)findViewById(R.id.ivSend__lo_chat_writesend);
-        ivEmoji__lo_chat_writesend= (ImageView)findViewById(R.id.ivEmoji__lo_chat_writesend);
-        ivAttach__lo_chat_writesend = (ImageView)findViewById(R.id.ivAttach__lo_chat_writesend);
+        lo_chat_writesend = (LinearLayout) findViewById(R.id.lo_chat_writesend);
+        etSend__lo_chat_writesend = (EditText) findViewById(R.id.etSend__lo_chat_writesend);
+        ivSend__lo_chat_writesend = (ImageView) findViewById(R.id.ivSend__lo_chat_writesend);
+        ivEmoji__lo_chat_writesend = (ImageView) findViewById(R.id.ivEmoji__lo_chat_writesend);
+        ivAttach__lo_chat_writesend = (ImageView) findViewById(R.id.ivAttach__lo_chat_writesend);
+
+        JM.tint(ivSend__lo_chat_writesend, R.color.material_green500);
+        JM.tint(ivEmoji__lo_chat_writesend, R.color.material_amber500);
+        JM.tint(ivAttach__lo_chat_writesend, R.color.material_blue500);
 
 
     }

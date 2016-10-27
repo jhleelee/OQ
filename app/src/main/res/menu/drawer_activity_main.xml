@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-
+    <!--<group android:checkableBehavior="single">-->
+    <group>
         <item
             android:id="@+id/nav_share"
             android:icon="@drawable/ic_share_white_48dp"
             android:title="@string/share_this_app"
-            android:actionProviderClass=
-                "android.widget.ShareActionProvider"/>
+            />
     </group>
 
     <!--GET-->

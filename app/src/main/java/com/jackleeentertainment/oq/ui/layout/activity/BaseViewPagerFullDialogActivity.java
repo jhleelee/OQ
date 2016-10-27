@@ -11,13 +11,13 @@ public class BaseViewPagerFullDialogActivity extends BaseFullDialogActivity{
     @Override
     void initUIOnCreate() {
         super.initUIOnCreate();
-        tabLayout.setVisibility(View.GONE);
-        viewPager.setVisibility(View.GONE);
-        fr_content.setVisibility(View.VISIBLE);
-        initTabLayoutViewPager();
+        tabLayout.setVisibility(View.VISIBLE);
+        viewPager.setVisibility(View.VISIBLE);
+        fr_content.setVisibility(View.GONE);
+        initTabLayoutViewPagerOnCreate();
     }
 
-    void initTabLayoutViewPager() {
+    void initTabLayoutViewPagerOnCreate() {
 
     }
 

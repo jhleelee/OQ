@@ -1,6 +1,9 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
+import android.app.Activity;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -10,6 +13,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.Ram;
+import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
+import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.object.Post;
 import com.jackleeentertainment.oq.ui.widget.EndlessRecyclerViewScrollListener;
 import com.jackleeentertainment.oq.ui.widget.FeedRVAdapter;
@@ -36,7 +41,7 @@ public class MainFrag1_Feeds extends ListFrag {
 
 
     @Override
-    void initUI() {
+    public void initUI() {
         super.initUI();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(App.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -49,11 +54,13 @@ public class MainFrag1_Feeds extends ListFrag {
                 get100ObjIdOfFeedsFromFirebase(page);
             }
         });
+        searchView.setVisibility(View.GONE);
+
     }
 
 
     @Override
-    void initAdapter() {
+    void initAdapterOnResume() {
 
         FeedRVAdapter feedRVAdapter = new FeedRVAdapter();
         recyclerView.setAdapter(feedRVAdapter);
@@ -128,6 +135,39 @@ public class MainFrag1_Feeds extends ListFrag {
     }
 
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        checkIfFirebaseListIsEmpty(getActivity());
 
+    }
+
+    void checkIfFirebaseListIsEmpty(Activity activity){
+
+        JM.V(roProgress);
+
+        App.fbaseDbRef
+                .child(FBaseNode0.MyReceivedPosts)
+                .child(App.getUid(activity))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.exists()){
+                            JM.G(roProgress);
+                            JM.V(roEmpty);
+                        } else {
+                            JM.G(roProgress);
+                            JM.G(roEmpty);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        JM.G(roProgress);
+                        JM.V(roEmpty);
+                    }
+                });
+
+    }
 
 }

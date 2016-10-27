@@ -28,7 +28,7 @@ public class DiaFragAdapter extends BaseAdapter {
         super();
     }
 
-    public DiaFragAdapter( ArrayList<ItemDiaFragList> arl, Context mContext) {
+    public DiaFragAdapter(ArrayList<ItemDiaFragList> arl, Context mContext) {
         super();
         this.arl = arl;
         this.mContext = mContext;
@@ -37,7 +37,7 @@ public class DiaFragAdapter extends BaseAdapter {
 
     static class ItemDiaFragListViewHolder {
         RelativeLayout ro__i_diafraglist;
-        RelativeLayout ro_person_photo_48dip__i_diafraglist;
+        RelativeLayout ro_person_photo;
         ImageView ro_person_photo_iv;
         TextView tv__i_diafraglist;
     }
@@ -52,11 +52,10 @@ public class DiaFragAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.i_diafraglist, parent, false);
 
             viewHolder = new ItemDiaFragListViewHolder();
-            viewHolder.ro__i_diafraglist = (RelativeLayout)convertView.findViewById(R.id.ro__i_diafraglist);
-            viewHolder.ro_person_photo_48dip__i_diafraglist = (RelativeLayout) convertView.findViewById(R.id.ro_person_photo_48dip__i_diafraglist);
-            viewHolder.ro_person_photo_iv = (ImageView) viewHolder.ro_person_photo_48dip__i_diafraglist.findViewById(R.id.ro_person_photo_iv);
+            viewHolder.ro__i_diafraglist = (RelativeLayout) convertView.findViewById(R.id.ro__i_diafraglist);
+            viewHolder.ro_person_photo = (RelativeLayout) convertView.findViewById(R.id.ro_person_photo);
+            viewHolder.ro_person_photo_iv = (ImageView) viewHolder.ro_person_photo.findViewById(R.id.ro_person_photo_iv);
             viewHolder.tv__i_diafraglist = (TextView) convertView.findViewById(R.id.tv__i_diafraglist);
-
             convertView.setTag(viewHolder);
 
         } else {
@@ -68,7 +67,7 @@ public class DiaFragAdapter extends BaseAdapter {
 
         // assign values if the object is not null
         if (itemDiaFragList != null) {
-            // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
+            // get the TextView from the ViewHolderReceipt and then set the text (item name) and tag (item ID) values
             viewHolder.ro_person_photo_iv.setBackground(JM.drawableById(itemDiaFragList.getIdDrawableBg()));
             viewHolder.ro_person_photo_iv.setImageDrawable(JM.drawableById(itemDiaFragList.getIdDrawableIco()));
             viewHolder.tv__i_diafraglist.setText(itemDiaFragList.getText());

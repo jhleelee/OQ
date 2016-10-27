@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/translucent_grey"
+              android:gravity="right"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_marginBottom="16dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/material_layout_app_bar_height"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/roClose"
+                android:layout_width="72dip"
+                android:layout_height="match_parent">
+
+                <ImageView style="@style/ImageView.ToolbarIcon.Close"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvToolbarTitle"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/material_layout_app_bar_title_textSize"/>
+
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:background="@color/colorPrimary"
+        android:layout_marginLeft="16dip"
+        android:layout_marginRight="16dip"
+        android:layout_marginBottom="16dip"
+        android:layout_width="match_parent"
+        android:layout_height="56dip">
+
+
+        <TextView
+            android:id="@+id/tvAmmount"
+            android:textSize="14sp"
+            android:text="@string/money_sum"
+            android:layout_marginLeft="@dimen/md_16dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/etAmmount"
+            android:layout_marginLeft="@dimen/md_16dip"
+            android:layout_marginRight="@dimen/md_16dip"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_marginBottom="16dip"
+            android:layout_height="56dip"/>
+
+
+    </LinearLayout>
+
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_marginLeft="16dip"
+        android:layout_marginRight="16dip"
+        android:layout_marginBottom="16dip"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dip">
+
+    </android.support.v4.view.ViewPager>
+
+    <Button
+        android:layout_marginLeft="16dip"
+        android:layout_marginRight="16dip"
+        android:layout_marginBottom="16dip"
+        android:id="@+id/bt__lo_lefttext_rightoneaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/changeperiod"
+        style="@style/Base.Widget.AppCompat.Button.Colored"
+        />
+
+
+</LinearLayout>

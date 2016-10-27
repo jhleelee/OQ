@@ -7,16 +7,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.jackleeentertainment.oq.App;
+import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.firebase.database.SetValue;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.firebase.storage.Upload;
+import com.jackleeentertainment.oq.generalutil.JM;
+import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.types.OQT;
+import com.jackleeentertainment.oq.object.util.OqItemUtil;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
+import com.jackleeentertainment.oq.ui.layout.fragment.FirstVisitFrag0_PhotoEmailName;
+import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0;
 
 import java.io.File;
 
@@ -27,12 +35,44 @@ import static com.jackleeentertainment.oq.generalutil.ContactsUtil.getArlEmailFr
  * Created by jaehaklee on 2016. 10. 3..
  */
 
-public class FirstVisitActivity extends BaseActivity {
+public class FirstVisitActivity extends FragmentContainBaseActivity {
+
+
+
+
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set OqItemEffect
+        showFrag(new FirstVisitFrag0_PhotoEmailName(), R.id.fr_content);
+
     }
+
+
+    @Override
+    void initUIOnCreate() {
+        super.initUIOnCreate();
+        fab.setVisibility(View.GONE);
+        tabLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    void initUIDataOnResume() {
+        super.initUIDataOnResume();
+
+            tvToolbarTitle.setText(JM.strById(R.string.welcome));
+
+
+    }
+
+
+
+
+
+
+
 
     void finallyNewUserEnters(Profile profileToMe, Uri uri){
 

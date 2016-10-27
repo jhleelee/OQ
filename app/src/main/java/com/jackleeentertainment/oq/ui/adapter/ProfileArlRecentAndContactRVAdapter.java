@@ -70,6 +70,7 @@ public class ProfileArlRecentAndContactRVAdapter extends RecyclerView.Adapter<Re
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case 0:
+
                 return new AvatarNameEmailChkViewHolder(parent);
             case 1:
                 return new SectionViewHolder(parent);

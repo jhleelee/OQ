@@ -14,13 +14,20 @@ public class LBR {
    static String TAG = "LBR";
 
   public   static class SendSuffixT {
-       public  final static String SENT = "s";
+      public  final static String SENDING = "g";
+
+      public  final static String SENT = "s";
       public final static String RECEIVED = "r";
 
   }
 
     public static class IntentFilterT{
         public  final static String MainActivityDrawerMenu = "MainActivityDrawerMenu";
+        public  final static String NewGroupActivityTitlePhoto = "NewGroupActivityTitlePhoto";
+        public  final static String NewOQActivity_Frag0 =
+                "NewOQActivity_Fg0_Ppe";
+
+
     }
 
     public static void send(String intentfilterT) {

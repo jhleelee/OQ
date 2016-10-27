@@ -42,7 +42,7 @@ import static com.jackleeentertainment.oq.backendgcm.OfyService.ofy;
  * you'd like to add authentication, take a look at the documentation.
  */
 @Api(
-        name = "messaging",
+        name = "messagingEndpoint",
         version = "v1",
         namespace = @ApiNamespace(
                 ownerDomain = "backendgcm.oq.jackleeentertainment.com",
@@ -50,20 +50,20 @@ import static com.jackleeentertainment.oq.backendgcm.OfyService.ofy;
                 packagePath = ""
         )
 )
-public class MessagingEndpoint {
-    private static final Logger log = Logger.getLogger(MessagingEndpoint.class.getName());
+public   class MessagingEndpoint {
+    private   final Logger log = Logger.getLogger(MessagingEndpoint.class.getName());
 
     /**
      * Api Keys can be obtained from the google cloud console
      */
-    private static final String API_KEY = System.getProperty("gcm.api.key");
+    private   final String API_KEY = System.getProperty("gcm.api.key");
 
     @ApiMethod
-    public void checkTokenSendMessageToSingleReceiver(
+    public   void checkTokenSendMessageToSingleReceiver(
             @Named("token") final String token, // includes senderUid
             @Named("rid") final String rid,     // includes receiverUid (single)
             @Named("meta") final String meta,     // includes type
-            @Named("txt") final String txt       //includes type, content
+            @Named("txt") final String txt       //includes only content
     ) throws IOException {
 
         // (0) check if there is meta, txt
@@ -115,7 +115,7 @@ public class MessagingEndpoint {
     }
 
 
-    private void trySendMessage(Message msg, UserObj receiverUserObj) {
+    private   void trySendMessage(Message msg, UserObj receiverUserObj) {
 
         Sender sender = new Sender(API_KEY);
 
@@ -136,7 +136,7 @@ public class MessagingEndpoint {
 
     }
 
-    private void trySendMessage(Message msg, Map<String, UserObj> mapReciverUidUserObj) {
+    private   void trySendMessage(Message msg, Map<String, UserObj> mapReciverUidUserObj) {
 
         Sender sender = new Sender(API_KEY);
         ArrayList<UserObj> arlReceiverUserObj = new ArrayList<>();
@@ -169,7 +169,7 @@ public class MessagingEndpoint {
 
 
     @ApiMethod
-    public void checkTokenSendMessageToMultipleReceiver(
+    public   void checkTokenSendMessageToMultipleReceiver(
             @Named("token") final String token, // includes senderUid
             @Named("gsonrids") final String gsonrids,     // includes receiverUid (single)
             @Named("meta") final String meta,     // includes type
@@ -227,7 +227,7 @@ public class MessagingEndpoint {
     }
 
 
-    private void updateReceiverRegId(final Result result, final UserObj receiverUserObjOld
+    private   void updateReceiverRegId(final Result result, final UserObj receiverUserObjOld
     ) {
 
         if (result.getMessageId() != null) {
@@ -259,13 +259,13 @@ public class MessagingEndpoint {
     }
 
 
-    private void updateReceiverRegId(final MulticastResult multicastResult,
+    private   void updateReceiverRegId(final MulticastResult multicastResult,
                                      ArrayList<UserObj> arlReceiverUserObj
     ) {
 
     }
 
-    private String cropText(String tx, int limit) {
+    private   String cropText(String tx, int limit) {
 
         String _tx = "";
 

@@ -88,7 +88,7 @@ public class SetCardViewRVAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     /**
-     * ViewHolder
+     * ViewHolderReceipt
      */
 
     class ViewHolderFirst extends RecyclerView.ViewHolder {

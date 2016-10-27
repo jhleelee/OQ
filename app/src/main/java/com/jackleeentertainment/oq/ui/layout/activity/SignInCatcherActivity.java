@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
@@ -14,8 +15,17 @@ import android.widget.RelativeLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.Ram;
+import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
+import com.jackleeentertainment.oq.firebase.database.GetValue;
+import com.jackleeentertainment.oq.firebase.database.SetValue;
+import com.jackleeentertainment.oq.generalutil.LBR;
+import com.jackleeentertainment.oq.object.Profile;
 
 
 /**
@@ -26,7 +36,7 @@ public class SignInCatcherActivity extends AppCompatActivity {
     private final static String TAG = SignInCatcherActivity.class.getSimpleName();
     private RelativeLayout roRoot;
     private boolean flag = true;
-
+    Activity mActivity = this;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +60,8 @@ public class SignInCatcherActivity extends AppCompatActivity {
 
                         flag = false;
                         goMainActivity();
+
+                        ifProfilePublicNameEmailNullThenUplaodIt();
 
                     }
 
@@ -137,5 +149,38 @@ public class SignInCatcherActivity extends AppCompatActivity {
     @Override public void finish() { super.finish(); overridePendingTransition(0, 0); }
 
 
+    void  ifProfilePublicNameEmailNullThenUplaodIt(){
 
+        App.fbaseDbRef
+                .child(FBaseNode0.ProfileToPublic) // FBaseNode0T.ProfileToFriend ; FBaseNode0T.ProfileToPublic
+                .child(App.getUid(this)) //targetUid
+                .addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if (!dataSnapshot.exists()){
+                                    Profile profile = new Profile();
+                                    profile.setUid(App.getUid(mActivity));
+                                    profile.setFull_name(App.getFirebaseUser(mActivity).getDisplayName());
+                                    profile.setEmail(App.getFirebaseUser(mActivity).getEmail());
+                                    SetValue.profile(
+                                            FBaseNode0.ProfileToPublic,
+                                            profile,
+                                            false,
+                                            mActivity
+                                    );
+                                }
+                                                                                           }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.d(TAG, databaseError.toString());
+                            }
+                        }
+                );
+
+
+
+    }
 }

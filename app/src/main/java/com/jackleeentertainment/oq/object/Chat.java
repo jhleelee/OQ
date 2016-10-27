@@ -6,7 +6,7 @@ package com.jackleeentertainment.oq.object;
 
 public class Chat {
 
-    String rid;
+    String rid; //receiverId or roomId?
     String sid;
     long ts;
     String txt;

@@ -10,4 +10,8 @@ public class DiaFragT {
     public final static String SelectedFriendsAndMore ="b";
     public final static String OneLineInput="c";
     public final static String GalleryOrCamera="d";
+    public final static String ReceiptBreakdown="e";
+    public final static String TransactChatOrShowProfile="f";
+    public final static String MyProfileBackgroundPhoto="g";
+
 }

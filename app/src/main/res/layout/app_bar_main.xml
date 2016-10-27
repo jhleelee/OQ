@@ -28,8 +28,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:elevation="6dp"/>
-
+            android:elevation="6dp"
+            app:tabGravity="fill"
+            app:tabMode="fixed"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -42,6 +43,12 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_add_white_48dp"/>
+
+    <include
+        android:id="@+id/vScrim"
+        android:visibility="gone"
+        layout="@layout/v_scrim_solid"/>
+
 
     <io.codetail.widget.RevealFrameLayout
         android:layout_width="match_parent"
@@ -63,12 +70,13 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvFootTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left|center_vertical"
                     android:padding="8dip"
                     android:text="@string/quickstart"
-                    android:textColor="@color/white"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/md_13sp"/>
 
 
@@ -85,14 +93,27 @@
                         android:layout_weight="1">
 
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                        <LinearLayout
+                            android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_photo_camera_white_24dp"
-                            />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
+                            <ImageView
+                                android:id="@+id/ivFootTab0"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_photo_camera_white_24dp"
+                                />
+
+                            <TextView
+                                android:id="@+id/tvFootTab0"
+                                style="@style/TextView.tabFoot"
+                                android:text="@string/take_receipt"/>
+
+                        </LinearLayout>
 
                     </RelativeLayout>
 
@@ -102,14 +123,28 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                        <LinearLayout
+                            android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_credit_card_white_24dp"
-                            />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/ivFootTab1"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerInParent="true"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_credit_card_white_24dp"
+                                />
+
+                            <TextView
+                                android:id="@+id/tvFootTab1"
+                                style="@style/TextView.tabFoot"
+                                android:text="@string/load_sms_short"/>
+
+                        </LinearLayout>
 
 
                     </RelativeLayout>
@@ -121,14 +156,28 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                        <LinearLayout
+                            android:gravity="center"
                             android:layout_centerInParent="true"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_create_white_24dp"
-                            />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
+                            <ImageView
+                                android:id="@+id/ivFootTab2"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerInParent="true"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_create_white_24dp"
+                                />
+
+                            <TextView
+                                android:id="@+id/tvFootTab2"
+                                style="@style/TextView.tabFoot"
+                                android:text="@string/input_manually_short"/>
+
+                        </LinearLayout>
                     </RelativeLayout>
 
                 </LinearLayout>

@@ -29,12 +29,12 @@ public class FeedRVAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     /*
     Called when RecyclerView needs a new RecyclerView.
-    ViewHolder of the given type to represent an item.
-    This new ViewHolder should be constructed with a new View that can represent the items of
+    ViewHolderReceipt of the given type to represent an item.
+    This new ViewHolderReceipt should be constructed with a new View that can represent the items of
     the given type. You can either create a new View manually or inflate it from an XML
     layout file.
-    The new ViewHolder will be used to display items of the adapter using
-    onBindViewHolder(ViewHolder, int, List).
+    The new ViewHolderReceipt will be used to display items of the adapter using
+    onBindViewHolder(ViewHolderReceipt, int, List).
     Since it will be re-used to display different items in the data set, it is a good idea
     to cache references to sub views of the View to avoid unnecessary findViewById(int) calls.
 
@@ -44,7 +44,7 @@ public class FeedRVAdapter extends RecyclerView.Adapter<PostViewHolder> {
     at a time, it will create 5-6 ViewHolders, and then automatically reuse them, each time
     calling onBindViewHolder.
     Its similar to what your code in the ListView does (checking if convertView is null,
-    and if not, grabbing the existing ViewHolder from the tag), except, with RecyclerView,
+    and if not, grabbing the existing ViewHolderReceipt from the tag), except, with RecyclerView,
     this is all done automatically.
      */
     @Override
@@ -65,12 +65,12 @@ public class FeedRVAdapter extends RecyclerView.Adapter<PostViewHolder> {
     acquiring the related data item inside this method and should not keep a copy of it.
     If you need the position of an item later on (e.g. in a click listener), use
     getAdapterPosition() which will have the updated adapter position. Override
-    onBindViewHolder(ViewHolder, int, List) instead if Adapter can handle efficient partial bind.
+    onBindViewHolder(ViewHolderReceipt, int, List) instead if Adapter can handle efficient partial bind.
 
     Partial bind vs full bind:
 
     The payloads parameter is a merge list from notifyItemChanged(int, Object) or
-    notifyItemRangeChanged(int, int, Object). If the payloads list is not empty, the ViewHolder
+    notifyItemRangeChanged(int, int, Object). If the payloads list is not empty, the ViewHolderReceipt
     is currently bound to old data and Adapter may run an efficient partial update using
     the payload info. If the payload is empty, Adapter must run a full bind.
     Adapter should not assume that the payload passed in notify methods will be received by

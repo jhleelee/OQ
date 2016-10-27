@@ -1,12 +1,15 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,10 +28,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
+import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.PeopleActivity;
@@ -50,7 +54,6 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
             cardview_cause_breakdown__frag_newoq_0;
     TextView tv_done__frag_newoq_0;
     SelectedPeopleListAdapter selectedPeopleListAdapter;
-    ArrayList<Profile> mArrayListProfile = new ArrayList<>();
 
     LinearLayout loLv__PERSON, loLv__SUMTYPE, loLv__BREAKDOWN;
     TextView tv_title__cardview_cause__PERSON, tvEmpty__cardview_cause__PERSON,
@@ -60,6 +63,23 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
             lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__SUMTYPE, lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__BREAKDOWN;
     RelativeLayout roEmpty__cardview_cause__PERSON, roEmpty__cardview_cause__SUMTYPE, roEmpty__cardview_cause__BREAKDOWN;
     Button bt__lo_lefttext_rightoneaction__PERSON, bt__lo_lefttext_rightoneaction__SUMTYPE, bt__lo_lefttext_rightoneaction__BREAKDOWN;
+
+
+//    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            // Get extra data included in the Intent
+//            Log.d(TAG, "onReceive");
+//
+//
+//            String key = intent.getStringExtra("data");
+//            Log.d(TAG, "onReceive : "+ key);
+//
+//            if (key.equals("REQ_PEOPLE")){
+//                uiDataCardViewPeopleList(((NewOQActivity)getActivity()).arlOppoProfile);
+//            }
+//        }
+//    };
 
 
     public NewOQFrag0() {
@@ -84,8 +104,45 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        uiDependOnOQItemCardViewPeople(((NewOQActivity)getActivity()).getOqItemEffect());
+//        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
+//                new IntentFilter("com.jackleeentertainment.oq." + LBR.IntentFilterT.NewOQActivity_Frag0));
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+
+        uiDataCardViewPeopleList(((NewOQActivity) getActivity()).arlOppoProfile);
+
+        uiDataCardViewSumType(
+                ((NewOQActivity) getActivity()).arlOppoProfile,
+                ((NewOQActivity) getActivity()).ammountAsStandard,
+                ((NewOQActivity) getActivity()).OQSumT
+        );
+        uiDataCardViewBreakDown(
+                ((NewOQActivity) getActivity()).arlOQItem_Past,
+                ((NewOQActivity) getActivity()).arlOQItem_Now,
+                ((NewOQActivity) getActivity()).arlOQItem_Future
+        );
+        uiDataCardViewExist(
+                ((NewOQActivity) getActivity()).arlOppoProfile,
+                ((NewOQActivity) getActivity()).ammountAsStandard,
+                ((NewOQActivity) getActivity()).OQSumT
+
+                );
+
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -231,86 +288,48 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
 
     }
 
-    void initAdapterData() {
-        uiDataCardViewPeopleList(mArrayListProfile);
-    }
-
 
     void initAdapter() {
         selectedPeopleListAdapter = new SelectedPeopleListAdapter(getActivity());
     }
 
-    void uiDependOnOQItemCardViewPeople(OqItem oqItemEffect) {
-        if (oqItemEffect.getUidgettor() == null || oqItemEffect.getUidpayer() == null) {
-            JM.V(cardview_cause_people__frag_newoq_0);
-            JM.G(cardview_cause_sumtype__frag_newoq_0);
-            JM.G(cardview_cause_breakdown__frag_newoq_0);
-            JM.G(tv_done__frag_newoq_0);
-
-
-            JM.V(roEmpty__cardview_cause__PERSON);
-            View.OnClickListener onClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(getActivity(), PeopleActivity.class);
-                    startActivityForResult(i, REQ_PEOPLE);
-                }
-            };
-            roEmpty__cardview_cause__PERSON.setOnClickListener(onClickListener);
-            tvEmpty__cardview_cause__PERSON.setOnClickListener(onClickListener);
-        } else{
-            JM.G(roEmpty__cardview_cause__PERSON);
-            if (oqItemEffect.getUidpayer().equals(App.getUid(getActivity()))){
-                mArrayListProfile = ProfileUtil.getArlProfileFromJson(oqItemEffect.getUidgettor());
-                initAdapter();
-                initAdapterData();
-            } else if (oqItemEffect.getUidgettor().equals(App.getUid(getActivity()))){
-                mArrayListProfile =  ProfileUtil.getArlProfileFromJson(oqItemEffect.getUidpayer());
-                initAdapter();
-                initAdapterData();
-            }
-        }
-    }
-
 
     void uiDependOnOQItemCardViewSumType(OqItem oqItemEffect) {
 
-        if (oqItemEffect.getAmmount()==0 ||oqItemEffect.getOqgnltype()==null||
-                oqItemEffect.getOqwnttype()==null) {
+        if (oqItemEffect.getAmmount() == 0 || oqItemEffect.getOqgnltype() == null ||
+                oqItemEffect.getOqwnttype() == null) {
 
-        } else{
+        } else {
 
         }
 
     }
-
 
 
     void uiDependOnOQItemCardViewBreakdown(OqItem oqItemEffect) {
 
 
-
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-
-            switch (requestCode) {
-                case REQ_PEOPLE:
-                    String result = data.getStringExtra("result");
-                    uiDataCardViewPeopleList(result);
-                    break;
-
-
-            }
-
-
-        }
-    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (resultCode == Activity.RESULT_OK) {
+//
+//            switch (requestCode) {
+//                case REQ_PEOPLE:
+//                    String result = data.getStringExtra("result");
+//                    uiDataCardViewPeopleList(result);
+//                    break;
+//
+//
+//            }
+//
+//
+//        }
+//    }
 
 
     private void uiDataCardViewPeopleList(String jsonStrSelectedProfiles) {
@@ -322,14 +341,103 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
     }
 
     private void uiDataCardViewPeopleList(ArrayList<Profile> arlProfiles) {
+
         if (arlProfiles == null || arlProfiles.size() == 0) {
+
+            JM.V(roEmpty__cardview_cause__PERSON);
+            View.OnClickListener onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((NewOQActivity) getActivity()).startActivityForResultPeopleActivity();
+                }
+            };
+            roEmpty__cardview_cause__PERSON.setOnClickListener(onClickListener);
+            tvEmpty__cardview_cause__PERSON.setOnClickListener(onClickListener);
+
+        } else {
+
+            JM.G(roEmpty__cardview_cause__PERSON);
+            if (((NewOQActivity) getActivity())
+                    .OQTWantT_Future.equals(OQT.WantT
+                            .GET)) {
+                tv_title__cardview_cause__PERSON.setText(JM.strById(R.string.payer));
+            } else if (((NewOQActivity) getActivity())
+                    .OQTWantT_Future.equals(OQT.WantT
+                            .PAY)) {
+                tv_title__cardview_cause__PERSON.setText(JM.strById(R.string.getter));
+            }
+
+            lv__cardview_cause__PERSON.setAdapter(new SelectedPeopleListAdapter(getActivity()));
+
+        }
+    }
+
+
+    void uiDataCardViewSumType(
+            ArrayList<Profile> arlOppoProfile,
+            long ammountAsStandard,
+            String OQSumT
+    ) {
+        if (ammountAsStandard == 0 || OQSumT == null) {
+
+            roEmpty__cardview_cause__SUMTYPE.setVisibility(View.VISIBLE);
+            tvEmpty__cardview_cause__SUMTYPE.setText(JM.strById(R.string.tab_to_add_sumtype));
+            View.OnClickListener onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((NewOQActivity) getActivity()).startActivityForResultSumTypeActivity();
+                }
+            };
+            roEmpty__cardview_cause__SUMTYPE.setOnClickListener(onClickListener);
+            roEmpty__cardview_cause__SUMTYPE.setOnClickListener(onClickListener);
 
         } else {
 
         }
     }
 
-    static class SelectedPeopleListAdapter extends BaseAdapter {
+
+    void uiDataCardViewBreakDown(
+            ArrayList<OqItem> arlOQItem_Past,
+            ArrayList<OqItem> arlOQItem_Now,
+            ArrayList<OqItem> arlOQItem_Future
+    ) {
+
+
+
+
+    }
+
+
+    void uiDataCardViewExist(
+            ArrayList<Profile> arlProfile,
+            long ammountAsStandard,
+            String OQSumT
+    ) {
+
+        if (((NewOQActivity) getActivity()).arlOppoProfile == null ||
+                ((NewOQActivity) getActivity())
+                .arlOppoProfile.size() == 0) {
+
+            JM.V(cardview_cause_people__frag_newoq_0);
+            JM.G(cardview_cause_sumtype__frag_newoq_0);
+            JM.G(cardview_cause_breakdown__frag_newoq_0);
+            JM.G(tv_done__frag_newoq_0);
+
+
+        } else {
+
+            JM.V(cardview_cause_people__frag_newoq_0);
+            JM.V(cardview_cause_sumtype__frag_newoq_0);
+            JM.V(cardview_cause_breakdown__frag_newoq_0);
+            JM.V(tv_done__frag_newoq_0);
+        }
+
+
+
+    }
+
+    class SelectedPeopleListAdapter extends BaseAdapter {
 
         LayoutInflater mInflater;
         Context mContext;
@@ -360,7 +468,7 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            // create a ViewHolder reference
+            // create a ViewHolderReceipt reference
             ProfileViewHolder holder;
 
             //check to see if the reused view is null or not, if is not null then reuse it
@@ -426,7 +534,7 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
             ImageButton ibDelete;
         }
 
-    }
 
+    }
 
 }

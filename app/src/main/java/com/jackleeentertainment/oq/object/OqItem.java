@@ -1,10 +1,12 @@
 package com.jackleeentertainment.oq.object;
 
+import java.io.Serializable;
+
 /**
  * Created by Jacklee on 2016. 9. 29..
  */
 
-public class OqItem {
+public class OqItem implements Serializable{
 
     String oid; //this object's id
     String gid; //human group's id

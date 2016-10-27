@@ -2,6 +2,7 @@ package com.jackleeentertainment.oq.ui.layout.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,8 +16,10 @@ public class AvatarNameViewHolder extends RecyclerView.ViewHolder{
 
 
     View mView;
-    RelativeLayout ro_person_photo_48dip__lo_avatar_name;
-    TextView tvTitle__lo_avatar_name   ;
+  public   RelativeLayout ro_person_photo_48dip__lo_avatar_name;
+    public  TextView tvTitle__lo_avatar_name   ;
+    public TextView ro_person_photo_tv;
+    public ImageView ro_person_photo_iv;
 
     public AvatarNameViewHolder(View itemView) {
         super(itemView);
@@ -24,20 +27,16 @@ public class AvatarNameViewHolder extends RecyclerView.ViewHolder{
         ro_person_photo_48dip__lo_avatar_name =
                 (RelativeLayout) mView
                         .findViewById(R.id.ro_person_photo_48dip__lo_avatar_name);
+        ro_person_photo_tv =
+                (TextView) ro_person_photo_48dip__lo_avatar_name
+                        .findViewById(R.id.ro_person_photo_tv);
+        ro_person_photo_iv =
+                (ImageView) ro_person_photo_48dip__lo_avatar_name
+                        .findViewById(R.id.ro_person_photo_iv);
         tvTitle__lo_avatar_name =
                 (TextView) mView
                         .findViewById(R.id.tvTitle__lo_avatar_name);
     }
-
-
-    public void setPersonPhoto(String personUid) {
-        //Glide
-    }
-
-    public void setPersonName(String personName) {
-        tvTitle__lo_avatar_name.setText(personName);
-    }
-
 
 
 

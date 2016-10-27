@@ -10,9 +10,21 @@
         android:layout_width="@dimen/avatar_lessmargin"
         android:layout_height="@dimen/avatar_lessmargin" />
 
-    <ImageView
+
+    <TextView
+        android:id="@+id/ro_person_photo_tv"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24dip"
         android:layout_centerInParent="true"
+        android:layout_width="@dimen/avatar_lessmargin"
+        android:layout_height="@dimen/avatar_lessmargin"
+        android:gravity="center"
+          />
+
+    <ImageView
         android:id="@+id/ro_person_photo_iv"
+        android:layout_centerInParent="true"
         android:layout_width="@dimen/avatar_lessmargin"
         android:layout_height="@dimen/avatar_lessmargin"
         android:scaleType="centerCrop" />

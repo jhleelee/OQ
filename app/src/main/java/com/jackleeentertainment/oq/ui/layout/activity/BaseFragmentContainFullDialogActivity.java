@@ -14,4 +14,6 @@ public class BaseFragmentContainFullDialogActivity extends BaseFullDialogActivit
         viewPager.setVisibility(View.GONE);
         fr_content.setVisibility(View.VISIBLE);
     }
+
+
 }

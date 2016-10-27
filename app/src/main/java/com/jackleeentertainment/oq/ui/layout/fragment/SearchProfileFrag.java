@@ -1,16 +1,19 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SearchView;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -18,28 +21,30 @@ import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
+import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Profile;
-import com.jackleeentertainment.oq.ui.adapter.ProfileArlRVAdapter;
+import com.jackleeentertainment.oq.ui.layout.activity.PeopleActivity;
+import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameEmailChkViewHolder;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by jaehaklee on 2016. 10. 2..
  */
 
-public class SearchProfileFrag extends Fragment {
+public class SearchProfileFrag extends ListFrag {
 
     String TAG = this.getClass().getSimpleName();
     int numDone = 0;
+    FirebaseRecyclerAdapter<Profile, AvatarNameEmailChkViewHolder>
+            frvAdapterPub;
 
     View view;
-    RecyclerView recyclerView;
-    ProfileArlRVAdapter profileArlRVAdapter;
-
-    ArrayList<Profile> arlProfiles = new ArrayList<>();
 
     public SearchProfileFrag() {
         super();
@@ -50,32 +55,78 @@ public class SearchProfileFrag extends Fragment {
         return new SearchProfileFrag();
     }
 
-    @Nullable
+
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView ...");
-        view = inflater.inflate(R.layout.frag_content_nodividerlist,
-                container, false);
-        initUI();
-        initAdapter(arlProfiles);
-        return view;
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        roEmpty.setVisibility(View.VISIBLE);
+
+        tempGetPubProfiles();
+
+
+        SearchManager searchManager =
+                (SearchManager)getActivity(). getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        //
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        initQueryByFullFirstLastNameOrEmail(query);
+
+
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+
+                        return false;
+                    }
+                });
+
+
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Begin", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
 
-    void initUI() {
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
+
+    @Override
+    public void initUI() {
+        super.initUI();
+        searchView.setVisibility(View.VISIBLE);
+
     }
 
-    void initAdapter(ArrayList<Profile> arlProfiles) {
-        if (arlProfiles!=null && arlProfiles.size()==0) {
-            JM.G(recyclerView);
 
-        } else {
-            JM.V(recyclerView);
-            profileArlRVAdapter = new ProfileArlRVAdapter(this, arlProfiles);
-        }
+    @Override
+    void initAdapterOnResume() {
+        super.initAdapterOnResume();
+
+        tempGetPubProfiles();
+
+//        if (arlProfiles!=null && arlProfiles.size()==0) {
+//            JM.G(recyclerView);
+//
+//        } else {
+//            JM.V(recyclerView);
+//            profileArlRVAdapter = new ProfileArlCheckableRVAdapter(this, arlProfiles);
+//            recyclerView.setAdapter(profileArlRVAdapter);
+//        }
     }
+
+
+
 
 
     void initQueryByFullFirstLastNameOrEmail(String fullfirstlastnameOrEmail) {
@@ -145,5 +196,96 @@ public class SearchProfileFrag extends Fragment {
         }
         return arlProfiles;
     }
+
+
+    void tempGetPubProfiles(){
+
+        roEmpty.setVisibility(View.GONE);
+        roProgress.setVisibility(View.GONE);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+        frvAdapterPub = new FirebaseRecyclerAdapter<Profile, AvatarNameEmailChkViewHolder>
+                (Profile.class,
+                        R.layout.lo_avatar_titlesubtitle_chk,
+                        AvatarNameEmailChkViewHolder.class,
+                        App.fbaseDbRef
+                                .child(FBaseNode0.ProfileToPublic)
+                ) {
+            public void populateViewHolder(
+                    final AvatarNameEmailChkViewHolder avatarNameEmailChkViewHolder,
+                    final Profile profile,
+                    int position) {
+
+                avatarNameEmailChkViewHolder.tvTitle__lo_avatartitlesubtitle_chk.setTextColor(
+                        JM.colorById(R.color.text_black_87)
+                );
+
+
+                avatarNameEmailChkViewHolder.tvSubTitle__lo_avatartitlesubtitle_chk.setTextColor(
+                        JM.colorById(R.color.text_black_54)
+                );
+
+
+                avatarNameEmailChkViewHolder.tvTitle__lo_avatartitlesubtitle_chk
+                        .setText(profile.getFull_name()
+                        );
+
+                avatarNameEmailChkViewHolder.tvSubTitle__lo_avatartitlesubtitle_chk
+                        .setText(profile.getEmail()
+                        );
+
+                //set Image
+                Glide.with(getActivity())
+                        .using(new FirebaseImageLoader())
+                        .load(App.fbaseStorageRef
+                                .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                .child(profile.getUid())
+                                .child(FStorageNode.createMediaFileNameToDownload(
+                                        FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                                        profile.getUid()
+                                )))
+                        .crossFade()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(avatarNameEmailChkViewHolder.ro_person_photo_iv);
+                ;
+
+
+                // if size is larger than 1, it is a problem.
+
+
+                if (((PeopleActivity)getActivity()).arlSelectedProfile.contains(profile)) {
+                    avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk
+                            .setChecked(true);
+                } else {
+                    avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk
+                            .setChecked(false);
+                }
+
+                avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (((PeopleActivity)getActivity()).arlSelectedProfile.contains
+                                        (profile )) {
+                                    ((PeopleActivity)getActivity()).arlSelectedProfile.remove(profile);
+                                    avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk.setChecked(false);
+                                } else {
+                                    ((PeopleActivity)getActivity()).arlSelectedProfile.add(profile);
+                                    avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk.setChecked(true);
+                                }
+                                ((PeopleActivity)getActivity()).bottomSheetControl((
+                                        (PeopleActivity)getActivity()).arlSelectedProfile.size());
+//                                notifyDataSetChanged();
+                            }
+                        });
+            }
+        };
+
+        recyclerView.setAdapter(frvAdapterPub);
+    }
+
+
 
 }

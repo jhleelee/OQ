@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DatabaseReference;
@@ -198,16 +199,48 @@ public class App extends Application {
 
 
 
+
+
+
+
+
+    public static FirebaseUser getFirebaseUser(Activity activity){
+        Log.d(TAG, "getFirebaseUser()");
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user!=null) {
+            return user;
+        } else {
+            nullifyUser();
+
+            activity.startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setIsSmartLockEnabled(false)
+                            .setTheme(R.style.AppTheme)
+                            .setProviders(App.getSelectedProviders())
+                            .build(),
+                    App.RC_SIGN_IN);
+            return null;
+        }
+    }
+
+
+
+
+
+
     public static String getUid(Activity activity){
-
-
+        Log.d(TAG, "getUid()");
         if (App.firebaseUser!=null&&
                 App.firebaseUser.getUid()!=null){
+            Log.d(TAG, "return " + App.firebaseUser.getUid());
             return  App.firebaseUser.getUid();
         } else {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 // User is signed in
+                Log.d(TAG, "return " + user.getUid());
                 return user.getUid();
             } else {
                 // No user is signed in
@@ -221,8 +254,8 @@ public class App extends Application {
                                 .setProviders(App.getSelectedProviders())
                                 .build(),
                         App.RC_SIGN_IN);
-
-                return null;
+                Log.d(TAG, "return " + "nullvalue");
+                return "nullvalue";
             }
         }
     }
@@ -294,6 +327,8 @@ public class App extends Application {
     public static void initFirebaseUser(FirebaseUser firebaseUser) {
 
         Log.d(TAG, "initFirebaseUser()");
+        App.firebaseUser = firebaseUser;
+
         if (firebaseUser != null) {
             // The user's ID, unique to the Firebase project. Do NOT use this value to
             // authenticate with your backend server, if you have one. Use

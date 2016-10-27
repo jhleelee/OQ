@@ -4,11 +4,13 @@ import com.google.firebase.database.Query;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 
+import java.io.Serializable;
+
 /**
  * Created by Jacklee on 2016. 9. 29..
  */
 
-public class Profile {
+public class Profile implements Serializable{
 
     /**
      * search people is done by email or full_name.

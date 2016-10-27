@@ -1,6 +1,7 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,22 +11,32 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.JSMS;
 import com.jackleeentertainment.oq.object.SMSHighlight;
@@ -39,18 +50,19 @@ import java.util.ArrayList;
  */
 
 public class SMSListActivity extends BaseActivity
+        // Does not extend BaseFullDialogActivity because CursorLoader
         implements LoaderManager.LoaderCallbacks<Cursor> {
     final static String TAG = "SMSListActivity";
     final public static int LOADER_SMSLIST = 99;
     final public static int REQUEST_PERSMISSIONS = 98;
-
+    static BottomSheetBehavior bottomSheetBehavior;
     SMSCursorAdapter smsCursorAdapter;
     LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
     static ArrayList<Long> arlSelectedSmsId = new ArrayList<>();
-
-
-   void getPermissions(){
-
+    static ArrayList<Cursor> arlSelectedSmsCursor = new ArrayList<>();
+    Switch swFilter;
+     void getPermissions() {
+        Log.d(TAG, "getPermissions()");
         Log.d(TAG, String.valueOf(Build.VERSION.SDK_INT));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -58,21 +70,24 @@ public class SMSListActivity extends BaseActivity
             /**************************
              (0) Check Permission stat
              ***************************/
-            ArrayList<String> arlPermissiionsToGet =new ArrayList<>();
+            ArrayList<String> arlPermissiionsToGet = new ArrayList<>();
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
                     != PackageManager.PERMISSION_GRANTED) {
                 arlPermissiionsToGet.add(Manifest.permission.READ_SMS);
+            } else {
+                //Permission is already given before.
+                getSupportLoaderManager().initLoader(LOADER_SMSLIST, null, mCallbacks);
             }
 
-            if (arlPermissiionsToGet.size()>0){
+            if (arlPermissiionsToGet.size() > 0) {
 
-                Log.d(TAG, "arlPermissiionsToGet.size() : "+String.valueOf(arlPermissiionsToGet.size()));
+                Log.d(TAG, "arlPermissiionsToGet.size() : " + String.valueOf(arlPermissiionsToGet.size()));
 
                 /*********************
                  (1) Need Explanations?
                  **********************/
-                ArrayList<String> arlExplanations =new ArrayList<>();
+                ArrayList<String> arlExplanations = new ArrayList<>();
 
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.READ_SMS)) {
@@ -80,7 +95,7 @@ public class SMSListActivity extends BaseActivity
                 }
 
 
-                if (arlExplanations.size()>0){
+                if (arlExplanations.size() > 0) {
                     //show dialog for explanation
                 }
 
@@ -97,11 +112,10 @@ public class SMSListActivity extends BaseActivity
 
             }
         } else {
+            getSupportLoaderManager().initLoader(LOADER_SMSLIST, null, mCallbacks);
 
         }
     }
-
-
 
 
     @Override
@@ -110,6 +124,7 @@ public class SMSListActivity extends BaseActivity
         if (requestCode == REQUEST_PERSMISSIONS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getSupportLoaderManager().initLoader(LOADER_SMSLIST, null, mCallbacks);
+
             } else {
                 showAlertDialogWithOnlyOk(R.string.sms_read_permission_denied);
             }
@@ -123,7 +138,6 @@ public class SMSListActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms);
         initUI();
-        initOnClickListeners();
         mCallbacks = this;
         smsCursorAdapter = new SMSCursorAdapter(
                 this,
@@ -154,6 +168,8 @@ public class SMSListActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+
 //        if (getIntent().getStringExtra("ProfilesStr") != null) {
 //
 //        }
@@ -181,6 +197,7 @@ public class SMSListActivity extends BaseActivity
 
             LinearLayout lo_wrap;
             CheckBoxJack checkBoxJack;
+            LinearLayout  loCheckBoxJack;
             TextView tvDate, tvSender, tvContent;
         }
 
@@ -194,6 +211,8 @@ public class SMSListActivity extends BaseActivity
             ViewHolder_SMS viewHolder_sms = new ViewHolder_SMS();
             viewHolder_sms.lo_wrap = (LinearLayout) view.findViewById(R.id.lo_wrap__i_sms);
             viewHolder_sms.checkBoxJack = (CheckBoxJack) view.findViewById(R.id.checkBoxJack__i_sms);
+            viewHolder_sms.loCheckBoxJack = (LinearLayout) view.findViewById(R.id.loCheckBoxJack);
+
             viewHolder_sms.tvDate = (TextView) view.findViewById(R.id.tvDate__i_sms);
             viewHolder_sms.tvSender = (TextView) view.findViewById(R.id.tvSender__i_sms);
             viewHolder_sms.tvContent = (TextView) view.findViewById(R.id.tvContent__i_sms);
@@ -203,7 +222,8 @@ public class SMSListActivity extends BaseActivity
 
 
         @Override
-        public void bindView(@NonNull View view, final Context context, @Nullable Cursor cursor) {
+        public void bindView(@NonNull View view, final Context context, @Nullable final Cursor
+                cursor) {
 
             if (cursor != null) {
 
@@ -241,20 +261,45 @@ public class SMSListActivity extends BaseActivity
                         SMSHighlightT.SUM);
                 JSMS.highlight(vh.tvContent, arlSMSHighlight);
 
-                if (arlSelectedSmsId.contains(_id)) {
+                if (arlSelectedSmsId.contains(new Long(_id))) {
                     vh.checkBoxJack.setChecked(true);
                     vh.tvContent.setText(body);
-                    vh.tvContent
-                            .setLayoutParams(new ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                    Log.d(TAG, "body " + body);
+//                    vh.tvContent
+//                            .setLayoutParams(new LinearLayout.LayoutParams(
+//                                    LinearLayout.LayoutParams.MATCH_PARENT,
+//                                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                    ViewGroup.LayoutParams params =  vh.tvContent.getLayoutParams();
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    vh.tvContent.setLayoutParams(params);
+
                 } else {
                     vh.tvContent.setText(JSMS.replaceLinesToSpaces(body));
-                    vh.tvContent
-                            .setLines(2);
+                    vh.tvContent.setLines(2);
                     vh.checkBoxJack.setChecked(false);
                 }
 
+                vh.loCheckBoxJack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (arlSelectedSmsId.contains(new Long(_id))) {
+                            arlSelectedSmsId.remove(new Long(_id));
+                            vh.checkBoxJack.setChecked(false);
+                        } else {
+                            arlSelectedSmsId.add(new Long(_id));
+                            vh.checkBoxJack.setChecked(true);
+                        }
+
+                        Log.d(TAG, J.st(arlSelectedSmsId.size()));
+
+                        bottomSheetControl(arlSelectedSmsId.size());
+                        notifyDataSetChanged();
+
+                    }
+
+                });
 
             }
         }
@@ -262,41 +307,61 @@ public class SMSListActivity extends BaseActivity
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d(TAG, "onCreateLoader");
+
         switch (id) {
             case LOADER_SMSLIST:
+                Log.d(TAG, "LOADER_PHONEBOOKLIST");
+
+                if (swFilter.isChecked()) {
+                    String[] selectionArg =
+                            {"%카드%"};
+
+                    return new android.support.v4.content.CursorLoader(
+                            this,   // Parent activity context
+                            Uri.parse("content://sms/inbox"),        // Table to query
+                            null,     // Projection to return
+                            "body LIKE ?",            // No selection clause
+                            selectionArg,            // No
+                            // selection arguments
+                            null             // Default sort order
+                    );
+                } else {
+                    return new android.support.v4.content.CursorLoader(
+                            this,   // Parent activity context
+                            Uri.parse("content://sms/inbox"),        // Table to query
+                            null,     // Projection to return
+                            null,            // No selection clause
+                            null,            // No selection arguments
+                            null             // Default sort order
+                    );
+                }
 
 
-                return new android.support.v4.content.CursorLoader(
-                        this,   // Parent activity context
-                        Uri.parse("content://sms/inbox"),        // Table to query
-                        null,     // Projection to return
-                        null,            // No selection clause
-                        null,            // No selection arguments
-                        null             // Default sort order
-                );
             default:
                 return null;
         }
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    public void onLoadFinished(final Loader<Cursor> loader, Cursor cursor) {
+        Log.d(TAG, "onLoadFinished : " + J.st(loader.getId()));
+
         switch (loader.getId()) {
             case LOADER_SMSLIST:
+                Log.d(TAG, "case LOADER_PHONEBOOKLIST");
                 smsCursorAdapter.changeCursor(cursor);
                 if (cursor != null && cursor.getCount() > 0) {
-                    lvSMS.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Cursor cursor = (Cursor) lvSMS.getItemAtPosition(position);
-                            final long _id = cursor.getLong(cursor.getColumnIndex("_id"));
-                            arlSelectedSmsId.add(new Long(_id));
-                        }
-                    });
+                    Log.d(TAG, "cursor != null && cursor.getCount() > 0");
 
 
-
-                    tv_done.setText("");
+                    Log.d(TAG, "size : " + J.st(arlSelectedSmsId.size()));
+                    lvSMS.setVisibility(View.VISIBLE);
+                    tvEmpty.setVisibility(View.GONE);
+                } else {
+                    Log.d(TAG, "cursor==null||cursor.getCount()==0");
+                    lvSMS.setVisibility(View.GONE);
+                    tvEmpty.setVisibility(View.VISIBLE);
                 }
 
 
@@ -306,6 +371,8 @@ public class SMSListActivity extends BaseActivity
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        Log.d(TAG, "onLoaderReset");
+
         switch (loader.getId()) {
             case LOADER_SMSLIST:
                 smsCursorAdapter.changeCursor(null);
@@ -318,15 +385,73 @@ public class SMSListActivity extends BaseActivity
      * UI
      */
     ListView lvSMS;
-    TextView tv_done;
+    static TextView tv_done;
+    TextView tvEmpty;
+    Toolbar toolbar;
+    RelativeLayout roClose;
+    TextView tvToolbarTitle;
+
+
     void initUI() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        roClose = (RelativeLayout) findViewById(R.id.roClose);
         lvSMS = (ListView) findViewById(R.id.lvSMS);
-        tv_done = (TextView)findViewById(R.id.tv_done);
+        tv_done = (TextView) findViewById(R.id.tv_done);
+        tvToolbarTitle = (TextView) findViewById(R.id.tvToolbarTitle);
+        tvEmpty = (TextView) findViewById(R.id.tvEmpty);
+
+        bottomSheetBehavior =
+                BottomSheetBehavior.from(tv_done);
+        swFilter = (Switch) findViewById(R.id.swFilter);
+    }
+
+    @Override
+    void initUIDataOnResume() {
+        super.initUIDataOnResume();
+        tvToolbarTitle.setText(JM.strById(R.string.load_sms));
+    }
+
+    @Override
+    void initOnClickListenerOnResume() {
+        super.initOnClickListenerOnResume();
+        roClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        swFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    buttonView.setText(JM.strById(R.string.card_filter_on));
+                    getSupportLoaderManager().restartLoader(LOADER_SMSLIST, null, mCallbacks);
+
+                } else {
+                    buttonView.setText(JM.strById(R.string.card_filter_off));
+                    getSupportLoaderManager().restartLoader(LOADER_SMSLIST, null, mCallbacks);
+
+                }
+            }
+        });
+    }
+
+    static void bottomSheetControl(int selectedSmsNum) {
+        Log.d(TAG, "bottomSheetControl()");
+        if (selectedSmsNum == 0) {
+            tv_done.setVisibility(View.GONE);
+        } else {
+            String sum = "원";
+            tv_done.setText(sum);
+            tv_done.setVisibility(View.VISIBLE);
+        }
     }
 
 
-    void initOnClickListeners() {
-
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
     }
 
 }

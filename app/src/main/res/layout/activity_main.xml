@@ -23,5 +23,118 @@
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_activity_main"/>
 
+    <!-- Right drawer -->
+    <!--android:background="?android:colorBackground"-->
+    <android.support.design.widget.NavigationView
+
+        android:id="@+id/nav_view2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="?android:colorBackground"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="128dip"
+                android:background="@drawable/side_nav_bar"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                android:paddingBottom="16dip"
+                android:paddingLeft="16dip"
+                android:paddingRight="16dip"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+                <ImageView
+                    android:id="@+id/ivPeopleIcon2"
+                    style="@style/ImageView.WhiteImageSrcTransparentBg.36"
+                    android:src="@drawable/ic_people_white_48dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvTitle_DrawerHeader2"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="8dip"
+                    android:layout_height="36dip"
+                    android:textSize="20dip"
+                    android:gravity="center_vertical|left"
+                    android:textColor="@color/white"
+                    android:text="나의 연락처"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:paddingLeft="16dip"
+                    android:paddingTop="8dip"
+                    android:paddingBottom="8dip"
+                    android:id="@+id/tvRecentTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recent_profiles"
+                    android:textSize="12sp"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvRightDrawerRecent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dip"
+                    android:layout_weight="1"
+                    android:choiceMode="singleChoice"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="8dip"
+                android:layout_marginBottom="8dip"
+                android:background="@color/text_black_54"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="0dip"
+                android:orientation="vertical"
+                 >
+
+
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/searchViewRightDrawer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                </android.support.v7.widget.SearchView>
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvRightDrawerAll"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dip"
+                    android:layout_weight="1"
+                    android:choiceMode="singleChoice"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.design.widget.NavigationView>
+
 
 </android.support.v4.widget.DrawerLayout>

@@ -13,33 +13,97 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
+        <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="6dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/material_layout_app_bar_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/roClose"
+                        android:layout_width="72dip"
+                        android:layout_height="match_parent">
+
+                        <ImageView style="@style/ImageView.ToolbarIcon.Close"/>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tvToolbarTitle"
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/material_layout_app_bar_title_textSize"/>
+
+
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/swFilter"
+                    android:textSize="@dimen/md_13sp"
+                    android:paddingLeft="16dip"
+                    android:paddingRight="16dip"
+                    android:textColor="@color/white"
+                    android:text="@string/card_filter_on"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dip"/>
+            </LinearLayout>
+
+
+
+        </android.support.v7.widget.Toolbar>
+
 
     </android.support.design.widget.AppBarLayout>
 
-
     <ListView
         android:id="@+id/lvSMS"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
-
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"></ListView>
 
     <TextView
-        app:layout_behavior="@string/bottom_sheet_behavior"
+        android:visibility="gone"
+        android:id="@+id/tvEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/material_grey500"
+        android:gravity="center"
+        android:text="@string/sms_empty"
+        android:textColor="@color/text_black_87"
+        android:textSize="@dimen/md_13sp"/>
+
+
+    <!--You can use the behavior_peekHeight attribute to set the default height of the bottom sheet-->
+    <TextView
         android:id="@+id/tv_done"
-              android:layout_width="match_parent"
-              android:textSize="16dip"
-              android:text="@string/google_next"
-              android:background="@color/colorAccent"
-              android:textColor="@color/white"
-              android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-              android:gravity="center"
-              android:layout_height="56dip"/>
+        android:layout_width="match_parent"
+        android:layout_height="56dip"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="@string/google_next"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16dip"
+        android:visibility="gone"
+        app:behavior_hideable="true"
+        app:layout_behavior="@string/bottom_sheet_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

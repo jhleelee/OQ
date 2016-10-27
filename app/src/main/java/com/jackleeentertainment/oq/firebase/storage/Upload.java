@@ -1,7 +1,10 @@
 package com.jackleeentertainment.oq.firebase.storage;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -13,6 +16,8 @@ import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
+
+import java.io.File;
 
 
 /**
@@ -27,6 +32,8 @@ public class Upload {
                                     final String firstpath,
                                     final String secondpathAkaMyUid,
                                     final String suffix) {
+
+        LBR.send(  LBR.SendSuffixT.SENDING);
 
         UploadTask uploadTask = App.fbaseStorageRef
                 .child(firstpath)
@@ -93,5 +100,94 @@ public class Upload {
         Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getUploadSessionUri() " + J.st(taskSnapshot.getUploadSessionUri()));
     }
 
+
+
+    public static void uploadMyProfileImagesToFirebaseStorage(Uri uri, Activity activity) {
+
+        Log.d(TAG, "uploadMyProfileImagesToFirebaseStorage : " + uri.toString());
+
+        File file = new File(uri.getPath());
+
+        Bitmap thumbnail_320 =
+                ThumbnailUtils.extractThumbnail(
+                        BitmapFactory.decodeFile(
+                                file.getPath()), 320, 320);
+
+        Bitmap thumbnail_036 =
+                ThumbnailUtils.extractThumbnail(
+                        BitmapFactory.decodeFile(
+                                file.getPath()), 36, 36);
+
+        Bitmap thumbnail_048 =
+                ThumbnailUtils.extractThumbnail(
+                        BitmapFactory.decodeFile(
+                                file.getPath()), 48, 48);
+
+        Bitmap thumbnail_072 =
+                ThumbnailUtils.extractThumbnail(
+                        BitmapFactory.decodeFile(
+                                file.getPath()), 72, 72);
+
+        Bitmap thumbnail_096 =
+                ThumbnailUtils.extractThumbnail(
+                        BitmapFactory.decodeFile(
+                                file.getPath()), 96, 96);
+
+        Bitmap thumbnail_144 =
+                ThumbnailUtils.extractThumbnail(
+                        BitmapFactory.decodeFile(
+                                file.getPath()), 144, 144);
+
+
+        Log.d(TAG, "uploadMyProfileImagesToFirebaseStorage : Bitmaps are Created "
+                 );
+
+
+        Upload.uploadBitmap(
+                thumbnail_320,
+                FStorageNode.FirstT.PROFILE_PHOTO,
+                App.getUid(activity),
+                null
+        );
+
+        Upload.uploadBitmap(
+                thumbnail_036,
+                FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                App.getUid(activity),
+                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px36
+        );
+
+
+        Upload.uploadBitmap(
+                thumbnail_048,
+                FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                App.getUid(activity),
+                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px48
+        );
+
+
+        Upload.uploadBitmap(
+                thumbnail_072,
+                FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                App.getUid(activity),
+                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px72
+        );
+
+
+        Upload.uploadBitmap(
+                thumbnail_096,
+                FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                App.getUid(activity),
+                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px96
+        );
+
+
+        Upload.uploadBitmap(
+                thumbnail_144,
+                FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                App.getUid(activity),
+                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px144
+        );
+    }
 
 }
