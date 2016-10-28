@@ -17,7 +17,7 @@ public class OQSumT {
     public static class SoIWantToGETFromYou {
         public static String I_PAID_FOR_YOU_AND_ME = "d";
         public static String I_PAID_FOR_YOU = "e";
-        public static String N_ANYWAY = "f";
+        public static String ANYWAY = "f";
     }
 
 

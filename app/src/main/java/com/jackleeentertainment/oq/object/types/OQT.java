@@ -12,9 +12,9 @@ public class OQT {
         public static String PAY = "b";
     }
     public static class PointT {
-        public static String PAST = "a";
-        public static String NOW = "b";
-        public static String FUTURE = "c";
+        public static String PAID = "a";
+        public static String PAYING = "b";
+        public static String TOPAY = "c";
     }
 
 

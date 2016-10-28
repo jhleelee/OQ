@@ -1,57 +1,28 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.gson.Gson;
-import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
-import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
-import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Profile;
-import com.jackleeentertainment.oq.object.types.OQSumT;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
-import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
-import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag0_OQItems;
-import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag1_Feeds;
-import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag2_ChatroomList;
 import com.jackleeentertainment.oq.ui.layout.fragment.SumTypePageFrag;
-import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameViewHolder;
-import com.konifar.fab_transformation.FabTransformation;
 
 import java.util.ArrayList;
 
@@ -94,6 +65,7 @@ public class SumTypeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        intiUIListener();
         initUIAdapter();
 
     }
@@ -109,8 +81,29 @@ public class SumTypeActivity extends AppCompatActivity {
     }
 
 
-    void initUIData() {
+    void intiUIListener(){
+        roClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
+
+        bt__lo_lefttext_rightoneaction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                if (OQSumT!=null) {
+                    returnIntent.putExtra("OQSumT", OQSumT);
+                }
+                if (ammountAsStandard!=0){
+                    returnIntent.putExtra("ammountAsStandard", ammountAsStandard);
+                }
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
+            }
+        });
     }
 
 
@@ -160,7 +153,7 @@ public class SumTypeActivity extends AppCompatActivity {
                     return SumTypePageFrag.newInstance(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
                             .I_PAID_FOR_YOU_AND_ME);
                 case 2:
-                    return SumTypePageFrag.newInstance(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou.N_ANYWAY);
+                    return SumTypePageFrag.newInstance(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou.ANYWAY);
                 default:
                     return null;
             }
@@ -232,7 +225,7 @@ public class SumTypeActivity extends AppCompatActivity {
 
 
     void initPageChangeListenerCandidates() {
-  onPCListener_SoIWantToGETFromYou
+        onPCListener_SoIWantToGETFromYou
                 = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -243,14 +236,21 @@ public class SumTypeActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-
+                        OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
+                                .I_PAID_FOR_YOU_AND_ME;
+                        tvAmmount.setText(JM.strById(R.string.money_sum));
                         break;
                     case 1:
+                        OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
+                                .I_PAID_FOR_YOU;
+                        tvAmmount.setText(JM.strById(R.string.money_individual));
 
                         break;
 
                     case 2:
-
+                        OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
+                                .ANYWAY;
+                        tvAmmount.setText(JM.strById(R.string.money_individual));
                         break;
                 }
             }
@@ -262,7 +262,7 @@ public class SumTypeActivity extends AppCompatActivity {
         };
 
 
- onPCListener_SoIWantToGETFromYouGuys
+        onPCListener_SoIWantToGETFromYouGuys
                 = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -273,14 +273,20 @@ public class SumTypeActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-
+                        OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys
+                                .I_PAID_FOR_ALL_INCLUDING_YOU__INCLUDING_ME;
+                        tvAmmount.setText(JM.strById(R.string.money_sum));
                         break;
                     case 1:
-
+                        OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys
+                                .I_PAID_FOR_ALL_INCLUDING_YOU__BUT_ME;
+                        tvAmmount.setText(JM.strById(R.string.money_sum));
                         break;
 
                     case 2:
-
+                        OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys
+                                .N_ANYWAY;
+                        tvAmmount.setText(JM.strById(R.string.money_individual));
                         break;
                 }
             }
@@ -291,7 +297,7 @@ public class SumTypeActivity extends AppCompatActivity {
             }
         };
 
-       onPCListener_SoIWantToPAY
+        onPCListener_SoIWantToPAY
                 = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -302,14 +308,15 @@ public class SumTypeActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-
+                        OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToPAY
+                                .YOU_PAID_FOR_ME;
+                        tvAmmount.setText(JM.strById(R.string.money_ammount_neatural));
                         break;
                     case 1:
 
-                        break;
-
-                    case 2:
-
+                        OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToPAY
+                                .ANYWAY;
+                        tvAmmount.setText(JM.strById(R.string.money_ammount_neatural));
                         break;
                 }
             }
@@ -322,4 +329,9 @@ public class SumTypeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
+    }
 }

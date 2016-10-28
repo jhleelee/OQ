@@ -110,7 +110,7 @@ public class NewGroupFrag extends Fragment {
     void initUI() {
 
         /**
-         cardview_cause_people__frag_newoq_0
+         cvPERSON
          **/
 
         cardviewTitlePhoto = (CardView) view.findViewById(R.id

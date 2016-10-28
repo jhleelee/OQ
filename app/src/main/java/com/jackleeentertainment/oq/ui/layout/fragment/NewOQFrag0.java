@@ -1,22 +1,23 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,18 +25,14 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
-import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
-import com.jackleeentertainment.oq.ui.layout.activity.PeopleActivity;
+import com.jackleeentertainment.oq.ui.widget.ListViewUtil;
 
 import java.util.ArrayList;
 
@@ -44,42 +41,42 @@ import java.util.ArrayList;
  */
 public class NewOQFrag0 extends Fragment implements View.OnClickListener {
 
+    //((NewOQActivity) getActivity()).goToFragment(new NewOQFrag1(), R.id.lofragmentlayout);
     String TAG = this.getClass().getSimpleName();
     final int REQ_PEOPLE = 99;
     final int REQ_SUMTYPE = 98;
     boolean hasSumTypeEdited = false;
-
     View view;
-    CardView cardview_cause_people__frag_newoq_0, cardview_cause_sumtype__frag_newoq_0,
-            cardview_cause_breakdown__frag_newoq_0;
-    TextView tv_done__frag_newoq_0;
+    CardView cvPERSON, cvSUMTYPE,
+            cvBREAKDOWN;
+    TextView tv_done;
     SelectedPeopleListAdapter selectedPeopleListAdapter;
 
-    LinearLayout loLv__PERSON, loLv__SUMTYPE, loLv__BREAKDOWN;
-    TextView tv_title__cardview_cause__PERSON, tvEmpty__cardview_cause__PERSON,
-            tv__lo_lefttext_rightoneaction__PERSON, tv_title__cardview_cause__SUMTYPE, tv__lo_lefttext_rightoneaction__SUMTYPE, tvEmpty__cardview_cause__SUMTYPE, tv_title__cardview_cause__BREAKDOWN, tv__lo_lefttext_rightoneaction__BREAKDOWN, tvEmpty__cardview_cause__BREAKDOWN;
-    ListView lv__cardview_cause__PERSON, lv__cardview_cause__SUMTYPE, lv__cardview_cause__BREAKDOWN;
-    LinearLayout lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__PERSON,
-            lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__SUMTYPE, lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__BREAKDOWN;
-    RelativeLayout roEmpty__cardview_cause__PERSON, roEmpty__cardview_cause__SUMTYPE, roEmpty__cardview_cause__BREAKDOWN;
-    Button bt__lo_lefttext_rightoneaction__PERSON, bt__lo_lefttext_rightoneaction__SUMTYPE, bt__lo_lefttext_rightoneaction__BREAKDOWN;
+    //PERSON Cardview
+    LinearLayout loMain_PERSON;
+    TextView tvTitle_PERSON, tvEmpty_cardview_PERSON,
+            tv__lo_lefttext_rightoneaction__PERSON;
+    ListView lv_PERSON;
+    LinearLayout lo_lefttext_rightoneaction_borderlesscolored_PERSON;
+    RelativeLayout roEmpty_cardview_PERSON;
+    Button bt__lo_lefttext_rightoneaction__PERSON;
 
+    //SUMTYPE Cardview
+    TextView tv_title__cardview_titleedittextillust;
+    TextView tvAmmount__cardview_titleedittextillust;
+    EditText etAmmount__cardview_titleedittextillust;
+    ViewPager viewPager__cardview_titleedittextillust;
+    ViewPager.OnPageChangeListener onPCListener_SoIWantToGETFromYou;
+    ViewPager.OnPageChangeListener onPCListener_SoIWantToGETFromYouGuys;
+    ViewPager.OnPageChangeListener onPCListener_SoIWantToPAY;
 
-//    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            // Get extra data included in the Intent
-//            Log.d(TAG, "onReceive");
-//
-//
-//            String key = intent.getStringExtra("data");
-//            Log.d(TAG, "onReceive : "+ key);
-//
-//            if (key.equals("REQ_PEOPLE")){
-//                uiDataCardViewPeopleList(((NewOQActivity)getActivity()).arlOppoProfile);
-//            }
-//        }
-//    };
+    //BREAKDOWN Cardview
+    LinearLayout loMain_BREAKDOWN;
+    TextView tvTitle_BREAKDOWN, tv__lo_lefttext_rightoneaction__BREAKDOWN, tvEmptyBREAKDOWN;
+    ListView lvBREAKDOWN;
+    LinearLayout lo_lefttext_rightoneaction_borderlesscolored_BREAKDOWN;
+    RelativeLayout roEmptyBREAKDOWN;
+    Button bt__lo_lefttext_rightoneaction__BREAKDOWN;
 
 
     public NewOQFrag0() {
@@ -90,7 +87,6 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
     public static NewOQFrag0 newInstance() {
         return new NewOQFrag0();
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -104,39 +100,92 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
 //        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
 //                new IntentFilter("com.jackleeentertainment.oq." + LBR.IntentFilterT.NewOQActivity_Frag0));
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
+        Log.d(TAG, "onResume() : ((NewOQActivity) getActivity()).arlOppoProfile : " + J.st(((NewOQActivity) getActivity()).arlOppoProfile.size()));
 
-        uiDataCardViewPeopleList(((NewOQActivity) getActivity()).arlOppoProfile);
+        uiDataCardViewExist(
+                ((NewOQActivity) getActivity()).arlOppoProfile,
+                ((NewOQActivity) getActivity()).ammountAsStandard,
+                ((NewOQActivity) getActivity()).OQSumT
+        );
+
+        uiDataCardViewPeopleList(
+                ((NewOQActivity) getActivity()).arlOppoProfile
+        );
 
         uiDataCardViewSumType(
+                ((NewOQActivity) getActivity()).OQTWantT_Future,
                 ((NewOQActivity) getActivity()).arlOppoProfile,
                 ((NewOQActivity) getActivity()).ammountAsStandard,
                 ((NewOQActivity) getActivity()).OQSumT
         );
         uiDataCardViewBreakDown(
-                ((NewOQActivity) getActivity()).arlOQItem_Past,
+                ((NewOQActivity) getActivity()).arlOQItem_Paid,
                 ((NewOQActivity) getActivity()).arlOQItem_Now,
-                ((NewOQActivity) getActivity()).arlOQItem_Future
+                ((NewOQActivity) getActivity()).arlOQItem_ToPay
         );
-        uiDataCardViewExist(
-                ((NewOQActivity) getActivity()).arlOppoProfile,
-                ((NewOQActivity) getActivity()).ammountAsStandard,
-                ((NewOQActivity) getActivity()).OQSumT
 
+        initViewPagerChangeListenerCandidates();
+        initViewPagerAdapter(
+                ((NewOQActivity) getActivity())
+                        .OQTWantT_Future,
+                ((NewOQActivity) getActivity())
+                        .arlOppoProfile
+        );
+
+        etAmmount__cardview_titleedittextillust.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d(TAG, "beforeTextChanged(CharSequence s, int start, int count, int after) "
+                        + s.toString() + ", "
+                        + J.st(start) + ", "
+                        + J.st(count) + ", "
+                        + J.st(after + ", ")
+                );
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged(CharSequence s, int start, int before, int count) "
+                        + s.toString() + ", "
+                        + J.st(start) + ", "
+                        + J.st(before) + ", "
+                        + J.st(count) + ", "
+                );
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                Log.d(TAG, "afterTextChanged(Editable s) " + s.toString());
+                if(s.length() == 0){
+                    etAmmount__cardview_titleedittextillust.setText("0");
+                };
+
+                try {
+                    ((NewOQActivity)getActivity()).ammountAsStandard
+                            = Long.parseLong(etAmmount__cardview_titleedittextillust.getText().toString());
+                }catch (Exception e){
+                    Log.d(TAG, e.toString());
+                }
+
+                uiDataCardViewExist(
+                        ((NewOQActivity)getActivity()).arlOppoProfile,
+                        ((NewOQActivity)getActivity()).ammountAsStandard,
+                        ((NewOQActivity)getActivity()).OQSumT
                 );
 
+            }
+        });
+        ListViewUtil.getListViewSize(lv_PERSON);
 
     }
 
@@ -149,20 +198,21 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.cardview_cause_people__frag_newoq_0:
-
-
-                break;
-            case R.id.cardview_cause_sumtype__frag_newoq_0:
-
-                if (!hasSumTypeEdited) {
-                    Intent intent_cardview_cause_sumtype__frag_newoq_0 = new Intent(getActivity(), PeopleActivity.class);
-                    startActivityForResult(intent_cardview_cause_sumtype__frag_newoq_0, REQ_SUMTYPE);
-                }
-
+            case R.id.cv_people__frag_newoq_0:
                 break;
 
-            case R.id.cardview_cause_breakdown__frag_newoq_0:
+
+
+            case R.id.cv_sumtype__frag_newoq_0:
+
+//                if (!hasSumTypeEdited) {
+//                    Intent intent_cardview_cause_sumtype__frag_newoq_0 = new Intent(getActivity(), SumTypeActivity.class);
+//                    startActivityForResult(intent_cardview_cause_sumtype__frag_newoq_0, REQ_SUMTYPE);
+//                }
+
+                break;
+
+            case R.id.cv_breakdown__frag_newoq_0:
 
                 // no, deirect edit..
 
@@ -170,12 +220,7 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
 
 
             case R.id.tv_done__frag_newoq_0:
-
-                ((NewOQActivity) getActivity()).goToFragment(new NewOQFrag1(), R.id.lofragmentlayout);
-
-
-                break;
-
+               break;
         }
     }
 
@@ -183,217 +228,403 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
     void initUI() {
 
         /**
-         cardview_cause_people__frag_newoq_0
+         cvPERSON
          **/
-        cardview_cause_people__frag_newoq_0 = (CardView) view.findViewById(R.id
-                .cardview_cause_people__frag_newoq_0);
-        loLv__PERSON = (LinearLayout) cardview_cause_people__frag_newoq_0
-                .findViewById(R.id.loLv);
-        tv_title__cardview_cause__PERSON = (TextView) cardview_cause_people__frag_newoq_0
-                .findViewById(R.id.tv_title__cardview_cause);
-        lv__cardview_cause__PERSON = (ListView) cardview_cause_people__frag_newoq_0.findViewById(R.id
-                .lv__cardview_cause);
+        cvPERSON = (CardView) view.findViewById(R.id
+                .cv_people__frag_newoq_0);
+        loMain_PERSON = (LinearLayout) cvPERSON
+                .findViewById(R.id.loMain);
+        tvTitle_PERSON = (TextView) cvPERSON
+                .findViewById(R.id.tv_title__cardview_titlelistaction);
+        lv_PERSON = (ListView) cvPERSON.findViewById(R.id
+                .lv__cardview_titlelistaction);
         ////lo_lefttext_rightoneaction_borderlesscolored__cardview_cause
-        lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__PERSON = (LinearLayout)
-                cardview_cause_people__frag_newoq_0.findViewById(R.id
-                        .lo_lefttext_rightoneaction_borderlesscolored__cardview_cause);
+        lo_lefttext_rightoneaction_borderlesscolored_PERSON = (LinearLayout)
+                cvPERSON.findViewById(R.id
+                        .lo_lefttext_rightoneaction_borderlesscolored__cardview_titlelistaction);
 
         tv__lo_lefttext_rightoneaction__PERSON = (TextView)
-                lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__PERSON.findViewById(R.id
+                lo_lefttext_rightoneaction_borderlesscolored_PERSON.findViewById(R.id
                         .tv__lo_lefttext_rightoneaction);
-
+        tv__lo_lefttext_rightoneaction__PERSON.setVisibility(View.INVISIBLE);
         bt__lo_lefttext_rightoneaction__PERSON = (Button)
-                lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__PERSON.findViewById(R.id
+                lo_lefttext_rightoneaction_borderlesscolored_PERSON.findViewById(R.id
                         .bt__lo_lefttext_rightoneaction);
+        bt__lo_lefttext_rightoneaction__PERSON.setText(JM.strById(R.string.delete_all));
         ////lo_lefttext_rightoneaction_borderlesscolored__cardview_cause
-        roEmpty__cardview_cause__PERSON = (RelativeLayout)
-                cardview_cause_people__frag_newoq_0.findViewById(R.id
-                        .roEmpty__cardview_cause);
-        tvEmpty__cardview_cause__PERSON = (TextView)
-                cardview_cause_people__frag_newoq_0.findViewById(R.id
-                        .tvEmpty__cardview_cause);
+        roEmpty_cardview_PERSON = (RelativeLayout)
+                cvPERSON.findViewById(R.id
+                        .roEmpty__cardview_titlelistaction);
+        tvEmpty_cardview_PERSON = (TextView)
+                cvPERSON.findViewById(R.id
+                        .tvEmpty__cardview_titlelistaction);
 
         /**
-         cardview_cause_sumtype__frag_newoq_0
+         cvSUMTYPE
          **/
-        cardview_cause_sumtype__frag_newoq_0 = (CardView) view.findViewById(R.id
-                .cardview_cause_sumtype__frag_newoq_0);
-        loLv__SUMTYPE = (LinearLayout) cardview_cause_sumtype__frag_newoq_0
-                .findViewById(R.id.loLv);
-        tv_title__cardview_cause__SUMTYPE = (TextView) cardview_cause_sumtype__frag_newoq_0
-                .findViewById(R.id.tv_title__cardview_cause);
-        lv__cardview_cause__SUMTYPE = (ListView) cardview_cause_sumtype__frag_newoq_0
-                .findViewById(R.id
-                        .lv__cardview_cause);
-        ////lo_lefttext_rightoneaction_borderlesscolored__cardview_cause
-        lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__SUMTYPE = (LinearLayout)
-                cardview_cause_sumtype__frag_newoq_0
-                        .findViewById(R.id
-                                .lo_lefttext_rightoneaction_borderlesscolored__cardview_cause);
-
-        tv__lo_lefttext_rightoneaction__SUMTYPE = (TextView)
-                lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__SUMTYPE.findViewById(R.id
-                        .tv__lo_lefttext_rightoneaction);
-
-        bt__lo_lefttext_rightoneaction__SUMTYPE = (Button)
-                lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__SUMTYPE.findViewById(R.id
-                        .bt__lo_lefttext_rightoneaction);
-        ////lo_lefttext_rightoneaction_borderlesscolored__cardview_cause
-        roEmpty__cardview_cause__SUMTYPE = (RelativeLayout)
-                cardview_cause_sumtype__frag_newoq_0.findViewById(R.id
-                        .roEmpty__cardview_cause);
-        tvEmpty__cardview_cause__SUMTYPE = (TextView)
-                cardview_cause_sumtype__frag_newoq_0.findViewById(R.id
-                        .tvEmpty__cardview_cause);
+        cvSUMTYPE = (CardView) view.findViewById(R.id
+                .cv_sumtype__frag_newoq_0);
 
 
+        tv_title__cardview_titleedittextillust = (TextView) cvSUMTYPE
+                .findViewById(R.id.tv_title__cardview_titleedittextillust);
+        tvAmmount__cardview_titleedittextillust = (TextView) cvSUMTYPE
+                .findViewById(R.id.tvAmmount__cardview_titleedittextillust);
+        etAmmount__cardview_titleedittextillust = (EditText) cvSUMTYPE
+                .findViewById(R.id.etAmmount__cardview_titleedittextillust);
+        viewPager__cardview_titleedittextillust = (ViewPager) cvSUMTYPE
+                .findViewById(R.id.viewPager__cardview_titleedittextillust);
+
+        tv_title__cardview_titleedittextillust.setText(JM.strById(R.string.sumandtype));
         /**
-         cardview_cause_breakdown__frag_newoq_0
+         cvBREAKDOWN
          **/
 
-        cardview_cause_breakdown__frag_newoq_0 = (CardView) view
-                .findViewById(R.id.cardview_cause_breakdown__frag_newoq_0);
-        loLv__BREAKDOWN = (LinearLayout) cardview_cause_breakdown__frag_newoq_0
-                .findViewById(R.id.loLv);
-        tv_title__cardview_cause__BREAKDOWN = (TextView) cardview_cause_breakdown__frag_newoq_0
-                .findViewById(R.id.tv_title__cardview_cause);
-        lv__cardview_cause__BREAKDOWN = (ListView) cardview_cause_breakdown__frag_newoq_0
-                .findViewById(R.id.lv__cardview_cause);
+        cvBREAKDOWN = (CardView) view
+                .findViewById(R.id.cv_breakdown__frag_newoq_0);
+        loMain_BREAKDOWN = (LinearLayout) cvBREAKDOWN
+                .findViewById(R.id.loMain);
+        tvTitle_BREAKDOWN = (TextView) cvBREAKDOWN
+                .findViewById(R.id.tv_title__cardview_titlelistaction);
+        lvBREAKDOWN = (ListView) cvBREAKDOWN
+                .findViewById(R.id.lv__cardview_titlelistaction);
         ////lo_lefttext_rightoneaction_borderlesscolored__cardview_cause
-        lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__BREAKDOWN = (LinearLayout)
-                cardview_cause_breakdown__frag_newoq_0
-                        .findViewById(R.id.lo_lefttext_rightoneaction_borderlesscolored__cardview_cause);
+        lo_lefttext_rightoneaction_borderlesscolored_BREAKDOWN = (LinearLayout)
+                cvBREAKDOWN
+                        .findViewById(R.id.lo_lefttext_rightoneaction_borderlesscolored__cardview_titlelistaction);
 
         tv__lo_lefttext_rightoneaction__BREAKDOWN = (TextView)
-                lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__BREAKDOWN
+                lo_lefttext_rightoneaction_borderlesscolored_BREAKDOWN
                         .findViewById(R.id.tv__lo_lefttext_rightoneaction);
 
         bt__lo_lefttext_rightoneaction__BREAKDOWN = (Button)
-                lo_lefttext_rightoneaction_borderlesscolored__cardview_cause__BREAKDOWN
+                lo_lefttext_rightoneaction_borderlesscolored_BREAKDOWN
                         .findViewById(R.id.bt__lo_lefttext_rightoneaction);
         ////lo_lefttext_rightoneaction_borderlesscolored__cardview_cause
-        roEmpty__cardview_cause__BREAKDOWN = (RelativeLayout)
-                cardview_cause_breakdown__frag_newoq_0
-                        .findViewById(R.id.roEmpty__cardview_cause);
-        tvEmpty__cardview_cause__BREAKDOWN = (TextView)
-                cardview_cause_breakdown__frag_newoq_0
-                        .findViewById(R.id.tvEmpty__cardview_cause);
+        roEmptyBREAKDOWN = (RelativeLayout)
+                cvBREAKDOWN
+                        .findViewById(R.id.roEmpty__cardview_titlelistaction);
+        tvEmptyBREAKDOWN = (TextView)
+                cvBREAKDOWN
+                        .findViewById(R.id.tvEmpty__cardview_titlelistaction);
 
 
         /**
-         tv_done__frag_newoq_0
+         tv_done
          **/
 
-        tv_done__frag_newoq_0 = (TextView) view.findViewById(R.id.tv_done__frag_newoq_0);
+        tv_done = (TextView) view.findViewById(R.id.tv_done__frag_newoq_0);
 
     }
 
 
-    void initAdapter() {
-        selectedPeopleListAdapter = new SelectedPeopleListAdapter(getActivity());
-    }
-
-
-    void uiDependOnOQItemCardViewSumType(OqItem oqItemEffect) {
-
-        if (oqItemEffect.getAmmount() == 0 || oqItemEffect.getOqgnltype() == null ||
-                oqItemEffect.getOqwnttype() == null) {
-
-        } else {
-
-        }
-
-    }
-
-
-    void uiDependOnOQItemCardViewBreakdown(OqItem oqItemEffect) {
-
-
-    }
-
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (resultCode == Activity.RESULT_OK) {
-//
-//            switch (requestCode) {
-//                case REQ_PEOPLE:
-//                    String result = data.getStringExtra("result");
-//                    uiDataCardViewPeopleList(result);
-//                    break;
-//
-//
-//            }
-//
-//
-//        }
-//    }
-
-
-    private void uiDataCardViewPeopleList(String jsonStrSelectedProfiles) {
-        Gson gson = new Gson();
-        ArrayList<Profile> arlProfile = gson.fromJson(jsonStrSelectedProfiles, new
-                TypeToken<ArrayList<Profile>>() {
-                }.getType());
-
-    }
 
     private void uiDataCardViewPeopleList(ArrayList<Profile> arlProfiles) {
+        Log.d(TAG, "uiDataCardViewPeopleList()");
 
         if (arlProfiles == null || arlProfiles.size() == 0) {
-
-            JM.V(roEmpty__cardview_cause__PERSON);
+            Log.d(TAG, "arlProfiles == null || arlProfiles.size() == 0");
+            JM.G(loMain_PERSON);
+            JM.V(roEmpty_cardview_PERSON);
             View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((NewOQActivity) getActivity()).startActivityForResultPeopleActivity();
                 }
             };
-            roEmpty__cardview_cause__PERSON.setOnClickListener(onClickListener);
-            tvEmpty__cardview_cause__PERSON.setOnClickListener(onClickListener);
+            roEmpty_cardview_PERSON.setOnClickListener(onClickListener);
+            tvEmpty_cardview_PERSON.setOnClickListener(onClickListener);
 
         } else {
+            Log.d(TAG, "else");
+            JM.G(roEmpty_cardview_PERSON);
+            JM.V(loMain_PERSON);
 
-            JM.G(roEmpty__cardview_cause__PERSON);
             if (((NewOQActivity) getActivity())
-                    .OQTWantT_Future.equals(OQT.WantT
-                            .GET)) {
-                tv_title__cardview_cause__PERSON.setText(JM.strById(R.string.payer));
+                    .OQTWantT_Future.equals(
+                            OQT.WantT.GET)) {
+                Log.d(TAG, "GET");
+                tvTitle_PERSON.setText(JM.strById(R.string.payer));
             } else if (((NewOQActivity) getActivity())
                     .OQTWantT_Future.equals(OQT.WantT
                             .PAY)) {
-                tv_title__cardview_cause__PERSON.setText(JM.strById(R.string.getter));
+                Log.d(TAG, "PAY");
+
+                tvTitle_PERSON.setText(JM.strById(R.string.getter));
             }
 
-            lv__cardview_cause__PERSON.setAdapter(new SelectedPeopleListAdapter(getActivity()));
+            lv_PERSON.setAdapter(new SelectedPeopleListAdapter(
+                    arlProfiles,
+                    getActivity()));
+
+            bt__lo_lefttext_rightoneaction__PERSON.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((NewOQActivity)getActivity()).arlOppoProfile = new ArrayList<Profile>();
+                    uiDataCardViewPeopleList(((NewOQActivity)getActivity()).arlOppoProfile);
+                    uiDataCardViewExist(
+                            ((NewOQActivity)getActivity()).arlOppoProfile,
+                            ((NewOQActivity)getActivity()).ammountAsStandard,
+                            ((NewOQActivity)getActivity()).OQSumT
+                    );
+                    ListViewUtil.getListViewSize(lv_PERSON);
+
+                }
+            });
 
         }
     }
 
 
+    void initViewPagerAdapter(String OQTWantT_Future,
+                              ArrayList<Profile> arlOppoProfile) {
+        Log.d(TAG, "initViewPagerAdapter()");
+        if (OQTWantT_Future.equals(OQT.WantT.GET)) {
+            if (arlOppoProfile != null) {
+                if (arlOppoProfile.size() == 1) {
+                    viewPager__cardview_titleedittextillust.addOnPageChangeListener(onPCListener_SoIWantToGETFromYou);
+                    viewPager__cardview_titleedittextillust.setAdapter(
+                            new SumTypePagerAdapter_SoIWantToGETFromYou(getFragmentManager()));
+                } else if (arlOppoProfile.size() > 1) {
+                    viewPager__cardview_titleedittextillust.addOnPageChangeListener(onPCListener_SoIWantToGETFromYouGuys);
+                    viewPager__cardview_titleedittextillust.setAdapter(
+                            new SumTypePagerAdapter_SoIWantToGETFromYouGuys(getFragmentManager()));
+                }
+            }
+
+        } else if (OQTWantT_Future.equals(OQT.WantT.PAY)) {
+            viewPager__cardview_titleedittextillust.addOnPageChangeListener(onPCListener_SoIWantToPAY);
+            viewPager__cardview_titleedittextillust.setAdapter(
+                    new SumTypePagerAdapter_SoIWantToPAY(getFragmentManager()));
+        }
+    }
+
+
+    void initViewPagerChangeListenerCandidates() {
+        Log.d(TAG, "initViewPagerChangeListenerCandidates");
+
+        onPCListener_SoIWantToGETFromYou
+                = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        ((NewOQActivity) getActivity()).OQSumT =
+                                com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
+                                        .I_PAID_FOR_YOU_AND_ME;
+                        tvAmmount__cardview_titleedittextillust.setText(JM.strById(R.string.money_sum));
+                        break;
+                    case 1:
+                        ((NewOQActivity) getActivity()).OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
+                                .I_PAID_FOR_YOU;
+                        tvAmmount__cardview_titleedittextillust.setText(JM.strById(R.string.money_individual));
+
+                        break;
+
+                    case 2:
+                        ((NewOQActivity) getActivity()).OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
+                                .ANYWAY;
+                        tvAmmount__cardview_titleedittextillust.setText(JM.strById(R.string.money_individual));
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        };
+
+
+        onPCListener_SoIWantToGETFromYouGuys
+                = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        ((NewOQActivity) getActivity()).OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys
+                                .I_PAID_FOR_ALL_INCLUDING_YOU__INCLUDING_ME;
+                        tvAmmount__cardview_titleedittextillust.setText(JM.strById(R.string.money_sum));
+                        break;
+                    case 1:
+                        ((NewOQActivity) getActivity()).OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys
+                                .I_PAID_FOR_ALL_INCLUDING_YOU__BUT_ME;
+                        tvAmmount__cardview_titleedittextillust.setText(JM.strById(R.string.money_sum));
+                        break;
+
+                    case 2:
+                        ((NewOQActivity) getActivity()).OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys
+                                .N_ANYWAY;
+                        tvAmmount__cardview_titleedittextillust.setText(JM.strById(R.string.money_individual));
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        };
+
+        onPCListener_SoIWantToPAY
+                = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        ((NewOQActivity) getActivity()).OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToPAY
+                                .YOU_PAID_FOR_ME;
+                        tvAmmount__cardview_titleedittextillust.setText(JM.strById(R.string.money_ammount_neatural));
+                        break;
+                    case 1:
+
+                        ((NewOQActivity) getActivity()).OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToPAY
+                                .ANYWAY;
+                        tvAmmount__cardview_titleedittextillust.setText(JM.strById(R.string.money_ammount_neatural));
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        };
+
+    }
+
+    /**
+     * A simple pager frvAdapterAllMyContact that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private class SumTypePagerAdapter_SoIWantToGETFromYou extends FragmentPagerAdapter {
+        public SumTypePagerAdapter_SoIWantToGETFromYou(FragmentManager fm) {
+            super(fm);
+        }
+
+        String TAG = "SumTypePA_IWntGETFrYou";
+
+        @Override
+        public Fragment getItem(int position) {
+            Log.d(TAG, "position : " + String.valueOf(position));
+            switch (position) {
+                case 0:
+                    return SumTypePageFrag.newInstance(
+                            com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou.I_PAID_FOR_YOU);
+                case 1:
+                    return SumTypePageFrag.newInstance(
+                            com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
+                            .I_PAID_FOR_YOU_AND_ME);
+                case 2:
+                    return SumTypePageFrag.newInstance(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou.ANYWAY);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+    }
+
+
+    private class SumTypePagerAdapter_SoIWantToGETFromYouGuys extends FragmentPagerAdapter {
+        public SumTypePagerAdapter_SoIWantToGETFromYouGuys(FragmentManager fm) {
+            super(fm);
+        }
+
+        String TAG = "SumTypePA_IWntGETFrYouG";
+
+        @Override
+        public Fragment getItem(int position) {
+            Log.d(TAG, "position : " + String.valueOf(position));
+            switch (position) {
+                case 0:
+                    return SumTypePageFrag.newInstance(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys.I_PAID_FOR_ALL_INCLUDING_YOU__BUT_ME);
+                case 1:
+                    return SumTypePageFrag.newInstance(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys
+                            .I_PAID_FOR_ALL_INCLUDING_YOU__BUT_ME);
+                case 2:
+                    return SumTypePageFrag.newInstance(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys.N_ANYWAY);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+    }
+
+
+    private class SumTypePagerAdapter_SoIWantToPAY extends FragmentPagerAdapter {
+        public SumTypePagerAdapter_SoIWantToPAY(FragmentManager fm) {
+            super(fm);
+        }
+
+        String TAG = "SumTypePA_IWntPayYou";
+
+        @Override
+        public Fragment getItem(int position) {
+            Log.d(TAG, "position : " + String.valueOf(position));
+            switch (position) {
+                case 0:
+                    return SumTypePageFrag.newInstance(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToPAY.YOU_PAID_FOR_ME);
+                case 1:
+                    return SumTypePageFrag.newInstance(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToPAY.ANYWAY);
+
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+    }
+
+
+
     void uiDataCardViewSumType(
+            String OQTWantT_Future,
             ArrayList<Profile> arlOppoProfile,
             long ammountAsStandard,
             String OQSumT
     ) {
-        if (ammountAsStandard == 0 || OQSumT == null) {
+        //set default OQSumT
+        if (OQSumT == null) {
+            if (((NewOQActivity) getActivity()).OQTWantT_Future.equals(OQT.WantT.GET)) {
 
-            roEmpty__cardview_cause__SUMTYPE.setVisibility(View.VISIBLE);
-            tvEmpty__cardview_cause__SUMTYPE.setText(JM.strById(R.string.tab_to_add_sumtype));
-            View.OnClickListener onClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((NewOQActivity) getActivity()).startActivityForResultSumTypeActivity();
+                if (arlOppoProfile.size() == 1) {
+                    OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou.I_PAID_FOR_YOU_AND_ME;
+                } else if (arlOppoProfile.size() > 1) {
+                    OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys.I_PAID_FOR_ALL_INCLUDING_YOU__INCLUDING_ME;
                 }
-            };
-            roEmpty__cardview_cause__SUMTYPE.setOnClickListener(onClickListener);
-            roEmpty__cardview_cause__SUMTYPE.setOnClickListener(onClickListener);
 
-        } else {
-
+            } else if (((NewOQActivity) getActivity()).OQTWantT_Future.equals(OQT.WantT.PAY)) {
+                OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToPAY.YOU_PAID_FOR_ME;
+            }
         }
+
+
     }
 
 
@@ -404,38 +635,57 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
     ) {
 
 
-
-
     }
 
 
     void uiDataCardViewExist(
             ArrayList<Profile> arlProfile,
             long ammountAsStandard,
-            String OQSumT
+            @NonNull  String OQSumT
     ) {
+        Log.d(TAG, "uiDataCardViewExist()");
+        if (arlProfile == null ||
+                arlProfile.size() == 0) {
+            Log.d(TAG, "uiDataCardViewExist() - arlProfile == null ||" +
+                    "arlProfile.size() == 0");
+            JM.V(cvPERSON);
+            JM.G(cvSUMTYPE);
+            JM.G(cvBREAKDOWN);
+            JM.G(tv_done);
 
-        if (((NewOQActivity) getActivity()).arlOppoProfile == null ||
-                ((NewOQActivity) getActivity())
-                .arlOppoProfile.size() == 0) {
-
-            JM.V(cardview_cause_people__frag_newoq_0);
-            JM.G(cardview_cause_sumtype__frag_newoq_0);
-            JM.G(cardview_cause_breakdown__frag_newoq_0);
-            JM.G(tv_done__frag_newoq_0);
-
+        } else if (ammountAsStandard == 0 || OQSumT == null) {
+            Log.d(TAG, "uiDataCardViewExist() - ammountAsStandard == 0 || OQSumT == null");
+            JM.V(cvPERSON);
+            JM.V(cvSUMTYPE);
+            JM.G(cvBREAKDOWN);
+            JM.G(tv_done);
 
         } else {
-
-            JM.V(cardview_cause_people__frag_newoq_0);
-            JM.V(cardview_cause_sumtype__frag_newoq_0);
-            JM.V(cardview_cause_breakdown__frag_newoq_0);
-            JM.V(tv_done__frag_newoq_0);
+            Log.d(TAG, "uiDataCardViewExist() - else");
+            JM.V(cvPERSON);
+            JM.V(cvSUMTYPE);
+            JM.V(cvBREAKDOWN);
+            JM.G(tv_done);
         }
 
 
-
     }
+
+
+    void uiTvDoneExist(
+            ArrayList<OqItem> oqItems
+    ){
+        if (oqItems!=null&&oqItems.size()>0){
+            JM.V(tv_done);
+            tv_done.setText(J.st(oqItems.size())+"건의 요청");
+        } else {
+            JM.G(tv_done);
+
+        }
+    }
+
+
+
 
     class SelectedPeopleListAdapter extends BaseAdapter {
 
@@ -443,8 +693,11 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
         Context mContext;
         ArrayList<Profile> mArrayListProfile = new ArrayList<>();
 
-        public SelectedPeopleListAdapter(Context context) {
+        public SelectedPeopleListAdapter(
+                ArrayList<Profile> mArrayListProfile,
+                Context context) {
             super();
+            this.mArrayListProfile = mArrayListProfile;
             this.mContext = context;
             mInflater = LayoutInflater.from(this.mContext);
         }
@@ -457,6 +710,8 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
 
         @Override
         public Profile getItem(int position) {
+
+
             return mArrayListProfile.get(position);
         }
 
@@ -478,7 +733,8 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
 
                 // get all views you need to handle from the cell and save them in the view holder
 
-                holder.ro_person_photo_48dip__lo_avatartitlesubtitle_delete = (RelativeLayout) convertView.findViewById(R.id
+                holder.ro_person_photo_48dip__lo_avatartitlesubtitle_delete =
+                        (RelativeLayout) convertView.findViewById(R.id
                         .ro_person_photo_48dip__lo_avatartitlesubtitle_delete);
                 holder.ro_person_photo_iv = (ImageView)
                         holder.ro_person_photo_48dip__lo_avatartitlesubtitle_delete
@@ -486,8 +742,14 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
                                         .ro_person_photo_iv);
                 holder.tvTitle__lo_avatartitlesubtitle_delete = (TextView) convertView.findViewById(R.id.tvTitle__lo_avatartitlesubtitle_delete);
                 holder.tvSubTitle__lo_avatartitlesubtitle_delete = (TextView) convertView.findViewById(R.id.tvSubTitle__lo_avatartitlesubtitle_delete);
-                holder.ibDelete = (ImageButton) convertView.findViewById(R.id.ibDelete);
-
+                holder.ibDelete = (ImageView) convertView.findViewById(R.id.ivDelete);
+                holder.ibDelete.setImageDrawable(
+                        JM.tintedDrawable(
+                                R.drawable.ic_delete_white_24dp,
+                                R.color.material_grey800,
+                                mContext
+                        )
+                );
                 // save the view holder on the cell view to get it back latter
                 convertView.setTag(holder);
             } else {
@@ -500,14 +762,16 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
             if (profile != null) {
                 //set the item name on the TextView
                 //Glide
-                holder.tvTitle__lo_avatartitlesubtitle_delete.setText(profile.getEmail());
-                holder.tvSubTitle__lo_avatartitlesubtitle_delete.setText(profile.getFull_name());
+                holder.tvTitle__lo_avatartitlesubtitle_delete.setText(profile.getFull_name());
+                holder.tvSubTitle__lo_avatartitlesubtitle_delete.setText(profile.getEmail());
             }
 
             holder.ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mArrayListProfile.remove(position);
+                    Profile profile1 = getItem(position);
+                    mArrayListProfile.remove(profile1);
+                    ((NewOQActivity)mContext).arlOppoProfile.remove(profile1);
                     notifyDataSetChanged();
                 }
             });
@@ -531,7 +795,7 @@ public class NewOQFrag0 extends Fragment implements View.OnClickListener {
             ImageView ro_person_photo_iv;
             TextView tvTitle__lo_avatartitlesubtitle_delete,
                     tvSubTitle__lo_avatartitlesubtitle_delete;
-            ImageButton ibDelete;
+            ImageView ibDelete;
         }
 
 

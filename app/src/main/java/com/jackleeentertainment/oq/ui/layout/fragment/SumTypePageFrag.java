@@ -1,44 +1,16 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.CardView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.generalutil.LBR;
-import com.jackleeentertainment.oq.object.Group;
-import com.jackleeentertainment.oq.object.Profile;
-import com.jackleeentertainment.oq.object.types.OQSumT;
-
-import java.util.ArrayList;
 
 /**
  * Created by Jacklee on 2016. 10. 27..
@@ -97,19 +69,27 @@ public class SumTypePageFrag extends Fragment {
 
 
     void initUiData() {
-
+        Log.d(TAG, "initUiData() OQSumT : "+ OQSumT);
         if (OQSumT == null) {
             return;
         }
 
+        String myName = "";
+        String hisName = "";
+        int moneyStandard = 0;
+        int moneyTarget = 0;
+
         if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
                 .I_PAID_FOR_YOU)) {
+            String str = String.format("%s님이 %s님을 위하여 %d원을 지출하였습니다.\n그러므로 %s님은 %s님으로부터 %s원을 받고자 합니다." +
+                    "", myName, hisName, moneyStandard, myName, hisName, moneyTarget);
+            tv1.setText(str);
 
         } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
                 .I_PAID_FOR_YOU_AND_ME)) {
 
         } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
-                .N_ANYWAY)) {
+                .ANYWAY)) {
 
         } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT
                 .SoIWantToGETFromYouGuys.I_PAID_FOR_ALL_INCLUDING_YOU__BUT_ME)) {
@@ -121,10 +101,10 @@ public class SumTypePageFrag extends Fragment {
                 .SoIWantToGETFromYouGuys.N_ANYWAY)) {
 
         } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT
-                .SoIWantToPAY.YOU_PAID_FOR_ME)){
+                .SoIWantToPAY.YOU_PAID_FOR_ME)) {
 
         } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT
-                .SoIWantToPAY.ANYWAY)){
+                .SoIWantToPAY.ANYWAY)) {
 
         }
     }

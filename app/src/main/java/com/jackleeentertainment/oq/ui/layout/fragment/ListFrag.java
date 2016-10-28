@@ -11,10 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.generalutil.JM;
 
 /**
  * Created by Jacklee on 2016. 9. 14..
@@ -28,7 +32,7 @@ public class ListFrag extends Fragment {
     FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     SearchView searchView;
      RelativeLayout ro_tv_done;
-    RelativeLayout roProgress, roEmpty;
+    RelativeLayout roProgress, ro_empty_list;
 
 
     public ListFrag() {
@@ -55,6 +59,10 @@ public class ListFrag extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    LinearLayout  loEmpty;
+    ImageView ivEmpty;
+    TextView tvEmptyTitle, tvEmptyDetail, tvEmptyLearnMore;
+
     public void initUI(){
         searchView = (SearchView)view.findViewById(R.id.searchView);
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
@@ -62,8 +70,12 @@ public class ListFrag extends Fragment {
         recyclerView.setHasFixedSize(true);
          ro_tv_done.setVisibility(View.GONE);
         roProgress = (RelativeLayout) view.findViewById(R.id.vProgress);
-        roEmpty = (RelativeLayout) view.findViewById(R.id.vEmpty);
-
+        ro_empty_list = (RelativeLayout) view.findViewById(R.id.ro_empty_list);
+        loEmpty = (LinearLayout) ro_empty_list.findViewById(R.id.loEmpty);
+        ivEmpty = (ImageView) ro_empty_list.findViewById(R.id.ivEmpty);
+        tvEmptyTitle = (TextView) ro_empty_list.findViewById(R.id.tvEmptyTitle);
+        tvEmptyDetail= (TextView) ro_empty_list.findViewById(R.id.tvEmptyDetail);
+        tvEmptyLearnMore= (TextView) ro_empty_list.findViewById(R.id.tvEmptyLearnMore);
 
 
     }

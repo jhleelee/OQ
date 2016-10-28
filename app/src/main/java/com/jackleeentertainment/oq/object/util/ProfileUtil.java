@@ -44,6 +44,8 @@ public class ProfileUtil {
 
 
     public static ArrayList<Profile> getArlProfileFromJson(String json) {
+
+        Log.d(TAG, "getArlProfileFromJson(String json) : "+ json);
         ArrayList<Profile> arlReturn = new ArrayList();
         if (json != null) {
             arlReturn = new Gson().fromJson(json, new TypeToken<ArrayList<Profile>>(){}

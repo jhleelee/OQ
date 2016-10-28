@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
+import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.Ram;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.generalutil.JM;
@@ -55,6 +56,10 @@ public class MainFrag1_Feeds extends ListFrag {
             }
         });
         searchView.setVisibility(View.GONE);
+
+        tvEmptyTitle.setText(JM.strById(R.string.begin_feed));
+        tvEmptyDetail.setText(JM.strById(R.string.begin_feed_long));
+        tvEmptyLearnMore.setText(JM.strById(R.string.learn_more));
 
     }
 
@@ -154,17 +159,17 @@ public class MainFrag1_Feeds extends ListFrag {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (!dataSnapshot.exists()){
                             JM.G(roProgress);
-                            JM.V(roEmpty);
+                            JM.V(ro_empty_list);
                         } else {
                             JM.G(roProgress);
-                            JM.G(roEmpty);
+                            JM.G(ro_empty_list);
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         JM.G(roProgress);
-                        JM.V(roEmpty);
+                        JM.V(ro_empty_list);
                     }
                 });
 

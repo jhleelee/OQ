@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -53,7 +55,7 @@ public class RecentAndContactProfileFrag extends Fragment {
     FirebaseRecyclerAdapter<Profile, AvatarNameEmailChkViewHolder> frvAdapterMyRecent,
             frvAdapterAllMyContact;
 
-    RelativeLayout vProgress, vEmpty;
+    RelativeLayout vProgress, ro_empty_list;
 
 
     @NonNull
@@ -71,14 +73,26 @@ public class RecentAndContactProfileFrag extends Fragment {
         return view;
     }
 
+
+    LinearLayout loEmpty;
+    ImageView ivEmpty;
+    TextView tvEmptyTitle, tvEmptyDetail, tvEmptyLearnMore;
+
     void initUI() {
         rvAllMyContacts = (RecyclerView) view.findViewById(R.id.rvAllMyContacts);
         rvRecent = (RecyclerView) view.findViewById(R.id.rvRecent);
         tvAllMyContacts = (TextView) view.findViewById(R.id.tvAllMyContacts);
         tvRecent = (TextView) view.findViewById(R.id.tvRecent);
         vProgress = (RelativeLayout) view.findViewById(R.id.vProgress);
-        vEmpty = (RelativeLayout) view.findViewById(R.id.vEmpty);
-
+        ro_empty_list = (RelativeLayout) view.findViewById(R.id.ro_empty_list);
+        loEmpty = (LinearLayout) ro_empty_list.findViewById(R.id.loEmpty);
+        ivEmpty = (ImageView) ro_empty_list.findViewById(R.id.ivEmpty);
+        tvEmptyTitle = (TextView) ro_empty_list.findViewById(R.id.tvEmptyTitle);
+        tvEmptyDetail= (TextView) ro_empty_list.findViewById(R.id.tvEmptyDetail);
+        tvEmptyLearnMore= (TextView) ro_empty_list.findViewById(R.id.tvEmptyLearnMore);
+        tvEmptyTitle.setText(JM.strById(R.string.begin_sync_contact));
+        tvEmptyDetail.setText(JM.strById(R.string.begin_sync_contact_long));
+        tvEmptyLearnMore.setText(JM.strById(R.string.learn_more));
     }
 
 

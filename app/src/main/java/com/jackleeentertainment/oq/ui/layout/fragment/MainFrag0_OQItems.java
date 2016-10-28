@@ -68,6 +68,12 @@ public class MainFrag0_OQItems extends ListFrag {
     @Override
     public void initUI() {
         super.initUI();
+
+
+        tvEmptyTitle.setText(JM.strById(R.string.begin_transaction));
+        tvEmptyDetail.setText(JM.strById(R.string.begin_transaction_long));
+        tvEmptyLearnMore.setText(JM.strById(R.string.learn_more));
+
     }
 
     @DebugLog
@@ -118,17 +124,17 @@ public class MainFrag0_OQItems extends ListFrag {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (!dataSnapshot.exists()){
                             JM.G(roProgress);
-                            JM.V(roEmpty);
+                            JM.V(ro_empty_list);
                         } else {
                             JM.G(roProgress);
-                            JM.G(roEmpty);
+                            JM.G(ro_empty_list);
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         JM.G(roProgress);
-                        JM.V(roEmpty);
+                        JM.V(ro_empty_list);
                     }
                 });
 

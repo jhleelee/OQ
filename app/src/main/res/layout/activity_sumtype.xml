@@ -48,6 +48,7 @@
 
     <LinearLayout
         android:background="@color/colorPrimary"
+        android:orientation="horizontal"
         android:layout_marginLeft="16dip"
         android:layout_marginRight="16dip"
         android:layout_marginBottom="16dip"
@@ -70,7 +71,7 @@
             android:layout_weight="1"
             android:layout_width="0dip"
             android:layout_marginBottom="16dip"
-            android:layout_height="56dip"/>
+            style="@style/EditText.Ammount.Main"/>
 
 
     </LinearLayout>
@@ -96,6 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/changeperiod"
+        android:textColor="@color/colorPrimary"
         style="@style/Base.Widget.AppCompat.Button.Colored"
         />
 

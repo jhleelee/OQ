@@ -33,29 +33,29 @@ public class OqItemUtil {
         return oqItem;
     }
 
-
-    public static OqItem setMyUidToOneSide(OqItem oqItem, Activity activity){
-        if (oqItem.getOqgnltype()!=null&&
-                oqItem.getOqwnttype()!=null){
-
-            if (oqItem.getOqwnttype().equals(OQT.WantT.GET)){
-                oqItem.setUidgettor(
-                        App.getUid(activity)
-                );
-            } else
-
-            if (oqItem.getOqwnttype().equals(OQT.WantT.PAY))
-
-            {
-                oqItem.setUidpayer(
-                        App.getUid(activity)
-                );
-            }
-
-        }
-
-        return oqItem;
-    }
+//
+//    public static OqItem setMyUidToOneSide(OqItem oqItem, Activity activity){
+//        if (oqItem.getOqgnltype()!=null&&
+//                oqItem.getOqwnttype()!=null){
+//
+//            if (oqItem.getOqwnttype().equals(OQT.WantT.GET)){
+//                oqItem.setUidgettor(
+//                        App.getUid(activity)
+//                );
+//            } else
+//
+//            if (oqItem.getOqwnttype().equals(OQT.WantT.PAY))
+//
+//            {
+//                oqItem.setUidpayer(
+//                        App.getUid(activity)
+//                );
+//            }
+//
+//        }
+//
+//        return oqItem;
+//    }
 
 
 

@@ -87,6 +87,7 @@
                     >
 
                     <RelativeLayout
+                        android:visibility="gone"
                         android:id="@+id/roFootTab0"
                         android:layout_width="0dip"
                         android:layout_height="match_parent"

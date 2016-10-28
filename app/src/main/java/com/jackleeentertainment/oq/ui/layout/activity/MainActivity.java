@@ -769,14 +769,14 @@ public class MainActivity extends BaseActivity
 
             // I Get
 
-            case R.id.nav_take_receipt:
-                startActivityForResultToTakeReceipt();
-
-                break;
-
-            case R.id.nav_load_receipt:
-                startActivityForResultToLoadReceiptGallery();
-                break;
+//            case R.id.nav_take_receipt:
+//                startActivityForResultToTakeReceipt();
+//
+//                break;
+//
+//            case R.id.nav_load_receipt:
+//                startActivityForResultToLoadReceiptGallery();
+//                break;
 
             case R.id.nav_load_sms:
                 startActivityForResultToLoadSMS();

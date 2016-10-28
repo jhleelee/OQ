@@ -228,13 +228,17 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
         ro_tv_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d(TAG, "ro_tv_done");
                 if (arlSelectedProfile!=null&& arlSelectedProfile.size()>0){
+                    Log.d(TAG, "arlSelectedProfile.size() : "+ J.st(arlSelectedProfile.size()));
 
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("result", new Gson().toJson(arlSelectedProfile));
                     setResult(Activity.RESULT_OK,returnIntent);
                     finish();
+
+                } else {
+                    Log.d(TAG, "arlSelectedProfile==null...");
 
                 }
 

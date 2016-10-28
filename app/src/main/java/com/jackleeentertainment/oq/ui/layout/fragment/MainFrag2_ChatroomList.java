@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -204,11 +205,22 @@ public class MainFrag2_ChatroomList extends Fragment implements
         LocalBroadcastManager.getInstance(mainActivity).unregisterReceiver(mFragmentChangedReceiver);
     }
 
+    LinearLayout  loEmpty;
+    ImageView ivEmpty;
+    TextView tvEmptyTitle, tvEmptyDetail, tvEmptyLearnMore;
 
     private void initUI() {
-
         lvChatroomList = (ListView) view.findViewById(R.id.lvChatroomList);
         ro_empty_list__frag_main_2_chat = (RelativeLayout) view.findViewById(R.id.ro_empty_list__frag_main_2_chat);
+        loEmpty = (LinearLayout) ro_empty_list__frag_main_2_chat.findViewById(R.id.loEmpty);
+        ivEmpty = (ImageView) ro_empty_list__frag_main_2_chat.findViewById(R.id.ivEmpty);
+        tvEmptyTitle = (TextView) ro_empty_list__frag_main_2_chat.findViewById(R.id.tvEmptyTitle);
+        tvEmptyDetail= (TextView) ro_empty_list__frag_main_2_chat.findViewById(R.id.tvEmptyDetail);
+        tvEmptyLearnMore= (TextView) ro_empty_list__frag_main_2_chat.findViewById(R.id.tvEmptyLearnMore);
+
+        tvEmptyTitle.setText(JM.strById(R.string.begin_chat));
+        tvEmptyDetail.setText(JM.strById(R.string.begin_chat_long));
+        tvEmptyLearnMore.setText(JM.strById(R.string.learn_more));
     }
 
 

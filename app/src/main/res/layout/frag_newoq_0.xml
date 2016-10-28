@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.jackleeentertainment.oq.ui.widget.VerticalScrollview
+    xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -10,24 +11,24 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/cardview_cause_people__frag_newoq_0"
+            android:id="@+id/cv_people__frag_newoq_0"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            layout="@layout/cardview_cause"/>
+            layout="@layout/cardview_titlelistaction"/>
 
 
         <include
-            android:id="@+id/cardview_cause_sumtype__frag_newoq_0"
+            android:id="@+id/cv_sumtype__frag_newoq_0"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            layout="@layout/cardview_cause"/>
+            layout="@layout/cardview_titleedittextillust"/>
 
 
         <include
-            android:id="@+id/cardview_cause_breakdown__frag_newoq_0"
+            android:id="@+id/cv_breakdown__frag_newoq_0"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            layout="@layout/cardview_cause"/>
+            layout="@layout/cardview_titlelistaction"/>
 
         <include
             android:id="@+id/tv_done__frag_newoq_0"
@@ -39,4 +40,4 @@
     </LinearLayout>
 
 
-</ScrollView>
+</com.jackleeentertainment.oq.ui.widget.VerticalScrollview>

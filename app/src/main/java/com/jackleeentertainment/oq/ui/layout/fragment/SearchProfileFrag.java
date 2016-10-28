@@ -60,7 +60,7 @@ public class SearchProfileFrag extends ListFrag {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        roEmpty.setVisibility(View.VISIBLE);
+        ro_empty_list.setVisibility(View.VISIBLE);
 
         tempGetPubProfiles();
 
@@ -200,7 +200,7 @@ public class SearchProfileFrag extends ListFrag {
 
     void tempGetPubProfiles(){
 
-        roEmpty.setVisibility(View.GONE);
+        ro_empty_list.setVisibility(View.GONE);
         roProgress.setVisibility(View.GONE);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

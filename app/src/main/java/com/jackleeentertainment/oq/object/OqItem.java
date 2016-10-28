@@ -8,21 +8,26 @@ import java.io.Serializable;
 
 public class OqItem implements Serializable{
 
+    //id
     String oid; //this object's id
     String gid; //human group's id
     String qid; //oqitem group's id (in the case of case oqitem)
+
+    //people
     String uidpayer;
     String uidgettor;
-    String oqgnltype;
 
-
-
-    String oqwnttype;
-    long ts;
+    //ammount
     long ammount;
+
+    //point - future=obligation, now=paying, past=paid
+    String oqtype;
+
+    //ts
+    long ts;
+
     String currency;
     String duedate;
-
 
 
 
@@ -38,6 +43,22 @@ public class OqItem implements Serializable{
         this.oid = oid;
     }
 
+    public String getGid() {
+        return gid;
+    }
+
+    public void setGid(String gid) {
+        this.gid = gid;
+    }
+
+    public String getQid() {
+        return qid;
+    }
+
+    public void setQid(String qid) {
+        this.qid = qid;
+    }
+
     public String getUidpayer() {
         return uidpayer;
     }
@@ -45,7 +66,6 @@ public class OqItem implements Serializable{
     public void setUidpayer(String uidpayer) {
         this.uidpayer = uidpayer;
     }
-
 
     public String getUidgettor() {
         return uidgettor;
@@ -55,20 +75,28 @@ public class OqItem implements Serializable{
         this.uidgettor = uidgettor;
     }
 
-    public long getTs() {
-        return ts;
-    }
-
-    public void setTs(long ts) {
-        this.ts = ts;
-    }
-
     public long getAmmount() {
         return ammount;
     }
 
     public void setAmmount(long ammount) {
         this.ammount = ammount;
+    }
+
+    public String getOqtype() {
+        return oqtype;
+    }
+
+    public void setOqtype(String oqtype) {
+        this.oqtype = oqtype;
+    }
+
+    public long getTs() {
+        return ts;
+    }
+
+    public void setTs(long ts) {
+        this.ts = ts;
     }
 
     public String getCurrency() {
@@ -87,37 +115,4 @@ public class OqItem implements Serializable{
         this.duedate = duedate;
     }
 
-
-
-    public String getGid() {
-        return gid;
-    }
-
-    public void setGid(String gid) {
-        this.gid = gid;
-    }
-
-    public String getOqwnttype() {
-        return oqwnttype;
-    }
-
-    public void setOqwnttype(String oqwnttype) {
-        this.oqwnttype = oqwnttype;
-    }
-
-    public String getOqgnltype() {
-        return oqgnltype;
-    }
-
-    public void setOqgnltype(String oqgnltype) {
-        this.oqgnltype = oqgnltype;
-    }
-
-    public String getQid() {
-        return qid;
-    }
-
-    public void setQid(String qid) {
-        this.qid = qid;
-    }
 }
