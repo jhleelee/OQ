@@ -11,11 +11,13 @@ import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
+import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0;
+import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     public ArrayList<Profile> arlOppoProfile = new ArrayList<>();
 
     //temp data (2)
+    public long sumAmmountMySpent = 0;
     public long ammountAsStandard = 0;
     public String OQSumT = null;
 
@@ -45,7 +48,12 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         OQTWantT_Future = (getIntent().getStringExtra("OQTWantT_Future"));
-        showFrag(new NewOQFrag0(), R.id.fr_content);
+        Bundle bundle = new Bundle();
+        bundle.putString("OQTWantT_Future", OQTWantT_Future);
+        showFrag( NewOQFrag0Neo.newInstance(bundle), R.id.fr_content);
+
+
+
     }
 
 
@@ -78,27 +86,27 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     }
 
 
-    public void startActivityForResultSumTypeActivity() {
-
-        Intent i = new Intent(this, SumTypeActivity.class);
-        if (arlOppoProfile != null && arlOppoProfile.size() > 0) {
-            i.putExtra("alreadySelected", new Gson().toJson(arlOppoProfile));
-        }
-
-        if (ammountAsStandard != 0) {
-            i.putExtra("ammountAsStandard", ammountAsStandard);
-        }
-
-        if (OQSumT != null) {
-            i.putExtra("OQSumT", OQSumT);
-        }
-
-        if (OQTWantT_Future != null) {
-            i.putExtra("OQTWantT_Future", OQTWantT_Future);
-        }
-
-        startActivityForResult(i, REQ_SUMTYPE);
-    }
+//    public void startActivityForResultSumTypeActivity() {
+//
+//        Intent i = new Intent(this, SumTypeActivity.class);
+//        if (arlOppoProfile != null && arlOppoProfile.size() > 0) {
+//            i.putExtra("alreadySelected", new Gson().toJson(arlOppoProfile));
+//        }
+//
+//        if (ammountAsStandard != 0) {
+//            i.putExtra("ammountAsStandard", ammountAsStandard);
+//        }
+//
+//        if (OQSumT != null) {
+//            i.putExtra("OQSumT", OQSumT);
+//        }
+//
+//        if (OQTWantT_Future != null) {
+//            i.putExtra("OQTWantT_Future", OQTWantT_Future);
+//        }
+//
+//        startActivityForResult(i, REQ_SUMTYPE);
+//    }
 
 
     @Override
