@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/lo"
+              style="@style/loDiaFragWrap"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:checkedButton="@+id/n"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <RadioButton
+            android:id="@+id/r0"
+            style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <RadioButton
+            android:id="@+id/r1"
+            android:text="@string/dummyperiod"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <RadioButton
+            android:id="@+id/r2"
+            style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RadioGroup>
+
+
+    <EditText
+        android:id="@+id/etAmmount"
+        style="@style/EditText.Ammount.Main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <!--https://material.google.com/components/dialogs.html#dialogs-specs-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/md_24dip"/>
+
+    <include
+        android:id="@+id/ro_diafrag_okcancel__lo_diafrag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/ro_diafrag_okcancel" />
+
+</LinearLayout>
+
+

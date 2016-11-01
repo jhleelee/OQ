@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/md_72dip"
+                  android:gravity="center_vertical">
+
+        <include
+            android:id="@+id/ro_person_photo_48dip__lo_avatar_smallnamelargeamount_btns"
+            layout="@layout/ro_person_photo_48dip"
+            android:layout_width="@dimen/md_40dip"
+            android:layout_height="@dimen/md_40dip"
+            android:layout_marginLeft="@dimen/md_12dip"/>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="72dip"
+            android:layout_margin="@dimen/md_16dip"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle__lo_avatar_smallnamelargeamount_btns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|left"
+                android:lines="1"
+                android:text="Jack"
+                android:textColor="@color/text_black_54"
+                android:textSize="12dip"/>
+
+            <EditText
+                android:id="@+id/etAmount__lo_avatar_smallnamelargeamount_btns"
+                style="@style/EditText.Ammount.Sub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|left"
+                android:lines="1"
+                android:text="0"
+                android:textColor="@color/text_black_87"
+                android:textSize="16dip"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/ivToc"
+                style="@style/ImageView.WhiteImageSrcTransparentBg.24"
+                android:layout_marginLeft="@dimen/md_16dip"
+                android:src="@drawable/ic_toc_white_24dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/ivDelete"
+                style="@style/ImageView.WhiteImageSrcTransparentBg.24"
+                android:layout_marginLeft="@dimen/md_16dip"
+                android:layout_marginRight="@dimen/md_16dip"
+                android:src="@drawable/ic_delete_white_24dp"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvSms"
+        android:layout_width="match_parent"
+        android:layout_height="72dip"/>
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/ivReceipt"
+        android:layout_width="match_parent"
+        android:layout_height="144dip"/>
+</LinearLayout>

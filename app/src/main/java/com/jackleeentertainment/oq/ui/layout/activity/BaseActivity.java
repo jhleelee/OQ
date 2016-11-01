@@ -28,8 +28,10 @@ import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Receipt;
 import com.jackleeentertainment.oq.ui.layout.diafrag.ChatroomAttrDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
+import com.jackleeentertainment.oq.ui.layout.diafrag.EasyInputDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.GalleryOrCameraDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.MyProfileBackgroundPhotoDiaFrag;
+import com.jackleeentertainment.oq.ui.layout.diafrag.MySpentItemDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.OneLineInputDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.ReceiptBreakdownDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.SelectedFriendsAndMoreDiaFrag;
@@ -63,26 +65,24 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-
-    void initUILayoutOnCreate(){
-
-    }
-
-
-    void initUIDataOnResume(){
+    void initUILayoutOnCreate() {
 
     }
 
-    void initOnClickListenerOnResume(){
+
+    void initUIDataOnResume() {
 
     }
 
+    void initOnClickListenerOnResume() {
+
+    }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==RESULT_OK) {
+        if (requestCode == RESULT_OK) {
 
             switch (requestCode) {
                 case RESULT_ACTION_PICK:
@@ -119,7 +119,6 @@ public class BaseActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
 
 
-
         if (diaFragT.equals(DiaFragT.ChatroomAttr_atChatRoomList)) {
             ChatroomAttrDiaFrag chatroomAttrDiaFrag = ChatroomAttrDiaFrag.newInstance(
                     bundle, this);
@@ -139,28 +138,45 @@ public class BaseActivity extends AppCompatActivity {
                     .newInstance(
                             bundle, this);
             galleryOrCameraDiaFrag.show(fm, "ReceiptBreakdown");
-        } else if (diaFragT.equals(DiaFragT.ReceiptBreakdown)){
-           Receipt receipt = (Receipt) bundle.getSerializable("Receipt");
+        } else if (diaFragT.equals(DiaFragT.ReceiptBreakdown)) {
+            Receipt receipt = (Receipt) bundle.getSerializable("Receipt");
             ReceiptBreakdownDiaFrag receiptBreakdownDiaFrag = ReceiptBreakdownDiaFrag
                     .newInstance(
                             bundle, this);
             receiptBreakdownDiaFrag.show(fm, "ReceiptBreakdownDiaFrag");
 
-        }else if (diaFragT.equals(DiaFragT.TransactChatOrShowProfile)){
+        } else if (diaFragT.equals(DiaFragT.TransactChatOrShowProfile)) {
             TransactChatOrShowProfileDiaFrag frag =
                     TransactChatOrShowProfileDiaFrag
-                    .newInstance(
-                            bundle, this);
+                            .newInstance(
+                                    bundle, this);
             frag.show(fm, "TransactChatOrShowProfileDiaFrag");
 
-        }else if (diaFragT.equals(DiaFragT.MyProfileBackgroundPhoto)){
+        } else if (diaFragT.equals(DiaFragT.MyProfileBackgroundPhoto)) {
             MyProfileBackgroundPhotoDiaFrag frag =
                     MyProfileBackgroundPhotoDiaFrag
                             .newInstance(
                                     bundle, this);
             frag.show(fm, "MyProfileBackgroundPhotoDiaFrag");
 
+        } else if (diaFragT.equals(DiaFragT.MySpentItem)) {
+            MySpentItemDiaFrag frag =
+                    MySpentItemDiaFrag
+                            .newInstance(
+                                    bundle, this);
+            frag.show(fm, "MySpentItemDiaFrag");
+
+        } else if (diaFragT.equals(DiaFragT.EasyInput)) {
+
+
+            EasyInputDiaFrag frag =
+                    EasyInputDiaFrag
+                            .newInstance(
+                                    bundle, this);
+            frag.show(fm, "EasyInputDiaFrag");
+
         }
+
 
     }
 
@@ -189,7 +205,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showAlertDialogWithOkCancel(
             int messageStrId,
-          final  AsyncTask asyncTask
+            final AsyncTask asyncTask
 
     ) {
 
@@ -228,13 +244,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-
     public void showAlertDialogWithOkCancel(
             int messageStrId,
             final DialogInterface
                     .OnClickListener dialogOcl
 
-            ) {
+    ) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(JM.strById(messageStrId));
 
@@ -252,13 +267,50 @@ public class BaseActivity extends AppCompatActivity {
                             }
                         });
 
+
         AlertDialog alertDialog = alertDialogBuilder.create();
-        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        nbutton.setTextColor(JM.colorById(R.color.text_black_54));
-        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
+
+        if (alertDialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
+            Button nbutton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            nbutton.setTextColor(JM.colorById(R.color.text_black_54));
+        }
+        if (alertDialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
+            Button pbutton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
+        }
         alertDialog.show();
     }
+
+
+    public void showAlertDialogWithOkCancel(
+            String messageStr,
+            final DialogInterface
+                    .OnClickListener dialogOcl
+
+    ) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(messageStr);
+
+        alertDialogBuilder.setPositiveButton(
+                JM.strById(R.string.ok_korean),
+                dialogOcl)
+                .setNegativeButton(JM.strById(R.string.cancel_korean),
+                        new DialogInterface
+                                .OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                arg0.dismiss();
+                            }
+                        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        if (alertDialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
+            Button pbutton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
+        }
+        alertDialog.show();
+    }
+
 
     /********************************
      * UI - Fragment
@@ -292,10 +344,6 @@ public class BaseActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
-
-
-
 
 
 }

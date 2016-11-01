@@ -3,10 +3,12 @@
 
     <item android:drawable="@drawable/side_nav_bar"/>
 
-    <item android:top="120dp">
+    <item
+          android:gravity="top">
+
         <bitmap
-            android:src="@drawable/oqlogowhite"
-            android:gravity="top|center_horizontal" />
+            android:gravity="center"
+            android:src="@drawable/oqlogowhite"/>
     </item>
 
 </layer-list>

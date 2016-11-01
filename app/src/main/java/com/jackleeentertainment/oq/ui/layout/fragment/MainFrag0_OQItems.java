@@ -73,6 +73,7 @@ public class MainFrag0_OQItems extends ListFrag {
         tvEmptyTitle.setText(JM.strById(R.string.begin_transaction));
         tvEmptyDetail.setText(JM.strById(R.string.begin_transaction_long));
         tvEmptyLearnMore.setText(JM.strById(R.string.learn_more));
+        ivEmpty.setImageDrawable(JM.drawableById(R.drawable.bg_hand0));
 
     }
 
@@ -84,7 +85,7 @@ public class MainFrag0_OQItems extends ListFrag {
         if (App.fbaseDbRef!=null) {
             //nullpointerexception
             Query query = App.fbaseDbRef
-                    .child(FBaseNode0.MyOqItemSums)
+                    .child(FBaseNode0.MyOppoOids)
                     .child(App.getUid(getActivity()))
                     .orderByChild("ts");
             firebaseRecyclerAdapter = new MyOqItemSumPerPersonRVAdapter(
@@ -117,7 +118,7 @@ public class MainFrag0_OQItems extends ListFrag {
         JM.V(roProgress);
 
         App.fbaseDbRef
-                .child(FBaseNode0.MyOqItemSums)
+                .child(FBaseNode0.MyOppoOids)
                 .child(App.getUid(activity))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

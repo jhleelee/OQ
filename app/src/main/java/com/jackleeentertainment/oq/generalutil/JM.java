@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -146,7 +147,7 @@ public class JM {
     }
 
 
-    public static int getHalfProfileSizeOfImgWithDeviceDpi(){
+    public static int getHalfProfileSizeOfImgWithDeviceDpi() {
         switch (getDeviceDpi()) {
             case DisplayMetrics.DENSITY_LOW:
                 return 18;
@@ -180,7 +181,6 @@ public class JM {
     }
 
 
-
     /********************************
      * Getting Resources Id
      ********************************/
@@ -197,7 +197,6 @@ public class JM {
     public static int colorById(int intId) {
         return ContextCompat.getColor(App.getContext(), intId);
     }
-
 
 
     public static Drawable drawableById(int intId) {
@@ -300,16 +299,26 @@ public class JM {
     /********************************
      * Ui
      ********************************/
-    public static void uiTextViewPosiNega(TextView textView, boolean bool){
-        if (bool){
+    public static void uiTextViewPosiNega(TextView textView, boolean bool) {
+        if (bool) {
             BGC(textView, R.color.colorAccent);
-            TC(textView, R.color.white);
+            TC(textView, R.color.colorPrimary);
         } else {
             BGC(textView, R.color.material_grey500);
             TC(textView, R.color.text_black_87);
         }
     }
 
+    public static void btEnable(Button btEnable, boolean bool) {
+        btEnable.setClickable(bool);
+        btEnable.setEnabled(bool);
+        if (!bool) {
+            btEnable.setTextColor(JM.colorById(R.color.text_black_54));
+        } else {
+            btEnable.setTextColor(JM.colorById(R.color.colorPrimary));
+        }
+
+    }
 
 
     /********************************
@@ -366,10 +375,9 @@ public class JM {
                     showMultipleProfilePhotoWithBitmap(arlBitmap, imageView);
                 }
 
-            } catch (Exception e){
+            } catch (Exception e) {
 
             }
-
 
 
         }
@@ -542,11 +550,11 @@ public class JM {
         }
     }
 
-    public static Drawable tintedDrawable(int drawableId, int colorId, Context context){
+    public static Drawable tintedDrawable(int drawableId, int colorId, Context context) {
         Drawable normalDrawable = context.getResources().getDrawable(drawableId);
         Drawable wrapDrawable = DrawableCompat.wrap(normalDrawable);
-        DrawableCompat.setTint(wrapDrawable,context.getResources().getColor(colorId));
-        return  wrapDrawable;
+        DrawableCompat.setTint(wrapDrawable, context.getResources().getColor(colorId));
+        return wrapDrawable;
     }
 
     /********************************

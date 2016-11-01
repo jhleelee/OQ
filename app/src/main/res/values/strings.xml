@@ -7,6 +7,7 @@
     <string name="idp_name_facebook">Facebook</string>
     <string name="sign_in_with_facebook">Facebook으로 로그인</string>
     <string name="sign_in_with_google">Google로 로그인</string>
+    <string name="sign_in_with_email">이메일로 로그인</string>
 
 
     <string name="app_name">OQ</string>
@@ -20,10 +21,12 @@
     <string name="dummyperiod">7월 1일 ~ 30일</string>
 
     <string name="dummydate">12/06/2015</string>
-    <string name="dummytext">Wow, Cool</string>
-    <string name="dummyname">Jack Lee Corporation of Korea</string>
+    <string name="dummytext">좋구나</string>
+    <string name="dummyname">박개똥</string>
 
-
+    <string name="easy_input">간편 입력</string>
+    <string name="add_myspent">나의 지출내역 추가</string>
+    <string name="myspent">나의 지출</string>
 
 
     <!--Google Terminology-->
@@ -52,7 +55,6 @@
     <string name="google_learnmore">Learn more</string>
 
 
-
     Takes the user to the next step of a multi-step process
     <string name="google_next">Next</string>
 
@@ -61,7 +63,8 @@
     <string name="google_nothanks">No thanks</string>
 
 
-    Let’s a user postpone an action or decision. Use only when the call to action in the dialog is essential to the functionality of the product, for legal reasons, or for another urgent reason.
+    Let’s a user postpone an action or decision. Use only when the call to action in the dialog is
+    essential to the functionality of the product, for legal reasons, or for another urgent reason.
     Do not use “Not now” as a mechanism to avoid providing a “No thanks” option.
     <string name="google_notnow">Not now</string>
 
@@ -74,15 +77,13 @@
     <string name="google_skip">Skip</string>
 
 
-
-
-
     <!--Button-->
     <string name="change">변경</string>
     <string name="changeperiod">기간 변경</string>
     <string name="money_sum">총액</string>
     <string name="money_individual">각자</string>
     <string name="money_ammount_neatural">금액</string>
+    <string name="title">제목</string>
 
     <!--Notification-->
     <string name="sent">sent</string>
@@ -93,6 +94,7 @@
     <string name="photo">photo</string>
     <string name="video">video</string>
 
+    <string name="next_korean">다음</string>
 
     <!--FirstVisitActivity-->
 
@@ -101,7 +103,6 @@
     <string name="search_chatroom">Search Chatroom</string>
     <string name="search_friend">Search Friend</string>
     <string name="search_people">회원 검색</string>
-
 
 
     <!--    MainActivity Frag0-->
@@ -135,14 +136,13 @@
     <string name="undo_allcap">UNDO</string>
 
 
-
-
     <!--Profile-->
 
     <string name="change_profile_photo">프로필 사진 변경</string>
     <string name="change_background_photo">배경 사진 변경</string>
 
 
+    <string name="add_opponents">상대방 추가</string>
 
 
     <!--Google -->
@@ -180,8 +180,6 @@
         <item>0</item>
         <item>1</item>
     </string-array>
-
-
 
 
     <!-- Example settings for Data & Sync -->
@@ -240,8 +238,13 @@
     <!--Korean-->
 
 
+    apply_myspent
+    <string name="apply_myspent">요청 내역에 적용</string>
+
     <string name="delete_all">모두 삭제</string>
 
+
+    <string name="input_title_and_ammount">제목 및 금액을 모두 입력하세요.</string>
 
 
     <string name="app_slogan">OK보다 OQ</string>
@@ -271,7 +274,7 @@
     <string name="menu_search">Search</string>
     <string name="menu_add_contact">Add Contact</string>
     <string name="menu_edit_contact">Edit Contact</string>
-     <string name="no_contact_selected">No Contact Selected</string>
+    <string name="no_contact_selected">No Contact Selected</string>
     <string name="search_hint">Find contacts</string>
 
     <!-- Used for the AlphabetIndexer in ContactsListFragment to provide quick navigation by
@@ -340,16 +343,17 @@
     <string name="select_photo">사진 선택</string>
 
 
-
     <string name="contacts_phone">전화번호부</string>
     <string name="contacts_email">이메일</string>
     <string name="contacts_facebook">Facebook</string>
     <string name="contacts_google">Google</string>
 
 
-
     <!--ACCOUNT-->
     <string name="my_account">나의 계정</string>
+    <string name="account_buy">점포 계정 구입</string>
+
+    account_buy
     <string name="account_setting">계정 설정</string>
     <string name="logout">로그아웃</string>
 
@@ -399,17 +403,20 @@
     <string name="requesttoget_sentence">수령할 것인지 묻습니다.</string>
     <string name="tab_to_add_opposite">탭하여 상대방 추가</string>
     <string name="tab_to_add_sumtype">탭하여 금액 및 유형 추가</string>
+    <string name="add_photo">사진 추가</string>
 
     <string name="tab_to_add_photo">탭하여 사진 추가</string>
     <string name="sumandtype">금액 및 유형</string>
+    <string name="request_detail">청구 내역</string>
 
-    tabtoaddfriends
 
-    search
+    <string name="done_korean">완료</string>
+
+
     <string name="you_can_change_money_after_choose">(선택 후 금액 변경 가능)</string>
     <string name="foreach_">각각을 위해 </string>
 
-
+    <string name="symbol_krw">₩</string>
 
 
     <string name="getter">받는 사람</string>
@@ -457,11 +464,24 @@
         <item>user_birthday</item>
     </string-array>
 
-    <string name="begin_chat_long">다른 회원님들과 채팅을 시작할 수 있습니다.\n채팅 내용은 서버에 저장되지 않습니다.</string>
+    <string name="begin_chat_long">다른 회원님들에게 메시지를 보낼 수 있습니다.\n\n전송된 메시지는 서버에 저장되지 않습니다
+        .</string>
     <string name="begin_chat">채팅을 시작하세요</string>
-    <string name="begin_transaction_long">친구들과의 내역을 관리할 수 있습니다.\n회비 또는 계 모임을 관리할 수 있습니다.</string>    <string name="begin_transaction">금액 요청을 보내세요</string>
-    <string name="begin_feed_long">금액 요청 내역을 볼 수 있습니다.\n그룹별 게시물도 볼 수 있습니다.</string>
+    <string name="begin_transaction_long">친구들과의 내역을 관리할 수 있습니다.\n\n회비 또는 계 모임을 관리할 수 있습니다.</string>
+    <string name="begin_transaction">금액 요청을 보내세요</string>
+    <string name="begin_feed_long">금액 요청 내역을 볼 수 있습니다.\n\n그룹별 게시물도 볼 수 있습니다.</string>
     <string name="begin_feed">요청 내역 및 게시물</string>
+
+    <string name="add_photo_comment">사진 및 글 추가</string>
+
+
+    <string name="newoq_nophoto_nowriting">사진 및 글을 함께 보내면 분위기가 한결 부드러워집니다.\n\n사진이나 글 없이
+        요청을 보내시겠습니까?</string>
+    <string name="newoq_nophoto">사진을 함께 보내면 분위기가 한결 부드러워집니다.\n\n사진 없이
+        요청을 보내시겠습니까?</string>
+    <string name="newoq_nowriting">글을 함께 보내면 분위기가 한결 부드러워집니다.\n\n글 없이
+        요청을 보내시겠습니까?</string>
+    <string name="newoq_send">선택된 회원님에게 요청을 보냅니다.</string>
 
 
 </resources>

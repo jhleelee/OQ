@@ -183,9 +183,6 @@ public class App extends Application {
                     Log.d(TAG, "onSuccess() token : "+ getTokenResult.getToken());
 
                    token = getTokenResult.getToken();
-
-
-
                 }
             });
 
@@ -217,7 +214,7 @@ public class App extends Application {
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setIsSmartLockEnabled(false)
-                            .setTheme(R.style.AppTheme)
+                            .setTheme(R.style.FullscreenTheme)
                             .setProviders(App.getSelectedProviders())
                             .build(),
                     App.RC_SIGN_IN);
@@ -250,7 +247,7 @@ public class App extends Application {
                         AuthUI.getInstance()
                                 .createSignInIntentBuilder()
                                 .setIsSmartLockEnabled(false)
-                                .setTheme(R.style.AppTheme)
+                                .setTheme(R.style.FullscreenTheme)
                                 .setProviders(App.getSelectedProviders())
                                 .build(),
                         App.RC_SIGN_IN);
@@ -281,7 +278,7 @@ public class App extends Application {
                         AuthUI.getInstance()
                                 .createSignInIntentBuilder()
                                 .setIsSmartLockEnabled(false)
-                                .setTheme(R.style.AppTheme)
+                                .setTheme(R.style.FullscreenTheme)
                                 .setProviders(App.getSelectedProviders())
                                 .build(),
                         App.RC_SIGN_IN);
@@ -311,7 +308,7 @@ public class App extends Application {
                         AuthUI.getInstance()
                                 .createSignInIntentBuilder()
                                 .setIsSmartLockEnabled(false)
-                                .setTheme(R.style.AppTheme)
+                                .setTheme(R.style.FullscreenTheme)
                                 .setProviders(App.getSelectedProviders())
                                 .build(),
                         App.RC_SIGN_IN);

@@ -18,6 +18,10 @@
             android:padding="24dip">
 
             <ImageView
+                android:paddingTop="24dip"
+                android:paddingBottom="24dip"
+                android:paddingLeft="72dip"
+                android:paddingRight="72dip"
                 android:id="@+id/ivEmpty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

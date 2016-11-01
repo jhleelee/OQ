@@ -24,7 +24,6 @@ import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.OqItemUtil;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.fragment.FirstVisitFrag0_PhotoEmailName;
-import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0;
 
 import java.io.File;
 

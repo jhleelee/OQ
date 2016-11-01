@@ -22,12 +22,18 @@ public class SumTypePageFrag extends Fragment {
     View view;
     String OQSumT = "";
     TextView tv1, tv2;
+    String myName = "";
+    String hisName = "";
+    long moneyStandard = 0;
+    long moneyTarget = 0;
+    /**
+     *
+     * @param bundle - OQSumT, myName, hisName, moneyStandard, moneyTarget
+     * @return
+     */
 
     @NonNull
-    public static SumTypePageFrag newInstance(String OQSumT) {
-        Bundle bundle = new Bundle();
-        Log.d(TAG, "newInstance() OQSumT" + OQSumT);
-        bundle.putString("OQSumT", OQSumT);
+    public static SumTypePageFrag newInstance( Bundle bundle ) {
         SumTypePageFrag sumTypeItemFrag = new SumTypePageFrag();
         sumTypeItemFrag.setArguments(bundle);
         return sumTypeItemFrag;
@@ -45,24 +51,25 @@ public class SumTypePageFrag extends Fragment {
         Log.d(TAG, "onCreateView ...");
         view = inflater.inflate(R.layout.frag_sumtypepages, container, false);
         initUI();
+        initUiData();
+
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initUiData();
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        OQSumT = getArguments().getString("OQSumT");
-        initUiData();
+
     }
 
     void initUI() {
+        Log.d(TAG, "initUI()");
         tv1 = (TextView) view.findViewById(R.id.tv1);
         tv2 = (TextView) view.findViewById(R.id.tv2);
     }
@@ -74,10 +81,11 @@ public class SumTypePageFrag extends Fragment {
             return;
         }
 
-        String myName = "";
-        String hisName = "";
-        int moneyStandard = 0;
-        int moneyTarget = 0;
+        OQSumT = getArguments().getString("OQSumT");
+        myName = getArguments().getString("myName");
+        hisName = getArguments().getString("hisName");
+        moneyStandard = getArguments().getLong("moneyStandard");
+        moneyTarget = getArguments().getLong("moneyTarget");
 
         if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou
                 .I_PAID_FOR_YOU)) {

@@ -32,7 +32,9 @@
                     android:layout_width="72dip"
                     android:layout_height="match_parent">
 
-                    <ImageView style="@style/ImageView.ToolbarIcon.Close"/>
+                    <ImageView
+                        android:id="@+id/ivClose"
+                        style="@style/ImageView.ToolbarIcon.Close"/>
 
                 </RelativeLayout>
 

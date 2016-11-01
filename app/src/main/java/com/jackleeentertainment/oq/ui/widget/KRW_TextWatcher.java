@@ -62,6 +62,10 @@ public class KRW_TextWatcher implements TextWatcher {
         }
 
         et.addTextChangedListener(this);
+
+
+
+
     }
 
     @Override
@@ -84,5 +88,7 @@ public class KRW_TextWatcher implements TextWatcher {
         } else {
             hasFractionalPart = false;
         }
+
+
     }
 }

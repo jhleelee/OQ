@@ -81,7 +81,7 @@ public class MyOqItemSumPerPersonRVAdapter extends
 
     void checkOqItemSum(String uid, Activity activity) {
         App.fbaseDbRef
-                .child(FBaseNode0.MyOqItemSums)
+                .child(FBaseNode0.MyOppoOids)
                 .child(App.getUid(activity))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

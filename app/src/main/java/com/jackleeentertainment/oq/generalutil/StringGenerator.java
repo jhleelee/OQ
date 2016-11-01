@@ -3,6 +3,7 @@ package com.jackleeentertainment.oq.generalutil;
 import android.content.Context;
 
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Post;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
@@ -80,6 +81,27 @@ public class StringGenerator {
         return null;
 
     }
+
+
+
+    public static String xAndXPeopleOqItemClaimee(ArrayList<OqItem> arl) {
+
+        if (arl != null && arl.size() > 0) {
+
+            if (arl.size() == 1) {
+                return arl.get(0).getNameclaimee() + "님";
+            } else if (arl.size() == 2) {
+                return arl.get(0).getNameclaimee() + "님" + "," + arl.get(1).getNameclaimee() + "님";
+            } else {
+                return arl.get(0).getNameclaimee() + "님 외 " + J.st(arl.size() - 1) + "명";
+            }
+        }
+
+        return null;
+
+    }
+
+
 
 
     public static String xPeopleColonPeopleNamesWithComma(ArrayList<Profile> arl) {

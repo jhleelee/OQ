@@ -1,10 +1,15 @@
 package com.jackleeentertainment.oq.object.util;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.jackleeentertainment.oq.App;
+import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.object.OqItem;
+import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.types.OQSumT;
 import com.jackleeentertainment.oq.object.types.OQT;
 
 import java.util.ArrayList;
@@ -27,11 +32,211 @@ public class OqItemUtil {
     }
 
 
-    public static OqItem getInstance(){
+    public static OqItem getInstance() {
         OqItem oqItem = new OqItem();
+        oqItem.setCurrency(JM.strById(R.string.currency_code));
         oqItem.setAmmount(0);
         return oqItem;
     }
+
+
+
+    public static ArrayList<String> getArlUidClaimeeFromArlOqItem(ArrayList<OqItem> arlOqItem) {
+
+        ArrayList<String> arlUidClaimee = new ArrayList<>();
+
+        if (arlOqItem!=null&&arlOqItem.size()>0){
+            for (OqItem oqItem : arlOqItem){
+                String uidClaimee = oqItem.getUidclaimee();
+                arlUidClaimee.add(uidClaimee);
+            }
+        }
+
+        return arlUidClaimee;
+    }
+
+
+
+
+
+
+
+    public static boolean isFalseOqItem(ArrayList<OqItem> arrayList){
+
+        for (OqItem oqItem : arrayList){
+
+            if (oqItem.getAmmount()==0){
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+
+    public static OqItem getOqItemWithUidclaimee(ArrayList<OqItem> arrayList, String uidclaimee){
+
+        for (OqItem oqItem : arrayList){
+
+            if (oqItem.getUidclaimee()!=null &&
+                    oqItem.getUidclaimee().equals(uidclaimee)){
+                return oqItem;
+            }
+
+        }
+
+        return null;
+    }
+
+
+
+
+    public static OqItem getInstanceIClaimThatIGet(Profile profilePayerAndClaimee, Activity activity) {
+
+        String oid = App.fbaseDbRef.child("keygen").push().getKey();
+        OqItem oqItem = new OqItem();
+        oqItem.setOid(oid);
+        oqItem.setUidclaimer(App.getUid(activity));
+        oqItem.setNameclaimer(App.getUname(activity));
+        oqItem.setUidclaimee(profilePayerAndClaimee.getUid());
+        oqItem.setNameclaimee(profilePayerAndClaimee.getFull_name());
+
+        oqItem.setUidgettor(App.getUid(activity));
+        oqItem.setNamegettor(App.getUname(activity));
+        oqItem.setUidpayer(profilePayerAndClaimee.getUid());
+        oqItem.setNamepayer(profilePayerAndClaimee.getFull_name());
+
+        oqItem.setCurrency(JM.strById(R.string.currency_code));
+        oqItem.setOqtype(OQT.PointT.TOPAY);
+        return oqItem;
+    }
+
+    public static OqItem getInstanceIClaimThatIPay(Profile profileGettorAndClaimee, Activity
+            activity) {
+
+        String oid = App.fbaseDbRef.child("keygen").push().getKey();
+        OqItem oqItem = new OqItem();
+        oqItem.setOid(oid);
+
+        oqItem.setUidclaimer(App.getUid(activity));
+        oqItem.setNameclaimer(App.getUname(activity));
+        oqItem.setUidclaimee(profileGettorAndClaimee.getUid());
+        oqItem.setNameclaimee(profileGettorAndClaimee.getFull_name());
+
+        oqItem.setUidgettor(profileGettorAndClaimee.getUid() );
+        oqItem.setNamegettor(profileGettorAndClaimee.getFull_name() );
+        oqItem.setUidpayer(App.getUid(activity));
+        oqItem.setNamepayer(App.getUname(activity));
+
+        oqItem.setCurrency(JM.strById(R.string.currency_code));
+        oqItem.setOqtype(OQT.PointT.TOPAY);
+        return oqItem;
+    }
+
+
+
+
+    public static     ArrayList<OqItem> getInstances(
+            ArrayList<Profile> arlSelectedProfiles,
+            long standardAmount,
+            String oqsumtype,
+            Activity activity
+    ) {
+        String qid = App.fbaseDbRef.child("keygen").push().getKey();
+
+        ArrayList<OqItem> arrayListOqItems = new ArrayList<>();
+
+        for (int i = 0; i < arlSelectedProfiles.size(); i++) {
+
+            OqItem oqItem = new OqItem();
+
+            if (oqsumtype.equals(OQSumT.SoIWantToGETFromYou.I_PAID_FOR_YOU_AND_ME)) {
+
+                  oqItem =
+                        getInstanceIClaimThatIGet(
+                                arlSelectedProfiles.get(i),
+                                activity);
+                oqItem.setAmmount(standardAmount / 2);
+
+
+            } else if (oqsumtype.equals(OQSumT.SoIWantToGETFromYou.I_PAID_FOR_YOU)) {
+
+
+                  oqItem =
+                        getInstanceIClaimThatIGet(
+                                arlSelectedProfiles.get(i),
+                                activity);
+                oqItem.setAmmount(standardAmount);
+
+
+            } else if (oqsumtype.equals(OQSumT.SoIWantToGETFromYou.ANYWAY)) {
+
+
+                  oqItem =
+                        getInstanceIClaimThatIGet(
+                                arlSelectedProfiles.get(i),
+                                activity);
+                oqItem.setAmmount(standardAmount);
+
+
+            } else if (oqsumtype.equals(OQSumT.SoIWantToGETFromYouGuys.I_PAID_FOR_ALL_INCLUDING_YOU__INCLUDING_ME)) {
+
+                  oqItem =
+                        getInstanceIClaimThatIGet(
+                                arlSelectedProfiles.get(i),
+                                activity);
+                oqItem.setAmmount(getDivideByMeAndOthers(standardAmount, arlSelectedProfiles.size()));
+
+
+            } else if (oqsumtype.equals(OQSumT.SoIWantToGETFromYouGuys.I_PAID_FOR_ALL_INCLUDING_YOU__BUT_ME)) {
+
+
+                  oqItem =
+                        getInstanceIClaimThatIGet(
+                                arlSelectedProfiles.get(i),
+                                activity);
+                oqItem.setAmmount(getDivideByOthers(standardAmount, arlSelectedProfiles.size()));
+
+
+            } else if (oqsumtype.equals(OQSumT.SoIWantToGETFromYouGuys.N_ANYWAY)) {
+
+                  oqItem =
+                        getInstanceIClaimThatIGet(
+                                arlSelectedProfiles.get(i),
+                                activity);
+                oqItem.setAmmount(standardAmount);
+
+
+            } else if (oqsumtype.equals(OQSumT.SoIWantToPAY.YOU_PAID_FOR_ME) || oqsumtype.equals(OQSumT.SoIWantToPAY.ANYWAY)) {
+
+                  oqItem =  getInstanceIClaimThatIPay(
+                        arlSelectedProfiles.get(i),
+                        activity);
+                oqItem.setAmmount(standardAmount);
+
+
+            }
+            oqItem.setQid(qid);
+            arrayListOqItems.add(oqItem);
+        }
+
+        return arrayListOqItems;
+    }
+
+
+    public static long getDivideByMeAndOthers(long ammount, int numOthers) {
+
+        return ammount / (numOthers + 1);
+
+    }
+
+    public static long getDivideByOthers(long ammount, int numOthers) {
+
+        return ammount / (numOthers);
+
+    }
+
 
 //
 //    public static OqItem setMyUidToOneSide(OqItem oqItem, Activity activity){
@@ -56,9 +261,6 @@ public class OqItemUtil {
 //
 //        return oqItem;
 //    }
-
-
-
 
 
     public static OqItem copyOqItemValues(OqItem oqItem) {
@@ -104,14 +306,15 @@ public class OqItemUtil {
 //
 //        return arlUids;
 //    }
-
+   static String TAG = "OqItemUtil";
 
     public static long getSumOqItemAmmounts(ArrayList<OqItem> arlOqItems) {
 
         long returnVal = 0;
 
         for (int i = 0; i < arlOqItems.size(); i++) {
-            returnVal +=arlOqItems.get(i).getAmmount();
+            Log.d(TAG , "getSumOqItemAmmounts() "+String.valueOf(arlOqItems.get(i).getAmmount()));
+            returnVal += arlOqItems.get(i).getAmmount();
         }
 
         return returnVal;

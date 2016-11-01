@@ -60,6 +60,7 @@ public class MainFrag1_Feeds extends ListFrag {
         tvEmptyTitle.setText(JM.strById(R.string.begin_feed));
         tvEmptyDetail.setText(JM.strById(R.string.begin_feed_long));
         tvEmptyLearnMore.setText(JM.strById(R.string.learn_more));
+        ivEmpty.setImageDrawable(JM.drawableById(R.drawable.bg_feed0));
 
     }
 

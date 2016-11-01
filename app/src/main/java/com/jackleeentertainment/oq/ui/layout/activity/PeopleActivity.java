@@ -27,12 +27,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.firebase.database.SetValue;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
+import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.fragment.RecentAndContactProfileFrag;
@@ -126,13 +131,44 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
     void initUIDataOnResume() {
         super.initUIDataOnResume();
 
-        String alreadySelected = getIntent().getStringExtra("alreadySelected");
-
-        if (alreadySelected!=null) {
-            ArrayList<Profile> arlAlreadySelectedProfiles = ProfileUtil.getArlProfileFromJson
-                    (alreadySelected);
-            arlSelectedProfile.addAll(arlAlreadySelectedProfiles);
+        String beforeProfiles = getIntent().getStringExtra("beforeProfiles");
+        if (beforeProfiles!=null) {
+            ArrayList<Profile> arlBeforeProfiles = ProfileUtil.getArlProfileFromJson
+                    (beforeProfiles);
+            arlSelectedProfile.addAll(arlBeforeProfiles);
         }
+
+        String beforeUids = getIntent().getStringExtra("beforeUids");
+        if (beforeUids!=null) {
+            final ArrayList<String> arlBeforeUids = J.arlStringFromjsonArlString(beforeUids);
+
+            for (String uid : arlBeforeUids){
+                App.fbaseDbRef
+                        .child(FBaseNode0.ProfileToPublic)
+                        .child(uid)
+                        .addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            Profile profile = dataSnapshot.getValue(Profile.class);
+                                            profile.setUid(dataSnapshot.getKey());
+                                            arlSelectedProfile.add(profile);
+                                            LBR.send(LBR.IntentFilterT.PeopleActivity_Frag0);
+                                            LBR.send(LBR.IntentFilterT.PeopleActivity_Frag1);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                }
+                        );
+            }
+        }
+
+
         tvToolbarTitle.setText(JM.strById(R.string.select_oponent));
         tvFootTitle.setText(JM.strById(R.string.see_people_at_my_contact));
 

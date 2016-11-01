@@ -58,6 +58,8 @@ public class ProfileUtil {
 
 
 
+
+
     public static ArrayList<String> getArlJsonProfiles(ArrayList<Profile> arrayListProfile) {
 
         Log.d(TAG, "getArlJsonProfiles()");

@@ -21,9 +21,10 @@ import com.jackleeentertainment.oq.R;
 
 public class BaseFullDialogActivity extends BaseActivity {
 
-    Toolbar toolbar;
-    RelativeLayout roClose;
-    TextView tvToolbarTitle, tvToolbarPreview, tvToolbarSave;
+ public   Toolbar toolbar;
+    public  RelativeLayout roClose;
+    public  ImageView ivClose;
+    public  TextView tvToolbarTitle, tvToolbarPreview, tvToolbarSave;
     TabLayout tabLayout;
     ViewPager viewPager;
     FrameLayout fr_content;
@@ -56,6 +57,7 @@ public class BaseFullDialogActivity extends BaseActivity {
     void initUIOnCreate() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         roClose = (RelativeLayout) findViewById(R.id.roClose);
+        ivClose = (ImageView)findViewById(R.id.ivClose);
         tvToolbarTitle = (TextView) findViewById(R.id.tvToolbarTitle);
         tvToolbarPreview = (TextView) findViewById(R.id.tvToolbarPreview);
         tvToolbarSave = (TextView) findViewById(R.id.tvToolbarSave);
@@ -86,6 +88,12 @@ public class BaseFullDialogActivity extends BaseActivity {
     void initOnClickListenerOnResume() {
         super.initOnClickListenerOnResume();
         roClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

@@ -24,10 +24,21 @@ public class LBR {
     public static class IntentFilterT{
         public  final static String MainActivityDrawerMenu = "MainActivityDrawerMenu";
         public  final static String NewGroupActivityTitlePhoto = "NewGroupActivityTitlePhoto";
+        public  final static String NewOQActivity =
+                "NewOQActivity";
+
+
         public  final static String NewOQActivity_Frag0 =
-                "NewOQActivity_Fg0_Ppe";
-
-
+                "NewOQActivity_Fg0";
+        public  final static String NewOQActivity_Frag0_EasyInput ="NewOQActivity_Fg0_EI";
+        public  final static String
+                NewOQActivity_ArlOppoProfile_Frag0="NewOQAct_ArlOpPro_Fg0";
+        public  final static String PeopleActivity =
+                "PeopleActivity";
+        public  final static String PeopleActivity_Frag0 =
+                "PeopleActivity_Fg0";
+        public  final static String PeopleActivity_Frag1 =
+                "PeopleActivity_Fg1";
     }
 
     public static void send(String intentfilterT) {

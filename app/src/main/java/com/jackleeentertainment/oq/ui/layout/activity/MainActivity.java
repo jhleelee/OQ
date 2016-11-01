@@ -782,10 +782,10 @@ public class MainActivity extends BaseActivity
                 startActivityForResultToLoadSMS();
                 break;
 
-            case R.id.nav_choose_from_list_get:
-                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_choose_from_list_get");
-
-                break;
+//            case R.id.nav_choose_from_list_get:
+//                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_choose_from_list_get");
+//
+//                break;
 
             case R.id.nav_input_manually_get:
 
@@ -797,10 +797,10 @@ public class MainActivity extends BaseActivity
 
             // I Pay
 
-            case R.id.nav_choose_from_list_pay:
-                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_choose_from_list_pay");
-
-                break;
+//            case R.id.nav_choose_from_list_pay:
+//                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_choose_from_list_pay");
+//
+//                break;
 
             case R.id.nav_input_manually_pay:
                 Intent intentManualPay = new Intent(this, NewOQActivity.class);
@@ -816,18 +816,23 @@ public class MainActivity extends BaseActivity
                 startActivity(intentNewGroup);
                 break;
 
-            case R.id.nav_list_i_am_master:
-                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_list_i_am_master");
-
-                break;
-
-            case R.id.nav_list_i_am_member:
-                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_list_i_am_member");
-                break;
+//            case R.id.nav_list_i_am_master:
+//                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_list_i_am_master");
+//
+//                break;
+//
+//            case R.id.nav_list_i_am_member:
+//                LBR.send(LBR.IntentFilterT.MainActivityDrawerMenu, "nav_list_i_am_member");
+//                break;
 
             // Account
+            case R.id.nav_account_buy:
+                break;
+
+
             case R.id.nav_account_setting:
                 break;
+
             case R.id.nav_logout:
                 break;
 

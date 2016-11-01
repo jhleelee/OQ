@@ -115,4 +115,32 @@ public class SetValue {
                              final boolean toRamLBR) {
 
     }
+
+
+        /*
+    OQ
+    */
+        public static void myOQItems(final Post post,
+                                final boolean toRamLBR) {
+            App.fbaseDbRef
+                    .child(FBaseNode0.MyOqItems)
+                    .child(post.getOid())
+                    .setValue(post, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                if (toRamLBR) {
+                                    LBR.send(FBaseNode0.Post + LBR.SendSuffixT.SENT, post);
+                                }
+                            }
+                        }
+                    });
+        }
+
+
+
+
+
+
+
 }

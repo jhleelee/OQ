@@ -221,6 +221,8 @@ public class MainFrag2_ChatroomList extends Fragment implements
         tvEmptyTitle.setText(JM.strById(R.string.begin_chat));
         tvEmptyDetail.setText(JM.strById(R.string.begin_chat_long));
         tvEmptyLearnMore.setText(JM.strById(R.string.learn_more));
+        ivEmpty.setImageDrawable(JM.drawableById(R.drawable.bg_chat0));
+
     }
 
 

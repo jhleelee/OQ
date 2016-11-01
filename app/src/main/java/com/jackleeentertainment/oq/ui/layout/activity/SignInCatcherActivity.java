@@ -74,7 +74,7 @@ public class SignInCatcherActivity extends AppCompatActivity {
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
-                                    .setTheme(R.style.AppTheme)
+                                    .setTheme(R.style.FullscreenTheme)
                                     .setProviders(App.getSelectedProviders())
                                     .build(),
                             App.RC_SIGN_IN);

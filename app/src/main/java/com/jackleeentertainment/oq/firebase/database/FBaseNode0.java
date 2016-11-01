@@ -14,7 +14,14 @@ public class FBaseNode0 {
     public final static String MyPContacts = "my_p_contacts";
 
 
-    public final static String MyOqItemSums = "my_oqisum";
+    public final static String MyOppoOids = "my_oppo";
+
+    public final static String MyOppoList = "my_oppolist";
+
+
+
+
+
     public final static String MyOqItems = "my_oqi";
 
     public final static String Group_OqItem = "group_oqitem";

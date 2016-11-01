@@ -13,7 +13,6 @@ import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.GroupUtil;
 import com.jackleeentertainment.oq.object.util.OqItemUtil;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewGroupFrag;
-import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0;
 
 /**
  * Created by Jacklee on 2016. 10. 21..
