@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.generalutil.J;
@@ -27,18 +29,17 @@ public class Upload {
     static String TAG = "Upload";
 
 
-
     public static void uploadBitmap(Bitmap bitmap,
                                     final String firstpath,
                                     final String secondpathAkaMyUid,
                                     final String suffix) {
 
-        LBR.send(  LBR.SendSuffixT.SENDING);
+        LBR.send(LBR.SendSuffixT.SENDING);
 
         UploadTask uploadTask = App.fbaseStorageRef
                 .child(firstpath)
                 .child(secondpathAkaMyUid)
-                .child(FStorageNode.createMediaFileNameToUpload(firstpath,secondpathAkaMyUid,suffix))
+                .child(FStorageNode.createMediaFileNameToUpload(firstpath, secondpathAkaMyUid, suffix))
                 .putStream(JM.getByteArrayInputStreamFromBitmap(bitmap));
 
         uploadTask
@@ -63,15 +64,15 @@ public class Upload {
 
     public static void uploadFile(final String firstpath,
                                   final String secondpathAkaMyUid,
-                                  String filenameAkaResolution,
+                                  String filenameAkaResolutionAkaPostId,
                                   Uri fileUri,
-                                  Context context) {
+                                  Activity activity) {
 
         UploadTask uploadTask =
                 App.fbaseStorageRef
                         .child(firstpath)
                         .child(secondpathAkaMyUid)
-                        .child(filenameAkaResolution + ".jpg")
+                        .child(filenameAkaResolutionAkaPostId + ".jpg")
                         .putFile(fileUri);
 
         uploadTask
@@ -88,9 +89,26 @@ public class Upload {
                         LBR.send(taskSnapshot.getDownloadUrl() + "," + LBR.SendSuffixT.SENT,
                                 taskSnapshot.getMetadata());
                     }
-                });
-    }
+                })
+                .addOnProgressListener(
+                        new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                System.out.println("Upload is " + progress + "% done");
+                            }
+                        })
+                .addOnPausedListener(
+                        new OnPausedListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                                System.out.println("Upload is paused");
+                            }
+                        })
+        ;
 
+
+    }
 
 
     public static void logTaskSnapshot(UploadTask.TaskSnapshot taskSnapshot) {
@@ -99,7 +117,6 @@ public class Upload {
         Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getDownloadUrl() " + J.st(taskSnapshot.getDownloadUrl()));
         Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getUploadSessionUri() " + J.st(taskSnapshot.getUploadSessionUri()));
     }
-
 
 
     public static void uploadMyProfileImagesToFirebaseStorage(Uri uri, Activity activity) {
@@ -140,7 +157,7 @@ public class Upload {
 
 
         Log.d(TAG, "uploadMyProfileImagesToFirebaseStorage : Bitmaps are Created "
-                 );
+        );
 
 
         Upload.uploadBitmap(

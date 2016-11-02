@@ -7,30 +7,52 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
+import com.jackleeentertainment.oq.firebase.database.SetValue;
+import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
+import com.jackleeentertainment.oq.firebase.storage.Upload;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
+import com.jackleeentertainment.oq.object.MyOppo;
+import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.types.DeedT;
+import com.jackleeentertainment.oq.object.types.OQPostT;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.OqItemUtil;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
-import com.soundcloud.android.crop.Crop;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jacklee on 2016. 10. 19..
  */
 
 public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
+
+    NewOQActivity mActivity = this;
     String TAG = "NewOQActivity";
     final int REQ_PEOPLE = 99;
     final int REQ_PICK_IMAGE_FOR_FEED = 98;
@@ -42,7 +64,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     public ArrayList<OqItem> arlOQItem_Now = new ArrayList<>();
     public ArrayList<OqItem> arlOQItem_Future = new ArrayList<>();
 
-    public  ArrayList<Uri> arlUriPhoto = new ArrayList<>();
+    public ArrayList<Uri> arlUriPhoto = new ArrayList<>();
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -119,6 +141,294 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
         startActivityForResult(Intent.createChooser(intent,
                 JM.strById(R.string.attach_photo)),
                 REQ_PICK_IMAGE_FOR_FEED);
+    }
+
+
+    public void doUploadAll(final EditText etContent) {
+
+        final long ts = System.currentTimeMillis();
+        final ArrayList<MyOppo> arlMyOppo = new ArrayList<MyOppo>();
+
+        for (final OqItem oqItem : arlOQItem_Future) {
+            final String oid = App.fbaseDbRef.child("push").push().getKey();
+            oqItem.setOid(oid);
+            oqItem.setTs(ts);
+            uploadMyOqItemThenMyOppo(oqItem, oid, ts, arlMyOppo);
+            uploadHisOqItemThenHisOppo(oqItem, oid, ts);
+            SetValue.updateMyRecentProfilesWithOppo(arlMyOppo, mActivity);
+        }
+
+        final String pid = App.fbaseDbRef.child("push").push().getKey();
+        OQPost oqPost = new OQPost();
+        oqPost.setPid(pid);
+        oqPost.setUid(App.getUid(mActivity));
+        oqPost.setUname(App.getUname(mActivity));
+        oqPost.setUdeed(DeedT.SENT_GETREQ);
+        oqPost.setTxt(etContent.getText()
+                .toString());
+        oqPost.setTs(ts);
+
+        if (arlUriPhoto == null ||
+                arlUriPhoto.size()
+                        == 0) {
+            oqPost.setPosttype(OQPostT.NONE);
+
+        } else if (arlUriPhoto != null &&
+                (arlUriPhoto.size() > 0)) {
+            oqPost.setPosttype(OQPostT.PHOTO);
+            for (Uri uri : arlUriPhoto) {
+                uploadFeedPhoto(pid);
+            }
+        }
+        oqPost.setMyOppos(arlMyOppo);
+
+        App.fbaseDbRef
+                .child(FBaseNode0.MyPosts)
+                .child(App.getUid(mActivity))
+                .child(pid)
+                .setValue(oqPost)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                })
+        ;
+
+
+        for (final OqItem oqItem : arlOQItem_Future) {
+            App.fbaseDbRef
+                    .child(FBaseNode0.MyPosts)
+                    .child(oqItem.getUidclaimee())
+                    .child(pid)
+                    .setValue(oqPost)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    })
+            ;
+        }
+
+
+    }
+
+    void uploadMyOqItemThenMyOppo(final OqItem oqItem,
+                                  final String oid,
+                                  final long ts,
+                                  final ArrayList<MyOppo> arlMyOppo) {
+
+        App.fbaseDbRef
+                .child(FBaseNode0.MyOqItems)
+                .child(App.getUid(mActivity))
+                .child(oqItem.getUidclaimee())
+                .child(oid)
+                .setValue(oqItem)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        App.fbaseDbRef
+                                .child(FBaseNode0.MyOqItems)
+                                .child(App.getUid(mActivity))
+                                .child(oqItem.getUidclaimee())
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        if (dataSnapshot.exists()) {
+
+                                            long amtIClaimToHim = 0;
+
+                                            Iterable<DataSnapshot> i = dataSnapshot.getChildren();
+
+                                            for (DataSnapshot d : i) {
+
+                                                if ((d.getValue
+                                                        (OqItem.class))
+                                                        .getUidclaimer()
+                                                        .equals(App.getUid
+                                                                (mActivity))) {
+                                                    amtIClaimToHim += (d.getValue
+                                                            (OqItem.class))
+                                                            .getAmmount();
+                                                }
+                                            }
+
+
+                                            MyOppo myOppo = new MyOppo();
+                                            myOppo.setUid(oqItem.getUidclaimee());
+                                            myOppo.setUname(oqItem.getNameclaimee
+                                                    ());
+                                            myOppo.setAmticlaim(amtIClaimToHim);
+                                            myOppo.setTs(ts);
+                                            App.fbaseDbRef
+                                                    .child(FBaseNode0.MyOppoList)
+                                                    .child(App.getUid(mActivity))
+                                                    .child(oqItem.getUidclaimee())
+                                                    .setValue(myOppo)
+                                                    .addOnCompleteListener
+                                                            (new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+
+                                                                }
+                                                            });
+
+                                            arlMyOppo.add(myOppo);
+
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+                    }
+                });
+    }
+
+    void uploadHisOqItemThenHisOppo(final OqItem oqItem,
+                                    final String oid,
+                                    final long ts) {
+
+        App.fbaseDbRef
+                .child(FBaseNode0.MyOqItems)
+                .child(oqItem.getUidclaimee())
+                .child(App.getUid(mActivity))
+                .child(oid)
+                .setValue(oqItem)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        App.fbaseDbRef
+                                .child(FBaseNode0.MyOqItems)
+                                .child(oqItem.getUidclaimee())
+                                .child(App.getUid(mActivity))
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        if (dataSnapshot.exists()) {
+
+                                            long amtHeClaimMe = 0;
+
+                                            Iterable<DataSnapshot> i = dataSnapshot.getChildren();
+
+                                            for (DataSnapshot d : i) {
+
+                                                if ((d.getValue
+                                                        (OqItem.class))
+                                                        .getUidclaimee()
+                                                        .equals(oqItem
+                                                                .getUidclaimee())) {
+
+                                                    amtHeClaimMe += (d.getValue
+                                                            (OqItem.class))
+                                                            .getAmmount();
+                                                }
+                                            }
+
+
+                                            MyOppo myOppo = new MyOppo();
+                                            myOppo.setUid(App.getUid(mActivity));
+                                            myOppo.setUname(App.getUname(mActivity));
+                                            myOppo.setAmtheclaim
+                                                    (amtHeClaimMe);
+                                            myOppo.setTs(ts);
+
+
+                                            App.fbaseDbRef
+                                                    .child(FBaseNode0.MyOppoList)
+                                                    .child(oqItem
+                                                            .getUidclaimee())
+                                                    .child(App.getUid(mActivity))
+                                                    .setValue(myOppo)
+                                                    .addOnCompleteListener
+                                                            (new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+
+                                                                }
+                                                            });
+
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+                    }
+                });
+
+    }
+
+    void uploadFeedPhoto(String pid) {
+
+        for (Uri uri : arlUriPhoto) {
+            Upload.uploadFile(
+                    FStorageNode.FirstT.POST_PHOTO,
+                    App.getUid(mActivity), // for security and maintainence
+                    pid,
+                    uri,
+                    mActivity                    );
+        }
+    }
+
+
+    StorageReference mTempStorageRef;  //mTempStorageRef was previously used to transfer data.
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // If there's an upload in progress, save the reference so you can query it later
+        if (mTempStorageRef != null) {
+            outState.putString("reference", mTempStorageRef.toString());
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // If there was an upload in progress, get its reference and create a new StorageReference
+        final String stringRef = savedInstanceState.getString("reference");
+        if (stringRef == null) {
+            return;
+        }
+        mTempStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(stringRef);
+
+        // Find all UploadTasks under this StorageReference (in this example, there should be one)
+        List<UploadTask> tasks = mTempStorageRef.getActiveUploadTasks();
+        if (tasks.size() > 0) {
+            // Get the task monitoring the upload
+            UploadTask task = tasks.get(0);
+
+            // Add new listeners to the task using an Activity scope
+            task.addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            //handleSuccess(state);
+                            // call a user defined function to
+                            // handle the event.
+
+                        }
+                    }
+            );
+        }
     }
 
 

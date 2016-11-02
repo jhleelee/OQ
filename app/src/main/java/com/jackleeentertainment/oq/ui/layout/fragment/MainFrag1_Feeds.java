@@ -174,7 +174,7 @@ public class MainFrag1_Feeds extends ListFrag {
 
                 if (oqPost.getPosttype().equals(OQPostT.NONE)) {
                     postViewHolder.roMedia.setVisibility(View.GONE);
-                }
+                } else
 
                 if (oqPost.getPosttype().equals(OQPostT.PHOTO)) {
 

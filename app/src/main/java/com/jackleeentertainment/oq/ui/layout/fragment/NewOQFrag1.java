@@ -18,10 +18,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.UploadTask;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
@@ -124,22 +130,36 @@ public class NewOQFrag1 extends Fragment {
 
 
     void initClickListener() {
-        View.OnClickListener onClickListenerPhotoGetOrEdit = new View.OnClickListener() {
 
+
+        loBtAddPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (((NewOQActivity)getActivity()).arlUriPhoto != null ||
-                        ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) {
-                    startActivityForResultGallery();
-                } else if (((NewOQActivity)getActivity()).arlUriPhoto.size() >= 1) {
-                    startActivityForResultSelectedPhotoList(((NewOQActivity)getActivity()).arlUriPhoto);
-                }
+                ((NewOQActivity)getActivity()).startActivityForResultPhotoGalleryForFeed();
             }
-        };
-        ivPhotoSub.setOnClickListener(onClickListenerPhotoGetOrEdit);
-        ivPhotoMain.setOnClickListener(onClickListenerPhotoGetOrEdit);
-        tvPhotoSubNum.setOnClickListener(onClickListenerPhotoGetOrEdit);
-        tvPhotoMainEmpty.setOnClickListener(onClickListenerPhotoGetOrEdit);
+        });
+
+
+
+        // show selected photo list activity and allow deletion
+//        View.OnClickListener onClickListenerPhotoGetOrEdit = new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                if (((NewOQActivity)getActivity()).arlUriPhoto != null ||
+//                        ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) {
+//                    ((NewOQActivity)getActivity()).startActivityForResultPhotoGalleryForFeed();
+//
+//                } else if (((NewOQActivity)getActivity()).arlUriPhoto.size() >= 1) {
+//                    startActivityForResultSelectedPhotoList(((NewOQActivity)getActivity()).arlUriPhoto);
+//                }
+//            }
+//        };
+//
+//        ivPhotoSub.setOnClickListener(onClickListenerPhotoGetOrEdit);
+//        ivPhotoMain.setOnClickListener(onClickListenerPhotoGetOrEdit);
+//        tvPhotoSubNum.setOnClickListener(onClickListenerPhotoGetOrEdit);
+//        tvPhotoMainEmpty.setOnClickListener(onClickListenerPhotoGetOrEdit);
 
         View.OnClickListener onClickListenerBackToFrag0 = new View.OnClickListener() {
 
@@ -153,6 +173,10 @@ public class NewOQFrag1 extends Fragment {
         };
         ((NewOQActivity) getActivity()).ivClose.setOnClickListener(onClickListenerBackToFrag0);
         ((NewOQActivity) getActivity()).roClose.setOnClickListener(onClickListenerBackToFrag0);
+
+
+
+
         tv_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,222 +187,8 @@ public class NewOQFrag1 extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d(TAG, "onClick which :" + J.st(which));
 
-                        final long ts = System.currentTimeMillis();
-                        final ArrayList<MyOppo> arlMyOppo = new ArrayList<MyOppo>();
-                        for (final OqItem oqItem : ((NewOQActivity) getActivity()).arlOQItem_Future) {
+                        ((NewOQActivity)getActivity()).doUploadAll(etContent);
 
-                            final String oid = App.fbaseDbRef.child("push").push().getKey();
-
-                            oqItem.setOid(oid);
-                            oqItem.setTs(ts);
-
-                            /*********
-                             * My Space
-                             */
-
-
-                            App.fbaseDbRef
-                                    .child(FBaseNode0.MyOqItems)
-                                    .child(App.getUid(getActivity()))
-                                    .child(oqItem.getUidclaimee())
-                                    .child(oid)
-                                    .setValue(oqItem)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-
-                                            App.fbaseDbRef
-                                                    .child(FBaseNode0.MyOqItems)
-                                                    .child(App.getUid(getActivity()))
-                                                    .child(oqItem.getUidclaimee())
-                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                                            if (dataSnapshot.exists()) {
-
-                                                                long amtIClaimToHim = 0;
-
-                                                                Iterable<DataSnapshot> i = dataSnapshot.getChildren();
-
-                                                                for (DataSnapshot d : i) {
-
-                                                                    if ((d.getValue
-                                                                            (OqItem.class))
-                                                                            .getUidclaimer()
-                                                                            .equals(App.getUid
-                                                                                    (getActivity()))) {
-                                                                        amtIClaimToHim += (d.getValue
-                                                                                (OqItem.class))
-                                                                                .getAmmount();
-                                                                    }
-                                                                }
-
-
-                                                                MyOppo myOppo = new MyOppo();
-                                                                myOppo.setUid(oqItem.getUidclaimee());
-                                                                myOppo.setUname(oqItem.getNameclaimee
-                                                                        ());
-                                                                myOppo.setAmticlaim(amtIClaimToHim);
-                                                                myOppo.setTs(ts);
-                                                                App.fbaseDbRef
-                                                                        .child(FBaseNode0.MyOppoList)
-                                                                        .child(App.getUid(getActivity()))
-                                                                        .child(oqItem.getUidclaimee())
-                                                                        .setValue(myOppo)
-                                                                        .addOnCompleteListener
-                                                                                (new OnCompleteListener<Void>() {
-                                                                                    @Override
-                                                                                    public void onComplete(@NonNull Task<Void> task) {
-
-                                                                                    }
-                                                                                });
-
-                                                                arlMyOppo.add(myOppo);
-
-
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(DatabaseError databaseError) {
-
-                                                        }
-                                                    });
-
-
-                                        }
-                                    });
-
-                            App.fbaseDbRef
-                                    .child(FBaseNode0.MyOqItems)
-                                    .child(oqItem.getUidclaimee())
-                                    .child(App.getUid(getActivity()))
-                                    .child(oid)
-                                    .setValue(oqItem)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-
-                                            App.fbaseDbRef
-                                                    .child(FBaseNode0.MyOqItems)
-                                                    .child(oqItem.getUidclaimee())
-                                                    .child(App.getUid(getActivity()))
-                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                                            if (dataSnapshot.exists()) {
-
-                                                                long amtHeClaimMe = 0;
-
-                                                                Iterable<DataSnapshot> i = dataSnapshot.getChildren();
-
-                                                                for (DataSnapshot d : i) {
-
-                                                                    if ((d.getValue
-                                                                            (OqItem.class))
-                                                                            .getUidclaimee()
-                                                                            .equals(oqItem
-                                                                                    .getUidclaimee())) {
-
-                                                                        amtHeClaimMe += (d.getValue
-                                                                                (OqItem.class))
-                                                                                .getAmmount();
-                                                                    }
-                                                                }
-
-
-                                                                MyOppo myOppo = new MyOppo();
-                                                                myOppo.setUid(App.getUid(getActivity()));
-                                                                myOppo.setUname(App.getUname(getActivity()));
-                                                                myOppo.setAmtheclaim
-                                                                        (amtHeClaimMe);
-                                                                myOppo.setTs(ts);
-
-
-                                                                App.fbaseDbRef
-                                                                        .child(FBaseNode0.MyOppoList)
-                                                                        .child(oqItem
-                                                                                .getUidclaimee())
-                                                                        .child(App.getUid(getActivity()))
-                                                                        .setValue(myOppo)
-                                                                        .addOnCompleteListener
-                                                                                (new OnCompleteListener<Void>() {
-                                                                                    @Override
-                                                                                    public void onComplete(@NonNull Task<Void> task) {
-
-                                                                                    }
-                                                                                });
-
-
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(DatabaseError databaseError) {
-
-                                                        }
-                                                    });
-
-
-                                        }
-                                    });
-
-
-                            //my db (1, 2)
-
-                            SetValue.updateMyRecentProfilesWithOppo(arlMyOppo, getActivity());
-                        }
-
-
-                        final String pid = App.fbaseDbRef.child("push").push().getKey();
-                        OQPost oqPost = new OQPost();
-                        oqPost.setPid(pid);
-                        oqPost.setUid(App.getUid(getActivity()));
-                        oqPost.setUname(App.getUname(getActivity()));
-                        oqPost.setUdeed(DeedT.SENT_GETREQ);
-                        oqPost.setTxt(etContent.getText()
-                                .toString());
-                        oqPost.setTs(ts);
-                        if (((NewOQActivity)getActivity()).arlUriPhoto == null ||
-                                ((NewOQActivity)getActivity()).arlUriPhoto.size()
-                                        == 0) {
-                            oqPost.setPosttype(OQPostT.NONE);
-                        } else if (((NewOQActivity)getActivity()).arlUriPhoto != null &&
-                                ((NewOQActivity)getActivity()).arlUriPhoto.size() > 0) {
-                            oqPost.setPosttype(OQPostT.PHOTO);
-                        }
-                        oqPost.setMyOppos(arlMyOppo);
-
-                        App.fbaseDbRef
-                                .child(FBaseNode0.MyPosts)
-                                .child(App.getUid(getActivity()))
-                                .child(pid)
-                                .setValue(oqPost)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-
-                                    }
-                                })
-                        ;
-
-
-                        for (final OqItem oqItem : ((NewOQActivity) getActivity()).arlOQItem_Future) {
-                            App.fbaseDbRef
-                                    .child(FBaseNode0.MyPosts)
-                                    .child(oqItem.getUidclaimee())
-                                    .child(pid)
-                                    .setValue(oqPost)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-
-                                        }
-                                    })
-                            ;
-                        }
                     }
                 };
 
@@ -462,15 +272,7 @@ public class NewOQFrag1 extends Fragment {
         }
     }
 
-    void startActivityForResultGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQ_PHOTO_GALLERY);
-    }
+
 
     void startActivityForResultSelectedPhotoList(ArrayList<Uri> arlUri) {
         Intent intent = new Intent(getActivity(), SelectedPhotoListActivity.class);
