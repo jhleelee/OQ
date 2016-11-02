@@ -21,15 +21,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
+import com.jackleeentertainment.oq.firebase.database.SetValue;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.StringGenerator;
+import com.jackleeentertainment.oq.object.MyOppo;
+import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.OqItem;
+import com.jackleeentertainment.oq.object.types.DeedT;
+import com.jackleeentertainment.oq.object.types.OQPostT;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.SelectedPhotoListActivity;
 
@@ -51,7 +55,6 @@ public class NewOQFrag1 extends Fragment {
     LinearLayout loBtAddPhoto;
     ImageView ivBtAddPhoto;
     TextView tvBtAddPhoto;
-    ArrayList<Uri> arlUri = new ArrayList<>();
 
     String content = "";
     Bundle bundleFromFrag0;
@@ -87,6 +90,13 @@ public class NewOQFrag1 extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        uiPhotoData();
+
+    }
+
     void initUI() {
 
 
@@ -103,11 +113,11 @@ public class NewOQFrag1 extends Fragment {
         etContent = (EditText) view.findViewById(R.id.etContent);
         tv_done = (TextView) view.findViewById(R.id.tv_done);
         tvPhotoMainEmpty = (TextView) view.findViewById(R.id.tvPhotoMainEmpty);
-        uiPhotoData();
     }
 
     void initUiCosmetic() {
         tvPhotoCommentTitle.setText(JM.strById(R.string.add_photo_comment));
+        ((NewOQActivity) getActivity()).ivClose.setImageDrawable(null);
         ((NewOQActivity) getActivity()).ivClose.setImageDrawable(JM.drawableById(R.drawable.ic_arrow_back_white_48dp));
 
     }
@@ -118,10 +128,11 @@ public class NewOQFrag1 extends Fragment {
 
             @Override
             public void onClick(View v) {
-                if (arlUri != null || arlUri.size() == 0) {
+                if (((NewOQActivity)getActivity()).arlUriPhoto != null ||
+                        ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) {
                     startActivityForResultGallery();
-                } else if (arlUri.size() >= 1) {
-                    startActivityForResultSelectedPhotoList(arlUri);
+                } else if (((NewOQActivity)getActivity()).arlUriPhoto.size() >= 1) {
+                    startActivityForResultSelectedPhotoList(((NewOQActivity)getActivity()).arlUriPhoto);
                 }
             }
         };
@@ -153,10 +164,11 @@ public class NewOQFrag1 extends Fragment {
                         Log.d(TAG, "onClick which :" + J.st(which));
 
                         final long ts = System.currentTimeMillis();
-
+                        final ArrayList<MyOppo> arlMyOppo = new ArrayList<MyOppo>();
                         for (final OqItem oqItem : ((NewOQActivity) getActivity()).arlOQItem_Future) {
 
                             final String oid = App.fbaseDbRef.child("push").push().getKey();
+
                             oqItem.setOid(oid);
                             oqItem.setTs(ts);
 
@@ -202,12 +214,18 @@ public class NewOQFrag1 extends Fragment {
                                                                     }
                                                                 }
 
+
+                                                                MyOppo myOppo = new MyOppo();
+                                                                myOppo.setUid(oqItem.getUidclaimee());
+                                                                myOppo.setUname(oqItem.getNameclaimee
+                                                                        ());
+                                                                myOppo.setAmticlaim(amtIClaimToHim);
+                                                                myOppo.setTs(ts);
                                                                 App.fbaseDbRef
                                                                         .child(FBaseNode0.MyOppoList)
                                                                         .child(App.getUid(getActivity()))
                                                                         .child(oqItem.getUidclaimee())
-                                                                        .child("amticlaim")
-                                                                        .setValue(amtIClaimToHim)
+                                                                        .setValue(myOppo)
                                                                         .addOnCompleteListener
                                                                                 (new OnCompleteListener<Void>() {
                                                                                     @Override
@@ -216,19 +234,8 @@ public class NewOQFrag1 extends Fragment {
                                                                                     }
                                                                                 });
 
-                                                                App.fbaseDbRef
-                                                                        .child(FBaseNode0.MyOppoList)
-                                                                        .child(App.getUid(getActivity()))
-                                                                        .child(oqItem.getUidclaimee())
-                                                                        .child("ts")
-                                                                        .setValue(ts)
-                                                                        .addOnCompleteListener
-                                                                                (new OnCompleteListener<Void>() {
-                                                                                    @Override
-                                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                arlMyOppo.add(myOppo);
 
-                                                                                    }
-                                                                                });
 
                                                             }
                                                         }
@@ -245,8 +252,8 @@ public class NewOQFrag1 extends Fragment {
 
                             App.fbaseDbRef
                                     .child(FBaseNode0.MyOqItems)
-                                    .child(oqItem.getUidclaimee() )
-                                    .child( App.getUid(getActivity()))
+                                    .child(oqItem.getUidclaimee())
+                                    .child(App.getUid(getActivity()))
                                     .child(oid)
                                     .setValue(oqItem)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -255,8 +262,8 @@ public class NewOQFrag1 extends Fragment {
 
                                             App.fbaseDbRef
                                                     .child(FBaseNode0.MyOqItems)
-                                                    .child(oqItem.getUidclaimee() )
-                                                    .child( App.getUid(getActivity()))
+                                                    .child(oqItem.getUidclaimee())
+                                                    .child(App.getUid(getActivity()))
                                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                                         @Override
                                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -282,28 +289,20 @@ public class NewOQFrag1 extends Fragment {
                                                                 }
 
 
-                                                                App.fbaseDbRef
-                                                                        .child(FBaseNode0.MyOppoList)
-                                                                        .child(oqItem
-                                                                                .getUidclaimee() )
-                                                                        .child( App.getUid(getActivity()))
-                                                                        .child("amtheclaim")
-                                                                        .setValue(amtHeClaimMe)
-                                                                        .addOnCompleteListener
-                                                                                (new OnCompleteListener<Void>() {
-                                                                                    @Override
-                                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                MyOppo myOppo = new MyOppo();
+                                                                myOppo.setUid(App.getUid(getActivity()));
+                                                                myOppo.setUname(App.getUname(getActivity()));
+                                                                myOppo.setAmtheclaim
+                                                                        (amtHeClaimMe);
+                                                                myOppo.setTs(ts);
 
-                                                                                    }
-                                                                                });
 
                                                                 App.fbaseDbRef
                                                                         .child(FBaseNode0.MyOppoList)
                                                                         .child(oqItem
-                                                                                .getUidclaimee() )
+                                                                                .getUidclaimee())
                                                                         .child(App.getUid(getActivity()))
-                                                                        .child("ts")
-                                                                        .setValue(ts)
+                                                                        .setValue(myOppo)
                                                                         .addOnCompleteListener
                                                                                 (new OnCompleteListener<Void>() {
                                                                                     @Override
@@ -311,6 +310,7 @@ public class NewOQFrag1 extends Fragment {
 
                                                                                     }
                                                                                 });
+
 
                                                             }
                                                         }
@@ -328,22 +328,65 @@ public class NewOQFrag1 extends Fragment {
 
                             //my db (1, 2)
 
-                            /*********
-                             * His Space
-                             */
-                            //his db (1, 2)
-
-                            //push
+                            SetValue.updateMyRecentProfilesWithOppo(arlMyOppo, getActivity());
                         }
 
 
+                        final String pid = App.fbaseDbRef.child("push").push().getKey();
+                        OQPost oqPost = new OQPost();
+                        oqPost.setPid(pid);
+                        oqPost.setUid(App.getUid(getActivity()));
+                        oqPost.setUname(App.getUname(getActivity()));
+                        oqPost.setUdeed(DeedT.SENT_GETREQ);
+                        oqPost.setTxt(etContent.getText()
+                                .toString());
+                        oqPost.setTs(ts);
+                        if (((NewOQActivity)getActivity()).arlUriPhoto == null ||
+                                ((NewOQActivity)getActivity()).arlUriPhoto.size()
+                                        == 0) {
+                            oqPost.setPosttype(OQPostT.NONE);
+                        } else if (((NewOQActivity)getActivity()).arlUriPhoto != null &&
+                                ((NewOQActivity)getActivity()).arlUriPhoto.size() > 0) {
+                            oqPost.setPosttype(OQPostT.PHOTO);
+                        }
+                        oqPost.setMyOppos(arlMyOppo);
+
+                        App.fbaseDbRef
+                                .child(FBaseNode0.MyPosts)
+                                .child(App.getUid(getActivity()))
+                                .child(pid)
+                                .setValue(oqPost)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                    }
+                                })
+                        ;
+
+
+                        for (final OqItem oqItem : ((NewOQActivity) getActivity()).arlOQItem_Future) {
+                            App.fbaseDbRef
+                                    .child(FBaseNode0.MyPosts)
+                                    .child(oqItem.getUidclaimee())
+                                    .child(pid)
+                                    .setValue(oqPost)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                        }
+                                    })
+                            ;
+                        }
                     }
                 };
 
 
                 String s = "";
 
-                if ((arlUri == null || arlUri.size() == 0) &&
+                if ((((NewOQActivity)getActivity()).arlUriPhoto == null ||
+                        ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) &&
                         etContent.getText().length() == 0) {
                     s = JM.strById(R.string.newoq_nophoto_nowriting);
                     s += "\n";
@@ -351,7 +394,8 @@ public class NewOQFrag1 extends Fragment {
                             .xAndXPeopleOqItemClaimee(
                                     ((NewOQActivity) getActivity()).arlOQItem_Future
                             );
-                } else if (arlUri == null || arlUri.size() == 0) {
+                } else if (((NewOQActivity)getActivity()).arlUriPhoto == null ||
+                        ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) {
                     s = JM.strById(R.string.newoq_nophoto);
                     s += "\n";
                     s += StringGenerator
@@ -382,20 +426,20 @@ public class NewOQFrag1 extends Fragment {
 
 
     void uiPhotoData() {
-        if (arlUri == null || arlUri.size() == 0) {
+        if (((NewOQActivity)getActivity()).arlUriPhoto == null || ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) {
             JM.V(tvPhotoMainEmpty);
             JM.G(ivPhotoSub);
-        } else if (arlUri.size() == 1) {
+        } else if (((NewOQActivity)getActivity()).arlUriPhoto.size() == 1) {
             JM.G(tvPhotoMainEmpty);
             JM.G(ivPhotoSub);
-        } else if (arlUri.size() == 2) {
+        } else if (((NewOQActivity)getActivity()).arlUriPhoto.size() == 2) {
             JM.G(tvPhotoMainEmpty);
             JM.V(ivPhotoSub);
         } else {
             JM.G(tvPhotoMainEmpty);
             JM.V(ivPhotoSub);
             JM.V(tvPhotoSubNum);
-            tvPhotoSubNum.setText("+" + J.st(arlUri.size() - 2));
+            tvPhotoSubNum.setText("+" + J.st(((NewOQActivity)getActivity()).arlUriPhoto.size() - 2));
         }
     }
 
@@ -409,7 +453,7 @@ public class NewOQFrag1 extends Fragment {
             switch (requestCode) {
                 case REQ_PHOTO_GALLERY:
                     String result = data.getStringExtra("result");
-                    arlUri.add(Uri.parse(result));
+                    ((NewOQActivity)getActivity()).arlUriPhoto.add(Uri.parse(result));
                     uiPhotoData();
                     break;
             }

@@ -8,22 +8,35 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
+import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
+import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.generalutil.LBR;
-import com.jackleeentertainment.oq.object.OqItemSumForPerson;
-import com.jackleeentertainment.oq.ui.adapter.MyOqItemSumPerPersonRVAdapter;
-import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameDetailViewHolder;
+import com.jackleeentertainment.oq.generalutil.StringGenerator;
+import com.jackleeentertainment.oq.object.MyOppo;
+import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.ui.layout.activity.ProfileActivity;
+import com.jackleeentertainment.oq.ui.layout.viewholder.OppoAvatarNameAmtTsViewHolder;
 
 import hugo.weaving.DebugLog;
 
@@ -33,7 +46,8 @@ import hugo.weaving.DebugLog;
 public class MainFrag0_OQItems extends ListFrag {
     String TAG = this.getClass().getSimpleName();
     View view;
-
+    Fragment mFragment = this;
+    FirebaseRecyclerAdapter<MyOppo, OppoAvatarNameAmtTsViewHolder> firebaseRecyclerAdapterOppo;
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -42,11 +56,11 @@ public class MainFrag0_OQItems extends ListFrag {
             String searchKey = intent.getStringExtra("data");
 
 
-            if (searchKey.equals("nav_choose_from_list_get")||
-                    searchKey.equals("nav_choose_from_list_pay")||
-                    searchKey.equals("nav_list_i_am_master")||
+            if (searchKey.equals("nav_choose_from_list_get") ||
+                    searchKey.equals("nav_choose_from_list_pay") ||
+                    searchKey.equals("nav_list_i_am_master") ||
                     searchKey.equals("nav_list_i_am_member")
-                    ){
+                    ) {
 
                 //query
 
@@ -82,19 +96,11 @@ public class MainFrag0_OQItems extends ListFrag {
     void initAdapterOnResume() {
         super.initAdapterOnResume();
 
-        if (App.fbaseDbRef!=null) {
-            //nullpointerexception
-            Query query = App.fbaseDbRef
-                    .child(FBaseNode0.MyOppoOids)
-                    .child(App.getUid(getActivity()))
-                    .orderByChild("ts");
-            firebaseRecyclerAdapter = new MyOqItemSumPerPersonRVAdapter(
-                    OqItemSumForPerson.class,
-                    R.layout.lo_avatar_titlesubtitle,
-                    AvatarNameDetailViewHolder.class,
-                    query
-            );
-            recyclerView.setAdapter(firebaseRecyclerAdapter);
+        if (App.fbaseDbRef != null) {
+
+            initRVAdapter();
+
+
         } else {
             J.TOAST("App.fbaseDbRef!=null");
         }
@@ -104,26 +110,130 @@ public class MainFrag0_OQItems extends ListFrag {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        checkIfFirebaseListIsEmpty(getActivity());
         searchView.setVisibility(View.GONE);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
-                new IntentFilter("com.jackleeentertainment.oq." + LBR.IntentFilterT.MainActivityDrawerMenu));
-     }
+                new IntentFilter(LBR.IntentFilterT.MainActivityDrawerMenu));
+    }
 
 
+    void initRVAdapter() {
+        checkIfFirebaseListIsEmpty(getActivity());
+
+        ro_empty_list.setVisibility(View.GONE);
+        roProgress.setVisibility(View.GONE);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-    void checkIfFirebaseListIsEmpty(Activity activity){
+        firebaseRecyclerAdapterOppo = new FirebaseRecyclerAdapter<MyOppo, OppoAvatarNameAmtTsViewHolder>
+                (MyOppo.class,
+                        R.layout.i_oppo,
+                        OppoAvatarNameAmtTsViewHolder.class,
+                        App.fbaseDbRef
+                                .child(FBaseNode0.MyOppoList)
+                                .child(App.getUid(getActivity()))
+                ) {
+
+            public void populateViewHolder(
+                    final OppoAvatarNameAmtTsViewHolder oppoAvatarNameAmtTsViewHolder,
+                    final MyOppo myOppo,
+                    final int position) {
+
+                if (myOppo.getUid()!=null) {
+
+                    //set Image
+                    Glide.with(mFragment)
+                            .using(new FirebaseImageLoader())
+                            .load(App.fbaseStorageRef
+                                    .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                    .child(myOppo.getUid())
+                                    .child(FStorageNode.createMediaFileNameToDownload(
+                                            FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                                            myOppo.getUid()
+                                    )))
+                            .crossFade()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    oppoAvatarNameAmtTsViewHolder.ivAvatar.setVisibility(View.GONE);
+                                    oppoAvatarNameAmtTsViewHolder.tvAvatar.setVisibility(View
+                                            .VISIBLE);
+                                    oppoAvatarNameAmtTsViewHolder.tvAvatar.setText(myOppo.getUname()
+                                            .substring(0, 1));
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    oppoAvatarNameAmtTsViewHolder.ivAvatar.setVisibility(View.VISIBLE);
+                                    oppoAvatarNameAmtTsViewHolder.tvAvatar.setVisibility(View.GONE);
+                                    return false;
+                                }
+                            })
+                            .into(oppoAvatarNameAmtTsViewHolder.ivAvatar);
+                }
+
+                oppoAvatarNameAmtTsViewHolder.tvName.setText(myOppo.getUname());
+                oppoAvatarNameAmtTsViewHolder.tvDate.setText(JT.str(myOppo.getTs()));
+                oppoAvatarNameAmtTsViewHolder.tvDeed.setText(StringGenerator.deed(myOppo));
+
+                JM.tvAmtTextBgAboutMuOppo(oppoAvatarNameAmtTsViewHolder.tvAmtConfirmed, myOppo, 0);
+                JM.tvAmtTextBgAboutMuOppo(oppoAvatarNameAmtTsViewHolder.tvAmtArgued, myOppo, 1);
+                JM.tvAmtTextBgAboutMuOppo(oppoAvatarNameAmtTsViewHolder.tvAmtDone, myOppo, 2);
+
+                oppoAvatarNameAmtTsViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        App.fbaseDbRef
+                        .child(FBaseNode0.ProfileToPublic)
+                                .child(myOppo.getUid())
+                                .addListenerForSingleValueEvent(
+                                        new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.exists()){
+                                                    Profile profile = dataSnapshot.getValue
+                                                            (Profile.class);
+                                                    Intent intent = new Intent(
+                                                            mFragment.getActivity(),
+                                                            ProfileActivity.class);
+                                                    intent.putExtra("Profile",profile);
+                                                    intent.putExtra("isMe",false);
+                                                    startActivity(intent);
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        }
+                                );
+
+
+                    }
+                });
+            }
+        };
+
+        recyclerView.setAdapter(firebaseRecyclerAdapterOppo);
+    }
+
+
+    void checkIfFirebaseListIsEmpty(Activity activity) {
 
         JM.V(roProgress);
 
         App.fbaseDbRef
-                .child(FBaseNode0.MyOppoOids)
+                .child(FBaseNode0.MyOppoList)
                 .child(App.getUid(activity))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.exists()){
+                        if (!dataSnapshot.exists()) {
                             JM.G(roProgress);
                             JM.V(ro_empty_list);
                         } else {

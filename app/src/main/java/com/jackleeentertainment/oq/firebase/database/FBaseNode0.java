@@ -28,7 +28,7 @@ public class FBaseNode0 {
     public final static String Group_People = "group_oqitem";
 
 
-    public final static String MyReceivedPosts = "my_r_post";
+    public final static String MyPosts = "my_r_post";
     public final static String MySentPosts = "my_s_post";
 
 

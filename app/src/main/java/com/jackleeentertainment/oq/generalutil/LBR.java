@@ -11,34 +11,38 @@ import com.jackleeentertainment.oq.App;
  * Created by Jacklee on 16. 5. 9..
  */
 public class LBR {
-   static String TAG = "LBR";
+    static String TAG = "LBR";
 
-  public   static class SendSuffixT {
-      public  final static String SENDING = "g";
+    public static class SendSuffixT {
+        public final static String SENDING = "g";
 
-      public  final static String SENT = "s";
-      public final static String RECEIVED = "r";
+        public final static String SENT = "s";
+        public final static String RECEIVED = "r";
 
-  }
+    }
 
-    public static class IntentFilterT{
-        public  final static String MainActivityDrawerMenu = "MainActivityDrawerMenu";
-        public  final static String NewGroupActivityTitlePhoto = "NewGroupActivityTitlePhoto";
-        public  final static String NewOQActivity =
-                "NewOQActivity";
+    public static class IntentFilterT {
+
+        public final static String root =
+                "com.jackleeentertainment.oq.";
+
+        public final static String MainActivityDrawerMenu = root + "MainActivityDrawerMenu";
+        public final static String NewGroupActivityTitlePhoto = root + "NewGroupActivityTitlePhoto";
+        public final static String NewOQActivity =
+                root + "NewOQActivity";
 
 
-        public  final static String NewOQActivity_Frag0 =
-                "NewOQActivity_Fg0";
-        public  final static String NewOQActivity_Frag0_EasyInput ="NewOQActivity_Fg0_EI";
-        public  final static String
-                NewOQActivity_ArlOppoProfile_Frag0="NewOQAct_ArlOpPro_Fg0";
-        public  final static String PeopleActivity =
-                "PeopleActivity";
-        public  final static String PeopleActivity_Frag0 =
-                "PeopleActivity_Fg0";
-        public  final static String PeopleActivity_Frag1 =
-                "PeopleActivity_Fg1";
+        public final static String NewOQActivity_Frag0 =
+                root + "NewOQActivity_Fg0";
+        public final static String NewOQActivity_Frag0_EasyInput = root + "NewOQActivity_Fg0_EI";
+        public final static String
+                NewOQActivity_ArlOppoProfile_Frag0 = root + "NewOQAct_ArlOpPro_Fg0";
+        public final static String PeopleActivity =
+                root + "PeopleActivity";
+        public final static String PeopleActivity_Frag0 =
+                root + "PeopleActivity_Fg0";
+        public final static String PeopleActivity_Frag1 =
+                root + "PeopleActivity_Fg1";
     }
 
     public static void send(String intentfilterT) {

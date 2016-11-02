@@ -33,6 +33,13 @@
     <dimen name="md_24sp">24sp</dimen>
 
 
+
+    <dimen name="radius_tvoppo">8dp</dimen>
+    <dimen name="stroke_tvoppo">1dp</dimen>
+
+
+
+
     <!--Avatar-->
     <dimen name="avatar_lessmargin">44dp</dimen>
 

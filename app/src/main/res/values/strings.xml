@@ -317,6 +317,8 @@
     <string name="choose_from_list">기존 목록에서 선택</string>
     <!--<string name="input_manually">직접 입력하기</string>-->
 
+    <string name="attach_photo">사진 추가</string>
+
     <!--GROUP-->
     <string name="group">그룹</string>
     <string name="title_group">그룹 이름</string>
@@ -409,6 +411,7 @@
     <string name="sumandtype">금액 및 유형</string>
     <string name="request_detail">청구 내역</string>
 
+    <string name="sent_getreq">청구 요청을 보냈습니다.</string>
 
     <string name="done_korean">완료</string>
 
@@ -417,6 +420,7 @@
     <string name="foreach_">각각을 위해 </string>
 
     <string name="symbol_krw">₩</string>
+    <string name="request">요청</string>
 
 
     <string name="getter">받는 사람</string>
@@ -432,6 +436,11 @@
 
 
     <string name="search">검색</string>
+
+    <string name="none">없음</string>
+
+
+
 
 
     <string-array

@@ -127,9 +127,10 @@ public class App extends Application {
 
     public static void initFbaseDatabase() {
         Log.d(TAG, "initFbaseDatabase()");
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.setPersistenceEnabled(true);
-        Log.d(TAG, "firebaseDatabase.getApp().getMname() :"+firebaseDatabase.getApp().getName());
+        if (firebaseDatabase==null) {
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            firebaseDatabase.setPersistenceEnabled(true);
+        }
     }
 
     public static void initFbaseDatabaseRef() {

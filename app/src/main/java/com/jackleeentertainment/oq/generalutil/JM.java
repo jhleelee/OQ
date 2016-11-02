@@ -19,6 +19,7 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
+import com.jackleeentertainment.oq.object.MyOppo;
 import com.jackleeentertainment.oq.object.Profile;
 
 import java.io.ByteArrayInputStream;
@@ -318,6 +319,66 @@ public class JM {
             btEnable.setTextColor(JM.colorById(R.color.colorPrimary));
         }
 
+    }
+
+
+    public static void tvAmtTextBgAboutMuOppo(TextView tvAmt, MyOppo myOppo, int
+            zeroNormalOneArguedTwoDone
+    ) {
+        if (zeroNormalOneArguedTwoDone == 0) {
+
+            long val = myOppo.getAmticlaim() - myOppo.getAmtheclaim();
+
+            if (val > 0) {
+                tvAmt.setText(J.st(val));
+                JM.BGD(tvAmt, R.drawable.tv_oppo_normal_iplus);
+            } else if (val == 0) {
+                tvAmt.setVisibility(View.GONE);
+//                tvAmt.setText(JM.strById(R.string.none));
+//                JM.BGD(tvAmt,R.drawable.tv_oppo_confirmed_zero);
+            } else if (val < 0) {
+                tvAmt.setText(J.st(-val));
+                JM.BGD(tvAmt, R.drawable.tv_oppo_normal_iminus);
+            }
+
+        } else if (zeroNormalOneArguedTwoDone == 1) {
+
+            long val = myOppo.getAmticlaimarg() - myOppo.getAmtheclaimarg();
+
+            if (val > 0) {
+                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(val) + JM.strById(R.string
+                        .request));
+                JM.BGD(tvAmt, R.drawable.tv_oppo_argued_iplus);
+                JM.TC(tvAmt, R.color.getPrimary);
+
+            } else if (val == 0) {
+                tvAmt.setVisibility(View.GONE);
+//                tvAmt.setText(JM.strById(R.string.none));
+//                JM.BGD(tvAmt,R.drawable.tv_oppo_yet_zero);
+            } else if (val < 0) {
+                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(-val) + JM.strById(R.string
+                        .request));
+                JM.BGD(tvAmt, R.drawable.tv_oppo_argued_iminus);
+                JM.TC(tvAmt, R.color.payPrimary);
+
+            }
+
+        } else if (zeroNormalOneArguedTwoDone == 2) {
+            long val = myOppo.getAmticlaimdone() - myOppo.getAmtheclaimdone();
+
+            if (val > 0) {
+                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(val) + JM.strById(R.string
+                        .request));
+                JM.TC(tvAmt, R.color.getPrimary);
+            } else if (val == 0) {
+                tvAmt.setText(JM.strById(R.string.none));
+
+            } else if (val < 0) {
+                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(-val) + JM.strById(R.string
+                        .request));
+                JM.TC(tvAmt, R.color.payPrimary);
+            }
+        }
     }
 
 

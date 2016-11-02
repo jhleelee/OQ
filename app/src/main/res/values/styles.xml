@@ -272,6 +272,19 @@
     </style>
 
 
+    <style name="TextView.OppoAmmountItem">
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12dip</item>
+        <item name="android:paddingLeft">4dip</item>
+        <item name="android:paddingRight">4dip</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+
+
+
 
 
     <style name="TextView.InCardView">
@@ -356,6 +369,12 @@
 
     </style>
 
+
+    <style name="ListView.Divider">
+        <item name="android:dividerHeight">1dip</item>
+        <item name="android:divider">@color/text_black_54</item>
+
+    </style>
 
 
 

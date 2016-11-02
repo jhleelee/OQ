@@ -42,15 +42,6 @@
         android:layout_width="40dip"
         android:layout_height="40dip" />
 
-    <ImageButton
-        android:id="@+id/ibShare__lo_feed_action"
-        android:layout_marginRight="8dip"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_check_white_48dp"
-        style="@style/Base.Widget.AppCompat.ImageButton"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_width="40dip"
-        android:layout_height="40dip" />
 
 
 

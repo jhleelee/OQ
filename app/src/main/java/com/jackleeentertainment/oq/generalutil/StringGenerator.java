@@ -3,11 +3,13 @@ package com.jackleeentertainment.oq.generalutil;
 import android.content.Context;
 
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.object.MyOppo;
 import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Post;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.types.DeedT;
 import com.jackleeentertainment.oq.object.types.OQT;
-import com.jackleeentertainment.oq.object.types.PostT;
+import com.jackleeentertainment.oq.object.types.OQPostT;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 
 import java.util.ArrayList;
@@ -17,6 +19,20 @@ import java.util.ArrayList;
  * Created by Jacklee on 2016. 9. 10..
  */
 public class StringGenerator {
+
+
+
+    public static String deed (MyOppo myOppo){
+
+        if (myOppo.getDeed().equals(DeedT.SENT_GETREQ)){
+                return myOppo.getUname() + "님 에게 " + JM.strById(R.string.sent_getreq);
+        } else {
+            return null;
+        }
+
+    }
+
+
 
 
     public static String xWantToXAboutMoney(String name, String wantToDoSomething) {
@@ -284,13 +300,13 @@ public class StringGenerator {
 
     public static String postT(Post post) {
         switch (post.getPosttype()) {
-            case PostT.NONE:
+            case OQPostT.NONE:
                 return JM.strById(R.string.post);
 
-            case PostT.PHOTO:
+            case OQPostT.PHOTO:
                 return JM.strById(R.string.photo);
 
-            case PostT.VIDEO:
+            case OQPostT.VIDEO:
                 return JM.strById(R.string.video);
 
             default:

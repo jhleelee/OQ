@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/side_nav_bar"/>
+    <item android:drawable="@drawable/side_nav_bar" />
 
-    <item
-          android:gravity="top">
-
+    <item android:top="80dp"
+          android:left="10dp"
+          android:right="10dp"
+        >
         <bitmap
-            android:gravity="center"
-            android:src="@drawable/oqlogowhite"/>
+            android:gravity="top|center_horizontal"
+            android:src="@drawable/oq_logo_small"
+            />
     </item>
 
 </layer-list>
+
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+    <!--<item android:drawable="@drawable/side_nav_bar"/>-->
+
+    <!--<item-->
+          <!--android:gravity="top">-->
+
+        <!--<bitmap-->
+            <!--android:gravity="center"-->
+            <!--android:src="@drawable/oqlogowhite"/>-->
+    <!--</item>-->
+
+<!--</layer-list>-->

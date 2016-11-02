@@ -5,12 +5,15 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.Ram;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Chat;
+import com.jackleeentertainment.oq.object.MyOppo;
 import com.jackleeentertainment.oq.object.Post;
 import com.jackleeentertainment.oq.object.Profile;
 
@@ -71,6 +74,141 @@ public class SetValue {
                 });
     }
 
+
+
+
+
+
+
+
+    public static void updateMyRecentProfile(
+            final Profile profile,
+            final Activity activity) {
+
+
+
+            App.fbaseDbRef
+                    .child(FBaseNode0.MyRecent)
+                    .child(App.getUid(activity))
+                    .push()
+                    .setValue(profile);
+
+
+        App.fbaseDbRef
+                .child(FBaseNode0.MyRecent)
+                .child(App.getUid(activity))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 20) {
+
+                            Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                            int j = 0;
+                            for (DataSnapshot d : iterable) {
+
+                                if (j > 20) {
+                                    App.fbaseDbRef
+                                            .child(FBaseNode0.MyRecent)
+                                            .child(App.getUid(activity))
+                                            .child(d.getKey())
+                                            .setValue(null)
+                                    ;
+                                }
+                                j++;
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+
+
+
+
+    public static void updateMyRecentProfiles(
+            final ArrayList<Profile> arlProfile,
+            final Activity activity) {
+
+        for (Profile profile : arlProfile) {
+
+            App.fbaseDbRef
+                    .child(FBaseNode0.MyRecent)
+                    .child(App.getUid(activity))
+                    .push()
+                    .setValue(profile);
+        }
+
+        App.fbaseDbRef
+                .child(FBaseNode0.MyRecent)
+                .child(App.getUid(activity))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 20) {
+
+                            Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                            int j = 0;
+                            for (DataSnapshot d : iterable) {
+
+                                if (j > 20) {
+                                    App.fbaseDbRef
+                                            .child(FBaseNode0.MyRecent)
+                                            .child(App.getUid(activity))
+                                            .child(d.getKey())
+                                            .setValue(null)
+                                    ;
+                                }
+                                j++;
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+
+
+    public static void updateMyRecentProfilesWithOppo(
+            final ArrayList<MyOppo> arlMyOppo,
+            final Activity activity) {
+
+        for (MyOppo myOppo : arlMyOppo) {
+
+            App.fbaseDbRef
+                    .child(FBaseNode0.ProfileToPublic)
+                    .child(myOppo.getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()){
+                                Profile profile = dataSnapshot.getValue(Profile.class);
+                                SetValue.updateMyRecentProfile(profile, activity);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+        }
+
+
+    }
+
+
     /*
     Post.class
     */
@@ -117,30 +255,25 @@ public class SetValue {
     }
 
 
-        /*
-    OQ
-    */
-        public static void myOQItems(final Post post,
-                                final boolean toRamLBR) {
-            App.fbaseDbRef
-                    .child(FBaseNode0.MyOqItems)
-                    .child(post.getOid())
-                    .setValue(post, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            if (databaseError == null) {
-                                if (toRamLBR) {
-                                    LBR.send(FBaseNode0.Post + LBR.SendSuffixT.SENT, post);
-                                }
+    /*
+OQ
+*/
+    public static void myOQItems(final Post post,
+                                 final boolean toRamLBR) {
+        App.fbaseDbRef
+                .child(FBaseNode0.MyOqItems)
+                .child(post.getOid())
+                .setValue(post, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if (databaseError == null) {
+                            if (toRamLBR) {
+                                LBR.send(FBaseNode0.Post + LBR.SendSuffixT.SENT, post);
                             }
                         }
-                    });
-        }
-
-
-
-
-
+                    }
+                });
+    }
 
 
 }

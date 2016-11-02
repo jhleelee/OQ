@@ -10,8 +10,13 @@ public class MyOppo {
     String uname;
     long amticlaim;
     long amtheclaim;
-    long amticlaimadm;
-    long amtheclaimadm;
+    long amticlaimarg;
+    long amtheclaimarg;
+    long amtheclaimdone;
+    long amticlaimdone;
+
+    String deed;
+
     long ts;
 
     public MyOppo() {
@@ -50,20 +55,20 @@ public class MyOppo {
         this.amtheclaim = amtheclaim;
     }
 
-    public long getAmticlaimadm() {
-        return amticlaimadm;
+    public long getAmticlaimarg() {
+        return amticlaimarg;
     }
 
-    public void setAmticlaimadm(long amticlaimadm) {
-        this.amticlaimadm = amticlaimadm;
+    public void setAmticlaimarg(long amticlaimarg) {
+        this.amticlaimarg = amticlaimarg;
     }
 
-    public long getAmtheclaimadm() {
-        return amtheclaimadm;
+    public long getAmtheclaimarg() {
+        return amtheclaimarg;
     }
 
-    public void setAmtheclaimadm(long amtheclaimadm) {
-        this.amtheclaimadm = amtheclaimadm;
+    public void setAmtheclaimarg(long amtheclaimarg) {
+        this.amtheclaimarg = amtheclaimarg;
     }
 
     public long getTs() {
@@ -74,5 +79,26 @@ public class MyOppo {
         this.ts = ts;
     }
 
+    public String getDeed() {
+        return deed;
+    }
 
+    public void setDeed(String deed) {
+        this.deed = deed;
+    }
+    public long getAmtheclaimdone() {
+        return amtheclaimdone;
+    }
+
+    public void setAmtheclaimdone(long amtheclaimdone) {
+        this.amtheclaimdone = amtheclaimdone;
+    }
+
+    public long getAmticlaimdone() {
+        return amticlaimdone;
+    }
+
+    public void setAmticlaimdone(long amticlaimdone) {
+        this.amticlaimdone = amticlaimdone;
+    }
 }

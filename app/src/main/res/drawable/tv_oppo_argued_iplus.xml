@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/radius_tvoppo" />
+
+
+            <stroke
+                android:width="@dimen/stroke_tvoppo"
+                android:color="@color/getPrimary"
+                />
+
+        </shape>
+    </item>
+</selector>

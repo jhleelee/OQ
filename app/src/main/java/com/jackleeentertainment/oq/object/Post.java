@@ -7,6 +7,11 @@ import java.util.List;
  */
 
 public class Post {
+
+
+
+
+
     String oid;
     String uid;
     String name;
@@ -17,6 +22,7 @@ public class Post {
     String posttype ; // 0null, 1video, 2photo
     List<Comment> comments;
     List<String> like_uids;
+    List<OqItem> oqItems;
 
     public Post() {
         super();

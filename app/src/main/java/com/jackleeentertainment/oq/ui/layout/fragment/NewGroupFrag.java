@@ -182,28 +182,28 @@ public class NewGroupFrag extends Fragment {
                                       int before, int count) {
 
 
-                if (etTitle.getText().length() != 0) {
+                if (etTitle.getText().length() > 0) {
                     cardviewMember.animate()
-                            .translationY(-view.getHeight())
+                            .translationY(-cardviewMember.getHeight())
                             .alpha(1.0f)
                             .setDuration(300)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
-                                    view.setVisibility(View.VISIBLE);
+                                    cardviewMember.setVisibility(View.VISIBLE);
                                 }
                             });
                 } else {
                     cardviewMember.animate()
-                            .translationY(view.getHeight())
+                            .translationY(cardviewMember.getHeight())
                             .alpha(0.0f)
                             .setDuration(100)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
-                                    view.setVisibility(View.GONE);
+                                    cardviewMember.setVisibility(View.GONE);
                                 }
                             });
                 }

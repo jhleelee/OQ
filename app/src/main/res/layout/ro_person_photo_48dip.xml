@@ -4,11 +4,7 @@
     android:layout_width="@dimen/md_48dip"
     android:layout_height="@dimen/md_48dip">
 
-    <VideoView
-        android:layout_centerInParent="true"
-        android:id="@+id/ro_person_photo_vv"
-        android:layout_width="@dimen/md_40dip"
-        android:layout_height="@dimen/md_40dip" />
+
 
 
     <TextView

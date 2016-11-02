@@ -250,35 +250,8 @@ public class BaseActivity extends AppCompatActivity {
                     .OnClickListener dialogOcl
 
     ) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(JM.strById(messageStrId));
+        showAlertDialogWithOkCancel(JM.strById(messageStrId), dialogOcl);
 
-        alertDialogBuilder.setPositiveButton(
-                JM.strById(R.string.ok_korean),
-                dialogOcl);
-
-        alertDialogBuilder.setNegativeButton(JM.strById(R.string.cancel_korean),
-                new
-                        DialogInterface
-                                .OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                arg0.dismiss();
-                            }
-                        });
-
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        if (alertDialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
-            Button nbutton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-            nbutton.setTextColor(JM.colorById(R.color.text_black_54));
-        }
-        if (alertDialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
-            Button pbutton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
-        }
-        alertDialog.show();
     }
 
 
@@ -288,27 +261,27 @@ public class BaseActivity extends AppCompatActivity {
                     .OnClickListener dialogOcl
 
     ) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(messageStr);
 
-        alertDialogBuilder.setPositiveButton(
-                JM.strById(R.string.ok_korean),
-                dialogOcl)
-                .setNegativeButton(JM.strById(R.string.cancel_korean),
-                        new DialogInterface
-                                .OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                arg0.dismiss();
-                            }
-                        });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        if (alertDialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
-            Button pbutton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
-        }
-        alertDialog.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(messageStr);
+        builder.setNegativeButton(JM.strById(R.string.cancel_korean), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(JM.strById(R.string.ok_korean), dialogOcl);
+        AlertDialog dialog = builder.create();
+
+
+        if(dialog == null)
+            return;
+        dialog.show();
+        Button nbutton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setTextColor(JM.colorById(R.color.text_black_54));
+        Button pbutton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
+
     }
 
 

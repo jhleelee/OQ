@@ -228,7 +228,8 @@ public class NewOQFrag0Neo extends Fragment {
 
         loSelectedPeople.removeAllViews();
 
-        if (((NewOQActivity) getActivity()).arlOQItem_Future == null || ((NewOQActivity) getActivity
+        if (((NewOQActivity) getActivity()).arlOQItem_Future == null ||
+                ((NewOQActivity) getActivity
                 ()).arlOQItem_Future.size() == 0) {
             JM.btEnable(btEasyInput, false);
 
@@ -280,6 +281,11 @@ public class NewOQFrag0Neo extends Fragment {
                     @Override
                     public void onClick(View v) {
 
+                        long l = oqItem.getAmmount();
+                        for (OqItem oqItem1 : ((NewOQActivity) getActivity()).arlOQItem_Future){
+                            oqItem1.setAmmount(l);
+                        }
+                        cvProfileApplyArlSelectedProfilesToLo();
                     }
                 });
                 lo.setOnIvDeleteClickListener(new View.OnClickListener() {
@@ -305,7 +311,7 @@ public class NewOQFrag0Neo extends Fragment {
                                 getActivity()
                         )
                 );
-
+                lo.etAmmount.setText(J.st(oqItem.getAmmount()));
                 lo.etAmmount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
                 lo.etAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
                 lo.etAmmount.addTextChangedListener(

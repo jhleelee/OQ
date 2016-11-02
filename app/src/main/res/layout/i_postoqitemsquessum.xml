@@ -6,7 +6,7 @@
 
 
     <include
-        layout="@layout/i_feed"/>
+        layout="@layout/i_post"/>
 
     // customView
 

@@ -527,27 +527,45 @@ public class MainActivity extends BaseActivity
                                 .child(FBaseNode0.MyContacts)
                                 .child(App.getUid(this))
                 ) {
-            public void populateViewHolder(AvatarNameViewHolder avatarNameViewHolder,
+            public void populateViewHolder(final AvatarNameViewHolder avatarNameViewHolder,
                                            Profile profile,
                                            int position) {
                 avatarNameViewHolder.tvTitle__lo_avatar_name
                         .setText(profile.getFull_name()
                         );
 
+
                 //set Image
                 Glide.with(mActivity)
                         .using(new FirebaseImageLoader())
                         .load(App.fbaseStorageRef
                                 .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                .child(profile.getUid())
+                                .child(App.getUid(mActivity))
                                 .child(FStorageNode.createMediaFileNameToDownload(
                                         FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                        profile.getUid()
+                                        App.getUid(mActivity)
                                 )))
                         .crossFade()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                avatarNameViewHolder.ro_person_photo_iv.setVisibility(View.GONE);
+                                avatarNameViewHolder.ro_person_photo_tv.setVisibility(View.VISIBLE);
+                                avatarNameViewHolder.ro_person_photo_tv.setText(App.getUname(mActivity).substring(0, 1));
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                avatarNameViewHolder.ro_person_photo_iv.setVisibility(View.VISIBLE);
+                                avatarNameViewHolder.ro_person_photo_tv.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
                         .into(avatarNameViewHolder.ro_person_photo_iv);
-                ;
+
+
             }
         };
 
@@ -563,7 +581,7 @@ public class MainActivity extends BaseActivity
                                 .child(App.getUid(this))
                 ) {
             public void populateViewHolder(
-                    AvatarNameViewHolder avatarNameViewHolder,
+                  final  AvatarNameViewHolder avatarNameViewHolder,
                     final Profile profile, int position) {
 
                 avatarNameViewHolder.tvTitle__lo_avatar_name
@@ -587,6 +605,41 @@ public class MainActivity extends BaseActivity
                             .crossFade()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(avatarNameViewHolder.ro_person_photo_iv);
+
+
+
+                    //set Image
+                    Glide.with(mActivity)
+                            .using(new FirebaseImageLoader())
+                            .load(App.fbaseStorageRef
+                                    .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                    .child(App.getUid(mActivity))
+                                    .child(FStorageNode.createMediaFileNameToDownload(
+                                            FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                                            App.getUid(mActivity)
+                                    )))
+                            .crossFade()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    avatarNameViewHolder.ro_person_photo_iv.setVisibility(View.GONE);
+                                    avatarNameViewHolder.ro_person_photo_tv.setVisibility(View.VISIBLE);
+                                    avatarNameViewHolder.ro_person_photo_tv.setText(App.getUname(mActivity).substring(0, 1));
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    avatarNameViewHolder.ro_person_photo_iv.setVisibility(View.VISIBLE);
+                                    avatarNameViewHolder.ro_person_photo_tv.setVisibility(View.GONE);
+                                    return false;
+                                }
+                            })
+                            .into(avatarNameViewHolder.ro_person_photo_iv);
+
+
+
                 }
 
                 View.OnClickListener onClickListener = new View.OnClickListener() {

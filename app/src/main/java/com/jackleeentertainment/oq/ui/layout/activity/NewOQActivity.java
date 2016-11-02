@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.OqItemUtil;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
+import com.soundcloud.android.crop.Crop;
 
 import java.util.ArrayList;
 
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     String TAG = "NewOQActivity";
     final int REQ_PEOPLE = 99;
-    final int REQ_SUMTYPE = 98;
+    final int REQ_PICK_IMAGE_FOR_FEED = 98;
 
     //temp data (1)
     public String OQTWantT_Future = null; //PAY/GET
@@ -40,7 +42,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     public ArrayList<OqItem> arlOQItem_Now = new ArrayList<>();
     public ArrayList<OqItem> arlOQItem_Future = new ArrayList<>();
 
-
+    public  ArrayList<Uri> arlUriPhoto = new ArrayList<>();
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -53,9 +55,6 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     };
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +64,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
         showFrag(NewOQFrag0Neo.newInstance(bundle), R.id.fr_content);
 
         //LBR
-        LocalBroadcastManager.getInstance( this).registerReceiver(
+        LocalBroadcastManager.getInstance(this).registerReceiver(
                 mMessageReceiver,
                 new IntentFilter(LBR.IntentFilterT.NewOQActivity));
     }
@@ -103,10 +102,23 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
         if (arlOQItem_Future != null && arlOQItem_Future.size() > 0) {
 
             ArrayList<String> arlUidClaimee = OqItemUtil.getArlUidClaimeeFromArlOqItem
-                    (arlOQItem_Future );
+                    (arlOQItem_Future);
             i.putExtra("beforeUids", new Gson().toJson(arlUidClaimee));
         }
         startActivityForResult(i, REQ_PEOPLE);
+    }
+
+
+    public void startActivityForResultPhotoGalleryForFeed() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        }
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                JM.strById(R.string.attach_photo)),
+                REQ_PICK_IMAGE_FOR_FEED);
     }
 
 
@@ -139,6 +151,25 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                                     , this);
                         }
                         arlOQItem_Future.add(oqItem1);
+                    }
+                }
+            }
+
+
+            if (requestCode == REQ_PICK_IMAGE_FOR_FEED) {
+
+                if (intent != null
+                        && intent.getData() != null) {
+                    Log.d(TAG, "data available");
+
+                    if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
+                        //Intent.EXTRA_ALLOW_MULTIPLE
+                        Log.d(TAG, "VERSION.SDK_INT >= 18 " + intent.getData().toString());
+                        arlUriPhoto.add(intent.getData());
+
+                    } else {
+                        Log.d(TAG, "VERSION.SDK_INT < 18 " + intent.getData().toString());
+                        arlUriPhoto.add(intent.getData());
                     }
                 }
             }

@@ -13,8 +13,8 @@
 
 
 
-    <color name="getPrimary">@color/material_green600</color>
-    <color name="payPrimary">@color/material_deeporange700</color>
+    <color name="getPrimary">@color/material_orange400a</color>
+    <color name="payPrimary">@color/material_cyan800</color>
     <color name="zeroPrimary">@color/material_grey600</color>
 
 
