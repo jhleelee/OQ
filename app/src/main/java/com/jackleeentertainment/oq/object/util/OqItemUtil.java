@@ -14,8 +14,6 @@ import com.jackleeentertainment.oq.object.types.OQT;
 
 import java.util.ArrayList;
 
-import hugo.weaving.DebugLog;
-
 /**
  * Created by Jacklee on 2016. 10. 5..
  */
@@ -108,7 +106,7 @@ public class OqItemUtil {
         oqItem.setNamepayer(profilePayerAndClaimee.getFull_name());
 
         oqItem.setCurrency(JM.strById(R.string.currency_code));
-        oqItem.setOqtype(OQT.PointT.TOPAY);
+        oqItem.setOqtype(OQT.DoWhen.FUTURE);
         return oqItem;
     }
 
@@ -130,7 +128,7 @@ public class OqItemUtil {
         oqItem.setNamepayer(App.getUname(activity));
 
         oqItem.setCurrency(JM.strById(R.string.currency_code));
-        oqItem.setOqtype(OQT.PointT.TOPAY);
+        oqItem.setOqtype(OQT.DoWhen.FUTURE);
         return oqItem;
     }
 
@@ -243,13 +241,13 @@ public class OqItemUtil {
 //        if (oqItem.getOqgnltype()!=null&&
 //                oqItem.getOqwnttype()!=null){
 //
-//            if (oqItem.getOqwnttype().equals(OQT.WantT.GET)){
+//            if (oqItem.getOqwnttype().equals(OQT.DoWhat.GET)){
 //                oqItem.setUidgettor(
 //                        App.getUid(activity)
 //                );
 //            } else
 //
-//            if (oqItem.getOqwnttype().equals(OQT.WantT.PAY))
+//            if (oqItem.getOqwnttype().equals(OQT.DoWhat.PAY))
 //
 //            {
 //                oqItem.setUidpayer(

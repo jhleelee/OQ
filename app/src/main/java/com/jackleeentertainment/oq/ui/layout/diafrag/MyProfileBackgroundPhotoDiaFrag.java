@@ -3,7 +3,6 @@ package com.jackleeentertainment.oq.ui.layout.diafrag;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +26,15 @@ public class MyProfileBackgroundPhotoDiaFrag extends BaseDiaFrag {
 
     public static MyProfileBackgroundPhotoDiaFrag newInstance(Bundle bundle, Context context) {
         MyProfileBackgroundPhotoDiaFrag frag = new MyProfileBackgroundPhotoDiaFrag();
-
-        int style = DialogFragment.STYLE_NORMAL, theme = 0;
-        theme = android.R.style.Theme_Material_Dialog_NoActionBar;
-        frag.setStyle(style, theme);
         frag.setArguments(bundle);
         mContext = context;
         return frag;
     }
+
+
+
+
+
 
     @Nullable
     @Override
@@ -46,18 +46,30 @@ public class MyProfileBackgroundPhotoDiaFrag extends BaseDiaFrag {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getDialog().setTitle(JM.strById(R.string.change_photo));
+
         JM.G(lo_numselectedprofiles_add__lo_diafrag);
         JM.V(lv__lo_diafragwithiconlist);
         JM.G(et__lo_diafrag);
         JM.G(ro_diafrag_okcancel__lo_diafragwithiconlist);
 
         //Items
-        ItemDiaFragList itemDiaFragListTransGet = new ItemDiaFragList();
-        itemDiaFragListTransGet.setText(JM.strById(R.string.change_profile_photo));
-        itemDiaFragListTransGet.setIdDrawableIco(
-                R.drawable.ic_person_white_48dp);
-        itemDiaFragListTransGet.setIdDrawableBg(R.drawable.btn_transparent);
-        itemDiaFragListTransGet.setOnClickListener(new View.OnClickListener() {
+        ItemDiaFragList iProfilePhoto = new ItemDiaFragList();
+        iProfilePhoto.setText(JM.strById(R.string.change_profile_photo));
+        iProfilePhoto.setDrawableIco(
+                JM.tintedDrawable(
+                        R.drawable.ic_person_white_48dp,
+                        R.color.colorPrimary,
+                        getActivity()
+                )
+        );
+        iProfilePhoto.setDrawableBg(
+                JM.drawableById(
+                        R.drawable.btn_transparent
+                )
+        );
+
+        iProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)mContext).startActivityForResultPhotoGalleryToPROFILECHANGE();
@@ -66,19 +78,29 @@ public class MyProfileBackgroundPhotoDiaFrag extends BaseDiaFrag {
             }
         });
 
-        ItemDiaFragList itemDiaFragListTransPay = new ItemDiaFragList();
-        itemDiaFragListTransPay.setText(JM.strById(R.string.change_background_photo));
-        itemDiaFragListTransPay.setIdDrawableIco(R.drawable.ic_photo_library_white_48dp);
-        itemDiaFragListTransPay.setIdDrawableBg(R.drawable.btn_transparent);
-        itemDiaFragListTransPay.setOnClickListener(new View.OnClickListener() {
+        ItemDiaFragList iBg = new ItemDiaFragList();
+        iBg.setText(JM.strById(R.string.change_background_photo));
+        iBg.setDrawableIco(
+                JM.tintedDrawable(
+                        R.drawable.ic_photo_library_white_48dp,
+                        R.color.colorPrimary,
+                        getActivity()
+                )
+        );
+        iBg.setDrawableBg(
+                JM.drawableById(
+                        R.drawable.btn_transparent
+                )
+        );
+        iBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        arl.add(itemDiaFragListTransGet);
-        arl.add(itemDiaFragListTransPay);
+        arl.add(iProfilePhoto);
+        arl.add(iBg);
 
         diaFragAdapter = new DiaFragAdapter(arl, mContext);
         lv__lo_diafragwithiconlist.setAdapter(diaFragAdapter);

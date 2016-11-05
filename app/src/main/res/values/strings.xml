@@ -138,11 +138,20 @@
 
     <!--Profile-->
 
+    <string name="change_photo">사진 변경</string>
+
     <string name="change_profile_photo">프로필 사진 변경</string>
     <string name="change_background_photo">배경 사진 변경</string>
 
 
     <string name="add_opponents">상대방 추가</string>
+
+
+    <string name="transaction_empty">청구 또는 거래 내역이 없습니다.</string>
+
+
+
+
 
 
     <!--Google -->
@@ -482,6 +491,7 @@
     <string name="begin_feed">요청 내역 및 게시물</string>
 
     <string name="add_photo_comment">사진 및 글 추가</string>
+    <string name="add_comment">글 추가</string>
 
 
     <string name="newoq_nophoto_nowriting">사진 및 글을 함께 보내면 분위기가 한결 부드러워집니다.\n\n사진이나 글 없이
@@ -491,6 +501,29 @@
     <string name="newoq_nowriting">글을 함께 보내면 분위기가 한결 부드러워집니다.\n\n글 없이
         요청을 보내시겠습니까?</string>
     <string name="newoq_send">선택된 회원님에게 요청을 보냅니다.</string>
+
+    <string name="req_amtvar_whatphrasevar">청구액 %1$s원 : %2$s</string>
+    <string name="whovar_argues">%1$s님이 이의제기</string>
+    <string name="whovar_all_notpaid">%1$s님이 전액 미지급</string>
+    <string name="whovar_amtvar_notpaid">%1$s님이 %2$s원 미지급</string>
+
+    <string name="whovar_all_claimpaid">%1$s님이 전액 지급 확인을 요청함</string>
+    <string name="whovar_amtvar_claimpaid">%1$s님이 %2$s원 지급 확인을 요청함</string>
+
+    <string name="whovar_all_paid_confirmed">%1$s님이 전액 지급하였음</string>
+    <string name="whovar_amtvar_paid_confirmed">%1$s님이 %2$s원 지급하였음</string>
+
+
+
+    public static String ASentGetPastNoti__BArgued = "h";
+    public static String ASentGetPastNoti__BNoArgued = "i";
+
+    public static String ASentPaySuggest__BArgued = "e";
+    public static String ASentPaySuggest__BNoArgued_NotReceivedAll = "f";
+    public static String ASentPaySuggest__BNoArgued_DidReceivedAll = "g";
+
+    public static String ASentPayPastNoti__BYetConfirmed = "j";
+    public static String ASentPayPastNoti__BDidConfirmed = "k";
 
 
 </resources>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +40,6 @@ public class TransactChatOrShowProfileDiaFrag extends BaseDiaFrag {
 
     public static TransactChatOrShowProfileDiaFrag newInstance(Bundle bundle, Context context) {
         TransactChatOrShowProfileDiaFrag frag = new TransactChatOrShowProfileDiaFrag();
-
-        int style = DialogFragment.STYLE_NORMAL, theme = 0;
-        theme = android.R.style.Theme_Material_Dialog_NoActionBar;
-        frag.setStyle(style, theme);
-
         frag.setArguments(bundle);
         profile = (Profile) bundle.getSerializable("Profile");
         mContext = context;
@@ -71,8 +65,21 @@ public class TransactChatOrShowProfileDiaFrag extends BaseDiaFrag {
         //Items
         ItemDiaFragList itemDiaFragListTransGet = new ItemDiaFragList();
         itemDiaFragListTransGet.setText(JM.strById(R.string.transaction_i_get));
-        itemDiaFragListTransGet.setIdDrawableIco(R.drawable.ic_play_for_work_white_48dp);
-        itemDiaFragListTransGet.setIdDrawableBg(R.drawable.rec_radmd2_nostr_getprimary);
+
+        itemDiaFragListTransGet.setDrawableIco(
+                JM.tintedDrawable(
+                        R.drawable.ic_play_for_work_white_48dp,
+                        R.color.colorPrimary,
+                        getActivity()
+                )
+        );
+        itemDiaFragListTransGet.setDrawableBg(
+                JM.drawableById(
+                        R.drawable.btn_transparent
+                )
+        );
+
+
         itemDiaFragListTransGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,8 +93,20 @@ public class TransactChatOrShowProfileDiaFrag extends BaseDiaFrag {
 
         ItemDiaFragList itemDiaFragListTransPay = new ItemDiaFragList();
         itemDiaFragListTransPay.setText(JM.strById(R.string.transaction_i_pay));
-        itemDiaFragListTransPay.setIdDrawableIco(R.drawable.ic_play_for_work_white_48dp);
-        itemDiaFragListTransPay.setIdDrawableBg(R.drawable.rec_radmd2_nostr_getprimary);
+
+
+        itemDiaFragListTransGet.setDrawableIco(
+                JM.tintedDrawable(
+                        R.drawable.ic_play_for_work_white_48dp,
+                        R.color.colorPrimary,
+                        getActivity()
+                )
+        );
+        itemDiaFragListTransGet.setDrawableBg(
+                JM.drawableById(
+                        R.drawable.btn_transparent
+                )
+        );
         itemDiaFragListTransPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,8 +121,20 @@ public class TransactChatOrShowProfileDiaFrag extends BaseDiaFrag {
 
         ItemDiaFragList itemDiaFragListChat = new ItemDiaFragList();
         itemDiaFragListChat.setText(JM.strById(R.string.do_chat));
-        itemDiaFragListChat.setIdDrawableIco(R.drawable.ic_chat_white_48dp);
-        itemDiaFragListChat.setIdDrawableBg(R.drawable.rec_radmd2_nostr_payprimary);
+
+        itemDiaFragListTransGet.setDrawableIco(
+                JM.tintedDrawable(
+                        R.drawable.ic_chat_white_48dp,
+                        R.color.colorPrimary,
+                        getActivity()
+                )
+        );
+        itemDiaFragListTransGet.setDrawableBg(
+                JM.drawableById(
+                        R.drawable.btn_transparent
+                )
+        );
+
         itemDiaFragListChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,8 +164,21 @@ public class TransactChatOrShowProfileDiaFrag extends BaseDiaFrag {
 
         ItemDiaFragList itemDiaFragListProfile = new ItemDiaFragList();
         itemDiaFragListProfile.setText(JM.strById(R.string.show_profile));
-        itemDiaFragListProfile.setIdDrawableIco(R.drawable.ic_person_white_48dp);
-        itemDiaFragListProfile.setIdDrawableBg(R.drawable.rec_radmd2_nostr_payprimary);
+
+        itemDiaFragListTransGet.setDrawableIco(
+                JM.tintedDrawable(
+                        R.drawable.ic_person_white_48dp,
+                        R.color.colorPrimary,
+                        getActivity()
+                )
+        );
+        itemDiaFragListTransGet.setDrawableBg(
+                JM.drawableById(
+                        R.drawable.btn_transparent
+                )
+        );
+
+
         itemDiaFragListProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

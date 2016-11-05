@@ -10,7 +10,10 @@
 
 
 
-
+    <color name="colorRequested">@color/material_red500</color>
+    <color name="colorRequestedButArgued">@color/material_yellow700a</color>
+    <color name="colorPaid">@color/material_green700a</color>
+    <color name="colorClaimPaid">@color/material_yellow700a</color>
 
 
     <color name="getPrimary">@color/material_orange400a</color>

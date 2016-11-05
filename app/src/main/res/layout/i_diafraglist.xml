@@ -7,14 +7,13 @@
 
     <RelativeLayout
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/md_12dip"
                     android:id="@+id/ro_person_photo"
                     android:layout_width="@dimen/md_48dip"
                     android:layout_height="@dimen/md_48dip">
 
         <ImageView
             android:layout_centerInParent="true"
-            android:id="@+id/ro_person_photo_iv"
+            android:id="@+id/ivAva"
             android:layout_width="@dimen/md_40dip"
             android:padding="4dip"
             android:layout_height="@dimen/md_40dip"

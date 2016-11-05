@@ -1,18 +1,12 @@
 package com.jackleeentertainment.oq.ui.layout.viewholder;
 
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
-import com.jackleeentertainment.oq.generalutil.JM;
 
 /**
  * Created by Jacklee on 2016. 9. 29..
@@ -34,7 +28,7 @@ public class AvatarNameDetailViewHolder extends RecyclerView.ViewHolder {
                         .findViewById(R.id.ro_person_photo_48dip__lo_avatartitlesubtitle);
         ro_person_photo_iv =
                 (ImageView) ro_person_photo_48dip__lo_avatartitlesubtitle
-                        .findViewById(R.id.ro_person_photo_iv);
+                        .findViewById(R.id.ivAva);
         tvTitle__lo_avatartitlesubtitle =
                 (TextView) mView
                         .findViewById(R.id.tvTitle__lo_avatartitlesubtitle);

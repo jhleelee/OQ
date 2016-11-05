@@ -61,6 +61,7 @@
     <!--        i_inline-->
     <dimen name="textSizeOfNameInLine">23sp</dimen>
     <dimen name="textSizeOfUsualTextInLine">23sp</dimen>
+    <dimen name="textSizeOfEmptyScreen">16sp</dimen>
 
 
     <dimen name="profilephotoHW_powerbtnHW__i_alarm">40dp</dimen>

@@ -7,11 +7,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.ui.layout.activity.BaseActivity;
 import com.jackleeentertainment.oq.ui.layout.diafrag.list.DiaFragAdapter;
 import com.jackleeentertainment.oq.ui.layout.diafrag.list.ItemDiaFragList;
@@ -34,6 +32,7 @@ public class GalleryOrCameraDiaFrag extends BaseDiaFrag {
         return frag;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,25 +51,47 @@ public class GalleryOrCameraDiaFrag extends BaseDiaFrag {
         //Items
         ItemDiaFragList itemDiaFragListGallery = new ItemDiaFragList();
         itemDiaFragListGallery.setText(JM.strById(R.string.chooseatgallery));
-        itemDiaFragListGallery.setIdDrawableIco(R.drawable.ic_photo_library_white_48dp);
-        itemDiaFragListGallery.setIdDrawableBg(R.drawable.rec_radmd2_nostr_getprimary);
+        itemDiaFragListGallery.setDrawableIco(
+                JM.tintedDrawable(
+                        R.drawable.ic_photo_library_white_48dp,
+                        R.color.colorPrimary,
+                        getActivity()
+                )
+        );
+        itemDiaFragListGallery.setDrawableBg(
+                JM.drawableById(
+                        R.drawable.rec_radmd2_nostr_getprimary
+                )
+        );
         itemDiaFragListGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                ((BaseActivity)mContext).startActivityForResult(intent,BaseActivity. RESULT_ACTION_PICK);
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                ((BaseActivity) mContext).startActivityForResult(intent, BaseActivity.RESULT_ACTION_PICK);
             }
         });
 
         ItemDiaFragList itemDiaFragListCamera = new ItemDiaFragList();
         itemDiaFragListCamera.setText(JM.strById(R.string.takephoto));
-        itemDiaFragListGallery.setIdDrawableIco(R.drawable.ic_photo_camera_white_48dp);
-        itemDiaFragListGallery.setIdDrawableBg(R.drawable.rec_radmd2_nostr_payprimary);
+
+        itemDiaFragListGallery.setDrawableIco(
+                JM.tintedDrawable(
+                        R.drawable.ic_photo_camera_white_48dp,
+                        R.color.colorPrimary,
+                        getActivity()
+                )
+        );
+        itemDiaFragListGallery.setDrawableBg(
+                JM.drawableById(
+                        R.drawable.rec_radmd2_nostr_payprimary
+                )
+        );
+
         itemDiaFragListGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                ((BaseActivity)mContext).startActivityForResult(cameraIntent, BaseActivity.RESULT_ACTION_IMAGE_CAPTURE);
+                ((BaseActivity) mContext).startActivityForResult(cameraIntent, BaseActivity.RESULT_ACTION_IMAGE_CAPTURE);
             }
         });
 

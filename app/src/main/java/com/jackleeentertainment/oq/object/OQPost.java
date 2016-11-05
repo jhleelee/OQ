@@ -15,6 +15,7 @@ public class OQPost {
     String posttype ; // 0null, 1video, 2photo
     String txt; //supportingTxt
     long ts;
+
     List<MyOppo> myOppos;
     Comment lastcmt;
 

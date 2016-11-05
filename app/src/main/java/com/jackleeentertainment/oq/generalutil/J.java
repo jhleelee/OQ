@@ -15,6 +15,7 @@ import com.jackleeentertainment.oq.App;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -32,7 +33,10 @@ import java.util.Map;
  */
 public class J {
 
+    public static String strAmt(long amt){
 
+        return MessageFormat.format("{0}", amt);
+    }
 
 
 

@@ -6,8 +6,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -37,19 +41,18 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
-import com.jackleeentertainment.oq.firebase.storage.Upload;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
@@ -61,16 +64,19 @@ import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag1_Feeds;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag2_ChatroomList;
 import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameViewHolder;
 import com.konifar.fab_transformation.FabTransformation;
-import com.soundcloud.android.crop.Crop;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     String TAG = this.getClass().getSimpleName();
-    final int REQ_PICK_IMAGE_FOR_RECEIPT = 99;
     final int REQ_PICK_SMS = 98;
-    final int REQ_TAKE_TESSER_RECEIPT = 97;
-    final int REQ_PROCESS_TESSER_RECEIPT = 96;
     final int REQ_PICK_IMAGE_FOR_PROFILECHANGE = 95;
     Uri outputCropUri;
 
@@ -80,8 +86,8 @@ public class MainActivity extends BaseActivity
     TextView tvTitleDrawerHeader;
     TextView tvSubTitleDrawerHeader;
     RelativeLayout ro_person_photo_48dip__lessmargin;
-    TextView ro_person_photo_tv;
-    ImageView ro_person_photo_iv;
+    TextView tvAvaDrawer;
+    ImageView ivAvaDrawer;
 
     //Drawer2
     TextView tvTitleDrawerHeader2;
@@ -125,11 +131,11 @@ public class MainActivity extends BaseActivity
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -444,7 +450,7 @@ public class MainActivity extends BaseActivity
         roFootTab0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResultToTakeReceipt();
+//                startActivityForResultToTakeReceipt();
             }
         });
         roFootTab1.setOnClickListener(new View.OnClickListener() {
@@ -457,7 +463,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, NewOQActivity.class);
-                intent.putExtra("OQTWantT_Future", OQT.WantT.GET);
+                intent.putExtra("OQTWantT_Future", OQT.DoWhat.GET);
                 startActivity(intent);
             }
         });
@@ -468,7 +474,15 @@ public class MainActivity extends BaseActivity
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                Log.d(TAG, "onDrawerOpened()");
+                initUiDataDrawer();
+            }
+        };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -481,10 +495,10 @@ public class MainActivity extends BaseActivity
                 .tvSubTitle_DrawerHeader);
         ro_person_photo_48dip__lessmargin = (RelativeLayout) header.findViewById(R.id
                 .ro_person_photo_48dip__lessmargin);
-        ro_person_photo_tv = (TextView) ro_person_photo_48dip__lessmargin.findViewById(R.id
-                .ro_person_photo_tv);
-        ro_person_photo_iv = (ImageView) ro_person_photo_48dip__lessmargin.findViewById(R.id
-                .ro_person_photo_iv);
+        tvAvaDrawer = (TextView) ro_person_photo_48dip__lessmargin.findViewById(R.id
+                .tvAva);
+        ivAvaDrawer = (ImageView) ro_person_photo_48dip__lessmargin.findViewById(R.id
+                .ivAva);
 
         header.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -531,39 +545,17 @@ public class MainActivity extends BaseActivity
                                            Profile profile,
                                            int position) {
                 avatarNameViewHolder.tvTitle__lo_avatar_name
-                        .setText(profile.getFull_name()
-                        );
+                        .setText(profile.getFull_name());
 
 
-                //set Image
-                Glide.with(mActivity)
-                        .using(new FirebaseImageLoader())
-                        .load(App.fbaseStorageRef
-                                .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                .child(App.getUid(mActivity))
-                                .child(FStorageNode.createMediaFileNameToDownload(
-                                        FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                        App.getUid(mActivity)
-                                )))
-                        .crossFade()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .listener(new RequestListener<StorageReference, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                avatarNameViewHolder.ro_person_photo_iv.setVisibility(View.GONE);
-                                avatarNameViewHolder.ro_person_photo_tv.setVisibility(View.VISIBLE);
-                                avatarNameViewHolder.ro_person_photo_tv.setText(App.getUname(mActivity).substring(0, 1));
-                                return false;
-                            }
+                JM.glideProfileThumb(
+                        profile.getUid(),
+                        profile.getFull_name(),
 
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                avatarNameViewHolder.ro_person_photo_iv.setVisibility(View.VISIBLE);
-                                avatarNameViewHolder.ro_person_photo_tv.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
-                        .into(avatarNameViewHolder.ro_person_photo_iv);
+                        avatarNameViewHolder.ro_person_photo_iv,
+                        avatarNameViewHolder.ro_person_photo_tv,
+                        mActivity
+                );
 
 
             }
@@ -581,7 +573,7 @@ public class MainActivity extends BaseActivity
                                 .child(App.getUid(this))
                 ) {
             public void populateViewHolder(
-                  final  AvatarNameViewHolder avatarNameViewHolder,
+                    final AvatarNameViewHolder avatarNameViewHolder,
                     final Profile profile, int position) {
 
                 avatarNameViewHolder.tvTitle__lo_avatar_name
@@ -593,51 +585,16 @@ public class MainActivity extends BaseActivity
                         );
                 //set Image
                 if (profile.getUid() != null) {
-                    Glide.with(mActivity)
-                            .using(new FirebaseImageLoader())
-                            .load(App.fbaseStorageRef
-                                    .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                    .child(profile.getUid())
-                                    .child(FStorageNode.createMediaFileNameToDownload(
-                                            FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                            profile.getUid()
-                                    )))
-                            .crossFade()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(avatarNameViewHolder.ro_person_photo_iv);
 
 
+                    JM.glideProfileThumb(
+                            profile.getUid(),
+                            profile.getFull_name(),
 
-                    //set Image
-                    Glide.with(mActivity)
-                            .using(new FirebaseImageLoader())
-                            .load(App.fbaseStorageRef
-                                    .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                    .child(App.getUid(mActivity))
-                                    .child(FStorageNode.createMediaFileNameToDownload(
-                                            FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                            App.getUid(mActivity)
-                                    )))
-                            .crossFade()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .listener(new RequestListener<StorageReference, GlideDrawable>() {
-                                @Override
-                                public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                    avatarNameViewHolder.ro_person_photo_iv.setVisibility(View.GONE);
-                                    avatarNameViewHolder.ro_person_photo_tv.setVisibility(View.VISIBLE);
-                                    avatarNameViewHolder.ro_person_photo_tv.setText(App.getUname(mActivity).substring(0, 1));
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                    avatarNameViewHolder.ro_person_photo_iv.setVisibility(View.VISIBLE);
-                                    avatarNameViewHolder.ro_person_photo_tv.setVisibility(View.GONE);
-                                    return false;
-                                }
-                            })
-                            .into(avatarNameViewHolder.ro_person_photo_iv);
-
+                            avatarNameViewHolder.ro_person_photo_iv,
+                            avatarNameViewHolder.ro_person_photo_tv,
+                            mActivity
+                    );
 
 
                 }
@@ -843,7 +800,7 @@ public class MainActivity extends BaseActivity
             case R.id.nav_input_manually_get:
 
                 Intent intentManualGet = new Intent(this, NewOQActivity.class);
-                intentManualGet.putExtra("OQTWantT_Future", OQT.WantT.GET);
+                intentManualGet.putExtra("OQTWantT_Future", OQT.DoWhat.GET);
                 startActivity(intentManualGet);
                 break;
 
@@ -857,7 +814,7 @@ public class MainActivity extends BaseActivity
 
             case R.id.nav_input_manually_pay:
                 Intent intentManualPay = new Intent(this, NewOQActivity.class);
-                intentManualPay.putExtra("OQTWantT_Future", OQT.WantT.PAY);
+                intentManualPay.putExtra("OQTWantT_Future", OQT.DoWhat.PAY);
                 startActivity(intentManualPay);
                 break;
 
@@ -901,37 +858,15 @@ public class MainActivity extends BaseActivity
         tvTitleDrawerHeader.setText(App.getUname(this));
         tvSubTitleDrawerHeader.setText(App.getUemail(this));
 
-        //set Image
-        Glide.with(this)
-                .using(new FirebaseImageLoader())
-                .load(App.fbaseStorageRef
-                        .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                        .child(App.getUid(this))
-                        .child(FStorageNode.createMediaFileNameToDownload(
-                                FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                App.getUid(this)
-                        )))
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .listener(new RequestListener<StorageReference, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        ro_person_photo_iv.setVisibility(View.GONE);
-                        ro_person_photo_tv.setVisibility(View.VISIBLE);
-                        ro_person_photo_tv.setText(App.getUname(mActivity).substring(0, 1));
-                        return false;
-                    }
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        ro_person_photo_iv.setVisibility(View.VISIBLE);
-                        ro_person_photo_tv.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .into(ro_person_photo_iv)
+        JM.glideProfileThumb(
+                App.getUid(mActivity),
+                App.getUname(mActivity),
+                ivAvaDrawer,
+                tvAvaDrawer,
+                mActivity
+        );
 
-        ;
 
     }
 
@@ -939,53 +874,231 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult() " + J.st(requestCode) + " " + J.st(resultCode) + " ");
 
         if (resultCode == Activity.RESULT_OK) {
 
-            if (requestCode == REQ_PICK_IMAGE_FOR_RECEIPT
-                    && data != null
-                    && data.getData() != null) {
-                Log.d(TAG, "data available");
-
-                if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
-                    //Intent.EXTRA_ALLOW_MULTIPLE
-                    Log.d(TAG, "VERSION.SDK_INT >= 18 " + data.getData().toString());
-                    Intent intent = new Intent(this, TesserPhotoListActivity.class);
-                    intent.putExtra("uriPhoto", data.getData().toString());
-                    startActivityForResult(intent,
-                            REQ_PROCESS_TESSER_RECEIPT);
-                } else {
-                    Log.d(TAG, "VERSION.SDK_INT < 18 " + data.getData().toString());
-                    Intent intent = new Intent(this, TesserPhotoListActivity.class);
-                    intent.putExtra("uriPhoto", data.getData().toString());
-                    startActivityForResult(intent,
-                            REQ_PROCESS_TESSER_RECEIPT);
-                }
-            } else if (requestCode == REQ_PICK_IMAGE_FOR_PROFILECHANGE) {
+            if (requestCode == REQ_PICK_IMAGE_FOR_PROFILECHANGE) {
 
                 if (data != null
                         && data.getData() != null) {
                     Log.d(TAG, "data available");
-
+                    Uri imageUri = data.getData();
                     if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
                         //Intent.EXTRA_ALLOW_MULTIPLE
                         Log.d(TAG, "VERSION.SDK_INT >= 18 " + data.getData().toString());
-                        Crop.of(data.getData(), outputCropUri).asSquare().start(this);
-
+                        CropImage.activity(imageUri)
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .start(this);
 
                     } else {
                         Log.d(TAG, "VERSION.SDK_INT < 18 " + data.getData().toString());
-                        Crop.of(data.getData(), outputCropUri).asSquare().start(this);
+                        CropImage.activity(imageUri)
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .start(this);
                     }
                 }
 
 
-            } else if (requestCode == Crop.REQUEST_CROP) {
-                Upload.uploadMyProfileImagesToFirebaseStorage(outputCropUri, this);
             }
 
+
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                uploadProfPhoto(resultUri, App.getUid(this));
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Log.d(TAG, error.toString());
+
+            }
         }
 
+    }
+
+
+    StorageReference mTempStorageRefORIG;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx36;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx48;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx72;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx96;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx144;  //mTempStorageRef was previously used to transfer data.
+    ArrayList<StorageReference> arlRef = new ArrayList<>();
+    int counter =0;
+
+    public void uploadProfPhoto(
+            final Uri uri,
+            String uid
+    ) {
+        Log.d(TAG, "uploadProfPhoto()");
+
+        if (uri == null) {
+            Log.d(TAG, "uri==null");
+
+            return;
+        }
+        if (uid == null) {
+            Log.d(TAG, "uid==null");
+
+            return;
+        }
+
+        /**
+         * get Bitmap
+         */
+
+        try {
+
+            ArrayList<Bitmap> arlBmp = new ArrayList<>();
+            ArrayList<String> arlStr = new ArrayList<>();
+
+
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            arlBmp.add(bitmap);
+            arlStr.add(FStorageNode.pxProfileT.ORIG);
+            //use bitmap and create thumnail file
+            Bitmap thumbnail_036 =
+                    ThumbnailUtils.extractThumbnail(
+                            bitmap, 36, 36);
+            arlStr.add(FStorageNode.pxProfileT.px36);
+            arlBmp.add(thumbnail_036);
+
+            Bitmap thumbnail_048 =
+                    ThumbnailUtils.extractThumbnail(
+                            bitmap, 48, 48);
+            arlStr.add(FStorageNode.pxProfileT.px48);
+            arlBmp.add(thumbnail_048);
+
+            Bitmap thumbnail_072 =
+                    ThumbnailUtils.extractThumbnail(
+                            bitmap, 72, 72);
+            arlBmp.add(thumbnail_072);
+            arlStr.add(FStorageNode.pxProfileT.px72);
+
+            Bitmap thumbnail_096 =
+                    ThumbnailUtils.extractThumbnail(
+                            bitmap, 96, 96);
+            arlBmp.add(thumbnail_096);
+            arlStr.add(FStorageNode.pxProfileT.px96);
+
+            Bitmap thumbnail_144 =
+                    ThumbnailUtils.extractThumbnail(
+                            bitmap, 144, 144);
+            arlBmp.add(thumbnail_144);
+            arlStr.add(FStorageNode.pxProfileT.px144);
+
+            arlRef = new ArrayList<>();
+            arlRef.add(mTempStorageRefORIG);
+            arlRef.add(mTempStorageRefpx36);
+            arlRef.add(mTempStorageRefpx48);
+            arlRef.add(mTempStorageRefpx72);
+            arlRef.add(mTempStorageRefpx96);
+            arlRef.add(mTempStorageRefpx144);
+
+              counter = 0;
+            for (int i = 0; i < 6; i++) {
+
+                Log.d(TAG, "uploadProfPhoto() loop " + J.st(i));
+
+
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+                if (arlBmp.get(i).compress(Bitmap.CompressFormat.JPEG, 100, os)) {
+                    byte[] bytes = os.toByteArray();
+
+
+                    /**
+                     metaData
+                     **/
+                    StorageMetadata metadata = new StorageMetadata.Builder()
+                            .setContentType("image/jpg")
+                            .setCustomMetadata("uid", uid)
+                            .build();
+                    /**
+                     path
+                     **/
+                    arlRef.set(i,
+                            App.fbaseStorageRef
+                                    .child(FStorageNode.FirstT.PROFILE_PHOTO)
+                                    .child(arlStr.get(i))
+                                    .child(uid));
+
+                    /**
+                     main
+                     **/
+                    UploadTask uploadTask =
+                            arlRef.get(i)
+                                    .putBytes(bytes, metadata);
+
+                    uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            System.out.println("Upload is " + progress + "% done");
+                        }
+                    }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                            System.out.println("Upload is paused");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            Log.d(TAG, "onFailure");
+                            Log.d(TAG, exception.toString());
+
+                            counter++;
+
+                            if (counter == 6) {
+                                JM.glideProfileThumb(
+                                        App.getUid(mActivity),
+                                        App.getUname(mActivity),
+                                        ivAvaDrawer,
+                                        tvAvaDrawer,
+                                        mActivity
+                                );
+
+                            }
+
+
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Handle successful uploads on complete
+                            Log.d(TAG, "onSuccess");
+                            Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+
+                            counter++;
+
+                            if (counter == 6) {
+                                JM.glideProfileThumb(
+                                        App.getUid(mActivity),
+                                        App.getUname(mActivity),
+                                        ivAvaDrawer,
+                                        tvAvaDrawer,
+                                        mActivity
+                                );
+
+                            }
+
+                        }
+                    });
+
+
+                }
+            }
+
+
+        } catch (FileNotFoundException e) {
+            Log.d(TAG, e.toString());
+        } catch (IOException e) {
+            Log.d(TAG, e.toString());
+        }
     }
 
 
@@ -1020,33 +1133,13 @@ public class MainActivity extends BaseActivity
     }
 
 
-  public   void startActivityForResultToTakeReceipt() {
-        Intent intentTesserCam = new Intent(this, TesserCameraActivity.class);
-        startActivityForResult(intentTesserCam, REQ_TAKE_TESSER_RECEIPT);
-    }
-
-    ;
-
-
-    public void startActivityForResultToLoadReceiptGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,
-                JM.strById(R.string.receipt_photo)),
-                REQ_PICK_IMAGE_FOR_RECEIPT);
-    }
-
     public void startActivityForResultToLoadSMS() {
         Intent intentLoadSMS = new Intent(this, SMSListActivity.class);
         startActivityForResult(intentLoadSMS, REQ_PICK_SMS);
     }
 
 
-    public  void startActivityForResultPhotoGalleryToPROFILECHANGE() {
+    public void startActivityForResultPhotoGalleryToPROFILECHANGE() {
         Intent intent = new Intent();
         intent.setType("image/*");
         if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
@@ -1054,8 +1147,9 @@ public class MainActivity extends BaseActivity
         }
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,
-                JM.strById(R.string.receipt_photo)),
+                JM.strById(R.string.change_profile_photo)),
                 REQ_PICK_IMAGE_FOR_PROFILECHANGE);
     }
+
 
 }

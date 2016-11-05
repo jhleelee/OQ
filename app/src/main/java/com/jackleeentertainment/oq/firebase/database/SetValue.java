@@ -210,20 +210,20 @@ public class SetValue {
 
 
     /*
-    Post.class
+    OQPost.class
     */
 
     public static void post(final Post post,
                             final boolean toRamLBR) {
         App.fbaseDbRef
-                .child(FBaseNode0.Post)
+                .child(FBaseNode0.OQPost)
                 .child(post.getOid())
                 .setValue(post, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                         if (databaseError == null) {
                             if (toRamLBR) {
-                                LBR.send(FBaseNode0.Post + LBR.SendSuffixT.SENT, post);
+                                LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.SENT, post);
                             }
                         }
                     }
@@ -232,17 +232,17 @@ public class SetValue {
 
     public static void postWithPushId(final Post post,
                                       final boolean toRamLBR) {
-        String pushId = SetValueUtil.getPushKey(FBaseNode0.Post);
+        String pushId = SetValueUtil.getPushKey(FBaseNode0.OQPost);
         post.setOid(pushId);
         App.fbaseDbRef
-                .child(FBaseNode0.Post)
+                .child(FBaseNode0.OQPost)
                 .child(post.getOid())
                 .setValue(post, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                         if (databaseError == null) {
                             if (toRamLBR) {
-                                LBR.send(FBaseNode0.Post + LBR.SendSuffixT.SENT, post);
+                                LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.SENT, post);
                             }
                         }
                     }
@@ -261,14 +261,14 @@ OQ
     public static void myOQItems(final Post post,
                                  final boolean toRamLBR) {
         App.fbaseDbRef
-                .child(FBaseNode0.MyOqItems)
+                .child(FBaseNode0.MyOqWraps)
                 .child(post.getOid())
                 .setValue(post, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                         if (databaseError == null) {
                             if (toRamLBR) {
-                                LBR.send(FBaseNode0.Post + LBR.SendSuffixT.SENT, post);
+                                LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.SENT, post);
                             }
                         }
                     }

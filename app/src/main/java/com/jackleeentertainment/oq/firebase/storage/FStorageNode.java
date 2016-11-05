@@ -42,13 +42,13 @@ public class FStorageNode {
         public final static String CHATATTACH_VIDEO_THUMB = "chatatch_video_thumb";
     }
 
-    public static class Suffix_PROFILE_PHOTO_THUMB_T {
-        public final static String EMPTY = "";
-        public final static String px36 = "__px036";
-        public final static String px48 = "__px048";
-        public final static String px72 = "__px072";
-        public final static String px96 = "__px096";
-        public final static String px144 = "__px144";
+    public static class pxProfileT {
+        public final static String ORIG = "orig";
+        public final static String px36 = "px036";
+        public final static String px48 = "px048";
+        public final static String px72 = "px072";
+        public final static String px96 = "px096";
+        public final static String px144 = "px144";
     }
 
 
@@ -75,7 +75,7 @@ public class FStorageNode {
     @DebugLog
     public static String createMediaFileNameToUpload(String firstPart,
                                                      String secondPart,
-                                                     String suffix){
+                                                     String suffix) {
         if (firstPart.equals(FirstT.PROFILE_PHOTO) ||
                 firstPart.equals(FirstT.POST_PHOTO) ||
                 firstPart.equals(FirstT.CHATATTACH_PHOTO)
@@ -116,8 +116,8 @@ public class FStorageNode {
 
     @DebugLog
     public static String createMediaFileNameToDownload(
-                                        String firstPart,
-                                        String secondPart
+            String firstPart,
+            String secondPart
     ) {
 
 
@@ -126,19 +126,19 @@ public class FStorageNode {
                 firstPart.equals(FirstT.CHATATTACH_PHOTO)
                 ) {
             return
-                     firstPart + "__" //firstNode
-                    + secondPart +  //uid or oid
+                    firstPart + "__" //firstNode
+                            + secondPart +  //uid or oid
 
-                    ".jpg";
+                            ".jpg";
         } else if (firstPart.equals(FirstT.PROFILE_VIDEO) ||
                 firstPart.equals(FirstT.POST_VIDEO) ||
                 firstPart.equals(FirstT.CHATATTACH_VIDEO)
                 ) {
             return
-                     firstPart + "__" //firstNode
-                    + secondPart + //uid
+                    firstPart + "__" //firstNode
+                            + secondPart + //uid
 
-                    ".mp4";
+                            ".mp4";
         } else if (firstPart.equals(FirstT.PROFILE_PHOTO_THUMB) ||
                 firstPart.equals(FirstT.PROFILE_VIDEO_THUMB) ||
                 firstPart.equals(FirstT.POST_PHOTO_THUMB) ||
@@ -148,10 +148,10 @@ public class FStorageNode {
                 ) {
 
             return
-                     firstPart + "__" //firstNode
-                    + secondPart + "__"  //uid
-                    + JM.getSuffixOfImgWithDeviceDpi(firstPart) +
-                    ".jpg";
+                    firstPart + "__" //firstNode
+                            + secondPart + "__"  //uid
+                            + JM.getSuffixOfImgWithDeviceDpi(firstPart) +
+                            ".jpg";
         }
 
 
@@ -170,16 +170,16 @@ public class FStorageNode {
 
         if (firstPart.equals(FirstT.POST_PHOTO)) {
             return
-                     firstPart + "__" //firstNode
-                    + secondPart + "__"  //uid
-                    + J.st(timeStamp) //ts
-                    + ".jpg";
+                    firstPart + "__" //firstNode
+                            + secondPart + "__"  //uid
+                            + J.st(timeStamp) //ts
+                            + ".jpg";
         } else if (firstPart.equals(FirstT.POST_PHOTO)) {
             return
-                     firstPart + "__" //firstNode
-                    + secondPart + "__"  //uid
-                    + J.st(timeStamp) //ts
-                    + ".jpg";
+                    firstPart + "__" //firstNode
+                            + secondPart + "__"  //uid
+                            + J.st(timeStamp) //ts
+                            + ".jpg";
         }
 
         return null;

@@ -1,9 +1,11 @@
 package com.jackleeentertainment.oq.generalutil;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.object.MyOppo;
+import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Post;
 import com.jackleeentertainment.oq.object.Profile;
@@ -20,12 +22,24 @@ import java.util.ArrayList;
  */
 public class StringGenerator {
 
-
+    static String TAG = "StringGenerator";
 
     public static String deed (MyOppo myOppo){
+        Log.d(TAG, "deed() ");
 
-        if (myOppo.getDeed().equals(DeedT.SENT_GETREQ)){
+        if (myOppo.getDeed()!=null&&myOppo.getDeed().equals(DeedT.RequesterSENT_IWantGet_REQ)){
                 return myOppo.getUname() + "님 에게 " + JM.strById(R.string.sent_getreq);
+        } else {
+            return null;
+        }
+
+    }
+
+    public static String deed (OQPost oqPost){
+        Log.d(TAG, "deed() ");
+
+        if (oqPost.getUdeed()!=null&&oqPost.getUdeed().equals(DeedT.RequesterSENT_IWantGet_REQ)){
+            return oqPost.getUname() + "님이 " + JM.strById(R.string.sent_getreq);
         } else {
             return null;
         }
@@ -40,9 +54,9 @@ public class StringGenerator {
         // get locale
         if (name != null) {
 
-            if (wantToDoSomething.equals(OQT.WantT.GET)) {
+            if (wantToDoSomething.equals(OQT.DoWhat.GET)) {
                 return name + "님은 " + JM.strById(R.string.wanttoget_sentence);
-            } else if (wantToDoSomething.equals(OQT.WantT.PAY)) {
+            } else if (wantToDoSomething.equals(OQT.DoWhat.PAY)) {
                 return name + "님은 " + JM.strById(R.string.wanttoget_sentence);
             }
 
@@ -58,9 +72,9 @@ public class StringGenerator {
         // get locale
         if (nameAndNumPeople != null) {
 
-            if (wantToDoSomething.equals(OQT.WantT.GET)) {
+            if (wantToDoSomething.equals(OQT.DoWhat.GET)) {
                 return nameAndNumPeople + "에게 " + JM.strById(R.string.requesttopay_sentence);
-            } else if (wantToDoSomething.equals(OQT.WantT.PAY)) {
+            } else if (wantToDoSomething.equals(OQT.DoWhat.PAY)) {
                 return nameAndNumPeople + "에게 " + JM.strById(R.string.requesttoget_sentence);
             }
 

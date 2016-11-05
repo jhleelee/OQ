@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -14,12 +16,16 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
@@ -28,12 +34,12 @@ import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.firebase.database.SetValue;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
-import com.jackleeentertainment.oq.firebase.storage.Upload;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.MyOppo;
 import com.jackleeentertainment.oq.object.OQPost;
+import com.jackleeentertainment.oq.object.OQPostPhoto;
 import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.DeedT;
@@ -43,6 +49,9 @@ import com.jackleeentertainment.oq.object.util.OqItemUtil;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,9 +112,9 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     void initUIDataOnResume() {
         super.initUIDataOnResume();
         //toolbar title
-        if (OQTWantT_Future != null && OQTWantT_Future.equals(OQT.WantT.GET)) {
+        if (OQTWantT_Future != null && OQTWantT_Future.equals(OQT.DoWhat.GET)) {
             tvToolbarTitle.setText(JM.strById(R.string.transaction_i_get));
-        } else if (OQTWantT_Future != null && OQTWantT_Future.equals(OQT.WantT.PAY)) {
+        } else if (OQTWantT_Future != null && OQTWantT_Future.equals(OQT.DoWhat.PAY)) {
             tvToolbarTitle.setText(JM.strById(R.string.transaction_i_pay));
         }
     }
@@ -159,14 +168,19 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
         }
 
         final String pid = App.fbaseDbRef.child("push").push().getKey();
+        Log.d(TAG, "pid : " + pid);
         OQPost oqPost = new OQPost();
         oqPost.setPid(pid);
         oqPost.setUid(App.getUid(mActivity));
         oqPost.setUname(App.getUname(mActivity));
-        oqPost.setUdeed(DeedT.SENT_GETREQ);
+        oqPost.setUdeed(DeedT.RequesterSENT_IWantGet_REQ);
         oqPost.setTxt(etContent.getText()
                 .toString());
         oqPost.setTs(ts);
+
+        OQPostPhoto oqPostPhoto = new OQPostPhoto();
+        oqPostPhoto.setPid(oqPost.getPid());
+        oqPostPhoto.setPhotoids(new ArrayList<String>());
 
         if (arlUriPhoto == null ||
                 arlUriPhoto.size()
@@ -176,9 +190,8 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
         } else if (arlUriPhoto != null &&
                 (arlUriPhoto.size() > 0)) {
             oqPost.setPosttype(OQPostT.PHOTO);
-            for (Uri uri : arlUriPhoto) {
-                uploadFeedPhoto(pid);
-            }
+            uploadFeedPhoto(arlUriPhoto, oqPostPhoto, App.getUid(mActivity));
+
         }
         oqPost.setMyOppos(arlMyOppo);
 
@@ -214,13 +227,14 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 
     }
 
+
     void uploadMyOqItemThenMyOppo(final OqItem oqItem,
                                   final String oid,
                                   final long ts,
                                   final ArrayList<MyOppo> arlMyOppo) {
 
         App.fbaseDbRef
-                .child(FBaseNode0.MyOqItems)
+                .child(FBaseNode0.MyOqWraps)
                 .child(App.getUid(mActivity))
                 .child(oqItem.getUidclaimee())
                 .child(oid)
@@ -230,7 +244,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                     public void onComplete(@NonNull Task<Void> task) {
 
                         App.fbaseDbRef
-                                .child(FBaseNode0.MyOqItems)
+                                .child(FBaseNode0.MyOqWraps)
                                 .child(App.getUid(mActivity))
                                 .child(oqItem.getUidclaimee())
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -263,6 +277,8 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                                                     ());
                                             myOppo.setAmticlaim(amtIClaimToHim);
                                             myOppo.setTs(ts);
+                                            myOppo.setDeed(DeedT.RequesterSENT_IWantGet_REQ);
+
                                             App.fbaseDbRef
                                                     .child(FBaseNode0.MyOppoList)
                                                     .child(App.getUid(mActivity))
@@ -298,7 +314,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                                     final long ts) {
 
         App.fbaseDbRef
-                .child(FBaseNode0.MyOqItems)
+                .child(FBaseNode0.MyOqWraps)
                 .child(oqItem.getUidclaimee())
                 .child(App.getUid(mActivity))
                 .child(oid)
@@ -308,7 +324,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                     public void onComplete(@NonNull Task<Void> task) {
 
                         App.fbaseDbRef
-                                .child(FBaseNode0.MyOqItems)
+                                .child(FBaseNode0.MyOqWraps)
                                 .child(oqItem.getUidclaimee())
                                 .child(App.getUid(mActivity))
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -341,6 +357,8 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                                             myOppo.setUname(App.getUname(mActivity));
                                             myOppo.setAmtheclaim
                                                     (amtHeClaimMe);
+                                            myOppo.setDeed(DeedT.RequesterSENT_IWantGet_REQ);
+
                                             myOppo.setTs(ts);
 
 
@@ -372,18 +390,6 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                     }
                 });
 
-    }
-
-    void uploadFeedPhoto(String pid) {
-
-        for (Uri uri : arlUriPhoto) {
-            Upload.uploadFile(
-                    FStorageNode.FirstT.POST_PHOTO,
-                    App.getUid(mActivity), // for security and maintainence
-                    pid,
-                    uri,
-                    mActivity                    );
-        }
     }
 
 
@@ -453,10 +459,10 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                             .getUid());
                     if (oqItem == null) {
                         OqItem oqItem1 = new OqItem();
-                        if (OQTWantT_Future.equals(OQT.WantT.GET)) {
+                        if (OQTWantT_Future.equals(OQT.DoWhat.GET)) {
                             oqItem1 = OqItemUtil.getInstanceIClaimThatIGet(profile
                                     , this);
-                        } else if (OQTWantT_Future.equals(OQT.WantT.PAY)) {
+                        } else if (OQTWantT_Future.equals(OQT.DoWhat.PAY)) {
                             oqItem1 = OqItemUtil.getInstanceIClaimThatIPay(profile
                                     , this);
                         }
@@ -520,7 +526,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setUidpayer(App.getUid(this));
 //                    oqItemPaid.setUidgettor(null);
 //                    oqItemPaid.setAmmount(ammountAsStandard);
-//                    oqItemPaid.setOqtype(OQT.PointT.PAID);
+//                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
 //                    arlOQItem_Paid.set(0, oqItemPaid);
@@ -529,7 +535,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setUidpayer(arlOppoProfile.get(0).getUid());
 //                    oqItemToPay.setUidgettor(App.getUid(this));
 //                    oqItemToPay.setAmmount(ammountAsStandard / 2);
-//                    oqItemToPay.setOqtype(OQT.PointT.TOPAY);
+//                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
 //                    arlOQItem_Future.set(0, oqItemToPay);
@@ -541,7 +547,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setUidpayer(App.getUid(this));
 //                    oqItemPaid.setUidgettor(null);
 //                    oqItemPaid.setAmmount(ammountAsStandard);
-//                    oqItemPaid.setOqtype(OQT.PointT.PAID);
+//                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
 //                    arlOQItem_Paid.set(0, oqItemPaid);
@@ -550,7 +556,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setUidpayer(arlOppoProfile.get(0).getUid());
 //                    oqItemToPay.setUidgettor(App.getUid(this));
 //                    oqItemToPay.setAmmount(ammountAsStandard);
-//                    oqItemToPay.setOqtype(OQT.PointT.TOPAY);
+//                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
 //                    arlOQItem_Future.set(0, oqItemToPay);
@@ -562,7 +568,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setUidpayer(arlOppoProfile.get(0).getUid());
 //                    oqItemToPay.setUidgettor(App.getUid(this));
 //                    oqItemToPay.setAmmount(ammountAsStandard);
-//                    oqItemToPay.setOqtype(OQT.PointT.TOPAY);
+//                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
 //                    arlOQItem_Future.set(0, oqItemToPay);
@@ -575,7 +581,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setUidpayer(App.getUid(this));
 //                    oqItemPaid.setUidgettor(null);
 //                    oqItemPaid.setAmmount(ammountAsStandard);
-//                    oqItemPaid.setOqtype(OQT.PointT.PAID);
+//                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
 //                    arlOQItem_Paid.set(0, oqItemPaid);
@@ -588,7 +594,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                        oqItemToPay.setUidpayer(arlOppoProfile.get(i).getUid());
 //                        oqItemToPay.setUidgettor(App.getUid(this));
 //                        oqItemToPay.setAmmount(eachBurden);
-//                        oqItemToPay.setOqtype(OQT.PointT.TOPAY);
+//                        oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                        oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                        oqItemToPay.setDuedate(null);
 //                        arlOQItem_Future.set(i, oqItemToPay);
@@ -601,7 +607,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setUidpayer(App.getUid(this));
 //                    oqItemPaid.setUidgettor(null);
 //                    oqItemPaid.setAmmount(ammountAsStandard);
-//                    oqItemPaid.setOqtype(OQT.PointT.PAID);
+//                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
 //                    arlOQItem_Paid.set(0, oqItemPaid);
@@ -614,7 +620,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                        oqItemToPay.setUidpayer(arlOppoProfile.get(i).getUid());
 //                        oqItemToPay.setUidgettor(App.getUid(this));
 //                        oqItemToPay.setAmmount(eachBurden);
-//                        oqItemToPay.setOqtype(OQT.PointT.TOPAY);
+//                        oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                        oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                        oqItemToPay.setDuedate(null);
 //                        arlOQItem_Future.set(i, oqItemToPay);
@@ -632,7 +638,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                        oqItemToPay.setUidpayer(arlOppoProfile.get(i).getUid());
 //                        oqItemToPay.setUidgettor(App.getUid(this));
 //                        oqItemToPay.setAmmount(eachBurden);
-//                        oqItemToPay.setOqtype(OQT.PointT.TOPAY);
+//                        oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                        oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                        oqItemToPay.setDuedate(null);
 //                        arlOQItem_Future.set(i, oqItemToPay);
@@ -645,7 +651,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setUidpayer(arlOppoProfile.get(0).getUid());
 //                    oqItemPaid.setUidgettor(null);
 //                    oqItemPaid.setAmmount(ammountAsStandard);
-//                    oqItemPaid.setOqtype(OQT.PointT.PAID);
+//                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
 //                    arlOQItem_Paid.set(0, oqItemPaid);
@@ -655,7 +661,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setUidpayer(App.getUid(this));
 //                    oqItemToPay.setUidgettor(arlOppoProfile.get(0).getUid());
 //                    oqItemToPay.setAmmount(ammountAsStandard);
-//                    oqItemToPay.setOqtype(OQT.PointT.TOPAY);
+//                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
 //                    arlOQItem_Future.set(0, oqItemToPay);
@@ -668,7 +674,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setUidpayer(App.getUid(this));
 //                    oqItemToPay.setUidgettor(arlOppoProfile.get(0).getUid());
 //                    oqItemToPay.setAmmount(ammountAsStandard);
-//                    oqItemToPay.setOqtype(OQT.PointT.TOPAY);
+//                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
 //                    arlOQItem_Future.set(0, oqItemToPay);
@@ -680,4 +686,119 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
         }
 
     }
+
+    int unloadPhotoCounter = 0;
+
+    public void uploadFeedPhoto(
+            final ArrayList<Uri> arluri,
+            final OQPostPhoto oqPostPhoto,
+            String uid
+    ) {
+
+        unloadPhotoCounter = 0;
+
+        for (Uri uri : arluri) {
+
+            /**
+             * get Bitmap
+             */
+
+            try {
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+
+                if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)) {
+                    byte[] bytes = os.toByteArray();
+
+                    /**
+                     photoId
+                     **/
+                    final String photoId = App.fbaseDbRef.child("push").push().getKey();
+
+                    /**
+                     metaData
+                     **/
+                    StorageMetadata metadata = new StorageMetadata.Builder()
+                            .setContentType("image/jpg")
+                            .setCustomMetadata("uid", uid)
+                            .build();
+                    /**
+                     metaData
+                     **/
+                    mTempStorageRef = App.fbaseStorageRef
+                            .child(FStorageNode.FirstT.POST_PHOTO)
+                            .child(photoId);
+
+                    /**
+                     main
+                     **/
+                    UploadTask uploadTask =
+                            mTempStorageRef
+                                    .putBytes(bytes, metadata);
+
+                    uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            System.out.println("Upload is " + progress + "% done");
+                        }
+                    }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                            System.out.println("Upload is paused");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            Log.d(TAG, "onFailure");
+                            Log.d(TAG, exception.toString());
+                            unloadPhotoCounter++;
+                            if (unloadPhotoCounter == arluri.size()) {
+                                uploadOqPostPhotoObj(oqPostPhoto);
+                            }
+
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Handle successful uploads on complete
+                            Log.d(TAG, "onSuccess");
+
+                            Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                            oqPostPhoto.getPhotoids().add(photoId);
+                            unloadPhotoCounter++;
+                            if (unloadPhotoCounter == arluri.size()) {
+                                uploadOqPostPhotoObj(oqPostPhoto);
+                            }
+                        }
+                    });
+
+
+                }
+                ;
+            } catch (FileNotFoundException e) {
+                Log.d(TAG, e.toString());
+            } catch (IOException e) {
+                Log.d(TAG, e.toString());
+            }
+
+        }
+    }
+
+    void uploadOqPostPhotoObj(OQPostPhoto oqPostPhoto) {
+        App.fbaseDbRef
+                .child(FBaseNode0.OQPostPhoto)
+                .child(oqPostPhoto.getPid())
+                .setValue(oqPostPhoto)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                })
+        ;
+    }
+
+
 }

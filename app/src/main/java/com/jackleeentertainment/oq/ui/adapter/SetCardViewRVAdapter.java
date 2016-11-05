@@ -303,7 +303,7 @@ public class SetCardViewRVAdapter extends RecyclerView.Adapter<RecyclerView.View
             case 0:
 
                 // title
-                if (wantT.equals(OQT.WantT.GET))
+                if (wantT.equals(OQT.DoWhat.GET))
                     ((ViewHolderFirst) holder).tvTitle__lo_titlesubtitlerectangle48_incardview
                             .setText(JM.strById(R.string.getter));
                 else {
@@ -340,7 +340,7 @@ public class SetCardViewRVAdapter extends RecyclerView.Adapter<RecyclerView.View
                     public void onClick(View v) {
                         switch (v.getId()) {
                             case R.id.btActionOne__lo_twoactionbuttons:
-                                wantT = OQT.WantT.GET;
+                                wantT = OQT.DoWhat.GET;
                                 JM.BGD(((Button) v), R.drawable.rec_radmd2_nostr_getprimary);
                                 JM.TC(((Button) v), R.color.white);
                                 JM.BGD(((ViewHolderFirst) holder).btActionTwo__lo_twoactionbuttons, R.color.transparent);
@@ -349,7 +349,7 @@ public class SetCardViewRVAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 break;
 
                             case R.id.btActionTwo__lo_twoactionbuttons:
-                                wantT = OQT.WantT.PAY;
+                                wantT = OQT.DoWhat.PAY;
                                 JM.BGD(((Button) v), R.drawable.rec_radmd2_nostr_payprimary);
                                 JM.TC(((Button) v), R.color.white);
                                 JM.BGD(((ViewHolderFirst) holder).btActionOne__lo_twoactionbuttons,
@@ -368,7 +368,7 @@ public class SetCardViewRVAdapter extends RecyclerView.Adapter<RecyclerView.View
             case 1:
 
                 // title
-                if (wantT.equals(OQT.WantT.GET))
+                if (wantT.equals(OQT.DoWhat.GET))
                     ((ViewHolderFirst) holder).tvTitle__lo_titlesubtitlerectangle48_incardview
                             .setText(JM.strById(R.string.payer));
                 else {

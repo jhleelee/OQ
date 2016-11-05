@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -234,6 +235,8 @@ public class MainFrag2_ChatroomList extends Fragment implements
         class ViewHolder_Chatroom {
             RelativeLayout ro_person_photo_48dip__lo_avatar_namedate_chatread;
             ImageView ro_person_photo_iv;
+            TextView ro_person_photo_tv;
+
             TextView tvTitle__lo_avatar_namedate_chatread;
             TextView tvSubTitle__lo_avatar_namedate_chatread;
             TextView tvDate__lo_avatar_namedate_chatread;
@@ -258,8 +261,10 @@ public class MainFrag2_ChatroomList extends Fragment implements
 
             viewHolder.ro_person_photo_iv = (ImageView) viewHolder.
                     ro_person_photo_48dip__lo_avatar_namedate_chatread.findViewById(R.id
-                    .ro_person_photo_iv);
-
+                    .ivAva);
+            viewHolder.ro_person_photo_tv = (TextView) viewHolder.
+                    ro_person_photo_48dip__lo_avatar_namedate_chatread.findViewById(R.id
+                    .tvAva);
             viewHolder.
                     tvTitle__lo_avatar_namedate_chatread =
                     (TextView) view
@@ -337,11 +342,14 @@ public class MainFrag2_ChatroomList extends Fragment implements
                 /**
                  * Room Photo
                  */
+                JM.glideProfileThumb(
+                        arlChatMemberProfiles.get(0).getUid(),
+                        arlChatMemberProfiles.get(0).getFull_name(),
+                        viewHolder.ro_person_photo_iv,
+                        viewHolder.ro_person_photo_tv,
+                        (Activity)context
+                );
 
-//                JM.loadMultipleProfilePhotoFromFbase(
-//                        arlChatMemberUids,
-//                        viewHolder.ro_person_photo_iv
-//                );
 
                 /**
                  * Last Chat Message

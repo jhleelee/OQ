@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/lo"
-              style="@style/loDiaFragWrap"
+              style="@style/loDiaFragWrapTop"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical">
@@ -15,14 +20,18 @@
 
 
         <RadioButton
+            android:layout_margin="16dip"
+
             android:id="@+id/r0"
             style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
 
         <RadioButton
+            android:layout_marginBottom="16dip"
+            android:layout_marginLeft="16dip"
+            android:layout_marginRight="16dip"
             android:id="@+id/r1"
             android:text="@string/dummyperiod"
             style="@style/Widget.AppCompat.CompoundButton.RadioButton"
@@ -31,6 +40,9 @@
 
 
         <RadioButton
+            android:layout_marginBottom="16dip"
+            android:layout_marginLeft="16dip"
+            android:layout_marginRight="16dip"
             android:id="@+id/r2"
             style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
             android:layout_width="match_parent"
@@ -41,10 +53,11 @@
 
     <EditText
         android:id="@+id/etAmmount"
-        style="@style/EditText.Ammount.Main"
+        style="@style/EditText.Comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+</LinearLayout>
 
     <!--https://material.google.com/components/dialogs.html#dialogs-specs-->
     <View

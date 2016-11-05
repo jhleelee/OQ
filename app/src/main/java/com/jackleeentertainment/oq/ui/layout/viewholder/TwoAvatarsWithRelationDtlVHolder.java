@@ -15,47 +15,77 @@ import com.jackleeentertainment.oq.R;
  */
 
 public class TwoAvatarsWithRelationDtlVHolder extends RecyclerView.ViewHolder {
-    View mView;
-    LinearLayout lo_twoavatars_relation_names_explain_date__lo_twoavatars_relation_names_explain_date_detail;
-    ListView lv__lo_twoavatars_relation_names_explain_date_detail;
-    LinearLayout lo_twoavatars_relation__lo_twoavatars_relation_names_explain_date;
-    TextView tvTitle__lo_twoavatars_relation_names_explain_date;
-    TextView tvDate__lo_twoavatars_relation_names_explain_date;
-    TextView tvSubTitle__lo_twoavatars_relation_names_explain_date;
-    ImageView ivMore__lo_twoavatars_relation_names_explain_date;
+    public   View mView;
+ public   LinearLayout loTwoAvaWrap;
+    public  ListView lv;
+    public  RelativeLayout roRelationTwoAva;
+    public  TextView tvTwoName;
+    public  TextView tvDate;
+    public  TextView tvContent;
+    public ImageView ivMore, ivRelation;
+    public  RelativeLayout roAvaLeft, roAvaRight;
+    public  ImageView ivAvaLeft, ivAvaRight;
+    public  TextView tvAvaLeft, tvAvaRight;
 
     public TwoAvatarsWithRelationDtlVHolder(View itemView) {
         super(itemView);
         mView = itemView;
-        lo_twoavatars_relation_names_explain_date__lo_twoavatars_relation_names_explain_date_detail
+        loTwoAvaWrap
                 =
                 (LinearLayout) mView
-                        .findViewById(R.id.lo_twoavatars_relation_names_explain_date__lo_twoavatars_relation_names_explain_date_detail);
-        //lo_twoavatars_relation_names_explain_date__lo_twoavatars_relation_names_explain_date_detail
+                        .findViewById(R.id.loTwoAvaWrap);
+        //loTwoAvaWrap
 
-        lo_twoavatars_relation__lo_twoavatars_relation_names_explain_date =
-                (LinearLayout) lo_twoavatars_relation_names_explain_date__lo_twoavatars_relation_names_explain_date_detail
-                        .findViewById(R.id.lo_twoavatars_relation__lo_twoavatars_relation_names_explain_date);
+        roRelationTwoAva =
+                (RelativeLayout) loTwoAvaWrap
+                        .findViewById(R.id.roRelationTwoAva);
 
-        tvTitle__lo_twoavatars_relation_names_explain_date =
-                (TextView) lo_twoavatars_relation_names_explain_date__lo_twoavatars_relation_names_explain_date_detail
-                        .findViewById(R.id.tvTitle__lo_twoavatars_relation_names_explain_date);
+        roAvaLeft =
+                (RelativeLayout) roRelationTwoAva
+                        .findViewById(R.id.roAvaLeft);
+        ivAvaLeft =
+                (ImageView) roAvaLeft
+                        .findViewById(R.id.ivAva);
+        tvAvaLeft =
+                (TextView) roAvaLeft
+                        .findViewById(R.id.tvAva);
 
-        tvDate__lo_twoavatars_relation_names_explain_date =
-                (TextView) lo_twoavatars_relation_names_explain_date__lo_twoavatars_relation_names_explain_date_detail
-                        .findViewById(R.id.tvDate__lo_twoavatars_relation_names_explain_date);
 
-        tvSubTitle__lo_twoavatars_relation_names_explain_date =
-                (TextView) lo_twoavatars_relation_names_explain_date__lo_twoavatars_relation_names_explain_date_detail
-                        .findViewById(R.id.tvSubTitle__lo_twoavatars_relation_names_explain_date);
+        roAvaRight =
+                (RelativeLayout) roRelationTwoAva
+                        .findViewById(R.id.roAvaRight);
+        ivAvaRight =
+                (ImageView) roAvaRight
+                        .findViewById(R.id.ivAva);
+        tvAvaRight =
+                (TextView) roAvaRight
+                        .findViewById(R.id.tvAva);
+        ivRelation =
+                (ImageView) roRelationTwoAva
+                        .findViewById(R.id.ivRelation);
 
-        ivMore__lo_twoavatars_relation_names_explain_date =
-                (ImageView) lo_twoavatars_relation_names_explain_date__lo_twoavatars_relation_names_explain_date_detail
-                        .findViewById(R.id.ivMore__lo_twoavatars_relation_names_explain_date);
-        lv__lo_twoavatars_relation_names_explain_date_detail
+
+        tvTwoName =
+                (TextView) loTwoAvaWrap
+                        .findViewById(R.id.tvNameTwoAva);
+
+        tvDate =
+                (TextView) loTwoAvaWrap
+                        .findViewById(R.id.tvDateTwoAva);
+
+        tvContent =
+                (TextView) loTwoAvaWrap
+                        .findViewById(R.id.tvContentTwoAva);
+
+        ivMore =
+                (ImageView) loTwoAvaWrap
+                        .findViewById(R.id.ivMoreTwoAvaHistory);
+
+
+        lv
                 =
                 (ListView) mView
-                        .findViewById(R.id.lv__lo_twoavatars_relation_names_explain_date_detail);
+                        .findViewById(R.id.lvTwoAvaHistory);
     }
 
          /*

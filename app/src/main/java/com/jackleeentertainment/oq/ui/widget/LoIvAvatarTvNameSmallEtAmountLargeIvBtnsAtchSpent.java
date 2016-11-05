@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.object.Profile;
 
 /**
  * Created by Jacklee on 2016. 10. 30..
@@ -34,8 +33,8 @@ public class LoIvAvatarTvNameSmallEtAmountLargeIvBtnsAtchSpent extends LinearLay
         super(context, attrs);
         View view = inflate(context, R.layout.lo_avatar_smallnamelargeamount_btns, this);
 
-        tvAvatar = (TextView) view.findViewById(R.id.ro_person_photo_tv);
-        ivAvatar = (ImageView) view.findViewById(R.id.ro_person_photo_iv);
+        tvAvatar = (TextView) view.findViewById(R.id.tvAva);
+        ivAvatar = (ImageView) view.findViewById(R.id.ivAva);
         ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
         tvName = (TextView) view.findViewById(R.id.tvTitle__lo_avatar_smallnamelargeamount_btns);
         ivToc = (ImageView) view.findViewById(R.id.ivToc);

@@ -3,6 +3,7 @@ package com.jackleeentertainment.oq.ui.layout.diafrag;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,17 @@ public class BaseDiaFrag extends android.support.v4.app.DialogFragment {
         mContext = context;
         return frag;
     }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        int style = DialogFragment.STYLE_NORMAL;
+        int  theme = android.R.style.Theme_Material_Light_Dialog_Alert;
+        setStyle(style, theme);
+
+    }
+
 
 
     @Nullable

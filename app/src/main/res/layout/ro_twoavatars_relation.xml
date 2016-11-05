@@ -14,7 +14,7 @@
         <!--android:layout_height="match_parent"/>-->
 
     <include
-
+        android:id="@+id/roAvaLeft"
         android:layout_alignParentLeft="true"
         android:layout_width="48dip"
         android:layout_height="48dip"
@@ -23,15 +23,29 @@
 
 
     <include
+        android:id="@+id/roAvaRight"
+
         android:layout_alignParentRight="true"
         android:layout_width="48dip"
         android:layout_height="48dip"
         layout="@layout/ro_person_photo_48dip"/>
 
-    <include
+
+    <ImageView
+        android:id="@+id/ivRelation"
+
         android:layout_centerInParent="true"
-        android:layout_width="48dip"
-        android:layout_height="24dip"
-        layout="@layout/lo_relation"/>
+        android:src="@drawable/ic_arrow_forward_white_24dp"
+        android:scaleType="centerCrop"
+        android:padding="2dip"
+        android:background="@drawable/cir_nostr_mdred500"
+        android:layout_width="24dip"
+        android:layout_height="24dip"/>
+
+    <!--<include-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_width="48dip"-->
+        <!--android:layout_height="24dip"-->
+        <!--layout="@layout/lo_relation"/>-->
 
 </RelativeLayout>

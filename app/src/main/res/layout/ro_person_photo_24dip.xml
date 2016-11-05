@@ -12,7 +12,7 @@
 
     <ImageView
         android:layout_centerInParent="true"
-        android:id="@+id/ro_person_photo_iv"
+        android:id="@+id/ivAva"
         android:layout_width="20dip"
         android:layout_height="20dip"
         android:scaleType="centerCrop" />

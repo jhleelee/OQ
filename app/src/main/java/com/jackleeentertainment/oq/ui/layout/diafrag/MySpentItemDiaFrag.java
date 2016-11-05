@@ -53,12 +53,18 @@ public class MySpentItemDiaFrag extends android.support.v4.app.DialogFragment {
     public static MySpentItemDiaFrag newInstance(Bundle bundle, Context context) {
         MySpentItemDiaFrag frag = new MySpentItemDiaFrag();
 
-        int style = DialogFragment.STYLE_NORMAL, theme = 0;
-        theme = android.R.style.Theme_Material_Dialog_NoActionBar;
-        frag.setStyle(style, theme);
         frag.setArguments(bundle);
         mContext = context;
         return frag;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        int style = DialogFragment.STYLE_NORMAL;
+        int  theme = android.R.style.Theme_Material_Light_Dialog_Alert;
+        setStyle(style, theme);
+
     }
 
 
@@ -74,6 +80,7 @@ public class MySpentItemDiaFrag extends android.support.v4.app.DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getDialog().setTitle(JM.strById(R.string.add_myspent));
 
         lo = (LinearLayout) view.findViewById(R.id
                 .lo);
@@ -98,8 +105,6 @@ public class MySpentItemDiaFrag extends android.support.v4.app.DialogFragment {
         tvCancel = (TextView) view.findViewById(R.id
                 .tvCancel__ro_diafrag_okcancel);
         // Fetch arguments from bundle and set title
-        String title = getArguments().getString("title", "Dialog");
-        getDialog().setTitle(title);
 //        // Show soft keyboard automatically and request focus to field
 //        getDialog().getWindow().setSoftInputMode(
 //                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

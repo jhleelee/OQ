@@ -33,6 +33,7 @@ import com.jackleeentertainment.oq.generalutil.StringGenerator;
 import com.jackleeentertainment.oq.object.Comment;
 import com.jackleeentertainment.oq.object.MyOppo;
 import com.jackleeentertainment.oq.object.OQPost;
+import com.jackleeentertainment.oq.object.OQPostPhoto;
 import com.jackleeentertainment.oq.object.Post;
 import com.jackleeentertainment.oq.object.types.OQPostT;
 import com.jackleeentertainment.oq.ui.layout.activity.ProfileActivity;
@@ -131,41 +132,20 @@ public class MainFrag1_Feeds extends ListFrag {
 
                 if (oqPost.getUid() != null) {
 
-                    //set Image
-                    Glide.with(mFragment)
-                            .using(new FirebaseImageLoader())
-                            .load(App.fbaseStorageRef
-                                    .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                    .child(oqPost.getUid())
-                                    .child(FStorageNode.createMediaFileNameToDownload(
-                                            FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                            oqPost.getUid()
-                                    )))
-                            .crossFade()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .listener(new RequestListener<StorageReference, GlideDrawable>() {
-                                @Override
-                                public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                    postViewHolder.ivAvatar.setVisibility(View.GONE);
-                                    postViewHolder.tvAvatar.setVisibility(View
-                                            .VISIBLE);
-                                    postViewHolder.tvAvatar.setText(oqPost.getUname()
-                                            .substring(0, 1));
-                                    return false;
-                                }
 
-                                @Override
-                                public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                    postViewHolder.ivAvatar.setVisibility(View.VISIBLE);
-                                    postViewHolder.tvAvatar.setVisibility(View.GONE);
-                                    return false;
-                                }
-                            })
-                            .into(postViewHolder.ivAvatar);
+                    JM.glideProfileThumb(
+                            oqPost.getUid(),
+                            oqPost.getUname(),
+                            postViewHolder.ivAvatar,
+                            postViewHolder.tvAvatar,
+                            mFragment
+                    );
+
+
                 }
 
                 postViewHolder.tvName.setText(oqPost.getUname());
-                postViewHolder.tvDeed.setText(J.st(oqPost.getUdeed()));
+                postViewHolder.tvDeed.setText(StringGenerator.deed(oqPost));
                 postViewHolder.tvDate.setText(JT.str(oqPost.getTs()));
 
 
@@ -174,89 +154,150 @@ public class MainFrag1_Feeds extends ListFrag {
 
                 if (oqPost.getPosttype().equals(OQPostT.NONE)) {
                     postViewHolder.roMedia.setVisibility(View.GONE);
-                } else
+                } else if (oqPost.getPosttype().equals(OQPostT.PHOTO)) {
 
-                if (oqPost.getPosttype().equals(OQPostT.PHOTO)) {
+                    App.fbaseDbRef
+                            .child(FBaseNode0.OQPostPhoto)
+                            .child(oqPost.getPid())
+                            .addListenerForSingleValueEvent(
+                                    new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    //set Image
-                    Glide.with(mFragment)
-                            .using(new FirebaseImageLoader())
-                            .load(App.fbaseStorageRef
-                                    .child(FStorageNode.FirstT.POST_PHOTO)
-                                    .child(oqPost.getPid())
-                                    .child(FStorageNode.createMediaFileNameToDownload(
-                                            FStorageNode.FirstT.POST_PHOTO,
-                                            oqPost.getPid()
-                                    )))
-                            .crossFade()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .listener(new RequestListener<StorageReference, GlideDrawable>() {
-                                @Override
-                                public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                    postViewHolder.roMedia.setVisibility(View.GONE);
+                                            if (dataSnapshot.exists()) {
 
-                                    return false;
-                                }
+                                                OQPostPhoto oqPostPhoto = dataSnapshot.getValue
+                                                        (OQPostPhoto.class);
 
-                                @Override
-                                public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                    postViewHolder.roMedia.setVisibility(View.VISIBLE);
-                                    postViewHolder.ivMedia.setVisibility(View.VISIBLE);
+                                                if (oqPostPhoto.getPhotoids() != null &&
+                                                        oqPostPhoto.getPhotoids().size() > 0) {
 
-                                    return false;
-                                }
-                            })
-                            .into(postViewHolder.ivMedia);
+
+
+
+
+                                                    Glide.with(mFragment)
+                                                            .using(new FirebaseImageLoader())
+                                                            .load(App.fbaseStorageRef
+                                                                    .child(FStorageNode.FirstT.POST_PHOTO)
+                                                                    .child(oqPostPhoto
+                                                                            .getPhotoids().get(0)))
+                                                            .crossFade()
+                                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                            .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                                                                @Override
+                                                                public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                                                    postViewHolder.roMedia.setVisibility(View.GONE);
+
+                                                                    return false;
+                                                                }
+
+                                                                @Override
+                                                                public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                                                    postViewHolder.roMedia.setVisibility(View.VISIBLE);
+                                                                    postViewHolder.ivPhotoMain.setVisibility(View.VISIBLE);
+
+                                                                    return false;
+                                                                }
+                                                            })
+                                                            .into(postViewHolder.ivPhotoMain);
+
+
+                                                    if (oqPostPhoto.getPhotoids().size() >= 2) {
+
+                                                        //set Image
+                                                        Glide.with(mFragment)
+                                                                .using(new FirebaseImageLoader())
+                                                                .load(App.fbaseStorageRef
+                                                                        .child(FStorageNode.FirstT.POST_PHOTO)
+                                                                        .child(oqPostPhoto
+                                                                                .getPhotoids()
+                                                                                .get(1)))
+                                                                .crossFade()
+                                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                                .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                                                                    @Override
+                                                                    public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                                                        postViewHolder.roPhotoSub.setVisibility(View.GONE);
+
+                                                                        return false;
+                                                                    }
+
+                                                                    @Override
+                                                                    public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                                                        postViewHolder.roPhotoSub
+                                                                                .setVisibility(View.VISIBLE);
+
+                                                                        return false;
+                                                                    }
+                                                                })
+                                                                .into(postViewHolder.ivPhotoSub);
+
+                                                        if (oqPostPhoto.getPhotoids().size() >= 3) {
+
+                                                            //tv
+                                                            postViewHolder.tvPhotoSubNum
+                                                                    .setVisibility(View.VISIBLE);
+
+                                                            postViewHolder.tvPhotoSubNum
+                                                                    .setText("+" + J.st
+                                                                            (oqPostPhoto.getPhotoids().size()
+                                                                                    - 2));
+
+
+                                                        }
+
+                                                    }
+
+
+                                                }
+
+
+                                            } else {
+                                                postViewHolder.roMedia.setVisibility(View.GONE);
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    }
+                            );
+
+
                 }
 
                 if (oqPost.getPosttype().equals(OQPostT.VIDEO)) {
                     postViewHolder.roMedia.setVisibility(View.VISIBLE);
-                    postViewHolder.ivMedia.setVisibility(View.GONE);
-                    postViewHolder.vvMedia.setVisibility(View.VISIBLE);
+                    postViewHolder.ivPhotoMain.setVisibility(View.GONE);
+                    postViewHolder.vvPhotoMain.setVisibility(View.VISIBLE);
 
                 }
 
                 postViewHolder.tvSupportingText.setText(oqPost.getTxt());
 
 
-                if (oqPost.getMyOppos()!=null){
-                    List<MyOppo> list =oqPost.getMyOppos();
+                if (oqPost.getMyOppos() != null) {
+                    List<MyOppo> list = oqPost.getMyOppos();
 
-                    for (final MyOppo myOppo : list){
+                    for (final MyOppo myOppo : list) {
 
                         final LoMyOppo lo = new
                                 LoMyOppo(getActivity());
 
                         //set Image
-                        Glide.with(mFragment)
-                                .using(new FirebaseImageLoader())
-                                .load(App.fbaseStorageRef
-                                        .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                        .child(App.getUid(getActivity()))
-                                        .child(FStorageNode.createMediaFileNameToDownload(
-                                                FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                                myOppo.getUid()
-                                        )))
-                                .crossFade()
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .listener(new RequestListener<StorageReference, GlideDrawable>() {
-                                    @Override
-                                    public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                        lo.ivAvatar.setVisibility(View.GONE);
-                                        lo.tvAvatar.setVisibility(View.VISIBLE);
-                                        lo.tvAvatar.setText(myOppo.getUname()
-                                                .substring(0, 1));
-                                        return false;
-                                    }
 
-                                    @Override
-                                    public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                        lo.ivAvatar.setVisibility(View.VISIBLE);
-                                        lo.tvAvatar.setVisibility(View.GONE);
-                                        return false;
-                                    }
-                                })
-                                .into(lo.ivAvatar);
+                        JM.glideProfileThumb(
+                                myOppo.getUid(),
+                                myOppo.getUname(),
+                                lo.ivAvatar,
+                                lo.tvAvatar,
+                                mFragment
+                        );
+
 
                         lo.ro_person_photo_48dip__i_oppo.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -281,20 +322,15 @@ public class MainFrag1_Feeds extends ListFrag {
                     }
 
 
-
                 }
 
 
-
-
-                if (oqPost.getLastcmt()!=null){
+                if (oqPost.getLastcmt() != null) {
                     Comment comment = oqPost.getLastcmt();
 
                     //comment layout
 
                 }
-
-
 
 
             }
@@ -383,7 +419,7 @@ public class MainFrag1_Feeds extends ListFrag {
         JM.V(roProgress);
 
         App.fbaseDbRef
-                .child(FBaseNode0.MyOqItems)
+                .child(FBaseNode0.MyOqWraps)
                 .child(App.getUid(activity))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

@@ -1,7 +1,6 @@
 package com.jackleeentertainment.oq.firebase.storage;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
@@ -27,6 +26,18 @@ import java.io.File;
  */
 public class Upload {
     static String TAG = "Upload";
+
+
+
+    public static void logTaskSnapshot(UploadTask.TaskSnapshot taskSnapshot) {
+        Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getBytesTransferred() " + J.st(taskSnapshot.getBytesTransferred()));
+        Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getTotalByteCount() " + J.st(taskSnapshot.getTotalByteCount()));
+        Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getDownloadUrl() " + J.st(taskSnapshot.getDownloadUrl()));
+        Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getUploadSessionUri() " + J.st(taskSnapshot.getUploadSessionUri()));
+    }
+
+
+
 
 
     public static void uploadBitmap(Bitmap bitmap,
@@ -68,6 +79,16 @@ public class Upload {
                                   Uri fileUri,
                                   Activity activity) {
 
+        Log.d(TAG,
+
+                "uploadFile(final String firstpath,\n" + firstpath + "\n" +
+                        "final String secondpathAkaMyUid,\n" + secondpathAkaMyUid + "\n" +
+                        "String filenameAkaResolutionAkaPostId,\n" + filenameAkaResolutionAkaPostId + "\n" +
+                        "Uri fileUri,\n" + fileUri.toString() + "\n" +
+                        "Activity activity) "
+
+        );
+
         UploadTask uploadTask =
                 App.fbaseStorageRef
                         .child(firstpath)
@@ -108,14 +129,6 @@ public class Upload {
         ;
 
 
-    }
-
-
-    public static void logTaskSnapshot(UploadTask.TaskSnapshot taskSnapshot) {
-        Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getBytesTransferred() " + J.st(taskSnapshot.getBytesTransferred()));
-        Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getTotalByteCount() " + J.st(taskSnapshot.getTotalByteCount()));
-        Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getDownloadUrl() " + J.st(taskSnapshot.getDownloadUrl()));
-        Log.d(TAG + ":" + "logTaskSnapshot()", "taskSnapshot.getUploadSessionUri() " + J.st(taskSnapshot.getUploadSessionUri()));
     }
 
 
@@ -171,7 +184,7 @@ public class Upload {
                 thumbnail_036,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
                 App.getUid(activity),
-                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px36
+                FStorageNode.pxProfileT.px36
         );
 
 
@@ -179,7 +192,7 @@ public class Upload {
                 thumbnail_048,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
                 App.getUid(activity),
-                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px48
+                FStorageNode.pxProfileT.px48
         );
 
 
@@ -187,7 +200,7 @@ public class Upload {
                 thumbnail_072,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
                 App.getUid(activity),
-                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px72
+                FStorageNode.pxProfileT.px72
         );
 
 
@@ -195,7 +208,7 @@ public class Upload {
                 thumbnail_096,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
                 App.getUid(activity),
-                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px96
+                FStorageNode.pxProfileT.px96
         );
 
 
@@ -203,7 +216,7 @@ public class Upload {
                 thumbnail_144,
                 FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
                 App.getUid(activity),
-                FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px144
+                FStorageNode.pxProfileT.px144
         );
     }
 

@@ -60,82 +60,71 @@
                 </LinearLayout>
 
 
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/roPhoto"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dip"
                     android:orientation="vertical"
                     android:visibility="gone">
 
 
-                    <RelativeLayout
+                    <ImageView
+                        android:id="@+id/ivPhotoMain"
                         android:layout_width="match_parent"
-                        android:layout_height="200dip"
-                        android:orientation="vertical">
+                        android:layout_height="200dip"/>
 
+
+
+
+                    <RelativeLayout
+                        android:layout_width="80dip"
+                        android:layout_height="80dip"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true">
 
                         <ImageView
-                            android:id="@+id/ivPhotoMain"
+                            android:id="@+id/ivPhotoSub"
                             android:layout_width="match_parent"
-                            android:layout_height="200dip"/>
-
+                            android:layout_height="match_parent"/>
 
                         <TextView
-                            android:id="@+id/tvPhotoMainEmpty"
+                            android:id="@+id/tvPhotoSubNum"
                             android:layout_width="match_parent"
-                            android:layout_height="200dip"
-                            android:text="@string/tab_to_add_opposite"/>
-
-                        <RelativeLayout
-                            android:layout_width="80dip"
-                            android:layout_height="80dip"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentRight="true">
-
-                            <ImageView
-                                android:id="@+id/ivPhotoSub"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"/>
-
-                            <TextView
-                                android:id="@+id/tvPhotoSubNum"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/scrim_solid"
-                                android:gravity="center"
-                                android:text="+2"
-                                android:textColor="@color/alphawhite_50"
-                                android:textSize="16dip"
-                                android:textStyle="bold"/>
-
-                        </RelativeLayout>
-
-
-                        <RelativeLayout
-                            android:id="@+id/roEmpty"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:visibility="gone">
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="160dip"
-                                android:background="@drawable/scrim_solid"/>
-
-                            <TextView
-                                android:id="@+id/tvEmpty"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:text="@string/tab_to_add_opposite"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/md_24sp"/>
-                        </RelativeLayout>
+                            android:layout_height="match_parent"
+                            android:background="@drawable/scrim_solid"
+                            android:gravity="center"
+                            android:text="+2"
+                            android:textColor="@color/alphawhite_50"
+                            android:textSize="16dip"
+                            android:textStyle="bold"/>
 
                     </RelativeLayout>
 
 
-                </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/roEmpty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:visibility="gone">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="160dip"
+                            android:background="@drawable/scrim_solid"/>
+
+                        <TextView
+                            android:id="@+id/tvEmpty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="@string/tab_to_add_opposite"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/md_24sp"/>
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -145,6 +134,7 @@
 
                     <EditText
                         android:id="@+id/etContent"
+                        android:hint="@string/add_comment"
                         style="@style/EditText.Comment"
                         />
 

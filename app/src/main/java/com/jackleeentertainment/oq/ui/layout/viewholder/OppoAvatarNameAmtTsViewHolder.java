@@ -33,11 +33,11 @@ public class OppoAvatarNameAmtTsViewHolder extends RecyclerView.ViewHolder {
 
         ivAvatar =
                 (ImageView) mView
-                        .findViewById(R.id.ro_person_photo_iv);
+                        .findViewById(R.id.ivAva);
 
         tvAvatar =
                 (TextView) mView
-                        .findViewById(R.id.ro_person_photo_tv);
+                        .findViewById(R.id.tvAva);
 
         tvName =
                 (TextView) mView

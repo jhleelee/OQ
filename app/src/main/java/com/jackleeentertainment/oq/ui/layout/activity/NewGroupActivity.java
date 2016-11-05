@@ -29,7 +29,7 @@ public class NewGroupActivity extends BaseFragmentContainFullDialogActivity {
         super.onCreate(savedInstanceState);
 
 //        group.setOqgnltype(getIntent().getStringExtra("GeneralT"));
-//        group.setOqwnttype(getIntent().getStringExtra("WantT"));
+//        group.setOqwnttype(getIntent().getStringExtra("DoWhat"));
 //        OqItemUtil.setMyUidToOneSide(oqItemEffect, this);
         showFrag(new NewGroupFrag(), R.id.fr_content);
     }

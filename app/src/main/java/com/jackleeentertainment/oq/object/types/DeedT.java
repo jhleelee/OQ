@@ -6,7 +6,7 @@ package com.jackleeentertainment.oq.object.types;
 
 public class DeedT {
 
-    public static String SENT_GETREQ = "a";
-    public static String SENT_GETREQ__GOT_APPROVED = "b";
+    public static String RequesterSENT_IWantGet_REQ = "a";
+    public static String SENT_IWantGet_REQ_Argued = "b";
 
 }

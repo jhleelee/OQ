@@ -141,37 +141,16 @@ public class MainFrag0_OQItems extends ListFrag {
 
                 if (myOppo.getUid()!=null) {
 
-                    //set Image
-                    Glide.with(mFragment)
-                            .using(new FirebaseImageLoader())
-                            .load(App.fbaseStorageRef
-                                    .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                    .child(myOppo.getUid())
-                                    .child(FStorageNode.createMediaFileNameToDownload(
-                                            FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                            myOppo.getUid()
-                                    )))
-                            .crossFade()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .listener(new RequestListener<StorageReference, GlideDrawable>() {
-                                @Override
-                                public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                    oppoAvatarNameAmtTsViewHolder.ivAvatar.setVisibility(View.GONE);
-                                    oppoAvatarNameAmtTsViewHolder.tvAvatar.setVisibility(View
-                                            .VISIBLE);
-                                    oppoAvatarNameAmtTsViewHolder.tvAvatar.setText(myOppo.getUname()
-                                            .substring(0, 1));
-                                    return false;
-                                }
 
-                                @Override
-                                public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                    oppoAvatarNameAmtTsViewHolder.ivAvatar.setVisibility(View.VISIBLE);
-                                    oppoAvatarNameAmtTsViewHolder.tvAvatar.setVisibility(View.GONE);
-                                    return false;
-                                }
-                            })
-                            .into(oppoAvatarNameAmtTsViewHolder.ivAvatar);
+                    JM.glideProfileThumb(
+                            myOppo.getUid(),
+                            myOppo.getUname(),
+                            oppoAvatarNameAmtTsViewHolder.ivAvatar,
+                            oppoAvatarNameAmtTsViewHolder.tvAvatar,
+                            mFragment
+                    );
+
+
                 }
 
                 oppoAvatarNameAmtTsViewHolder.tvName.setText(myOppo.getUname());

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,11 +58,11 @@ public class NewOQFrag1 extends Fragment {
     ImageView ivPhotoMain, ivPhotoSub;
     TextView tvPhotoSubNum;
     EditText etContent;
-    TextView tv_done, tvPhotoMainEmpty, tvPhotoCommentTitle;
+    TextView tv_done,  tvPhotoCommentTitle;
     LinearLayout loBtAddPhoto;
     ImageView ivBtAddPhoto;
     TextView tvBtAddPhoto;
-
+    RelativeLayout roPhoto;
     String content = "";
     Bundle bundleFromFrag0;
 
@@ -84,7 +85,6 @@ public class NewOQFrag1 extends Fragment {
         bundleFromFrag0 = getArguments();
         view = inflater.inflate(R.layout.frag_newoq_1, container, false);
         initUI();
-        initUiCosmetic();
         return view;
     }
 
@@ -92,14 +92,17 @@ public class NewOQFrag1 extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initClickListener();
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume()");
         uiPhotoData();
+        initUiCosmetic();
+        initClickListener();
+
 
     }
 
@@ -112,20 +115,18 @@ public class NewOQFrag1 extends Fragment {
         ivBtAddPhoto = (ImageView) view.findViewById(R.id.ivBtAddPhoto);
         tvBtAddPhoto = (TextView) view.findViewById(R.id.tvBtAddPhoto);
 
-
+        roPhoto= (RelativeLayout) view.findViewById(R.id.roPhoto);
         ivPhotoMain = (ImageView) view.findViewById(R.id.ivPhotoMain);
         ivPhotoSub = (ImageView) view.findViewById(R.id.ivPhotoSub);
         tvPhotoSubNum = (TextView) view.findViewById(R.id.tvPhotoSubNum);
         etContent = (EditText) view.findViewById(R.id.etContent);
         tv_done = (TextView) view.findViewById(R.id.tv_done);
-        tvPhotoMainEmpty = (TextView) view.findViewById(R.id.tvPhotoMainEmpty);
     }
 
     void initUiCosmetic() {
         tvPhotoCommentTitle.setText(JM.strById(R.string.add_photo_comment));
         ((NewOQActivity) getActivity()).ivClose.setImageDrawable(null);
         ((NewOQActivity) getActivity()).ivClose.setImageDrawable(JM.drawableById(R.drawable.ic_arrow_back_white_48dp));
-
     }
 
 
@@ -236,19 +237,33 @@ public class NewOQFrag1 extends Fragment {
 
 
     void uiPhotoData() {
+
         if (((NewOQActivity)getActivity()).arlUriPhoto == null || ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) {
-            JM.V(tvPhotoMainEmpty);
-            JM.G(ivPhotoSub);
+            JM.G(roPhoto);
+
         } else if (((NewOQActivity)getActivity()).arlUriPhoto.size() == 1) {
-            JM.G(tvPhotoMainEmpty);
+            Log.d(TAG, "uiPhotoData()" + J.st(((NewOQActivity)getActivity()).arlUriPhoto.size()));
+            JM.V(roPhoto);
             JM.G(ivPhotoSub);
+            JM.G(tvPhotoSubNum);
+            ivPhotoMain.setImageURI(((NewOQActivity)getActivity()).arlUriPhoto.get(0));
+
         } else if (((NewOQActivity)getActivity()).arlUriPhoto.size() == 2) {
-            JM.G(tvPhotoMainEmpty);
+            Log.d(TAG, "uiPhotoData()" + J.st(((NewOQActivity)getActivity()).arlUriPhoto.size()));
+            JM.V(roPhoto);
             JM.V(ivPhotoSub);
+            JM.G(tvPhotoSubNum);
+            ivPhotoMain.setImageURI(((NewOQActivity)getActivity()).arlUriPhoto.get(0));
+            ivPhotoSub.setImageURI(((NewOQActivity)getActivity()).arlUriPhoto.get(1));
+
         } else {
-            JM.G(tvPhotoMainEmpty);
+            Log.d(TAG, "uiPhotoData()" + J.st(((NewOQActivity)getActivity()).arlUriPhoto.size()));
+            JM.V(roPhoto);
             JM.V(ivPhotoSub);
             JM.V(tvPhotoSubNum);
+
+            ivPhotoMain.setImageURI(((NewOQActivity)getActivity()).arlUriPhoto.get(0));
+            ivPhotoSub.setImageURI(((NewOQActivity)getActivity()).arlUriPhoto.get(1));
             tvPhotoSubNum.setText("+" + J.st(((NewOQActivity)getActivity()).arlUriPhoto.size() - 2));
         }
     }

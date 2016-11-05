@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.generalutil.JM;
 
 import java.util.ArrayList;
 
@@ -54,7 +53,7 @@ public class DiaFragAdapter extends BaseAdapter {
             viewHolder = new ItemDiaFragListViewHolder();
             viewHolder.ro__i_diafraglist = (RelativeLayout) convertView.findViewById(R.id.ro__i_diafraglist);
             viewHolder.ro_person_photo = (RelativeLayout) convertView.findViewById(R.id.ro_person_photo);
-            viewHolder.ro_person_photo_iv = (ImageView) viewHolder.ro_person_photo.findViewById(R.id.ro_person_photo_iv);
+            viewHolder.ro_person_photo_iv = (ImageView) viewHolder.ro_person_photo.findViewById(R.id.ivAva);
             viewHolder.tv__i_diafraglist = (TextView) convertView.findViewById(R.id.tv__i_diafraglist);
             convertView.setTag(viewHolder);
 
@@ -68,8 +67,8 @@ public class DiaFragAdapter extends BaseAdapter {
         // assign values if the object is not null
         if (itemDiaFragList != null) {
             // get the TextView from the ViewHolderReceipt and then set the text (item name) and tag (item ID) values
-            viewHolder.ro_person_photo_iv.setBackground(JM.drawableById(itemDiaFragList.getIdDrawableBg()));
-            viewHolder.ro_person_photo_iv.setImageDrawable(JM.drawableById(itemDiaFragList.getIdDrawableIco()));
+            viewHolder.ro_person_photo_iv.setBackground((itemDiaFragList.getDrawableBg()));
+            viewHolder.ro_person_photo_iv.setImageDrawable((itemDiaFragList.getDrawableIco()));
             viewHolder.tv__i_diafraglist.setText(itemDiaFragList.getText());
             viewHolder.ro__i_diafraglist.setOnClickListener(itemDiaFragList.getOnClickListener());
         }

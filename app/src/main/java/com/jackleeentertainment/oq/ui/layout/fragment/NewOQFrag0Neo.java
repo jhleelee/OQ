@@ -20,21 +20,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.storage.StorageReference;
-import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.OqItem;
-import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.OqItemUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
@@ -44,8 +34,6 @@ import com.jackleeentertainment.oq.ui.widget.LoIvAvatarTvNameSmallEtAmountLargeI
 import com.jackleeentertainment.oq.ui.widget.NumericKeyBoardTransformationMethod;
 import com.jackleeentertainment.oq.ui.widget.SimpleTextWatcher;
 import com.jackleeentertainment.oq.ui.widget.SimpleTextWatcher2;
-
-import java.util.ArrayList;
 
 /**
  * Created by Jacklee on 2016. 10. 30..
@@ -245,36 +233,15 @@ public class NewOQFrag0Neo extends Fragment {
                 final LoIvAvatarTvNameSmallEtAmountLargeIvBtns lo = new
                         LoIvAvatarTvNameSmallEtAmountLargeIvBtns(getActivity());
 
-                //set Image
-                Glide.with(this)
-                        .using(new FirebaseImageLoader())
-                        .load(App.fbaseStorageRef
-                                .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                .child(App.getUid(getActivity()))
-                                .child(FStorageNode.createMediaFileNameToDownload(
-                                        FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                        oqItem.getNameclaimee()
-                                )))
-                        .crossFade()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .listener(new RequestListener<StorageReference, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                lo.ivAvatar.setVisibility(View.GONE);
-                                lo.tvAvatar.setVisibility(View.VISIBLE);
-                                lo.tvAvatar.setText(oqItem.getNameclaimee()
-                                        .substring(0, 1));
-                                return false;
-                            }
 
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                lo.ivAvatar.setVisibility(View.VISIBLE);
-                                lo.tvAvatar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
-                        .into(lo.ivAvatar);
+                JM.glideProfileThumb(
+                        oqItem.getUidclaimee(),
+                        oqItem.getNameclaimee(),
+                        lo.ivAvatar,
+                        lo.tvAvatar,
+                        this
+                );
+
 
                 lo.tvName.setText(oqItem.getNameclaimee());
                 lo.setOnIvTocClickListener(new View.OnClickListener() {
@@ -490,10 +457,10 @@ public class NewOQFrag0Neo extends Fragment {
     void initCosmetic() {
 
         if (OQTWantT_Future != null &&
-                OQTWantT_Future.equals(OQT.WantT.GET)) {
+                OQTWantT_Future.equals(OQT.DoWhat.GET)) {
             tvToGetOrPay.setText(JM.strById(R.string.request_detail));
         } else if (OQTWantT_Future != null &&
-                OQTWantT_Future.equals(OQT.WantT.PAY)) {
+                OQTWantT_Future.equals(OQT.DoWhat.PAY)) {
             tvToGetOrPay.setText(JM.strById(R.string.getter));
         }
         tvMySpent.setText(JM.strById(R.string.myspent));
@@ -514,10 +481,10 @@ public class NewOQFrag0Neo extends Fragment {
     void initVGView() {
 
         if (OQTWantT_Future != null &&
-                OQTWantT_Future.equals(OQT.WantT.GET)) {
+                OQTWantT_Future.equals(OQT.DoWhat.GET)) {
             JM.V(cvMySpent);
         } else if (OQTWantT_Future != null &&
-                OQTWantT_Future.equals(OQT.WantT.PAY)) {
+                OQTWantT_Future.equals(OQT.DoWhat.PAY)) {
             JM.G(cvMySpent);
         }
 

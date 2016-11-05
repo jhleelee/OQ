@@ -26,8 +26,8 @@ public class LoIvAvatarTvTitlesIvDelete extends LinearLayout {
         super(context, attrs);
         View view = inflate(context, R.layout.lo_avatar_titlesubtitle_delete, this);
 
-        tvAvatar = (TextView) view.findViewById(R.id.ro_person_photo_tv);
-        ivAvatar = (ImageView) view.findViewById(R.id.ro_person_photo_iv);
+        tvAvatar = (TextView) view.findViewById(R.id.tvAva);
+        ivAvatar = (ImageView) view.findViewById(R.id.ivAva);
         ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
         tvName = (TextView) view.findViewById(R.id.tvTitle__lo_avatartitlesubtitle_delete);
         tvEmail = (TextView) view.findViewById(R.id.tvSubTitle__lo_avatartitlesubtitle_delete);

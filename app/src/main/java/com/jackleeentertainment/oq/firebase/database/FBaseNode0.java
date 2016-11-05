@@ -22,7 +22,7 @@ public class FBaseNode0 {
 
 
 
-    public final static String MyOqItems = "my_oqi";
+    public final static String MyOqWraps = "my_oqw";
 
     public final static String Group_OqItem = "group_oqitem";
     public final static String Group_People = "group_oqitem";
@@ -34,7 +34,8 @@ public class FBaseNode0 {
 
 
 
-    public final static String Post = "post";
+    public final static String OQPost = "post";
+    public final static String OQPostPhoto = "postph";
 
 
 }

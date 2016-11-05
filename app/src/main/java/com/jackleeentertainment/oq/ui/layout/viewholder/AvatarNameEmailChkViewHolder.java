@@ -17,6 +17,8 @@ public class AvatarNameEmailChkViewHolder extends RecyclerView.ViewHolder {
     View mView;
     public RelativeLayout ro_person_photo_48dip__lo_avatartitlesubtitle_chk;
     public ImageView ro_person_photo_iv;
+    public TextView ro_person_photo_tv;
+
     public TextView tvTitle__lo_avatartitlesubtitle_chk;
     public TextView tvSubTitle__lo_avatartitlesubtitle_chk;
     public CheckBoxJack checkboxJack__lo_avatartitlesubtitle_chk;
@@ -28,8 +30,11 @@ public class AvatarNameEmailChkViewHolder extends RecyclerView.ViewHolder {
                 (RelativeLayout) mView
                         .findViewById(R.id.ro_person_photo_48dip__lo_avatartitlesubtitle_chk);
         ro_person_photo_iv =
-                (ImageView) mView
-                        .findViewById(R.id.ro_person_photo_iv);
+                (ImageView) ro_person_photo_48dip__lo_avatartitlesubtitle_chk
+                        .findViewById(R.id.ivAva);
+        ro_person_photo_tv =
+                (TextView) ro_person_photo_48dip__lo_avatartitlesubtitle_chk
+                        .findViewById(R.id.tvAva);
         tvTitle__lo_avatartitlesubtitle_chk =
                 (TextView) mView
                         .findViewById(R.id.tvTitle__lo_avatartitlesubtitle_chk);

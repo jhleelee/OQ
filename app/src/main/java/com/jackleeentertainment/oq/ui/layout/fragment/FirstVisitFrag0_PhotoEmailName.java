@@ -86,12 +86,14 @@ public class FirstVisitFrag0_PhotoEmailName extends Fragment
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, null);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        initUiData();
-    }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initUiData(); //this is called after onActivityResult
+
+    }
 
     @Override
     public void onDestroy() {

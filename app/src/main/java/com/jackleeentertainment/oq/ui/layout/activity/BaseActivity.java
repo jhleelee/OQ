@@ -36,7 +36,6 @@ import com.jackleeentertainment.oq.ui.layout.diafrag.OneLineInputDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.ReceiptBreakdownDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.SelectedFriendsAndMoreDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.TransactChatOrShowProfileDiaFrag;
-import com.soundcloud.android.crop.Crop;
 
 import java.util.ArrayList;
 
@@ -79,39 +78,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_OK) {
 
-            switch (requestCode) {
-                case RESULT_ACTION_PICK:
-                    if (null != data) {
-                        Uri uri = data.getData();
-                        Crop.of(uri, croppedUri).asSquare().start(this);
-                    }
-                    break;
-
-                case RESULT_ACTION_IMAGE_CAPTURE:
-                    if (null != data) {
-                        Uri uri = data.getData();
-                        Crop.of(uri, croppedUri).asSquare().start(this);
-                    }
-                    break;
-
-                case Crop.REQUEST_CROP:
-                    if (null != data) {
-                        Uri uri = data.getData();
-                        LBR.send("Crop.REQUEST_CROP", uri);
-                    }
-                    break;
-
-
-                default:
-                    break;
-            }
-        }
-    }
 
 
     public void showDialogFragment(Bundle bundle) {

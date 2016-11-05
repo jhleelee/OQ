@@ -53,15 +53,23 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
     public static EasyInputDiaFrag  newInstance(Bundle bundle, Context context) {
         EasyInputDiaFrag frag = new EasyInputDiaFrag();
 
-        int style = DialogFragment.STYLE_NORMAL, theme = 0;
-        theme = android.R.style.Theme_Material_Dialog_NoActionBar;
-        frag.setStyle(style, theme);
+
 
         frag.setArguments(bundle);
         selectedProfileNum =   bundle.getInt("selectedProfileNum");
         OQTWantT_Future =   bundle.getString("OQTWantT_Future");
         mContext = context;
         return frag;
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        int style = DialogFragment.STYLE_NORMAL;
+        int  theme = android.R.style.Theme_Material_Light_Dialog_Alert;
+        setStyle(style, theme);
+
     }
 
 
@@ -108,7 +116,7 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
 
 
 
-        if (OQTWantT_Future !=null&& OQTWantT_Future.equals(OQT.WantT.GET)){
+        if (OQTWantT_Future !=null&& OQTWantT_Future.equals(OQT.DoWhat.GET)){
 
             if (selectedProfileNum==1){
 
@@ -193,7 +201,7 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
                 r2.setText(JM.strById(R.string.dummydate));
             }
 
-        } else if (OQTWantT_Future !=null&& OQTWantT_Future.equals(OQT.WantT.PAY)){
+        } else if (OQTWantT_Future !=null&& OQTWantT_Future.equals(OQT.DoWhat.PAY)){
             JM.V(r0);
             JM.V(r1);
             JM.G(r2);

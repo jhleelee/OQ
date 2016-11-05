@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.google.gson.Gson;
 import com.jackleeentertainment.oq.App;
@@ -264,7 +263,7 @@ public class ChatActivity
                     roAttach__lo_attachts__lo_chat_message, ro_media__lo_attachts__lo_chat_message;
             LinearLayout loBody__lo_chat_message, lo_textts__lo_chat_message,
                     lo_attachts__lo_chat_message;
-            VideoView ro_person_photo_vv;
+            TextView ro_person_photo_tv;
             ImageView ro_person_photo_iv;
             TextView tvSenderName__lo_chat_message, tvTs__lo_textts__lo_chat_message,
                     _tvTs__lo_textts__lo_chat_message, tvText__lo_textts__lo_chat_message, _tvTs__lo_attachts__lo_chat_message, tvTextBelow__lo_attachts__lo_chat_message, tvTs__lo_attachts__lo_chat_message, tvTextCenter__lo_attachts__lo_chat_message;
@@ -282,10 +281,11 @@ public class ChatActivity
 
             viewHolder_chat.ro_person_photo_48dip__lo_chat_message = (RelativeLayout) view.findViewById(R.id
                     .ro_person_photo_48dip__lo_chat_message);
-            viewHolder_chat.ro_person_photo_vv = (VideoView) viewHolder_chat.ro_person_photo_48dip__lo_chat_message.findViewById(R.id
-                    .ro_person_photo_vv);
+            viewHolder_chat.ro_person_photo_tv = (TextView) viewHolder_chat
+                    .ro_person_photo_48dip__lo_chat_message.findViewById(R.id
+                    .tvAva);
             viewHolder_chat.ro_person_photo_iv = (ImageView) viewHolder_chat.ro_person_photo_48dip__lo_chat_message.findViewById(R.id
-                    .ro_person_photo_iv);
+                    .ivAva);
 
             viewHolder_chat.loBody__lo_chat_message = (LinearLayout) view.findViewById(R.id
                     .loBody__lo_chat_message);
@@ -406,6 +406,14 @@ public class ChatActivity
                     JM.G(vh.tvTs__lo_textts__lo_chat_message);
                     JM.V(vh._tvTs__lo_attachts__lo_chat_message);
                     JM.V(vh._tvTs__lo_textts__lo_chat_message);
+
+                    JM.glideProfileThumb(
+                            senderId,
+                            senderName,
+                            vh.ro_person_photo_iv,
+                            vh.ro_person_photo_tv,
+                            (Activity)context
+                    );
 
                 }
 

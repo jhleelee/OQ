@@ -21,31 +21,35 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public    RelativeLayout roMedia, roAvatar;
     public  ImageView ivAvatar;
     public  TextView tvAvatar, tvName, tvDate, tvDeed;
-    public  ImageView ivMedia;
-    public  VideoView vvMedia;
+
     public  TextView tvSupportingText;
     public  LinearLayout loOqOppo, loCommentOne;
+    public VideoView vvPhotoMain;
+    public  ImageView ivPhotoMain;
+    public  ImageView ivPhotoSub;
+    public  TextView tvPhotoSubNum;
+    public RelativeLayout roPhotoSub;
 
     public PostViewHolder(View itemView) {
         super(itemView);
 
         mView = itemView;
         roAvatar= (RelativeLayout) mView.findViewById(R.id.roAvatar);
-        tvAvatar= (TextView) mView.findViewById(R.id.ro_person_photo_tv);
-        ivAvatar= (ImageView) mView.findViewById(R.id.ro_person_photo_iv);
+        tvAvatar= (TextView) mView.findViewById(R.id.tvAva);
+        ivAvatar= (ImageView) mView.findViewById(R.id.ivAva);
                 tvName= (TextView) mView.findViewById(R.id.tvName);
         tvDate= (TextView) mView.findViewById(R.id.tvDate);
         tvDeed= (TextView) mView.findViewById(R.id.tvDeed);
         roMedia = (RelativeLayout) mView.findViewById(R.id.roMedia);
+        vvPhotoMain = (VideoView) mView.findViewById(R.id.vvPhotoMain);
+        ivPhotoMain = (ImageView) mView.findViewById(R.id.ivPhotoMain);
+        roPhotoSub= (RelativeLayout) mView.findViewById(R.id.roPhotoSub);
+        ivPhotoSub = (ImageView) mView.findViewById(R.id.ivPhotoSub);
+        tvPhotoSubNum= (TextView) mView.findViewById(R.id.tvPhotoSubNum);
 
-        vvMedia = (VideoView) mView.findViewById(R.id.videoViewMedia);
-        ivMedia = (ImageView) mView.findViewById(R.id.imageViewMedia);
-        tvSupportingText = (TextView) mView.findViewById(R.id.tvSupportingText);
+         tvSupportingText = (TextView) mView.findViewById(R.id.tvSupportingText);
         loOqOppo = (LinearLayout) mView.findViewById(R.id.loOqOppo);
         loCommentOne = (LinearLayout) mView.findViewById(R.id.loCommentOne);
-
-
-
     };
 
 

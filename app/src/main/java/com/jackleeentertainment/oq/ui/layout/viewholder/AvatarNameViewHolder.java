@@ -29,10 +29,10 @@ public class AvatarNameViewHolder extends RecyclerView.ViewHolder{
                         .findViewById(R.id.ro_person_photo_48dip__lo_avatar_name);
         ro_person_photo_tv =
                 (TextView) ro_person_photo_48dip__lo_avatar_name
-                        .findViewById(R.id.ro_person_photo_tv);
+                        .findViewById(R.id.tvAva);
         ro_person_photo_iv =
                 (ImageView) ro_person_photo_48dip__lo_avatar_name
-                        .findViewById(R.id.ro_person_photo_iv);
+                        .findViewById(R.id.ivAva);
         tvTitle__lo_avatar_name =
                 (TextView) mView
                         .findViewById(R.id.tvTitle__lo_avatar_name);

@@ -69,7 +69,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:9.6.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.orhanobut:logger:1.15'
-    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.7.1'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile 'konifar:fab-transformation:1.0.0'

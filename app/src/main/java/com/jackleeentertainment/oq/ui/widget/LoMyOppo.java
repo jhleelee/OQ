@@ -3,14 +3,12 @@ package com.jackleeentertainment.oq.ui.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.object.Profile;
 
 /**
  * Created by Jacklee on 2016. 11. 1..
@@ -36,9 +34,9 @@ public class LoMyOppo extends LinearLayout {
                 .ro_person_photo_48dip__i_oppo);
 
         ivAvatar = (ImageView) view.findViewById(R.id
-                .ro_person_photo_iv);
+                .ivAva);
         tvAvatar = (TextView) view.findViewById(R.id
-                .ro_person_photo_tv);
+                .tvAva);
         tvTitle__i_oppo = (TextView) view.findViewById(R.id
                 .tvTitle__i_oppo);
         tvDate__i_oppo = (TextView) view.findViewById(R.id

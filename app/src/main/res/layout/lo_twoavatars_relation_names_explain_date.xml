@@ -5,8 +5,8 @@
     android:gravity="center_vertical">
 
     <include
-        android:id="@+id/lo_twoavatars_relation__lo_twoavatars_relation_names_explain_date"
-        layout="@layout/lo_twoavatars_relation"
+        android:id="@+id/roRelationTwoAva"
+        layout="@layout/ro_twoavatars_relation"
         android:layout_width="96dip"
         android:layout_height="48dip"
         android:layout_marginLeft="@dimen/md_12dip"/>
@@ -25,7 +25,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvTitle__lo_twoavatars_relation_names_explain_date"
+                android:id="@+id/tvNameTwoAva"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -37,7 +37,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/tvDate__lo_twoavatars_relation_names_explain_date"
+                android:id="@+id/tvDateTwoAva"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dip"
@@ -55,7 +55,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvSubTitle__lo_twoavatars_relation_names_explain_date"
+                android:id="@+id/tvContentTwoAva"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -72,7 +72,7 @@
                 <!--android:layout_marginLeft="8dip"/>-->
 
             <ImageView
-                android:id="@+id/ivMore__lo_twoavatars_relation_names_explain_date"
+                android:id="@+id/ivMoreTwoAvaHistory"
                 android:src="@drawable/ic_expand_more_white_48dp"
                 style="@style/ImageView.WhiteImageSrcTransparentBg.24"
 

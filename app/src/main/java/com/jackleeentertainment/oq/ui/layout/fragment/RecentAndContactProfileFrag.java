@@ -129,18 +129,14 @@ public class RecentAndContactProfileFrag extends Fragment {
                         );
 
                 //set Image
-                Glide.with(getActivity())
-                        .using(new FirebaseImageLoader())
-                        .load(App.fbaseStorageRef
-                                .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                .child(profile.getUid())
-                                .child(FStorageNode.createMediaFileNameToDownload(
-                                        FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                        profile.getUid()
-                                )))
-                        .crossFade()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(avatarNameEmailChkViewHolder.ro_person_photo_iv);
+                JM.glideProfileThumb(
+                        profile.getUid(),
+                        profile.getFull_name(),
+                        avatarNameEmailChkViewHolder.ro_person_photo_iv,
+                        avatarNameEmailChkViewHolder.ro_person_photo_tv,
+                        getActivity()
+                );
+
                 ;
 
                 avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk
@@ -182,18 +178,19 @@ public class RecentAndContactProfileFrag extends Fragment {
 
                 //set Image
                 if (profile.getUid() != null) {
-                    Glide.with(getActivity())
-                            .using(new FirebaseImageLoader())
-                            .load(App.fbaseStorageRef
-                                    .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
-                                    .child(profile.getUid())
-                                    .child(FStorageNode.createMediaFileNameToDownload(
-                                            FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
-                                            profile.getUid()
-                                    )))
-                            .crossFade()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(avatarNameEmailChkViewHolder.ro_person_photo_iv);
+
+
+                    //set Image
+                    JM.glideProfileThumb(
+                            profile.getUid(),
+                            profile.getFull_name(),
+                            avatarNameEmailChkViewHolder.ro_person_photo_iv,
+                            avatarNameEmailChkViewHolder.ro_person_photo_tv,
+                            getActivity()
+                    );
+
+
+
                 }
 
                 avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk

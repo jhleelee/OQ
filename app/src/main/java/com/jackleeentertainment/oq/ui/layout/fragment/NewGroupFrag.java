@@ -349,7 +349,7 @@ public class NewGroupFrag extends Fragment {
                 holder.ro_person_photo_iv = (ImageView)
                         holder.ro_person_photo_48dip__lo_avatartitlesubtitle_delete
                                 .findViewById(R.id
-                                        .ro_person_photo_iv);
+                                        .ivAva);
                 holder.tvTitle__lo_avatartitlesubtitle_delete = (TextView) convertView.findViewById(R.id.tvTitle__lo_avatartitlesubtitle_delete);
                 holder.tvSubTitle__lo_avatartitlesubtitle_delete = (TextView) convertView.findViewById(R.id.tvSubTitle__lo_avatartitlesubtitle_delete);
                 holder.ibDelete = (ImageButton) convertView.findViewById(R.id.ibDelete);

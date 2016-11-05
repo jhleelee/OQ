@@ -1,6 +1,6 @@
 package com.jackleeentertainment.oq.ui.layout.diafrag.list;
 
-import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 /**
@@ -9,8 +9,8 @@ import android.view.View;
 
 public class ItemDiaFragList {
 
-    int idDrawableIco;
-    int idDrawableBg;
+    Drawable drawableIco;
+    Drawable drawableBg;
     String text;
     View.OnClickListener onClickListener;
 
@@ -18,20 +18,21 @@ public class ItemDiaFragList {
         super();
     }
 
-    public int getIdDrawableIco() {
-        return idDrawableIco;
+
+    public Drawable getDrawableIco() {
+        return drawableIco;
     }
 
-    public void setIdDrawableIco(int idDrawableIco) {
-        this.idDrawableIco = idDrawableIco;
+    public void setDrawableIco(Drawable drawableIco) {
+        this.drawableIco = drawableIco;
     }
 
-    public int getIdDrawableBg() {
-        return idDrawableBg;
+    public Drawable getDrawableBg() {
+        return drawableBg;
     }
 
-    public void setIdDrawableBg(int idDrawableBg) {
-        this.idDrawableBg = idDrawableBg;
+    public void setDrawableBg(Drawable drawableBg) {
+        this.drawableBg = drawableBg;
     }
 
     public String getText() {
@@ -49,5 +50,4 @@ public class ItemDiaFragList {
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
-
 }

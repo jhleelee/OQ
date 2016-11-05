@@ -1,6 +1,5 @@
 package com.jackleeentertainment.oq.ui.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -9,16 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.storage.StorageReference;
-import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.object.Profile;
 
 /**
@@ -39,8 +29,8 @@ public class LoIvAvatarTvNameSmallEtAmountLargeIvBtns extends LinearLayout {
         super(context, attrs);
         View view = inflate(context, R.layout.lo_avatar_smallnamelargeamount_btns, this);
 
-        tvAvatar = (TextView) view.findViewById(R.id.ro_person_photo_tv);
-        ivAvatar = (ImageView) view.findViewById(R.id.ro_person_photo_iv);
+        tvAvatar = (TextView) view.findViewById(R.id.tvAva);
+        ivAvatar = (ImageView) view.findViewById(R.id.ivAva);
         ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
         tvName = (TextView) view.findViewById(R.id.tvTitle__lo_avatar_smallnamelargeamount_btns);
         ivToc = (ImageView) view.findViewById(R.id.ivToc);
@@ -57,8 +47,8 @@ public class LoIvAvatarTvNameSmallEtAmountLargeIvBtns extends LinearLayout {
         super(context, attrs);
         View view = inflate(context, R.layout.lo_avatar_smallnamelargeamount_btns, this);
 
-        tvAvatar = (TextView) view.findViewById(R.id.ro_person_photo_tv);
-        ivAvatar = (ImageView) view.findViewById(R.id.ro_person_photo_iv);
+        tvAvatar = (TextView) view.findViewById(R.id.tvAva);
+        ivAvatar = (ImageView) view.findViewById(R.id.ivAva);
         ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
         tvName = (TextView) view.findViewById(R.id.tvTitle__lo_avatar_smallnamelargeamount_btns);
         ivToc = (ImageView) view.findViewById(R.id.ivToc);

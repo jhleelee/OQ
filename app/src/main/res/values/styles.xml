@@ -493,6 +493,7 @@
 
 
     <style name="loDiaFragWrap">
+
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
@@ -502,6 +503,7 @@
         <item name="android:layout_marginBottom">64dip</item>
         <item name="android:orientation">vertical</item>
         <item name="android:background">@color/white</item>
+        <item name="android:padding">@dimen/material_component_dialogs_padding_around_content_area</item>
     </style>
 
 

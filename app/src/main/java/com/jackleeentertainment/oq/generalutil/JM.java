@@ -1,10 +1,12 @@
 package com.jackleeentertainment.oq.generalutil;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.DisplayMetrics;
@@ -15,12 +17,21 @@ import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.StorageReference;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.object.MyOppo;
+import com.jackleeentertainment.oq.object.OqDo;
+import com.jackleeentertainment.oq.object.OqWrap;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.types.OQT;
+import com.jackleeentertainment.oq.object.util.OqDoUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -43,33 +54,33 @@ public class JM {
 
     public static String getSuffixOfImgWithDeviceDpi(String fStorageNodeT) {
 
-        if (fStorageNodeT.equals(FStorageNode.FirstT.CHATATTACH_PHOTO_THUMB)) {
+        if (fStorageNodeT.equals(FStorageNode.FirstT.PROFILE_PHOTO)) {
             switch (getDeviceDpi()) {
                 case DisplayMetrics.DENSITY_LOW:
-                    return FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px36;
+                    return FStorageNode.pxProfileT.px36;
 
                 case DisplayMetrics.DENSITY_DEFAULT:
-                    return FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px48;
+                    return FStorageNode.pxProfileT.px48;
 
                 case DisplayMetrics.DENSITY_HIGH:
                 case DisplayMetrics.DENSITY_280:
 
-                    return FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px72;
+                    return FStorageNode.pxProfileT.px72;
 
                 case DisplayMetrics.DENSITY_XHIGH:
                 case DisplayMetrics.DENSITY_360:
                 case DisplayMetrics.DENSITY_400:
                 case DisplayMetrics.DENSITY_420:
 
-                    return FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px96;
+                    return FStorageNode.pxProfileT.px96;
 
                 case DisplayMetrics.DENSITY_XXHIGH:
                 case DisplayMetrics.DENSITY_560:
 
-                    return FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px144;
+                    return FStorageNode.pxProfileT.px144;
 
                 case DisplayMetrics.DENSITY_XXXHIGH:
-                    return FStorageNode.Suffix_PROFILE_PHOTO_THUMB_T.px144;
+                    return FStorageNode.pxProfileT.px144;
 
                 default:
                     return null;
@@ -419,10 +430,10 @@ public class JM {
                 Bitmap bitmap = Glide.with(context)
                         .using(new FirebaseImageLoader())
                         .load(App.fbaseStorageRef
-                                .child(FStorageNode.FirstT.PROFILE_PHOTO_THUMB)
+                                .child(FStorageNode.FirstT.PROFILE_PHOTO)
                                 .child(uid)
                                 .child(FStorageNode.createMediaFileNameToDownload(
-                                        FStorageNode.FirstT.PROFILE_PHOTO_THUMB,
+                                        FStorageNode.FirstT.PROFILE_PHOTO,
                                         uid
 
                                 )))
@@ -639,5 +650,129 @@ public class JM {
     public static int pxFromDp(final float dp) {
         return Math.round(dp * App.getContext().getResources().getDisplayMetrics().density);
     }
+
+
+    /********************************
+     * Glide
+     ********************************/
+
+
+    public static void glideProfileThumb(final String uid,
+                                         final String uname,
+                                         final ImageView iv, final TextView tv,
+                                         final Activity
+                                                 mActivity) {
+        //set Image
+        Glide.with(mActivity)
+                .using(new FirebaseImageLoader())
+                .load(App.fbaseStorageRef
+                        .child(FStorageNode.FirstT.PROFILE_PHOTO)
+                        .child(JM.getSuffixOfImgWithDeviceDpi(FStorageNode.FirstT.PROFILE_PHOTO))
+                        .child(uid))
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        iv.setVisibility(View.GONE);
+                        tv.setVisibility(View.VISIBLE);
+                        tv.setText(uname.substring(0, 1));
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        iv.setVisibility(View.VISIBLE);
+                        tv.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(iv);
+    }
+
+    public static void glideProfileThumb(final String uid,
+                                         final String uname,
+                                         final ImageView iv, final TextView tv,
+                                         final Fragment mFragment) {
+        //set Image
+        Glide.with(mFragment)
+                .using(new FirebaseImageLoader())
+                .load(App.fbaseStorageRef
+                        .child(FStorageNode.FirstT.PROFILE_PHOTO)
+                        .child(JM.getSuffixOfImgWithDeviceDpi(FStorageNode.FirstT.PROFILE_PHOTO))
+                        .child(uid))
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        iv.setVisibility(View.GONE);
+                        tv.setVisibility(View.VISIBLE);
+                        tv.setText(uname.substring(0, 1));
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        iv.setVisibility(View.VISIBLE);
+                        tv.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(iv);
+    }
+
+
+
+   public static void  ivTwoAvaRelation(ImageView iv, OqWrap oqWrap){
+
+       List<OqDo> listoqdo = oqWrap.getListoqdo();
+       OqDoUtil.sortList(listoqdo);
+
+       OqDo firstOqdo = listoqdo.get(0);
+
+       if (firstOqdo.getOqwhat().equals(OQT.DoWhat.GET)&&
+               firstOqdo.getOqwhat().equals(OQT.DoWhen.FUTURE)){
+
+           List<OqDo> listBaPayFuture = OqDoUtil.getListBaPayFuture(listoqdo);
+           long sumListBaPayFuture = OqDoUtil.getSumAmt(listBaPayFuture);
+
+           List<OqDo> listAbGetPast = OqDoUtil.getListAbGetPast(listoqdo);
+           long sumListAbGetPast = OqDoUtil.getSumAmt(listAbGetPast);
+
+           List<OqDo> listBaPayPast = OqDoUtil.getListBaPayPast(listoqdo);
+           long sumListBaPayPast = OqDoUtil.getSumAmt(listBaPayPast);
+
+
+           if (firstOqdo.getAmmount()==sumListBaPayFuture){ //Basic - B agrees with A's req
+
+               if (firstOqdo.getAmmount()==sumListBaPayPast){ // B claims he paid to A. is it true?
+
+                   if (firstOqdo.getAmmount()==sumListAbGetPast){ // A admits is is paid all
+
+                       JM.BGD(iv, R.drawable.cir_requested_so_paid);
+                       JM.ID(iv, R.drawable.ic_check_white_24dp);
+
+                   } else { //not paid all (incl partially paid)
+                       JM.BGD(iv, R.drawable.cir_requested_so_claimpaid);
+                       JM.ID(iv, R.drawable.ic_check_white_24dp);
+                   }
+
+
+               } else { //not paid all (incl partially paid)
+                   JM.BGD(iv, R.drawable.cir_requested);
+                   JM.ID(iv, R.drawable.ic_arrow_forward_white_24dp);
+               }
+
+
+           } else if (firstOqdo.getAmmount()>sumListBaPayFuture){ // B does not agree with A's req
+               JM.BGD(iv, R.drawable.cir_requested_but_argued);
+               JM.ID(iv, R.drawable.ic_arrow_forward_white_24dp);
+           }
+
+       }
+
+   }
+
 
 }

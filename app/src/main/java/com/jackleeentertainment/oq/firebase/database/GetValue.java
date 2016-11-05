@@ -75,14 +75,14 @@ public class GetValue {
     }
 
         /*
-    Post.class
+    OQPost.class
      */
 
     public static void postCls(
                                   final String oid,
                                   final boolean isRamLBR) {
         App.fbaseDbRef
-                .child(FBaseNode0.Post)
+                .child(FBaseNode0.OQPost)
                 .child(oid)
                 .addListenerForSingleValueEvent(
                         new ValueEventListener() {
@@ -93,7 +93,7 @@ public class GetValue {
                                     Post post = dataSnapshot.getValue(Post.class);
                                     post.setOid(oid);
                                     Ram.addPost(oid, post);
-                                    LBR.send(FBaseNode0.Post + LBR.SendSuffixT.RECEIVED, post);
+                                    LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.RECEIVED, post);
                                 }
                             }
 
