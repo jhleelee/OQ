@@ -773,8 +773,6 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                             }
                         }
                     });
-
-
                 }
                 ;
             } catch (FileNotFoundException e) {
