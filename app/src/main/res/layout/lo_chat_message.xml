@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/ro_person_photo_48dip__lo_chat_message"
-        layout="@layout/ro_person_photo_48dip" />
+        layout="@layout/ro_ava_48dip" />
 
     <LinearLayout
         android:id="@+id/loBody__lo_chat_message"

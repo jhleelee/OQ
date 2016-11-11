@@ -4,11 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.object.MyOppo;
 import com.jackleeentertainment.oq.object.OQPost;
-import com.jackleeentertainment.oq.object.OqItem;
-import com.jackleeentertainment.oq.object.Post;
-import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.OqDo;
+ import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.DeedT;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.types.OQPostT;
@@ -24,16 +22,16 @@ public class StringGenerator {
 
     static String TAG = "StringGenerator";
 
-    public static String deed (MyOppo myOppo){
-        Log.d(TAG, "deed() ");
-
-        if (myOppo.getDeed()!=null&&myOppo.getDeed().equals(DeedT.RequesterSENT_IWantGet_REQ)){
-                return myOppo.getUname() + "님 에게 " + JM.strById(R.string.sent_getreq);
-        } else {
-            return null;
-        }
-
-    }
+//    public static String deed (MyOppo myOppo){
+//        Log.d(TAG, "deed() ");
+//
+//        if (myOppo.getDeed()!=null&&myOppo.getDeed().equals(DeedT.RequesterSENT_IWantGet_REQ)){
+//                return myOppo.getName() + "님 에게 " + JM.strById(R.string.sent_getreq);
+//        } else {
+//            return null;
+//        }
+//
+//    }
 
     public static String deed (OQPost oqPost){
         Log.d(TAG, "deed() ");
@@ -114,16 +112,16 @@ public class StringGenerator {
 
 
 
-    public static String xAndXPeopleOqItemClaimee(ArrayList<OqItem> arl) {
+    public static String xAndXPeopleOqItemClaimee(ArrayList<OqDo> arl) {
 
         if (arl != null && arl.size() > 0) {
 
             if (arl.size() == 1) {
-                return arl.get(0).getNameclaimee() + "님";
+                return arl.get(0).getNameb() + "님";
             } else if (arl.size() == 2) {
-                return arl.get(0).getNameclaimee() + "님" + "," + arl.get(1).getNameclaimee() + "님";
+                return arl.get(0).getNameb() + "님" + "," + arl.get(1).getNameb() + "님";
             } else {
-                return arl.get(0).getNameclaimee() + "님 외 " + J.st(arl.size() - 1) + "명";
+                return arl.get(0).getNameb() + "님 외 " + J.st(arl.size() - 1) + "명";
             }
         }
 
@@ -158,7 +156,7 @@ public class StringGenerator {
     }
 
 
-    public static String postedx(Post post) {
+    public static String postedx(OQPost post) {
 
         // get locale
 
@@ -166,7 +164,7 @@ public class StringGenerator {
     }
 
 
-    public static String xPostedx(String name, Post post, int postNum, Context context) {
+    public static String xPostedx(String name, OQPost post, int postNum, Context context) {
 
         // get locale
 
@@ -312,7 +310,7 @@ public class StringGenerator {
     }
 
 
-    public static String postT(Post post) {
+    public static String postT(OQPost post) {
         switch (post.getPosttype()) {
             case OQPostT.NONE:
                 return JM.strById(R.string.post);

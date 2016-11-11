@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tvHourAgo__lo_hourlikereply"
+        android:id="@+id/tvTs"
         android:text="8 hours ago"
         android:textSize="@dimen/textSizeOfHourAgoFavoriteReply_lohourlikereply"
         android:layout_width="wrap_content"

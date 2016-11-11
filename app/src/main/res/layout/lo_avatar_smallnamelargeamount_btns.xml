@@ -12,7 +12,7 @@
 
         <include
             android:id="@+id/ro_person_photo_48dip__lo_avatar_smallnamelargeamount_btns"
-            layout="@layout/ro_person_photo_48dip"
+            layout="@layout/ro_ava_48dip"
             android:layout_width="@dimen/md_40dip"
             android:layout_height="@dimen/md_40dip"
             android:layout_marginLeft="@dimen/md_12dip"/>
@@ -35,16 +35,13 @@
                 android:textColor="@color/text_black_54"
                 android:textSize="12dip"/>
 
-            <EditText
-                android:id="@+id/etAmount__lo_avatar_smallnamelargeamount_btns"
-                style="@style/EditText.Comment"
+
+            <com.jackleeentertainment.oq.ui.widget.LoEtMoney
+                android:id="@+id/loetmomey"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical|left"
-                android:lines="1"
-                android:layout_margin="0dip"
-                android:text="0"
-                 />
+                android:layout_height="wrap_content"/>
+
+
 
         </LinearLayout>
 

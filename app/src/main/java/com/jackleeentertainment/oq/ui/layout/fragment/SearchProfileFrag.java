@@ -61,40 +61,10 @@ public class SearchProfileFrag extends ListFrag {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ro_empty_list.setVisibility(View.VISIBLE);
-
+        searchView.setVisibility(View.GONE);
         tempGetPubProfiles();
 
 
-        SearchManager searchManager =
-                (SearchManager)getActivity(). getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getActivity().getComponentName()));
-
-        //
-        searchView.setOnQueryTextListener(
-                new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        initQueryByFullFirstLastNameOrEmail(query);
-
-
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-
-                        return false;
-                    }
-                });
-
-
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Begin", Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
     }

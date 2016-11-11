@@ -13,8 +13,9 @@ public class OqWrap implements Serializable {
     String wid; //this's id;
     String gid; //groups'id;
     String qid; //appointment's id;
+    String pid; //post's id;
     long ts; //listopdo's;
-        List<OqDo> listoqdo;
+    List<OqDo> listoqdo;
 
 
     public OqWrap() {
@@ -46,7 +47,6 @@ public class OqWrap implements Serializable {
     }
 
 
-
     public long getTs() {
         return ts;
     }
@@ -61,5 +61,13 @@ public class OqWrap implements Serializable {
 
     public void setListoqdo(List<OqDo> listoqdo) {
         this.listoqdo = listoqdo;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 }

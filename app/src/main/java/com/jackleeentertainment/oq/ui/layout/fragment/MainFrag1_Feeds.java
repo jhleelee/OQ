@@ -31,11 +31,11 @@ import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.generalutil.StringGenerator;
 import com.jackleeentertainment.oq.object.Comment;
-import com.jackleeentertainment.oq.object.MyOppo;
 import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.OQPostPhoto;
-import com.jackleeentertainment.oq.object.Post;
+import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQPostT;
+import com.jackleeentertainment.oq.ui.layout.activity.PostCommentActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.ProfileActivity;
 import com.jackleeentertainment.oq.ui.layout.viewholder.PostViewHolder;
 import com.jackleeentertainment.oq.ui.widget.EndlessRecyclerViewScrollListener;
@@ -48,6 +48,7 @@ import java.util.List;
  * Created by Jacklee on 2016. 9. 14..
  */
 public class MainFrag1_Feeds extends ListFrag {
+
     String TAG = this.getClass().getSimpleName();
     View view;
     Fragment mFragment = this;
@@ -63,11 +64,11 @@ public class MainFrag1_Feeds extends ListFrag {
         return new MainFrag1_Feeds();
     }
 
-
+    LinearLayoutManager linearLayoutManager;
     @Override
     public void initUI() {
         super.initUI();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(App.getContext());
+          linearLayoutManager = new LinearLayoutManager(App.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         // Add the scroll listener
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -75,7 +76,7 @@ public class MainFrag1_Feeds extends ListFrag {
             public void onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                get100ObjIdOfFeedsFromFirebase(page);
+//                get100ObjIdOfFeedsFromFirebase(page);
             }
         });
         searchView.setVisibility(View.GONE);
@@ -97,6 +98,7 @@ public class MainFrag1_Feeds extends ListFrag {
         if (App.fbaseDbRef != null) {
 
             initRVAdapter();
+            linearLayoutManager   .scrollToPositionWithOffset(0, 0);
 
 
         } else {
@@ -106,6 +108,8 @@ public class MainFrag1_Feeds extends ListFrag {
 
 
     void initRVAdapter() {
+
+        checkIfFirebaseListIsEmpty(getActivity());
 
         ro_empty_list.setVisibility(View.GONE);
         roProgress.setVisibility(View.GONE);
@@ -128,6 +132,8 @@ public class MainFrag1_Feeds extends ListFrag {
                     int position) {
 
 
+
+
                 //avatar ..
 
                 if (oqPost.getUid() != null) {
@@ -143,6 +149,45 @@ public class MainFrag1_Feeds extends ListFrag {
 
 
                 }
+                postViewHolder.roAvatar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (oqPost!=null&&oqPost.getUid()!=null){
+                            App.fbaseDbRef
+                                    .child(FBaseNode0.ProfileToPublic)
+                                    .child(oqPost.getUid())
+                                    .child(oqPost.getPid())
+                                    .addListenerForSingleValueEvent(
+                                            new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    if (dataSnapshot.exists()) {
+                                                        Profile profile = dataSnapshot.getValue(Profile
+                                                                .class);
+                                                        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                                                        intent.putExtra("Profile", profile);
+                                                        if(profile.getUid().equals(App.getUid(getActivity()))){
+                                                            intent.putExtra("isMe", true);
+                                                        }
+                                                        startActivity(intent);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            }
+                                    );
+                        }
+
+
+
+
+                    }
+                });
+
 
                 postViewHolder.tvName.setText(oqPost.getUname());
                 postViewHolder.tvDeed.setText(StringGenerator.deed(oqPost));
@@ -152,7 +197,7 @@ public class MainFrag1_Feeds extends ListFrag {
                 //media ..
 
 
-                if (oqPost.getPosttype().equals(OQPostT.NONE)) {
+                if (oqPost.getPosttype()==null||oqPost.getPosttype().equals(OQPostT.NONE)) {
                     postViewHolder.roMedia.setVisibility(View.GONE);
                 } else if (oqPost.getPosttype().equals(OQPostT.PHOTO)) {
 
@@ -171,9 +216,6 @@ public class MainFrag1_Feeds extends ListFrag {
 
                                                 if (oqPostPhoto.getPhotoids() != null &&
                                                         oqPostPhoto.getPhotoids().size() > 0) {
-
-
-
 
 
                                                     Glide.with(mFragment)
@@ -270,7 +312,7 @@ public class MainFrag1_Feeds extends ListFrag {
 
                 }
 
-                if (oqPost.getPosttype().equals(OQPostT.VIDEO)) {
+                if (oqPost.getPosttype()!=null&&oqPost.getPosttype().equals(OQPostT.VIDEO)) {
                     postViewHolder.roMedia.setVisibility(View.VISIBLE);
                     postViewHolder.ivPhotoMain.setVisibility(View.GONE);
                     postViewHolder.vvPhotoMain.setVisibility(View.VISIBLE);
@@ -280,10 +322,10 @@ public class MainFrag1_Feeds extends ListFrag {
                 postViewHolder.tvSupportingText.setText(oqPost.getTxt());
 
 
-                if (oqPost.getMyOppos() != null) {
-                    List<MyOppo> list = oqPost.getMyOppos();
+                if (oqPost.getWids() != null) {
+                    List<String> listWids = oqPost.getWids();
 
-                    for (final MyOppo myOppo : list) {
+                    for (final String wid : listWids) {
 
                         final LoMyOppo lo = new
                                 LoMyOppo(getActivity());
@@ -291,8 +333,8 @@ public class MainFrag1_Feeds extends ListFrag {
                         //set Image
 
                         JM.glideProfileThumb(
-                                myOppo.getUid(),
-                                myOppo.getUname(),
+                                oqPost.getUid(),
+                                oqPost.getUname(),
                                 lo.ivAvatar,
                                 lo.tvAvatar,
                                 mFragment
@@ -312,11 +354,8 @@ public class MainFrag1_Feeds extends ListFrag {
                         });
 
 
-                        lo.tvTitle__i_oppo.setText(myOppo.getUname());
-                        JM.tvAmtTextBgAboutMuOppo(lo.tvAmtConfirmed, myOppo, 0);
-                        JM.tvAmtTextBgAboutMuOppo(lo.tvAmtYet, myOppo, 1);
-                        JM.tvAmtTextBgAboutMuOppo(lo.tvAmtDone, myOppo, 2);
-                        lo.tvDeed.setText(StringGenerator.deed(myOppo));
+                        lo.tvTitle__i_oppo.setText(oqPost.getUname());
+                        lo.tvDeed.setText("text temp");
 
                         postViewHolder.loOqOppo.addView(lo);
                     }
@@ -332,6 +371,15 @@ public class MainFrag1_Feeds extends ListFrag {
 
                 }
 
+
+                postViewHolder.tvAddComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), PostCommentActivity.class);
+                        intent.putExtra("pid", oqPost.getPid());
+                        startActivity(intent);
+                    }
+                });
 
             }
         };
@@ -387,14 +435,15 @@ public class MainFrag1_Feeds extends ListFrag {
         for (dxArlPostsToUpdate = 0; dxArlPostsToUpdate < arlDx.size(); dxArlPostsToUpdate++) {
 
             App.fbaseDbRef
-                    .child("fd")
-                    .child(Ram.arlPosts.get(arlDx.get(dxArlPostsToUpdate)).getOid())
+                    .child(FBaseNode0.OQPost)
+                    .child(Ram.arlPosts.get(arlDx.get(dxArlPostsToUpdate)).getUid())
+                    .child(Ram.arlPosts.get(arlDx.get(dxArlPostsToUpdate)).getPid())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             String key = dataSnapshot.getKey();
-                            Post post = dataSnapshot.getValue(Post.class);
-                            post.setOid(key);
+                            OQPost post = dataSnapshot.getValue(OQPost.class);
+                            post.setPid(key);
                             Ram.arlPosts.set(dxArlPostsToUpdate, post);
                         }
 
@@ -410,7 +459,6 @@ public class MainFrag1_Feeds extends ListFrag {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        checkIfFirebaseListIsEmpty(getActivity());
 
     }
 
@@ -419,7 +467,7 @@ public class MainFrag1_Feeds extends ListFrag {
         JM.V(roProgress);
 
         App.fbaseDbRef
-                .child(FBaseNode0.MyOqWraps)
+                .child(FBaseNode0.MyPosts)
                 .child(App.getUid(activity))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

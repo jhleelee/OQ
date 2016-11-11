@@ -14,7 +14,7 @@
         <include
 
             android:id="@+id/ro_person_photo_48dip__i_oppo"
-            layout="@layout/ro_person_photo_48dip"
+            layout="@layout/ro_ava_48dip"
             android:layout_width="@dimen/md_40dip"
             android:layout_height="@dimen/md_40dip"
             android:layout_marginLeft="@dimen/md_12dip"

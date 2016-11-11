@@ -27,6 +27,9 @@
     <string name="easy_input">간편 입력</string>
     <string name="add_myspent">나의 지출내역 추가</string>
     <string name="myspent">나의 지출</string>
+    <string name="write_comment">댓글 쓰기</string>
+    <string name="add_firstcomment">처음으로 댓글을 달아 주세요</string>
+    <string name="no_comment">댓글이 없습니다</string>
 
 
     <!--Google Terminology-->
@@ -86,7 +89,11 @@
     <string name="title">제목</string>
 
     <!--Notification-->
-    <string name="sent">sent</string>
+    <string name="sent">전송되었습니다.</string>
+
+    <string name="lunch_paidforall_fortitle">점심식사 대표로 계산</string>
+
+
     <string name="message">message</string>
 
     <string name="post">post</string>
@@ -492,6 +499,11 @@
 
     <string name="add_photo_comment">사진 및 글 추가</string>
     <string name="add_comment">글 추가</string>
+    <string name="add_postcomment">댓글 추가</string>
+
+
+    <string name="file_not_found">파일을 찾을 수 없습니다.</string>
+
 
 
     <string name="newoq_nophoto_nowriting">사진 및 글을 함께 보내면 분위기가 한결 부드러워집니다.\n\n사진이나 글 없이
@@ -501,6 +513,10 @@
     <string name="newoq_nowriting">글을 함께 보내면 분위기가 한결 부드러워집니다.\n\n글 없이
         요청을 보내시겠습니까?</string>
     <string name="newoq_send">선택된 회원님에게 요청을 보냅니다.</string>
+
+
+    no_amt_to_settle
+    <string name="no_amt_to_settle">정산할 금액 없음</string>
 
     <string name="req_amtvar_whatphrasevar">청구액 %1$s원 : %2$s</string>
     <string name="whovar_argues">%1$s님이 이의제기</string>

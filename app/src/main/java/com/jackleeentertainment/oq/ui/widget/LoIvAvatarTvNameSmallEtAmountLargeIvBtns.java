@@ -19,8 +19,7 @@ public class LoIvAvatarTvNameSmallEtAmountLargeIvBtns extends LinearLayout {
     public TextView tvAvatar;
     public ImageView ivAvatar, ivToc, ivDelete;
     public TextView tvName;
-    public EditText etAmmount;
-
+    public LoEtMoney loetmomey;
     public LoIvAvatarTvNameSmallEtAmountLargeIvBtns(Context context) {
         this(context, null);
     }
@@ -28,24 +27,21 @@ public class LoIvAvatarTvNameSmallEtAmountLargeIvBtns extends LinearLayout {
     public LoIvAvatarTvNameSmallEtAmountLargeIvBtns(final Context context, AttributeSet attrs) {
         super(context, attrs);
         View view = inflate(context, R.layout.lo_avatar_smallnamelargeamount_btns, this);
-
-        tvAvatar = (TextView) view.findViewById(R.id.tvAva);
-        ivAvatar = (ImageView) view.findViewById(R.id.ivAva);
-        ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
-        tvName = (TextView) view.findViewById(R.id.tvTitle__lo_avatar_smallnamelargeamount_btns);
-        ivToc = (ImageView) view.findViewById(R.id.ivToc);
-        ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
-        etAmmount = (EditText) view.findViewById(R.id.etAmount__lo_avatar_smallnamelargeamount_btns);
+        common(view);
 
 
 
     }
 
-
-    public LoIvAvatarTvNameSmallEtAmountLargeIvBtns(Context context, AttributeSet attrs, Profile
-            profile) {
-        super(context, attrs);
+    public LoIvAvatarTvNameSmallEtAmountLargeIvBtns(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         View view = inflate(context, R.layout.lo_avatar_smallnamelargeamount_btns, this);
+        common(view);
+
+    }
+
+
+    void common(View view){
 
         tvAvatar = (TextView) view.findViewById(R.id.tvAva);
         ivAvatar = (ImageView) view.findViewById(R.id.ivAva);
@@ -53,13 +49,9 @@ public class LoIvAvatarTvNameSmallEtAmountLargeIvBtns extends LinearLayout {
         tvName = (TextView) view.findViewById(R.id.tvTitle__lo_avatar_smallnamelargeamount_btns);
         ivToc = (ImageView) view.findViewById(R.id.ivToc);
         ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
-        etAmmount = (EditText) view.findViewById(R.id.etAmount__lo_avatar_smallnamelargeamount_btns);
+        loetmomey = (LoEtMoney) view.findViewById(R.id.loetmomey);
 
-//        Glide ;
-
-        tvName.setText(profile.getFull_name());
     }
-
 
     public void setOnIvTocClickListener(OnClickListener l) {
         ivToc.setOnClickListener(l);

@@ -18,29 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.UploadTask;
-import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
-import com.jackleeentertainment.oq.firebase.database.SetValue;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.StringGenerator;
-import com.jackleeentertainment.oq.object.MyOppo;
-import com.jackleeentertainment.oq.object.OQPost;
-import com.jackleeentertainment.oq.object.OqItem;
-import com.jackleeentertainment.oq.object.types.DeedT;
-import com.jackleeentertainment.oq.object.types.OQPostT;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.SelectedPhotoListActivity;
 
@@ -102,7 +83,7 @@ public class NewOQFrag1 extends Fragment {
         uiPhotoData();
         initUiCosmetic();
         initClickListener();
-
+        ((NewOQActivity)getActivity()).uiLsnerFrag1(bundleFromFrag0);
 
     }
 
@@ -125,8 +106,7 @@ public class NewOQFrag1 extends Fragment {
 
     void initUiCosmetic() {
         tvPhotoCommentTitle.setText(JM.strById(R.string.add_photo_comment));
-        ((NewOQActivity) getActivity()).ivClose.setImageDrawable(null);
-        ((NewOQActivity) getActivity()).ivClose.setImageDrawable(JM.drawableById(R.drawable.ic_arrow_back_white_48dp));
+
     }
 
 
@@ -162,18 +142,6 @@ public class NewOQFrag1 extends Fragment {
 //        tvPhotoSubNum.setOnClickListener(onClickListenerPhotoGetOrEdit);
 //        tvPhotoMainEmpty.setOnClickListener(onClickListenerPhotoGetOrEdit);
 
-        View.OnClickListener onClickListenerBackToFrag0 = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                ((NewOQActivity) getActivity()).backToFragment(NewOQFrag0Neo.newInstance
-                                (bundleFromFrag0),
-                        R.id.fr_content);
-            }
-        };
-        ((NewOQActivity) getActivity()).ivClose.setOnClickListener(onClickListenerBackToFrag0);
-        ((NewOQActivity) getActivity()).roClose.setOnClickListener(onClickListenerBackToFrag0);
 
 
 
@@ -203,7 +171,7 @@ public class NewOQFrag1 extends Fragment {
                     s += "\n";
                     s += StringGenerator
                             .xAndXPeopleOqItemClaimee(
-                                    ((NewOQActivity) getActivity()).arlOQItem_Future
+                                    ((NewOQActivity) getActivity()).arlOqDo_Future
                             );
                 } else if (((NewOQActivity)getActivity()).arlUriPhoto == null ||
                         ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) {
@@ -211,21 +179,21 @@ public class NewOQFrag1 extends Fragment {
                     s += "\n";
                     s += StringGenerator
                             .xAndXPeopleOqItemClaimee(
-                                    ((NewOQActivity) getActivity()).arlOQItem_Future
+                                    ((NewOQActivity) getActivity()).arlOqDo_Future
                             );
                 } else if (etContent.getText().length() == 0) {
                     s = JM.strById(R.string.newoq_nowriting);
                     s += "\n";
                     s += StringGenerator
                             .xAndXPeopleOqItemClaimee(
-                                    ((NewOQActivity) getActivity()).arlOQItem_Future
+                                    ((NewOQActivity) getActivity()).arlOqDo_Future
                             );
                 } else {
                     s = JM.strById(R.string.newoq_send);
                     s += "\n";
                     s += StringGenerator
                             .xAndXPeopleOqItemClaimee(
-                                    ((NewOQActivity) getActivity()).arlOQItem_Future
+                                    ((NewOQActivity) getActivity()).arlOqDo_Future
                             );
                 }
 

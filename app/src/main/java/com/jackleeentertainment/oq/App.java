@@ -3,6 +3,7 @@ package com.jackleeentertainment.oq;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.MainThread;
 import android.support.annotation.StyleRes;
@@ -23,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.ui.layout.activity.SignInCatcherActivity;
 
 import java.util.ArrayList;
 
@@ -44,7 +46,7 @@ public class App extends Application {
 
     //Firebase Ref
     public static FirebaseAuth mAuth;
-    public static FirebaseAuth.AuthStateListener mAuthListener;
+     public static FirebaseAuth.AuthStateListener mAuthListener;
     public static FirebaseDatabase firebaseDatabase;
     public static DatabaseReference fbaseDbRef;
     public static FirebaseStorage firebaseStorage;
@@ -53,12 +55,22 @@ public class App extends Application {
     public static boolean GIVEN_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGES = false;
     public static int CURRENTFRAGMENT_MAINACTIVITY = 0;
 
+    //Recent
+    static public ArrayList<Profile> arlProfile = new ArrayList<>();
 
 
 
     public static Application getInstance() {
         return new App();
     }
+
+
+    public static void logout(Context context){
+        mAuth.signOut();
+        Intent intent = new Intent(context, SignInCatcherActivity.class);
+        context.startActivity(intent);
+     }
+
 
 
     @Override

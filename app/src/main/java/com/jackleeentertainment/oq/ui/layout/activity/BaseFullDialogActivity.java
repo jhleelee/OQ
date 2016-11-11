@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,7 +45,8 @@ public class BaseFullDialogActivity extends BaseActivity {
     RelativeLayout ro_tv_done;
     TextView tvDone__ro_tv_done;
     ImageView ivChev__ro_tv_done;
-
+    RelativeLayout ro_prog;
+    ProgressBar prog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +82,10 @@ public class BaseFullDialogActivity extends BaseActivity {
         ro_tv_done = (RelativeLayout) findViewById(R.id.ro_tv_done);
         tvDone__ro_tv_done = (TextView) findViewById(R.id.tvDone__ro_tv_done);
         ivChev__ro_tv_done = (ImageView) findViewById(R.id.ivChev__ro_tv_done);
+
+        ro_prog = (RelativeLayout) findViewById(R.id.ro_prog);
+        prog = (ProgressBar)ro_prog.findViewById(R.id.prog);
+
 //        searchView= (SearchView) findViewById(R.id.searchView);
 
     }

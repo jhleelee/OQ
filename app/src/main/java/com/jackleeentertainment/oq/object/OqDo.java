@@ -8,6 +8,13 @@ import java.io.Serializable;
 
 public class OqDo implements Serializable {
 
+
+
+    String oid;
+
+
+    String referoid;
+    String wid;
     String uida;
     String namea;
     String emaila;
@@ -16,7 +23,7 @@ public class OqDo implements Serializable {
     String emailb;
     long ammount;
     long ts;
-    long currency;
+    String currency;
     String oqwhen;//point - future=obligation, now=paying, past=paid
     String oqwhat;//get ; pa
 
@@ -88,14 +95,14 @@ public class OqDo implements Serializable {
     public void setTs(long ts) {
         this.ts = ts;
     }
-
-    public long getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(long currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
+
 
     public String getOqwhen() {
         return oqwhen;
@@ -115,5 +122,28 @@ public class OqDo implements Serializable {
 
 
 
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public String getWid() {
+        return wid;
+    }
+
+    public void setWid(String wid) {
+        this.wid = wid;
+    }
+
+    public String getReferoid() {
+        return referoid;
+    }
+
+    public void setReferoid(String referoid) {
+        this.referoid = referoid;
+    }
 
 }

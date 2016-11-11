@@ -3,7 +3,7 @@ package com.jackleeentertainment.oq.firebase.fcm;
  import com.jackleeentertainment.oq.object.Chat;
  import com.jackleeentertainment.oq.object.ChatM;
  import com.jackleeentertainment.oq.object.ChatR;
- import com.jackleeentertainment.oq.object.Post;
+ import com.jackleeentertainment.oq.object.OQPost;
 
 /**
  * Created by Jacklee on 2016. 9. 27..
@@ -12,7 +12,7 @@ package com.jackleeentertainment.oq.firebase.fcm;
 public class FCMSend {
 
 
-    public static void send(Post post){
+    public static void send(OQPost post){
 
     }
 

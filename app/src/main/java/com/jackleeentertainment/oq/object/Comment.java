@@ -8,7 +8,10 @@ import java.util.List;
 
 public class Comment {
     String uid;
-    String name;
+
+
+
+    String uname;
     String txt;
     long ts;
     List<Comment> comments;
@@ -33,13 +36,7 @@ public class Comment {
         this.uid = uid;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getTxt() {
         return txt;
@@ -55,5 +52,13 @@ public class Comment {
 
     public void setTs(long ts) {
         this.ts = ts;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
     }
 }

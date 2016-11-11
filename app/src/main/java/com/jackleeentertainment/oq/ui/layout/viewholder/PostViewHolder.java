@@ -1,5 +1,6 @@
 package com.jackleeentertainment.oq.ui.layout.viewholder;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +18,7 @@ import com.jackleeentertainment.oq.R;
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
     View mView;
-
+    public CardView cardView;
     public    RelativeLayout roMedia, roAvatar;
     public  ImageView ivAvatar;
     public  TextView tvAvatar, tvName, tvDate, tvDeed;
@@ -29,11 +30,13 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public  ImageView ivPhotoSub;
     public  TextView tvPhotoSubNum;
     public RelativeLayout roPhotoSub;
+    public TextView tvAddComment;
 
     public PostViewHolder(View itemView) {
         super(itemView);
 
         mView = itemView;
+        cardView= (CardView) mView.findViewById(R.id.cardview);
         roAvatar= (RelativeLayout) mView.findViewById(R.id.roAvatar);
         tvAvatar= (TextView) mView.findViewById(R.id.tvAva);
         ivAvatar= (ImageView) mView.findViewById(R.id.ivAva);
@@ -50,6 +53,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
          tvSupportingText = (TextView) mView.findViewById(R.id.tvSupportingText);
         loOqOppo = (LinearLayout) mView.findViewById(R.id.loOqOppo);
         loCommentOne = (LinearLayout) mView.findViewById(R.id.loCommentOne);
+        tvAddComment= (TextView) mView.findViewById(R.id.tvAddComment);
     };
 
 

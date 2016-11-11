@@ -8,10 +8,8 @@ import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Group;
-import com.jackleeentertainment.oq.object.OqItem;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.GroupUtil;
-import com.jackleeentertainment.oq.object.util.OqItemUtil;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewGroupFrag;
 
 /**

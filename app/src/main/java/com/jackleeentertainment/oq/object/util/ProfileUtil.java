@@ -7,9 +7,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.generalutil.J;
+import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.Profile;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -98,5 +101,28 @@ public class ProfileUtil {
         }
         return arlProfileNames;
     }
+
+
+    public static void sortList(List<Profile> profileList){
+
+        if (profileList==null||profileList.size()==0){
+            return;
+        }
+
+//        Collections.sort(profileList, new ProfileUtil.ProfileComparatorByName());
+
+    }
+
+
+    public  static class ProfileComparatorByName implements Comparator<Profile> {
+        @Override
+        public int compare(Profile t1, Profile t2) {
+
+            return t1.getFull_name().compareToIgnoreCase(t2.getFirst_name());
+        }
+    }
+
+
+
 
 }

@@ -315,9 +315,10 @@ public class MainFrag2_ChatroomList extends Fragment implements
                 /**
                  * Data
                  */
+                Log.d(TAG, "ChatMemberProfilesJson : " + ChatMemberProfilesJson);
 
-                List<Profile> arlChatMemberProfiles = new Gson().fromJson
-                        (ChatMemberProfilesJson, new TypeToken<List<Profile>>() {
+                ArrayList<Profile> arlChatMemberProfiles = new Gson().fromJson
+                        (ChatMemberProfilesJson, new TypeToken<ArrayList<Profile>>() {
                         }.getType());
                 ArrayList<String> arlChatMemberUids = ProfileUtil.getArlUid
                         (arlChatMemberProfiles);

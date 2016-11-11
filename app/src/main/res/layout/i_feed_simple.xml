@@ -4,7 +4,7 @@
     android:layout_height="@dimen/profilephotoHW__i_feed_simple">
 
     <include
-        layout="@layout/ro_person_photo_48dip"
+        layout="@layout/ro_ava_48dip"
         android:layout_width="@dimen/profilephotoHW__i_feed_simple"
         android:layout_height="match_parent"
         />

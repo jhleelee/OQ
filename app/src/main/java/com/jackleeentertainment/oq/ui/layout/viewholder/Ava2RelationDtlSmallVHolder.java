@@ -11,35 +11,30 @@ import android.widget.TextView;
 import com.jackleeentertainment.oq.R;
 
 /**
- * Created by jaehaklee on 2016. 10. 4..
+ * Created by Jacklee on 2016. 11. 6..
  */
 
-public class TwoAvatarsWithRelationDtlVHolder extends RecyclerView.ViewHolder {
-    public   View mView;
- public   LinearLayout loTwoAvaWrap;
-    public  ListView lv;
-    public  RelativeLayout roRelationTwoAva;
-    public  TextView tvTwoName;
-    public  TextView tvDate;
-    public  TextView tvContent;
-    public ImageView ivMore, ivRelation;
-    public  RelativeLayout roAvaLeft, roAvaRight;
-    public  ImageView ivAvaLeft, ivAvaRight;
-    public  TextView tvAvaLeft, tvAvaRight;
+public class Ava2RelationDtlSmallVHolder extends RecyclerView.ViewHolder {
+    public View mView;
+    public LinearLayout loTwoAvaWrap;
+     public RelativeLayout roRelationTwoAva;
+    public TextView tvDate;
+    public TextView tvContent;
+    public ImageView  ivRelation;
+    public RelativeLayout roAvaLeft, roAvaRight;
+    public ImageView ivAvaLeft, ivAvaRight;
+    public TextView tvAvaLeft, tvAvaRight;
 
-    public TwoAvatarsWithRelationDtlVHolder(View itemView) {
+    public Ava2RelationDtlSmallVHolder(View itemView) {
         super(itemView);
         mView = itemView;
-        loTwoAvaWrap
-                =
-                (LinearLayout) mView
-                        .findViewById(R.id.loTwoAvaWrap);
+
+
         //loTwoAvaWrap
 
         roRelationTwoAva =
-                (RelativeLayout) loTwoAvaWrap
-                        .findViewById(R.id.roRelationTwoAva);
-
+                (RelativeLayout) mView
+                        .findViewById(R.id.roRelationTwoAva); //incl
         roAvaLeft =
                 (RelativeLayout) roRelationTwoAva
                         .findViewById(R.id.roAvaLeft);
@@ -54,6 +49,8 @@ public class TwoAvatarsWithRelationDtlVHolder extends RecyclerView.ViewHolder {
         roAvaRight =
                 (RelativeLayout) roRelationTwoAva
                         .findViewById(R.id.roAvaRight);
+
+
         ivAvaRight =
                 (ImageView) roAvaRight
                         .findViewById(R.id.ivAva);
@@ -65,10 +62,6 @@ public class TwoAvatarsWithRelationDtlVHolder extends RecyclerView.ViewHolder {
                         .findViewById(R.id.ivRelation);
 
 
-        tvTwoName =
-                (TextView) loTwoAvaWrap
-                        .findViewById(R.id.tvNameTwoAva);
-
         tvDate =
                 (TextView) loTwoAvaWrap
                         .findViewById(R.id.tvDateTwoAva);
@@ -77,15 +70,7 @@ public class TwoAvatarsWithRelationDtlVHolder extends RecyclerView.ViewHolder {
                 (TextView) loTwoAvaWrap
                         .findViewById(R.id.tvContentTwoAva);
 
-        ivMore =
-                (ImageView) loTwoAvaWrap
-                        .findViewById(R.id.ivMoreTwoAvaHistory);
 
-
-        lv
-                =
-                (ListView) mView
-                        .findViewById(R.id.lvTwoAvaHistory);
     }
 
          /*

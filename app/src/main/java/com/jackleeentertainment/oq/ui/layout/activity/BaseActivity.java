@@ -1,10 +1,12 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,8 +20,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.jackleeentertainment.oq.R;
@@ -36,6 +41,7 @@ import com.jackleeentertainment.oq.ui.layout.diafrag.OneLineInputDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.ReceiptBreakdownDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.SelectedFriendsAndMoreDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.TransactChatOrShowProfileDiaFrag;
+import com.jackleeentertainment.oq.ui.layout.diafrag.TransactOrChatDiaFrag;
 
 import java.util.ArrayList;
 
@@ -142,6 +148,12 @@ public class BaseActivity extends AppCompatActivity {
                                     bundle, this);
             frag.show(fm, "EasyInputDiaFrag");
 
+        } else if (diaFragT.equals(DiaFragT.TransactOrChat)){
+            TransactOrChatDiaFrag frag =
+                    TransactOrChatDiaFrag
+                            .newInstance(
+                                    bundle, this);
+            frag.show(fm, "TransactOrChatDiaFrag");
         }
 
 
@@ -164,10 +176,16 @@ public class BaseActivity extends AppCompatActivity {
                             }
                         });
         AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
         Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
-        alertDialog.show();
     }
+
+
+
+
+
+
 
 
     public void showAlertDialogWithOkCancel(
@@ -284,6 +302,25 @@ public class BaseActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
+
 
 
 }

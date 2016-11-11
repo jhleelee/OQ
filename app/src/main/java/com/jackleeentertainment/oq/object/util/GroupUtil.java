@@ -3,7 +3,6 @@ package com.jackleeentertainment.oq.object.util;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.object.Group;
-import com.jackleeentertainment.oq.object.OqItem;
 
 /**
  * Created by Jacklee on 2016. 10. 6..

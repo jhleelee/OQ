@@ -14,7 +14,7 @@ import com.jackleeentertainment.oq.Ram;
 import com.jackleeentertainment.oq.debug.L;
 import com.jackleeentertainment.oq.generalutil.StringGenerator;
 import com.jackleeentertainment.oq.object.Chat;
-import com.jackleeentertainment.oq.object.Post;
+import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.ui.layout.activity.MainActivity;
 
@@ -51,12 +51,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     remoteMessage.getNotification().getBody(),
                     NotificationBody.class);
             Profile profile = body.getProfile();
-            Post post = gson.fromJson(
+            OQPost post = gson.fromJson(
                     body.getObj().toString(),
-                    Post.class);
+                    OQPost.class);
             //RAM
             Ram.addProfile(profile.getUid(), profile);
-            Ram.addPost(post.getOid(), post);
+            Ram.addPost(post.getPid(), post);
             //Upload To Fireabse
             //Notification
             doPostNotifiation(profile, post);
@@ -92,7 +92,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
 
-    private void doPostNotifiation(Profile profile, Post post) {
+    private void doPostNotifiation(Profile profile, OQPost post) {
 
                 Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

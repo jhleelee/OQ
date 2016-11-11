@@ -43,27 +43,29 @@ public class GalleryOrCameraDiaFrag extends BaseDiaFrag {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        JM.G(viewForMarginBelow);
+
         JM.G(lo_numselectedprofiles_add__lo_diafrag);
         JM.V(lv__lo_diafragwithiconlist);
         JM.G(et__lo_diafrag);
         JM.G(ro_diafrag_okcancel__lo_diafragwithiconlist);
 
         //Items
-        ItemDiaFragList itemDiaFragListGallery = new ItemDiaFragList();
-        itemDiaFragListGallery.setText(JM.strById(R.string.chooseatgallery));
-        itemDiaFragListGallery.setDrawableIco(
+        ItemDiaFragList iGallery = new ItemDiaFragList();
+        iGallery.setText(JM.strById(R.string.chooseatgallery));
+        iGallery.setDrawableIco(
                 JM.tintedDrawable(
                         R.drawable.ic_photo_library_white_48dp,
                         R.color.colorPrimary,
                         getActivity()
                 )
         );
-        itemDiaFragListGallery.setDrawableBg(
+        iGallery.setDrawableBg(
                 JM.drawableById(
                         R.drawable.rec_radmd2_nostr_getprimary
                 )
         );
-        itemDiaFragListGallery.setOnClickListener(new View.OnClickListener() {
+        iGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -71,23 +73,23 @@ public class GalleryOrCameraDiaFrag extends BaseDiaFrag {
             }
         });
 
-        ItemDiaFragList itemDiaFragListCamera = new ItemDiaFragList();
-        itemDiaFragListCamera.setText(JM.strById(R.string.takephoto));
+        ItemDiaFragList iCam = new ItemDiaFragList();
+        iCam.setText(JM.strById(R.string.takephoto));
 
-        itemDiaFragListGallery.setDrawableIco(
+        iCam.setDrawableIco(
                 JM.tintedDrawable(
                         R.drawable.ic_photo_camera_white_48dp,
                         R.color.colorPrimary,
                         getActivity()
                 )
         );
-        itemDiaFragListGallery.setDrawableBg(
+        iCam.setDrawableBg(
                 JM.drawableById(
                         R.drawable.rec_radmd2_nostr_payprimary
                 )
         );
 
-        itemDiaFragListGallery.setOnClickListener(new View.OnClickListener() {
+        iCam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -95,8 +97,8 @@ public class GalleryOrCameraDiaFrag extends BaseDiaFrag {
             }
         });
 
-        arl.add(itemDiaFragListGallery);
-        arl.add(itemDiaFragListCamera);
+        arl.add(iGallery);
+        arl.add(iCam);
         diaFragAdapter = new DiaFragAdapter(arl, mContext);
     }
 }

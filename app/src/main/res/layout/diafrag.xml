@@ -34,6 +34,7 @@
 
     <!--https://material.google.com/components/dialogs.html#dialogs-specs-->
     <View
+        android:id="@+id/viewForMarginBelow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/md_24dip"/>
 

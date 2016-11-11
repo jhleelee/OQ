@@ -51,9 +51,8 @@
     </RadioGroup>
 
 
-    <EditText
-        android:id="@+id/etAmmount"
-        style="@style/EditText.Comment"
+    <com.jackleeentertainment.oq.ui.widget.LoEtMoney
+        android:id="@+id/loetmoney"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

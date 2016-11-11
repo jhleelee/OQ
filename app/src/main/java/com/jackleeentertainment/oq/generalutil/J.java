@@ -39,6 +39,47 @@ public class J {
     }
 
 
+    public  static int isLarger(long a, long b){
+        Log.d("J.isLarger",    J.st(a) + " " + J.st(b));
+
+        if (a==b ){
+            return 0;
+        } else if (a>b){
+            return 1;
+
+        } else {
+            return 2;
+        }
+
+    }
+
+    public  static long getLargerLong(long a, long b){
+
+        if (a==b ){
+            return a;
+        } else if (a>b){
+            return a;
+
+        } else {
+            return b;
+        }
+
+    }
+
+    public  static long getSmallerLong(long a, long b){
+
+        if (a==b ){
+            return a;
+        } else if (a>b){
+            return b;
+
+        } else {
+            return a;
+        }
+
+    }
+
+
 
     public static int countWords(String s) {
 

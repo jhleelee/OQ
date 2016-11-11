@@ -8,7 +8,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.Ram;
 import com.jackleeentertainment.oq.generalutil.LBR;
-import com.jackleeentertainment.oq.object.Post;
+import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.Profile;
 
 
@@ -79,20 +79,23 @@ public class GetValue {
      */
 
     public static void postCls(
-                                  final String oid,
+            final String uid,
+
+            final String pid,
                                   final boolean isRamLBR) {
         App.fbaseDbRef
                 .child(FBaseNode0.OQPost)
-                .child(oid)
+                .child(uid)
+                .child(pid)
                 .addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
                                 if (isRamLBR) {
-                                    Post post = dataSnapshot.getValue(Post.class);
-                                    post.setOid(oid);
-                                    Ram.addPost(oid, post);
+                                    OQPost post = dataSnapshot.getValue(OQPost.class);
+                                    post.setPid(pid);
+                                    Ram.addPost(pid, post);
                                     LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.RECEIVED, post);
                                 }
                             }

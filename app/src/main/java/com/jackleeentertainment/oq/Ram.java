@@ -2,8 +2,8 @@ package com.jackleeentertainment.oq;
 
 
 
-import com.jackleeentertainment.oq.object.Post;
-import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.OQPost;
+ import com.jackleeentertainment.oq.object.Profile;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,9 +20,9 @@ public class Ram {
 
     static public Profile myProfile;
 
-    static public ArrayList<Post> arlPosts;
+    static public ArrayList<OQPost> arlPosts;
     static public HashMap<String, Long> hmapKeyPostOIdValueLastTs;
-    static public HashMap<String, Post> hmapPosts;
+    static public HashMap<String, OQPost> hmapPosts;
     static public HashMap<String, Profile> hmapProfiles;
 
     public static void initArlPosts() {
@@ -42,7 +42,7 @@ public class Ram {
         hmapProfiles = new HashMap<>();
     }
 
-    public static void addPost(Post post) {
+    public static void addPost(OQPost post) {
         if (Ram.arlPosts == null){
             Ram.initArlPosts();
         }
@@ -59,7 +59,7 @@ public class Ram {
     }
 
 
-    public static void addPost(String postId, Post post) {
+    public static void addPost(String postId, OQPost post) {
         if (Ram.hmapPosts == null){
             Ram.initHmapPosts();
         }
@@ -77,9 +77,9 @@ public class Ram {
 
      public static void sortArlPostsByTs(){
          //sort by Ts
-         Collections.sort(Ram.arlPosts, new Comparator<Post>() {
+         Collections.sort(Ram.arlPosts, new Comparator<OQPost>() {
              @Override
-             public int compare(Post o1, Post o2) {
+             public int compare(OQPost o1, OQPost o2) {
                  return ((Long)o1.getTs()).compareTo((Long)o2.getTs());
              }
          });

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/ro_person_photo"
+                android:layout_width="32dip"
+                android:layout_height="32dip">
+
+
+
+
+    <TextView
+        android:id="@+id/tvAva"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16dip"
+        android:layout_centerInParent="true"
+        android:layout_width="28dip"
+        android:layout_height="28dip"
+        android:gravity="center"
+        />
+
+    <ImageView
+        android:layout_centerInParent="true"
+        android:id="@+id/ivAva"
+        android:layout_width="28dip"
+        android:layout_height="28dip"
+        android:scaleType="centerCrop" />
+
+
+
+    <!--<ProgressBar-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:id="@+id/ro_person_photo_pb"-->
+    <!--style="?android:attr/progressBarStyleSmall"-->
+    <!--android:layout_width="@dimen/md_40dip"-->
+    <!--android:layout_height="@dimen/md_40dip"-->
+    <!--android:visibility="gone" />-->
+
+</RelativeLayout>

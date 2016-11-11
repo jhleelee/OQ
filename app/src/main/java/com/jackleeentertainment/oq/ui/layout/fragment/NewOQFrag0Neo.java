@@ -24,9 +24,9 @@ import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
-import com.jackleeentertainment.oq.object.OqItem;
+import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.types.OQT;
-import com.jackleeentertainment.oq.object.util.OqItemUtil;
+import com.jackleeentertainment.oq.object.util.OqDoUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
 import com.jackleeentertainment.oq.ui.widget.LoIvAvatarTvNameSmallEtAmountLargeIvBtns;
@@ -120,6 +120,7 @@ public class NewOQFrag0Neo extends Fragment {
         cvProfileApplyArlSelectedProfilesToLo();
         cvMySpentApplyArlOqItemsPastToLo();
         tvNextEnableOrNot();
+        ((NewOQActivity)getActivity()).uiLsnerFrag0();
     }
 
     @Override
@@ -141,13 +142,13 @@ public class NewOQFrag0Neo extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (((NewOQActivity) getActivity()).arlOQItem_Future != null &&
-                        ((NewOQActivity) getActivity()).arlOQItem_Future.size() > 0) {
+                if (((NewOQActivity) getActivity()).arlOqDo_Future != null &&
+                        ((NewOQActivity) getActivity()).arlOqDo_Future.size() > 0) {
                     Bundle bundle = new Bundle();
                     bundle.putString("diaFragT", DiaFragT.EasyInput);
                     bundle.putString("OQTWantT_Future", OQTWantT_Future);
                     bundle.putInt("arlOQItem_FutureNum",
-                            ((NewOQActivity) getActivity()).arlOQItem_Future.size());
+                            ((NewOQActivity) getActivity()).arlOqDo_Future.size());
                     ((NewOQActivity) getActivity()).showDialogFragment(bundle);
                 }
             }
@@ -169,22 +170,22 @@ public class NewOQFrag0Neo extends Fragment {
             @Override
             public void onClick(View v) {
 
-                int othersNum = ((NewOQActivity) getActivity()).arlOQItem_Future.size();
+                int othersNum = ((NewOQActivity) getActivity()).arlOqDo_Future.size();
                 //sumAmmountMySpent / (n+1)
 
-                long div = OqItemUtil.getDivideByMeAndOthers(
-                        OqItemUtil.getSumOqItemAmmounts(
-                                ((NewOQActivity) getActivity()).arlOQItem_Paid
+                long div = OqDoUtil.getDivideByMeAndOthers(
+                        OqDoUtil.getSumOqDoAmmounts(
+                                ((NewOQActivity) getActivity()).arlOqDo_Paid
                         ),
                         othersNum);
 
-                for (OqItem oqItem : ((NewOQActivity) getActivity()).arlOQItem_Future) {
+                for (OqDo oqItem : ((NewOQActivity) getActivity()).arlOqDo_Future) {
                     oqItem.setAmmount(div);
                     //update view
                 }
 
                 long divSum = 0;
-                for (OqItem oqItem : ((NewOQActivity) getActivity()).arlOQItem_Future) {
+                for (OqDo oqItem : ((NewOQActivity) getActivity()).arlOqDo_Future) {
                     divSum += oqItem.getAmmount();
                 }
                 cvMySpentApplyArlOqItemsPastToLo();
@@ -216,41 +217,41 @@ public class NewOQFrag0Neo extends Fragment {
 
         loSelectedPeople.removeAllViews();
 
-        if (((NewOQActivity) getActivity()).arlOQItem_Future == null ||
+        if (((NewOQActivity) getActivity()).arlOqDo_Future == null ||
                 ((NewOQActivity) getActivity
-                ()).arlOQItem_Future.size() == 0) {
+                ()).arlOqDo_Future.size() == 0) {
             JM.btEnable(btEasyInput, false);
 
         } else {
             JM.btEnable(btEasyInput, true);
 
 
-            Log.d(TAG, "((NewOQActivity) getActivity()).arlOQItem_Future " +
-                    J.st(((NewOQActivity) getActivity()).arlOQItem_Future.size()));
+            Log.d(TAG, "((NewOQActivity) getActivity()).arlOqDo_Future " +
+                    J.st(((NewOQActivity) getActivity()).arlOqDo_Future.size()));
 
-            for (final OqItem oqItem : ((NewOQActivity) getActivity()).arlOQItem_Future) {
+            for (final OqDo oqDo : ((NewOQActivity) getActivity()).arlOqDo_Future) {
 
                 final LoIvAvatarTvNameSmallEtAmountLargeIvBtns lo = new
                         LoIvAvatarTvNameSmallEtAmountLargeIvBtns(getActivity());
 
 
                 JM.glideProfileThumb(
-                        oqItem.getUidclaimee(),
-                        oqItem.getNameclaimee(),
+                        oqDo.getUidb(),
+                        oqDo.getNameb(),
                         lo.ivAvatar,
                         lo.tvAvatar,
                         this
                 );
 
 
-                lo.tvName.setText(oqItem.getNameclaimee());
+                lo.tvName.setText(oqDo.getNameb());
                 lo.setOnIvTocClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        long l = oqItem.getAmmount();
-                        for (OqItem oqItem1 : ((NewOQActivity) getActivity()).arlOQItem_Future){
-                            oqItem1.setAmmount(l);
+                        long l = oqDo.getAmmount();
+                        for (OqDo oqDo1 : ((NewOQActivity) getActivity()).arlOqDo_Future){
+                            oqDo1.setAmmount(l);
                         }
                         cvProfileApplyArlSelectedProfilesToLo();
                     }
@@ -258,7 +259,7 @@ public class NewOQFrag0Neo extends Fragment {
                 lo.setOnIvDeleteClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((NewOQActivity) getActivity()).arlOQItem_Future.remove(oqItem);
+                        ((NewOQActivity) getActivity()).arlOqDo_Future.remove(oqDo);
                         cvProfileApplyArlSelectedProfilesToLo();
                     }
                 });
@@ -278,13 +279,13 @@ public class NewOQFrag0Neo extends Fragment {
                                 getActivity()
                         )
                 );
-                lo.etAmmount.setText(J.st(oqItem.getAmmount()));
-                lo.etAmmount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-                lo.etAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
-                lo.etAmmount.addTextChangedListener(
+                lo.loetmomey.etMoneyAmmount.setText(J.st(oqDo.getAmmount()));
+                lo.loetmomey.etMoneyAmmount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                lo.loetmomey.etMoneyAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
+                lo.loetmomey.etMoneyAmmount.addTextChangedListener(
                         new SimpleTextWatcher(
-                                lo.etAmmount,
-                                oqItem,
+                                lo.loetmomey.etMoneyAmmount,
+                                oqDo,
                                 (NewOQActivity) getActivity(),
                                 mFragment
                         ));
@@ -307,8 +308,8 @@ public class NewOQFrag0Neo extends Fragment {
 
         loMySpent.removeAllViews();
 
-        if (((NewOQActivity) getActivity()).arlOQItem_Paid == null ||
-                ((NewOQActivity) getActivity()).arlOQItem_Paid.size() == 0) {
+        if (((NewOQActivity) getActivity()).arlOqDo_Paid == null ||
+                ((NewOQActivity) getActivity()).arlOqDo_Paid.size() == 0) {
 
             JM.btEnable(btApplyMySpentToReq, false);
 
@@ -316,26 +317,26 @@ public class NewOQFrag0Neo extends Fragment {
 
             JM.btEnable(btApplyMySpentToReq, true);
 
-            for (final OqItem oqItem : ((NewOQActivity) getActivity()).arlOQItem_Paid) {
+            for (final OqDo oqDo : ((NewOQActivity) getActivity()).arlOqDo_Paid) {
 
                 final LoIvAvatarTvNameSmallEtAmountLargeIvBtnsAtchSpent lo = new
                         LoIvAvatarTvNameSmallEtAmountLargeIvBtnsAtchSpent(getActivity());
 
 
-                lo.tvName.setText(oqItem.getNamegettor());
+                lo.tvName.setText(oqDo.getNameb());
                 lo.setOnIvTocClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Bundle bundle = new Bundle();
                         bundle.putString("diaFragT", DiaFragT.MySpentItem);
-                        bundle.putSerializable("oqItem", oqItem);
+                        bundle.putSerializable("oqItem", oqDo);
                         ((NewOQActivity) getActivity()).showDialogFragment(bundle);
                     }
                 });
                 lo.setOnIvDeleteClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((NewOQActivity) getActivity()).arlOQItem_Paid.remove(oqItem);
+                        ((NewOQActivity) getActivity()).arlOqDo_Paid.remove(oqDo);
                         cvMySpentApplyArlOqItemsPastToLo();
                     }
                 });
@@ -356,12 +357,11 @@ public class NewOQFrag0Neo extends Fragment {
                         )
                 );
 
-                lo. etAmmount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-                lo.  etAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
-                lo.etAmmount.addTextChangedListener(new
+
+                lo.loetmomey.etMoneyAmmount.addTextChangedListener(new
                         SimpleTextWatcher2(
-                        lo.etAmmount,
-                        oqItem,
+                        lo.loetmomey.etMoneyAmmount,
+                        oqDo,
                         (NewOQActivity) getActivity(),
                         mFragment
                 ));
@@ -382,22 +382,22 @@ public class NewOQFrag0Neo extends Fragment {
     public void tvNextEnableOrNot() {
 
         if (
-                ((NewOQActivity) getActivity()).arlOQItem_Future == null ||
-                        ((NewOQActivity) getActivity()).arlOQItem_Future.size() == 0 ||
-                        OqItemUtil.isFalseOqItem(((NewOQActivity) getActivity()).arlOQItem_Future)
+                ((NewOQActivity) getActivity()).arlOqDo_Future == null ||
+                        ((NewOQActivity) getActivity()).arlOqDo_Future.size() == 0 ||
+                        OqDoUtil.isFalseOqItem(((NewOQActivity) getActivity()).arlOqDo_Future)
                 ) {
 
 
-            if (((NewOQActivity) getActivity()).arlOQItem_Future == null) {
-                Log.d(TAG, "((NewOQActivity) getActivity()).arlOQItem_Future == null");
+            if (((NewOQActivity) getActivity()).arlOqDo_Future == null) {
+                Log.d(TAG, "((NewOQActivity) getActivity()).arlOqDo_Future == null");
             }
 
-            if (((NewOQActivity) getActivity()).arlOQItem_Future.size() == 0) {
-                Log.d(TAG, "((NewOQActivity) getActivity()).arlOQItem_Future.size() == 0");
+            if (((NewOQActivity) getActivity()).arlOqDo_Future.size() == 0) {
+                Log.d(TAG, "((NewOQActivity) getActivity()).arlOqDo_Future.size() == 0");
             }
 
-            if (OqItemUtil.isFalseOqItem(((NewOQActivity) getActivity()).arlOQItem_Future)) {
-                Log.d(TAG, "OqItemUtil.isFalseOqItem(((NewOQActivity) getActivity()).arlOQItem_Future");
+            if (OqDoUtil.isFalseOqItem(((NewOQActivity) getActivity()).arlOqDo_Future)) {
+                Log.d(TAG, "OqDoUtil.isFalseOqItem(((NewOQActivity) getActivity()).arlOqDo_Future");
             }
 
             Log.d(TAG, "tvNextEnableOrNot() false");

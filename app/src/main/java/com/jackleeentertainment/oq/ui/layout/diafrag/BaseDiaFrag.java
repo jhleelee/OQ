@@ -35,6 +35,7 @@ public class BaseDiaFrag extends android.support.v4.app.DialogFragment {
     TextView tvNumSelectedProfiles__lo_numselectedprofiles_add;
     ImageButton ibAdd__lo_numselectedprofiles_add;
     EditText et__lo_diafrag;
+    View viewForMarginBelow;
 
     public BaseDiaFrag() {
         super();
@@ -71,7 +72,7 @@ public class BaseDiaFrag extends android.support.v4.app.DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        viewForMarginBelow = (View)view.findViewById(R.id.viewForMarginBelow);
         lo_numselectedprofiles_add__lo_diafrag= (LinearLayout) view.findViewById(R.id
                 .lo_numselectedprofiles_add__lo_diafrag);
 

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.object.OqItem;
+import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.BaseActivity;
@@ -56,6 +56,7 @@ public class TransactChatOrShowProfileDiaFrag extends BaseDiaFrag {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        JM.G(viewForMarginBelow);
 
         JM.G(lo_numselectedprofiles_add__lo_diafrag);
         JM.V(lv__lo_diafragwithiconlist);
@@ -63,79 +64,79 @@ public class TransactChatOrShowProfileDiaFrag extends BaseDiaFrag {
         JM.G(ro_diafrag_okcancel__lo_diafragwithiconlist);
 
         //Items
-        ItemDiaFragList itemDiaFragListTransGet = new ItemDiaFragList();
-        itemDiaFragListTransGet.setText(JM.strById(R.string.transaction_i_get));
+        ItemDiaFragList iGet = new ItemDiaFragList();
+        iGet.setText(JM.strById(R.string.transaction_i_get));
 
-        itemDiaFragListTransGet.setDrawableIco(
+        iGet.setDrawableIco(
                 JM.tintedDrawable(
                         R.drawable.ic_play_for_work_white_48dp,
                         R.color.colorPrimary,
                         getActivity()
                 )
         );
-        itemDiaFragListTransGet.setDrawableBg(
+        iGet.setDrawableBg(
                 JM.drawableById(
                         R.drawable.btn_transparent
                 )
         );
 
 
-        itemDiaFragListTransGet.setOnClickListener(new View.OnClickListener() {
+        iGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent tranIntent = new Intent(getActivity(), NewOQActivity.class);
                 tranIntent.putExtra("Profile", profile);
-                OqItem oqItem = new OqItem();
-                tranIntent.putExtra("OQItem", oqItem);
+                OqDo oqdo = new OqDo();
+                tranIntent.putExtra("OqDo", oqdo);
                 ((BaseActivity) mContext).startActivity(tranIntent);
             }
         });
 
-        ItemDiaFragList itemDiaFragListTransPay = new ItemDiaFragList();
-        itemDiaFragListTransPay.setText(JM.strById(R.string.transaction_i_pay));
+        ItemDiaFragList iPay = new ItemDiaFragList();
+        iPay.setText(JM.strById(R.string.transaction_i_pay));
 
 
-        itemDiaFragListTransGet.setDrawableIco(
+        iPay.setDrawableIco(
                 JM.tintedDrawable(
                         R.drawable.ic_play_for_work_white_48dp,
                         R.color.colorPrimary,
                         getActivity()
                 )
         );
-        itemDiaFragListTransGet.setDrawableBg(
+        iPay.setDrawableBg(
                 JM.drawableById(
                         R.drawable.btn_transparent
                 )
         );
-        itemDiaFragListTransPay.setOnClickListener(new View.OnClickListener() {
+        iPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent tranIntent = new Intent(getActivity(), NewOQActivity.class);
                 tranIntent.putExtra("Profile", profile);
-                OqItem oqItem = new OqItem();
-                tranIntent.putExtra("OQItem", oqItem);
+                OqDo oqdo = new OqDo();
+                tranIntent.putExtra("OqDo", oqdo);
                 ((BaseActivity) mContext).startActivity(tranIntent);
             }
         });
 
 
-        ItemDiaFragList itemDiaFragListChat = new ItemDiaFragList();
-        itemDiaFragListChat.setText(JM.strById(R.string.do_chat));
+        ItemDiaFragList iChat = new ItemDiaFragList();
+        iChat.setText(JM.strById(R.string.do_chat));
 
-        itemDiaFragListTransGet.setDrawableIco(
+        iChat.setDrawableIco(
                 JM.tintedDrawable(
                         R.drawable.ic_chat_white_48dp,
                         R.color.colorPrimary,
                         getActivity()
                 )
         );
-        itemDiaFragListTransGet.setDrawableBg(
+        iChat.setDrawableBg(
                 JM.drawableById(
                         R.drawable.btn_transparent
                 )
         );
 
-        itemDiaFragListChat.setOnClickListener(new View.OnClickListener() {
+        iChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -162,24 +163,24 @@ public class TransactChatOrShowProfileDiaFrag extends BaseDiaFrag {
         });
 
 
-        ItemDiaFragList itemDiaFragListProfile = new ItemDiaFragList();
-        itemDiaFragListProfile.setText(JM.strById(R.string.show_profile));
+        ItemDiaFragList iProfile = new ItemDiaFragList();
+        iProfile.setText(JM.strById(R.string.show_profile));
 
-        itemDiaFragListTransGet.setDrawableIco(
+        iProfile.setDrawableIco(
                 JM.tintedDrawable(
                         R.drawable.ic_person_white_48dp,
                         R.color.colorPrimary,
                         getActivity()
                 )
         );
-        itemDiaFragListTransGet.setDrawableBg(
+        iProfile.setDrawableBg(
                 JM.drawableById(
                         R.drawable.btn_transparent
                 )
         );
 
 
-        itemDiaFragListProfile.setOnClickListener(new View.OnClickListener() {
+        iProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
@@ -188,10 +189,10 @@ public class TransactChatOrShowProfileDiaFrag extends BaseDiaFrag {
             }
         });
 
-        arl.add(itemDiaFragListTransGet);
-        arl.add(itemDiaFragListTransPay);
-        arl.add(itemDiaFragListChat);
-        arl.add(itemDiaFragListProfile);
+        arl.add(iGet);
+        arl.add(iPay);
+        arl.add(iChat);
+        arl.add(iProfile);
 
         diaFragAdapter = new DiaFragAdapter(arl, mContext);
         lv__lo_diafragwithiconlist.setAdapter(diaFragAdapter);

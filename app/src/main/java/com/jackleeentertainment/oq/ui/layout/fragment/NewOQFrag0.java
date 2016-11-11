@@ -131,9 +131,9 @@
 //                ((NewOQActivity) getActivity()).OQSumT
 //        );
 //        uiDataCardViewBreakDown(
-//                ((NewOQActivity) getActivity()).arlOQItem_Paid,
-//                ((NewOQActivity) getActivity()).arlOQItem_Now,
-//                ((NewOQActivity) getActivity()).arlOQItem_Future
+//                ((NewOQActivity) getActivity()).arlOqDo_Paid,
+//                ((NewOQActivity) getActivity()).arlOqDo_Now,
+//                ((NewOQActivity) getActivity()).arlOqDo_Future
 //        );
 //
 //        initViewPagerChangeListenerCandidates();
@@ -556,8 +556,8 @@
 //
 //    void uiDataCardViewBreakDown(
 //            ArrayList<OqItem> arlOQItem_Past,
-//            ArrayList<OqItem> arlOQItem_Now,
-//            ArrayList<OqItem> arlOQItem_Future
+//            ArrayList<OqItem> arlOqDo_Now,
+//            ArrayList<OqItem> arlOqDo_Future
 //    ) {
 //
 //
@@ -759,7 +759,7 @@
 //             */
 //            Bundle bundle = new Bundle();
 //            bundle.putString("myName",
-//                    App.getUname(getActivity()));
+//                    App.getName(getActivity()));
 //            bundle.putString("hisName",
 //                    ((NewOQActivity) getActivity()).arlOppoProfile.get(0).getFull_name());
 //            switch (position) {
@@ -834,7 +834,7 @@
 //             */
 //            Bundle bundle = new Bundle();
 //            bundle.putString("myName",
-//                    App.getUname(getActivity()));
+//                    App.getName(getActivity()));
 //            bundle.putString("hisName",
 //                    ((NewOQActivity) getActivity()).arlOppoProfile.get(0).getFull_name());
 //
@@ -909,7 +909,7 @@
 //             */
 //            Bundle bundle = new Bundle();
 //            bundle.putString("myName",
-//                    App.getUname(getActivity()));
+//                    App.getName(getActivity()));
 //            bundle.putString("hisName",
 //                    ((NewOQActivity) getActivity()).arlOppoProfile.get(0).getFull_name());
 //

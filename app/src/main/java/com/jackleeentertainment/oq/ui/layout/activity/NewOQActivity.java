@@ -3,6 +3,7 @@ package com.jackleeentertainment.oq.ui.layout.activity;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -11,8 +12,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,20 +35,22 @@ import com.google.gson.Gson;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
-import com.jackleeentertainment.oq.firebase.database.SetValue;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
-import com.jackleeentertainment.oq.object.MyOppo;
+
+import com.jackleeentertainment.oq.object.MyOqPerson;
+import com.jackleeentertainment.oq.object.MyOqPost;
 import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.OQPostPhoto;
-import com.jackleeentertainment.oq.object.OqItem;
+import com.jackleeentertainment.oq.object.OqDo;
+import com.jackleeentertainment.oq.object.OqWrap;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.DeedT;
 import com.jackleeentertainment.oq.object.types.OQPostT;
 import com.jackleeentertainment.oq.object.types.OQT;
-import com.jackleeentertainment.oq.object.util.OqItemUtil;
+import com.jackleeentertainment.oq.object.util.OqDoUtil;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
 
@@ -67,11 +72,13 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     final int REQ_PICK_IMAGE_FOR_FEED = 98;
 
     //temp data (1)
-    public String OQTWantT_Future = null; //PAY/GET
+    public String OQTWantT_Future =
+            null; //PAY/GET
 
-    public ArrayList<OqItem> arlOQItem_Paid = new ArrayList<>();
-    public ArrayList<OqItem> arlOQItem_Now = new ArrayList<>();
-    public ArrayList<OqItem> arlOQItem_Future = new ArrayList<>();
+    public ArrayList<OqDo> arlOqDo_Paid = new ArrayList<>();
+    public ArrayList<OqDo> arlOqDo_Now = new ArrayList<>();
+    public ArrayList<OqDo> arlOqDo_Future = new ArrayList<>();
+    public ArrayList<OqWrap> arlOqWrap = new ArrayList<>();
 
     public ArrayList<Uri> arlUriPhoto = new ArrayList<>();
 
@@ -130,10 +137,10 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     public void startActivityForResultPeopleActivity() {
 
         Intent i = new Intent(this, PeopleActivity.class);
-        if (arlOQItem_Future != null && arlOQItem_Future.size() > 0) {
+        if (arlOqDo_Future != null && arlOqDo_Future.size() > 0) {
 
-            ArrayList<String> arlUidClaimee = OqItemUtil.getArlUidClaimeeFromArlOqItem
-                    (arlOQItem_Future);
+            ArrayList<String> arlUidClaimee = OqDoUtil.getArlUidBFromArlOqDo
+                    (arlOqDo_Future);
             i.putExtra("beforeUids", new Gson().toJson(arlUidClaimee));
         }
         startActivityForResult(i, REQ_PEOPLE);
@@ -152,23 +159,263 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                 REQ_PICK_IMAGE_FOR_FEED);
     }
 
+    Profile profileMe;
 
     public void doUploadAll(final EditText etContent) {
 
-        final long ts = System.currentTimeMillis();
-        final ArrayList<MyOppo> arlMyOppo = new ArrayList<MyOppo>();
+        //MyOqPerson
+        //OqWrap <- OqDo
+        arlTask = new ArrayList<>();
 
-        for (final OqItem oqItem : arlOQItem_Future) {
-            final String oid = App.fbaseDbRef.child("push").push().getKey();
-            oqItem.setOid(oid);
-            oqItem.setTs(ts);
-            uploadMyOqItemThenMyOppo(oqItem, oid, ts, arlMyOppo);
-            uploadHisOqItemThenHisOppo(oqItem, oid, ts);
-            SetValue.updateMyRecentProfilesWithOppo(arlMyOppo, mActivity);
+        if (arlUriPhoto.size()>0) {
+            arlTask.add("all," +
+                    "setvalue_oqpostphoto");
         }
+        arlTask.add
+                ("all,setvalue_oqpost");
+        arlTask.add
+                ("my,setvalue_myoqpost");
+        arlTask.add
+                ("his,setvalue_myoqpost");
+        arlTask.add
+                ("his,setvalue_oqwrap");
+        arlTask.add
+                ("my,setvalue_oqwrap");
+        arlTask.add
+                ("his," + "setvalue_myoqperson");
+        arlTask.add
+                ("my," + "setvalue_myoqperson");
 
+
+        final long ts = System.currentTimeMillis();
+        profileMe = ProfileUtil
+                .getMyProfileWithUidNameEmail(mActivity);
+
+        final ArrayList<Profile> arlProfile = new ArrayList<Profile>();
+//        final String qid = App.fbaseDbRef.child("push").push().getKey();
+        final ArrayList<String> arlWids = new ArrayList<>();
         final String pid = App.fbaseDbRef.child("push").push().getKey();
         Log.d(TAG, "pid : " + pid);
+
+        for (final OqDo oqDo : arlOqDo_Future) {
+
+            final ArrayList<String> arlUidNotMe = OqDoUtil.getUidsNotMe(oqDo, this);
+
+            if (arlUidNotMe != null && arlUidNotMe.size() == 1) {
+
+
+                /**
+                 * Check Oppo's Profile and Upload MyOqPerson (to Me) using it
+                 */
+                App.fbaseDbRef
+                        .child(FBaseNode0.ProfileToPublic)
+                        .child(arlUidNotMe.get(0))
+                        .addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+
+
+                                            Profile profileHim = dataSnapshot.getValue(Profile
+                                                    .class);
+                                            if (profileHim != null) {
+                                                /**
+                                                 * Upload MyOqPerson - me
+                                                 */
+                                                MyOqPerson oqPersonHim = new MyOqPerson();
+                                                oqPersonHim.setProfile(profileHim);
+                                                oqPersonHim.setTs(ts);
+
+                                                App.fbaseDbRef
+                                                        .child(FBaseNode0.MyOqPerson)
+                                                        .child(App.getUid(mActivity))
+                                                        .child(oqPersonHim.getProfile().getUid())
+                                                        .setValue(oqPersonHim)
+                                                        .addOnCompleteListener(
+                                                                new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        arlTask.remove
+                                                                                ("my," +
+                                                                                        "setvalue_myoqperson");
+                                                                        uiCheckStatusShowAlertDialogWhenDone();
+                                                                    }
+                                                                }
+                                                        );
+
+
+                                                /**
+                                                 * Upload MyOqPerson - his
+                                                 */
+
+
+                                                final MyOqPerson oqPersonMe = new MyOqPerson();
+                                                oqPersonMe.setProfile(profileMe);
+                                                oqPersonMe.setTs(ts);
+
+                                                App.fbaseDbRef
+                                                        .child(FBaseNode0.MyOqPerson)
+                                                        .child(arlUidNotMe.get(0))
+                                                        .child(App.getUid(mActivity))
+                                                        .setValue(oqPersonMe)
+                                                        .addOnCompleteListener(
+                                                                new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        arlTask.remove
+                                                                                ("his," +
+                                                                                        "setvalue_myoqperson");
+                                                                        uiCheckStatusShowAlertDialogWhenDone();
+
+                                                                    }
+                                                                }
+                                                        );
+
+
+                                                /**
+                                                 * Upload OqWrap holding OqDo
+                                                 */
+                                                final String wid = App.fbaseDbRef.child("push").push().getKey();
+                                                arlWids.add(wid);
+
+                                                List<OqDo> oqDos = new ArrayList<>();
+                                                final String oid = App.fbaseDbRef.child("push").push().getKey();
+                                                oqDo.setOid(oid);
+                                                oqDo.setReferoid(oid);
+                                                oqDo.setWid(wid);
+                                                oqDo.setTs(ts);
+                                                oqDos.add(oqDo);
+
+                                                //reverse OqDo
+                                                OqDo oqDo1 = new OqDo();
+                                                final String oid1 = App.fbaseDbRef.child("push")
+                                                        .push().getKey();
+                                                oqDo1.setOid(oid1);
+                                                oqDo.setReferoid(oid);
+                                                oqDo1.setWid(wid);
+                                                oqDo1.setTs(ts);
+                                                oqDo1.setUida(oqDo.getUidb());
+                                                oqDo1.setNamea(oqDo.getNameb());
+                                                oqDo1.setEmaila(oqDo.getEmailb());
+                                                oqDo1.setUidb(oqDo.getUida());
+                                                oqDo1.setNameb(oqDo.getNamea());
+                                                oqDo1.setEmailb(oqDo.getEmaila());
+                                                oqDo1.setAmmount(oqDo.getAmmount());
+                                                oqDo1.setCurrency(oqDo.getCurrency());
+                                                oqDo1.setOqwhen(oqDo.getOqwhen());
+
+                                                if (oqDo.getOqwhat().equals(OQT.DoWhat.GET)) {
+                                                    oqDo1.setOqwhat(OQT.DoWhat.PAY);
+                                                } else if (oqDo.getOqwhat().equals(OQT.DoWhat.PAY)) {
+                                                    oqDo1.setOqwhat(OQT.DoWhat.GET);
+                                                }
+
+                                                if (oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)) {
+                                                    oqDo1.setOqwhen(OQT.DoWhen.FUTURE);
+                                                } else if (oqDo.getOqwhen().equals(OQT.DoWhen
+                                                        .PAST)) {
+                                                    oqDo1.setOqwhen(OQT.DoWhen.PAST);
+                                                }
+
+                                                oqDos.add(oqDo1);
+
+                                                /*
+                                                String wid; //this's id;
+                                                String gid; //groups'id;
+                                                String qid; //appointment's id;
+                                                long ts; //listopdo's;
+                                                List<OqDo> listoqdo;
+                                                 */
+                                                OqWrap oqWrap = new OqWrap();
+                                                oqWrap.setWid(wid);
+                                                oqWrap.setTs(ts);
+                                                oqWrap.setListoqdo(oqDos);
+                                                oqWrap.setPid(pid);
+                                                //gid
+
+                                                //Set My OqWrap
+                                                App.fbaseDbRef
+                                                        .child(FBaseNode0.MyOqWraps)
+                                                        .child(oqDo.getUida()) //me
+                                                        .child(oqDo.getUidb()) //opponent
+                                                        .child(wid)
+                                                        .setValue(oqWrap)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                arlTask.remove
+                                                                        ("my,setvalue_oqwrap");
+                                                                uiCheckStatusShowAlertDialogWhenDone();
+
+                                                            }
+                                                        });
+
+                                                //Set His OqWrap
+                                                App.fbaseDbRef
+                                                        .child(FBaseNode0.MyOqWraps)
+                                                        .child(oqDo.getUidb()) //opponent
+                                                        .child(oqDo.getUida()) //me
+                                                        .child(wid)
+                                                        .setValue(oqWrap)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                arlTask.remove
+                                                                        ("his,setvalue_oqwrap");
+                                                                uiCheckStatusShowAlertDialogWhenDone();
+                                                            }
+                                                        });
+
+
+                                                /**
+                                                 * Upload MyOqPost - his (my is at below , to
+                                                 * exec just once)
+                                                 */
+                                                MyOqPost myOqPost = new MyOqPost();
+                                                myOqPost.setPid(pid);
+                                                myOqPost.setTs(ts);
+                                                myOqPost.setProfile(profileMe);
+                                                App.fbaseDbRef
+                                                        .child(FBaseNode0.MyPosts)
+                                                        .child(oqPersonHim.getProfile().getUid())
+                                                        .child(pid)
+                                                        .setValue(myOqPost)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                arlTask.remove
+                                                                        ("his,setvalue_myoqpost");
+                                                                uiCheckStatusShowAlertDialogWhenDone();
+                                                            }
+                                                        })
+                                                ;
+                                            }
+
+
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.d(TAG, "onCancelled");
+                                    }
+                                }
+                        );
+
+
+            }
+
+
+        }
+
+        /**
+         * Post Body
+         */
+
+
         OQPost oqPost = new OQPost();
         oqPost.setPid(pid);
         oqPost.setUid(App.getUid(mActivity));
@@ -177,6 +424,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
         oqPost.setTxt(etContent.getText()
                 .toString());
         oqPost.setTs(ts);
+        oqPost.setWids(arlWids);
 
         OQPostPhoto oqPostPhoto = new OQPostPhoto();
         oqPostPhoto.setPid(oqPost.getPid());
@@ -193,202 +441,69 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
             uploadFeedPhoto(arlUriPhoto, oqPostPhoto, App.getUid(mActivity));
 
         }
-        oqPost.setMyOppos(arlMyOppo);
+
 
         App.fbaseDbRef
-                .child(FBaseNode0.MyPosts)
-                .child(App.getUid(mActivity))
+                .child(FBaseNode0.OQPost)
+                .child(App.getUid(this)) // this is not myspace. for all. for classification.
                 .child(pid)
                 .setValue(oqPost)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        arlTask.remove
+                                ("all,setvalue_oqpost");
+                        uiCheckStatusShowAlertDialogWhenDone();
+                    }
+                });
 
+        /**
+         * Upload MyOqPost -my
+         */
+        MyOqPost myOqPost = new MyOqPost();
+        myOqPost.setPid(pid);
+        myOqPost.setTs(ts);
+        myOqPost.setProfile(profileMe);
+        App.fbaseDbRef
+                .child(FBaseNode0.MyPosts)
+                .child(App.getUid(mActivity))
+                .child(pid)
+                .setValue(myOqPost)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        arlTask.remove
+                                ("my,setvalue_myoqpost");
+                        uiCheckStatusShowAlertDialogWhenDone();
                     }
                 })
         ;
-
-
-        for (final OqItem oqItem : arlOQItem_Future) {
-            App.fbaseDbRef
-                    .child(FBaseNode0.MyPosts)
-                    .child(oqItem.getUidclaimee())
-                    .child(pid)
-                    .setValue(oqPost)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    })
-            ;
-        }
-
-
     }
 
 
-    void uploadMyOqItemThenMyOppo(final OqItem oqItem,
-                                  final String oid,
-                                  final long ts,
-                                  final ArrayList<MyOppo> arlMyOppo) {
+    ArrayList<String> arlTask = new ArrayList<>();
 
-        App.fbaseDbRef
-                .child(FBaseNode0.MyOqWraps)
-                .child(App.getUid(mActivity))
-                .child(oqItem.getUidclaimee())
-                .child(oid)
-                .setValue(oqItem)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+    void uiCheckStatusShowAlertDialogWhenDone() {
 
-                        App.fbaseDbRef
-                                .child(FBaseNode0.MyOqWraps)
-                                .child(App.getUid(mActivity))
-                                .child(oqItem.getUidclaimee())
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
+        if (arlTask == null || arlTask.size() == 0) {
+            JM.G(ro_prog);
 
-                                        if (dataSnapshot.exists()) {
-
-                                            long amtIClaimToHim = 0;
-
-                                            Iterable<DataSnapshot> i = dataSnapshot.getChildren();
-
-                                            for (DataSnapshot d : i) {
-
-                                                if ((d.getValue
-                                                        (OqItem.class))
-                                                        .getUidclaimer()
-                                                        .equals(App.getUid
-                                                                (mActivity))) {
-                                                    amtIClaimToHim += (d.getValue
-                                                            (OqItem.class))
-                                                            .getAmmount();
-                                                }
-                                            }
-
-
-                                            MyOppo myOppo = new MyOppo();
-                                            myOppo.setUid(oqItem.getUidclaimee());
-                                            myOppo.setUname(oqItem.getNameclaimee
-                                                    ());
-                                            myOppo.setAmticlaim(amtIClaimToHim);
-                                            myOppo.setTs(ts);
-                                            myOppo.setDeed(DeedT.RequesterSENT_IWantGet_REQ);
-
-                                            App.fbaseDbRef
-                                                    .child(FBaseNode0.MyOppoList)
-                                                    .child(App.getUid(mActivity))
-                                                    .child(oqItem.getUidclaimee())
-                                                    .setValue(myOppo)
-                                                    .addOnCompleteListener
-                                                            (new OnCompleteListener<Void>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
-
-                                                                }
-                                                            });
-
-                                            arlMyOppo.add(myOppo);
-
-
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-
-
-                    }
-                });
-    }
-
-    void uploadHisOqItemThenHisOppo(final OqItem oqItem,
-                                    final String oid,
-                                    final long ts) {
-
-        App.fbaseDbRef
-                .child(FBaseNode0.MyOqWraps)
-                .child(oqItem.getUidclaimee())
-                .child(App.getUid(mActivity))
-                .child(oid)
-                .setValue(oqItem)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        App.fbaseDbRef
-                                .child(FBaseNode0.MyOqWraps)
-                                .child(oqItem.getUidclaimee())
-                                .child(App.getUid(mActivity))
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                        if (dataSnapshot.exists()) {
-
-                                            long amtHeClaimMe = 0;
-
-                                            Iterable<DataSnapshot> i = dataSnapshot.getChildren();
-
-                                            for (DataSnapshot d : i) {
-
-                                                if ((d.getValue
-                                                        (OqItem.class))
-                                                        .getUidclaimee()
-                                                        .equals(oqItem
-                                                                .getUidclaimee())) {
-
-                                                    amtHeClaimMe += (d.getValue
-                                                            (OqItem.class))
-                                                            .getAmmount();
-                                                }
-                                            }
-
-
-                                            MyOppo myOppo = new MyOppo();
-                                            myOppo.setUid(App.getUid(mActivity));
-                                            myOppo.setUname(App.getUname(mActivity));
-                                            myOppo.setAmtheclaim
-                                                    (amtHeClaimMe);
-                                            myOppo.setDeed(DeedT.RequesterSENT_IWantGet_REQ);
-
-                                            myOppo.setTs(ts);
-
-
-                                            App.fbaseDbRef
-                                                    .child(FBaseNode0.MyOppoList)
-                                                    .child(oqItem
-                                                            .getUidclaimee())
-                                                    .child(App.getUid(mActivity))
-                                                    .setValue(myOppo)
-                                                    .addOnCompleteListener
-                                                            (new OnCompleteListener<Void>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
-
-                                                                }
-                                                            });
-
-
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-
-
-                    }
-                });
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage(JM.strById(R.string.sent));
+            alertDialogBuilder.setPositiveButton(JM.strById(R.string.ok_korean),
+                    new
+                            DialogInterface
+                                    .OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    arg0.dismiss();
+                                    mActivity.finish();
+                                }
+                            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            pbutton.setTextColor(JM.colorById(R.color.colorPrimary));        }
 
     }
 
@@ -455,18 +570,19 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                 //create oqitems from it
                 for (Profile profile : arlOppoProfile) {
 
-                    OqItem oqItem = OqItemUtil.getOqItemWithUidclaimee(arlOQItem_Future, profile
+                    OqDo oqDo = OqDoUtil.getOqDoWithUidB(arlOqDo_Future, profile
                             .getUid());
-                    if (oqItem == null) {
-                        OqItem oqItem1 = new OqItem();
+                    if (oqDo == null) {
+
+                        OqDo oqDo1 = new OqDo();
                         if (OQTWantT_Future.equals(OQT.DoWhat.GET)) {
-                            oqItem1 = OqItemUtil.getInstanceIClaimThatIGet(profile
+                            oqDo1 = OqDoUtil.getInstanceIClaimThatIGet(profile
                                     , this);
                         } else if (OQTWantT_Future.equals(OQT.DoWhat.PAY)) {
-                            oqItem1 = OqItemUtil.getInstanceIClaimThatIPay(profile
+                            oqDo1 = OqDoUtil.getInstanceIClaimThatIPay(profile
                                     , this);
                         }
-                        arlOQItem_Future.add(oqItem1);
+                        arlOqDo_Future.add(oqDo1);
                     }
                 }
             }
@@ -529,7 +645,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
-//                    arlOQItem_Paid.set(0, oqItemPaid);
+//                    arlOqDo_Paid.set(0, oqItemPaid);
 //
 //                    OqItem oqItemToPay = new OqItem();
 //                    oqItemToPay.setUidpayer(arlOppoProfile.get(0).getUid());
@@ -538,7 +654,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
-//                    arlOQItem_Future.set(0, oqItemToPay);
+//                    arlOqDo_Future.set(0, oqItemToPay);
 //
 //                } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT
 //                        .SoIWantToGETFromYou.I_PAID_FOR_YOU)) {
@@ -550,7 +666,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
-//                    arlOQItem_Paid.set(0, oqItemPaid);
+//                    arlOqDo_Paid.set(0, oqItemPaid);
 //
 //                    OqItem oqItemToPay = new OqItem();
 //                    oqItemToPay.setUidpayer(arlOppoProfile.get(0).getUid());
@@ -559,7 +675,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
-//                    arlOQItem_Future.set(0, oqItemToPay);
+//                    arlOqDo_Future.set(0, oqItemToPay);
 //
 //                } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT
 //                        .SoIWantToGETFromYou.ANYWAY)) {
@@ -571,7 +687,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
-//                    arlOQItem_Future.set(0, oqItemToPay);
+//                    arlOqDo_Future.set(0, oqItemToPay);
 //
 //
 //                } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT
@@ -584,7 +700,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
-//                    arlOQItem_Paid.set(0, oqItemPaid);
+//                    arlOqDo_Paid.set(0, oqItemPaid);
 //
 //                    int pplNumWithoputMe = arlOppoProfile.size();
 //                    long eachBurden = ammountAsStandard / (pplNumWithoputMe + 1);
@@ -597,7 +713,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                        oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                        oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                        oqItemToPay.setDuedate(null);
-//                        arlOQItem_Future.set(i, oqItemToPay);
+//                        arlOqDo_Future.set(i, oqItemToPay);
 //                    }
 //
 //                } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT
@@ -610,7 +726,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
-//                    arlOQItem_Paid.set(0, oqItemPaid);
+//                    arlOqDo_Paid.set(0, oqItemPaid);
 //
 //                    int pplNumWithoputMe = arlOppoProfile.size();
 //                    long eachBurden = ammountAsStandard / (pplNumWithoputMe);
@@ -623,7 +739,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                        oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                        oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                        oqItemToPay.setDuedate(null);
-//                        arlOQItem_Future.set(i, oqItemToPay);
+//                        arlOqDo_Future.set(i, oqItemToPay);
 //                    }
 //
 //
@@ -641,7 +757,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                        oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                        oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                        oqItemToPay.setDuedate(null);
-//                        arlOQItem_Future.set(i, oqItemToPay);
+//                        arlOqDo_Future.set(i, oqItemToPay);
 //                    }
 //
 //                } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT
@@ -654,7 +770,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemPaid.setOqtype(OQT.DoWhen.PAST);
 //                    oqItemPaid.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemPaid.setDuedate(null);
-//                    arlOQItem_Paid.set(0, oqItemPaid);
+//                    arlOqDo_Paid.set(0, oqItemPaid);
 //
 //
 //                    OqItem oqItemToPay = new OqItem();
@@ -664,7 +780,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
-//                    arlOQItem_Future.set(0, oqItemToPay);
+//                    arlOqDo_Future.set(0, oqItemToPay);
 //
 //
 //                } else if (OQSumT.equals(com.jackleeentertainment.oq.object.types.OQSumT
@@ -677,7 +793,7 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 //                    oqItemToPay.setOqtype(OQT.DoWhen.FUTURE);
 //                    oqItemToPay.setCurrency(JM.strById(R.string.currency_code));
 //                    oqItemToPay.setDuedate(null);
-//                    arlOQItem_Future.set(0, oqItemToPay);
+//                    arlOqDo_Future.set(0, oqItemToPay);
 //
 //
 //                }
@@ -777,8 +893,16 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                 ;
             } catch (FileNotFoundException e) {
                 Log.d(TAG, e.toString());
+                arlTask.add
+                        ("error," +
+                                "FileNotFoundException");
+                uiCheckStatusShowAlertDialogWhenDone();
             } catch (IOException e) {
                 Log.d(TAG, e.toString());
+                arlTask.add
+                        ("error," +
+                                "IOException");
+                uiCheckStatusShowAlertDialogWhenDone();
             }
 
         }
@@ -792,10 +916,47 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-
+                        arlTask.remove
+                                ("all," +
+                                        "setvalue_oqpostphoto");
+                        uiCheckStatusShowAlertDialogWhenDone();
                     }
                 })
         ;
+    }
+
+    public void uiLsnerFrag0(){
+        ivClose.setImageDrawable(JM.drawableById(R.drawable
+                .ic_close_white_48dp));
+        View.OnClickListener ocl = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                finish();
+            }
+        };
+        ivClose.setOnClickListener(ocl);
+        roClose.setOnClickListener(ocl);
+    }
+
+    public void uiLsnerFrag1(final Bundle bundleFromFrag0){
+        ivClose.setImageDrawable(JM.drawableById(R.drawable
+                 .ic_arrow_back_white_48dp));
+
+        View.OnClickListener onClickListenerBackToFrag0 = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+              backToFragment(NewOQFrag0Neo.newInstance
+                                (bundleFromFrag0),
+                        R.id.fr_content);
+            }
+        };
+        ivClose.setOnClickListener(onClickListenerBackToFrag0);
+         roClose.setOnClickListener(onClickListenerBackToFrag0);
+
     }
 
 

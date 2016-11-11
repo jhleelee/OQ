@@ -5,11 +5,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.object.OqItem;
-import com.jackleeentertainment.oq.object.util.OqItemUtil;
-import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.object.OqDo;
+ import com.jackleeentertainment.oq.object.util.OqDoUtil;
+ import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
 
 /**
@@ -21,13 +19,13 @@ public class SimpleTextWatcher implements TextWatcher {
     private EditText mEditText;
     NewOQActivity mNewOQActivity;
     NewOQFrag0Neo mNewOQFrag0;
-    OqItem mOqItem;
+    OqDo mOqItem;
 
-    public SimpleTextWatcher(EditText editText, OqItem oqItem,
+    public SimpleTextWatcher(EditText editText, OqDo oqDo,
                              NewOQActivity newOQActivity,
                              NewOQFrag0Neo newOQFrag0Neo) {
         mEditText = editText;
-        mOqItem = oqItem;
+        mOqItem = oqDo;
         mNewOQActivity = newOQActivity;
         mNewOQFrag0= newOQFrag0Neo;
     }
@@ -68,8 +66,8 @@ public class SimpleTextWatcher implements TextWatcher {
                 l = Long.parseLong(
                         mEditText.getText().toString());
                 mOqItem.setAmmount(l);
-                long sum = OqItemUtil.getSumOqItemAmmounts(
-                        (mNewOQActivity).arlOQItem_Future
+                long sum = OqDoUtil.getSumOqDoAmmounts(
+                        (mNewOQActivity).arlOqDo_Future
                 );
 
                 mNewOQFrag0.tvSumOqItems.setText(String.valueOf(sum));

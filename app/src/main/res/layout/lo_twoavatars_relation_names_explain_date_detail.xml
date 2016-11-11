@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <include
         android:id="@+id/loTwoAvaWrap"
         layout="@layout/lo_twoavatars_relation_names_explain_date"/>
 
     <LinearLayout
+        android:id="@+id/lolvTwoAvaHistory"
+
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ListView
-            android:id="@+id/lvTwoAvaHistory"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvSub"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"/>
 
-        </ListView>
+
     </LinearLayout>
-
+    <View
+        android:background="@color/light_grey"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
 </LinearLayout>

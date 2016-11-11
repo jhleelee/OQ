@@ -1,12 +1,13 @@
 package com.jackleeentertainment.oq.object;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Jacklee on 2016. 11. 1..
  */
 
-public class OQPost {
+public class OQPost implements Serializable{
 
     String pid;
     String uid;
@@ -15,16 +16,13 @@ public class OQPost {
     String posttype ; // 0null, 1video, 2photo
     String txt; //supportingTxt
     long ts;
-
-    List<MyOppo> myOppos;
+    List<String> wids;
+    String qid;
     Comment lastcmt;
-
 
     public OQPost() {
         super();
     }
-
-
 
     public String getPid() {
         return pid;
@@ -82,13 +80,7 @@ public class OQPost {
         this.ts = ts;
     }
 
-    public List<MyOppo> getMyOppos() {
-        return myOppos;
-    }
 
-    public void setMyOppos(List<MyOppo> myOppos) {
-        this.myOppos = myOppos;
-    }
 
     public Comment getLastcmt() {
         return lastcmt;
@@ -96,6 +88,21 @@ public class OQPost {
 
     public void setLastcmt(Comment lastcmt) {
         this.lastcmt = lastcmt;
+    }
+    public List<String> getWids() {
+        return wids;
+    }
+
+    public void setWids(List<String> wids) {
+        this.wids = wids;
+    }
+
+    public String getQid() {
+        return qid;
+    }
+
+    public void setQid(String qid) {
+        this.qid = qid;
     }
 
 }

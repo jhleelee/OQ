@@ -27,6 +27,7 @@ import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.ui.layout.activity.MainActivity;
 import com.jackleeentertainment.oq.ui.layout.diafrag.list.DiaFragAdapter;
 import com.jackleeentertainment.oq.ui.layout.diafrag.list.ItemDiaFragList;
+import com.jackleeentertainment.oq.ui.widget.LoEtMoney;
 import com.jackleeentertainment.oq.ui.widget.NumericKeyBoardTransformationMethod;
 
 import java.util.ArrayList;
@@ -41,9 +42,9 @@ public class MySpentItemDiaFrag extends android.support.v4.app.DialogFragment {
 
     static Context mContext;
 
-
+    LoEtMoney loEtMoney;
     LinearLayout lo, loBtSMS;
-    EditText etTitle, etAmmount;
+    EditText etTitle  ;
     ImageView ivBtSMS;
     TextView tvBtSMS;
     TextView tvOk, tvCancel;
@@ -85,10 +86,12 @@ public class MySpentItemDiaFrag extends android.support.v4.app.DialogFragment {
         lo = (LinearLayout) view.findViewById(R.id
                 .lo);
 
-        etAmmount = (EditText) view.findViewById(R.id
-                .etAmmount);
-        etAmmount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        etAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
+
+        loEtMoney = (LoEtMoney)view.findViewById(R.id.loetmomey);
+
+        loEtMoney.   etMoneyAmmount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType
+                .TYPE_NUMBER_VARIATION_PASSWORD);
+        loEtMoney.   etMoneyAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
 
         etTitle = (EditText) view.findViewById(R.id
                 .etTitle);
@@ -116,12 +119,12 @@ public class MySpentItemDiaFrag extends android.support.v4.app.DialogFragment {
             public void onClick(View v) {
                 //send Data
 
-                if (etTitle.getText().length() == 0 || etAmmount.getText().length() == 0) {
+                if (etTitle.getText().length() == 0 ||  loEtMoney.   etMoneyAmmount.getText().length() == 0) {
                     J.TOAST(R.string.input_title_and_ammount);
                 }
 
                 LBR.send(LBR.IntentFilterT.NewOQActivity_Frag0, oqSumT + "," + J.st
-                        (etAmmount.getText().toString()));
+                        ( loEtMoney.   etMoneyAmmount.getText().toString()));
                 dismiss();
             }
         });

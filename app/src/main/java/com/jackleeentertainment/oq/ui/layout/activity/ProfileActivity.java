@@ -9,10 +9,15 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,6 +34,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
@@ -37,12 +43,17 @@ import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.object.OqDo;
-import com.jackleeentertainment.oq.object.OqItem;
+import com.jackleeentertainment.oq.object.OqDoPair;
 import com.jackleeentertainment.oq.object.OqWrap;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.types.OQT;
+import com.jackleeentertainment.oq.object.util.ChatUtil;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
 import com.jackleeentertainment.oq.object.util.OqWrapUtil;
-import com.jackleeentertainment.oq.ui.layout.viewholder.TwoAvatarsWithRelationDtlVHolder;
+import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
+import com.jackleeentertainment.oq.ui.layout.viewholder.Ava2RelationDtlSmallVHolder;
+import com.jackleeentertainment.oq.ui.layout.viewholder.Ava2RelationDtlVHolder;
+import com.konifar.fab_transformation.FabTransformation;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -65,12 +76,22 @@ public class ProfileActivity extends BaseActivity {
     ImageView ivClose;
     RecyclerView rvOQ;
     LinearLayout nav_header_main;
+
     RelativeLayout ro_person_photo_48dip__lessmargin;
     TextView tvTitle_DrawerHeader;
     TextView tvSubTitle_DrawerHeader;
     TextView ro_person_photo_tv;
     ImageView ro_person_photo_iv;
     RelativeLayout roProgress, ro_empty_list;
+    ImageView ivChat, ivAddTran;
+
+    //FAB
+    FloatingActionButton fab;
+    Toolbar toolbarFooter;
+    RelativeLayout roFootTab0, roFootTab1, roFootTab2;
+    TextView tvFootTitle;
+    ImageView ivFootTab0, ivFootTab1, ivFootTab2;
+    View vScrim;
 
 
     boolean isMe;
@@ -85,6 +106,8 @@ public class ProfileActivity extends BaseActivity {
         ivClose = (ImageView) findViewById(R.id.ivClose);
         rvOQ = (RecyclerView) findViewById(R.id.rvOQ);
         nav_header_main = (LinearLayout) findViewById(R.id.nav_header_main);
+        ivChat = (ImageView) findViewById(R.id.ivChat);
+        ivAddTran = (ImageView) findViewById(R.id.ivAddTran);
         ro_person_photo_48dip__lessmargin = (RelativeLayout) findViewById(R.id
                 .ro_person_photo_48dip__lessmargin);
 
@@ -98,8 +121,105 @@ public class ProfileActivity extends BaseActivity {
 
         ro_empty_list = (RelativeLayout) findViewById(R.id.ro_empty_list);
 
+
+        /**
+         * FAB
+         */
+        toolbarFooter = (Toolbar) findViewById(R.id.toolbar_footer);
+        vScrim = (View) findViewById(R.id.vScrim);
+
+
+        tvFootTitle = (TextView) findViewById(R.id.tvFootTitle);
+        ivFootTab0 = (ImageView) findViewById(R.id.ivFootTab0);
+        ivFootTab1 = (ImageView) findViewById(R.id.ivFootTab1);
+        ivFootTab2 = (ImageView) findViewById(R.id.ivFootTab2);
+
+        roFootTab0 = (RelativeLayout) findViewById(R.id.roFootTab0);
+        roFootTab1 = (RelativeLayout) findViewById(R.id.roFootTab1);
+        roFootTab2 = (RelativeLayout) findViewById(R.id.roFootTab2);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
+        fab.setImageDrawable(
+                JM.tintedDrawable(
+                        R.drawable.ic_add_white_48dp,
+                        R.color.colorPrimary,
+                        this));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FabTransformation.with(fab)
+                        .duration(200)
+                        .transformTo(toolbarFooter);
+                vScrim.setVisibility(View.VISIBLE);
+            }
+        });
+
+        vScrim.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                FabTransformation.with(fab)
+                        .duration(100)
+                        .transformFrom(toolbarFooter);
+                v.setVisibility(View.GONE);
+                return false;
+            }
+        });
+
+        ivFootTab0.setImageDrawable(
+                JM.tintedDrawable(
+                        R.drawable.ic_photo_camera_white_24dp,
+                        R.color.colorPrimary,
+                        this
+                )
+        );
+
+
+        ivFootTab1.setImageDrawable(
+                JM.tintedDrawable(
+                        R.drawable.ic_credit_card_white_24dp,
+                        R.color.colorPrimary,
+                        this
+                )
+        );
+
+        // upto provider
+        ivFootTab2.setImageDrawable(
+                JM.tintedDrawable(
+                        R.drawable.ic_create_white_24dp,
+                        R.color.colorPrimary,
+                        this
+                )
+        );
+
+
+        roFootTab0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                startActivityForResultToTakeReceipt();
+            }
+        });
+        roFootTab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResultToLoadSMS();
+            }
+        });
+        roFootTab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity, NewOQActivity.class);
+                intent.putExtra("OQTWantT_Future", OQT.DoWhat.GET);
+                startActivity(intent);
+            }
+        });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        uiDecoration(this);
+        setOcl();
+    }
 
     @Override
     void initUIDataOnResume() {
@@ -108,6 +228,17 @@ public class ProfileActivity extends BaseActivity {
 
             tvTitle_DrawerHeader.setText(profile.getFull_name());
             tvSubTitle_DrawerHeader.setText(profile.getEmail());
+            View.OnClickListener oclViewPhoto = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mActivity, ViewPhotoActivity.class);
+                    intent.putExtra("Profile", profile);
+                    startActivity(intent);
+                }
+            };
+            ro_person_photo_48dip__lessmargin.setOnClickListener(oclViewPhoto);
+            ro_person_photo_tv.setOnClickListener(oclViewPhoto);
+            ro_person_photo_iv.setOnClickListener(oclViewPhoto);
 
         } else {
 
@@ -372,11 +503,11 @@ public class ProfileActivity extends BaseActivity {
 
 
         recyclerAdapter = new FirebaseRecyclerAdapter<OqWrap,
-                TwoAvatarsWithRelationDtlVHolder
+                Ava2RelationDtlVHolder
                 >
                 (OqWrap.class,
                         R.layout.lo_twoavatars_relation_names_explain_date_detail,
-                        TwoAvatarsWithRelationDtlVHolder.class,
+                        Ava2RelationDtlVHolder.class,
                         App.fbaseDbRef
                                 .child(FBaseNode0.MyOqWraps)
                                 .child(App.getUid(mActivity))
@@ -384,7 +515,7 @@ public class ProfileActivity extends BaseActivity {
                 ) {
 
             public void populateViewHolder(
-                    final TwoAvatarsWithRelationDtlVHolder twoAvatarsWithRelationDtlVHolder,
+                    final Ava2RelationDtlVHolder twoAvatarsWithRelationDtlVHolder,
                     final OqWrap oqWrap,
                     final int position) {
 
@@ -428,6 +559,54 @@ public class ProfileActivity extends BaseActivity {
                     twoAvatarsWithRelationDtlVHolder.tvContent.setText(OqWrapUtil.getOqWrapStr(
                             oqWrap));
 
+                    twoAvatarsWithRelationDtlVHolder.ivMore.setImageDrawable(
+                            JM.tintedDrawable(
+                                    R.drawable.ic_expand_more_white_48dp,
+                                    R.color.text_black_54,
+                                    mActivity
+                            ));
+
+                    twoAvatarsWithRelationDtlVHolder.ivMore.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (twoAvatarsWithRelationDtlVHolder.lolvTwoAvaHistory
+                                    .getVisibility() == View.GONE) {
+                                twoAvatarsWithRelationDtlVHolder.lolvTwoAvaHistory
+                                        .setVisibility(View.VISIBLE);
+
+                                twoAvatarsWithRelationDtlVHolder.ivMore.setImageDrawable(
+                                        JM.tintedDrawable(
+                                                R.drawable.ic_expand_less_white_24dp,
+                                                R.color.text_black_54,
+                                                mActivity
+                                        ));
+
+                                rvOQ.requestLayout();
+                            } else if (twoAvatarsWithRelationDtlVHolder.lolvTwoAvaHistory
+                                    .getVisibility() == View.VISIBLE) {
+                                twoAvatarsWithRelationDtlVHolder.lolvTwoAvaHistory
+                                        .setVisibility(View.GONE);
+                                twoAvatarsWithRelationDtlVHolder.ivMore.setImageDrawable(
+                                        JM.tintedDrawable(
+                                                R.drawable.ic_expand_more_white_48dp,
+                                                R.color.text_black_54,
+                                                mActivity
+                                        ));
+                                rvOQ.requestLayout();
+
+                            }
+
+                        }
+                    });
+
+
+                    ArrayList<OqDoPair> arlOqDoPair = OqDoUtil.getArlOqDoPair(oqWrap.getListoqdo());
+
+                    OqDoAdapter oqDoAdapter = new OqDoAdapter(arlOqDoPair);
+
+                    twoAvatarsWithRelationDtlVHolder.rvSub.setAdapter(oqDoAdapter);
+
 
                 }
 
@@ -441,6 +620,75 @@ public class ProfileActivity extends BaseActivity {
         };
 
         rvOQ.setAdapter(recyclerAdapter);
+    }
+
+
+    public class OqDoAdapter extends RecyclerView.Adapter<Ava2RelationDtlSmallVHolder> {
+
+        public ArrayList<OqDoPair> mOqDoArrayList = new ArrayList();
+
+        public OqDoAdapter(ArrayList<OqDoPair> oqDoPairs) {
+            super();
+            mOqDoArrayList = oqDoPairs;
+        }
+
+        @Override
+        public Ava2RelationDtlSmallVHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(App.getContext())
+                    .inflate(R.layout.i_2ava_oqdo_small, parent, false);
+            return new Ava2RelationDtlSmallVHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(Ava2RelationDtlSmallVHolder holder, int position, List<Object> payloads) {
+            super.onBindViewHolder(holder, position, payloads);
+
+            OqDoPair oqDoPair = mOqDoArrayList.get(position);
+
+
+            JM.glideProfileThumb(
+                    oqDoPair.listOqDo.get(0).getUida(),
+                    oqDoPair.listOqDo.get(0).getNamea(),
+                    holder.ivAvaLeft,
+                    holder.tvAvaLeft,
+                    mActivity
+            );
+
+            JM.glideProfileThumb(
+                    oqDoPair.listOqDo.get(0).getUidb(),
+                    oqDoPair.listOqDo.get(0).getNameb(),
+                    holder.ivAvaRight,
+                    holder.tvAvaRight,
+                    mActivity
+            );
+
+            OqDoUtil.ivTwoAvaRelation(
+                    holder.ivRelation,
+                    oqDoPair.listOqDo
+            );
+
+            long ts = OqDoUtil.getLastTs(oqDoPair.listOqDo);
+            holder.tvDate.setText(JT.str(ts));
+            holder.tvContent.setText(OqDoUtil.getOqDoListStr(oqDoPair.listOqDo));
+
+        }
+
+
+        @Override
+        public long getItemId(int position) {
+            return super.getItemId(position);
+        }
+
+
+        @Override
+        public void onBindViewHolder(Ava2RelationDtlSmallVHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return mOqDoArrayList.size();
+        }
     }
 
 
@@ -473,5 +721,61 @@ public class ProfileActivity extends BaseActivity {
 
     }
 
+    int REQ_PICK_SMS = 98;
+
+    public void startActivityForResultToLoadSMS() {
+        Intent intentLoadSMS = new Intent(this, SMSListActivity.class);
+        startActivityForResult(intentLoadSMS, REQ_PICK_SMS);
+    }
+
+    private void uiDecoration(Activity activity) {
+        ivChat.setImageDrawable(
+                JM.tintedDrawable(
+                        R.drawable.ic_chat_white_48dp,
+                        R.color.colorPrimary,
+                        activity
+                )
+        );
+        ivAddTran.setImageDrawable(
+                JM.tintedDrawable(
+                        R.drawable.ic_add_white_48dp,
+                        R.color.colorPrimary,
+                        activity
+                )
+        );
+    }
+
+
+
+    void setOcl(){
+        ivChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //rid
+                String rid = ChatUtil.createRidWith2Ids(App.getUid(mActivity), profile.getUid());
+
+                //arlJsonProfilesInChat
+                String strProfile = new Gson().toJson(profile);
+                ArrayList<String> arlJsonProfilesInChat = new ArrayList();
+                arlJsonProfilesInChat.add(strProfile);
+
+                Intent intent = new Intent(mActivity, ChatActivity.class);
+                intent.putExtra("rid", rid);
+                intent.putStringArrayListExtra
+                        ("arlJsonProfilesInChat", arlJsonProfilesInChat);
+                startActivity(intent);
+
+            }
+        });
+
+
+        ivAddTran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
 
 }

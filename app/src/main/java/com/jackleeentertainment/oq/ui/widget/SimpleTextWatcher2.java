@@ -7,9 +7,9 @@ import android.widget.EditText;
 
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.object.OqItem;
-import com.jackleeentertainment.oq.object.util.OqItemUtil;
-import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.object.OqDo;
+ import com.jackleeentertainment.oq.object.util.OqDoUtil;
+ import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
 
 /**
@@ -21,13 +21,13 @@ public class SimpleTextWatcher2  implements TextWatcher {
     private EditText mEditText;
     NewOQActivity mNewOQActivity;
     NewOQFrag0Neo mNewOQFrag0;
-    OqItem mOqItem;
+    OqDo mOqDo;
 
-    public SimpleTextWatcher2(EditText editText, OqItem oqItem,
+    public SimpleTextWatcher2(EditText editText, OqDo oqItem,
                              NewOQActivity newOQActivity,
                              NewOQFrag0Neo newOQFrag0Neo) {
         mEditText = editText;
-        mOqItem = oqItem;
+        mOqDo = oqItem;
         mNewOQActivity = newOQActivity;
         mNewOQFrag0= newOQFrag0Neo;
     }
@@ -48,16 +48,16 @@ public class SimpleTextWatcher2  implements TextWatcher {
 
         Log.d(TAG, "afterTextChanged");
         if (mNewOQActivity!=null){
-            OqItem oqItem = OqItemUtil.getOqItemWithUidclaimee(
-                    (mNewOQActivity).arlOQItem_Paid,
-                    mOqItem.getUidgettor());
+            OqDo oqDo = OqDoUtil.getOqDoWithUidB(
+                    (mNewOQActivity).arlOqDo_Paid,
+                    mOqDo.getUidb());
             long l = 0;
             try {
                 l = Long.parseLong(
                         mEditText.getText().toString());
-                oqItem.setAmmount(l);
-                long sum = OqItemUtil.getSumOqItemAmmounts(
-                        (mNewOQActivity).arlOQItem_Paid
+                oqDo.setAmmount(l);
+                long sum = OqDoUtil.getSumOqDoAmmounts(
+                        (mNewOQActivity).arlOqDo_Paid
                 );
                 mNewOQFrag0.tvSumOqItems.setText(JM.strById(R.string.symbol_krw)+String.valueOf(sum));
 

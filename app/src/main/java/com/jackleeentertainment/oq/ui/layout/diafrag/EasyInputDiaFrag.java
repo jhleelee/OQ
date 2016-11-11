@@ -24,6 +24,7 @@ import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQSumT;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.ui.layout.diafrag.list.ItemDiaFragList;
+import com.jackleeentertainment.oq.ui.widget.LoEtMoney;
 import com.jackleeentertainment.oq.ui.widget.NumericKeyBoardTransformationMethod;
 
 import java.util.ArrayList;
@@ -44,11 +45,10 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
     LinearLayout lo;
     RadioGroup radioGroup;
     RadioButton r0, r1, r2;
-    EditText etAmmount;
 
     TextView tvOk, tvCancel;
     String oqSumT = "";
-
+    LoEtMoney loetmomey;
 
     public static EasyInputDiaFrag  newInstance(Bundle bundle, Context context) {
         EasyInputDiaFrag frag = new EasyInputDiaFrag();
@@ -96,10 +96,9 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
                 .r1);
         r2= (RadioButton) view.findViewById(R.id
                 .r2);
-        etAmmount= (EditText) view.findViewById(R.id
-                .etAmmount);
-        etAmmount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        etAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
+        loetmomey= (LoEtMoney) view.findViewById(R.id
+                .loetmomey);
+
 
 
 
@@ -108,8 +107,7 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
         tvCancel = (TextView) view.findViewById(R.id
                 .tvCancel__ro_diafrag_okcancel);
         // Fetch arguments from bundle and set title
-        String title = getArguments().getString("title", "Dialog");
-        getDialog().setTitle(title);
+        getDialog().setTitle(JM.strById(R.string.easy_input));
         // Show soft keyboard automatically and request focus to field
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -248,7 +246,7 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
                 //send Data
 
                 LBR.send(LBR.IntentFilterT.NewOQActivity_Frag0_EasyInput, oqSumT + "," + J.st
-                        (etAmmount.getText().toString()));
+                        (loetmomey.etMoneyAmmount.getText().toString()));
                 dismiss();
             }
         });

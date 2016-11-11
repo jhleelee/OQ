@@ -59,7 +59,7 @@ public class ChatActivity
         View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    static final String TAG = "ChatActivity2";
+    static final String TAG = "ChatActivity";
     final public static int LOADER_MESSAGESLIST = 99;
 
     String rid;
@@ -111,6 +111,7 @@ public class ChatActivity
         super.onResume();
         rid = getIntent().getStringExtra("rid");
         arlJsonProfilesInChat = getIntent().getStringArrayListExtra("arlJsonProfilesInChat");
+
         Log.d(TAG, "arlJsonProfilesInChat.size() : " + J.st(arlJsonProfilesInChat.size()));
         for (int i = 0; i < arlJsonProfilesInChat.size(); i++) {
             Log.d(TAG, "gson.fromJson(arlJsonProfilesInChat.get(i), Profile.class) : " + gson
@@ -121,13 +122,21 @@ public class ChatActivity
         ivSend__lo_chat_writesend.setOnClickListener(this);
         ivAttach__lo_chat_writesend.setOnClickListener(this);
         ivEmoji__lo_chat_writesend.setOnClickListener(this);
+        roClose.setOnClickListener(this);
 
         //setChatRoomTitleAtToolBar
         ArrayList<String> arlNames = ProfileUtil.getArlName(arlProfilesInChat);
         arlNames.remove(App.getUname(this));
-        if (arlNames.size() == 1) {
+        if (arlNames!=null){
+
+            if (arlNames.size() == 1) {
+                tvToolbarTitle.setText(arlNames.get(0));
+            } else {
+                tvToolbarTitle.setText(J.stFromArlWithComma(arlNames));
+            }
 
         }
+
     }
 
 
@@ -140,6 +149,11 @@ public class ChatActivity
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
+            case R.id.roClose:
+                finish();
+                break;
+
             case R.id.ivSend__lo_chat_writesend:
                 //Create Obj
                 Chat chat = new Chat();
@@ -495,9 +509,13 @@ public class ChatActivity
     LinearLayout lo_chat_writesend;
     EditText etSend__lo_chat_writesend;
     ImageView ivSend__lo_chat_writesend, ivEmoji__lo_chat_writesend, ivAttach__lo_chat_writesend;
+    RelativeLayout roClose;
+    TextView tvToolbarTitle;
 
     void initUI() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        roClose = (RelativeLayout) findViewById(R.id.roClose);
+        tvToolbarTitle = (TextView) findViewById(R.id.tvToolbarTitle);
         lv_chat = (ListView) findViewById(R.id.lv_chat);
         setSupportActionBar(toolbar);
         lo_chat_writesend = (LinearLayout) findViewById(R.id.lo_chat_writesend);

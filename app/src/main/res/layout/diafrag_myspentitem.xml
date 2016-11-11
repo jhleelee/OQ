@@ -25,16 +25,17 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dip"
             android:gravity="left"
-            android:hint="@string/title"/>
+            android:hint="@string/lunch_paidforall_fortitle"/>
 
-        <EditText
-            android:id="@+id/etAmmount"
-            style="@style/EditText.Comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <com.jackleeentertainment.oq.ui.widget.LoEtMoney
+            android:id="@+id/loetmomey"
             android:layout_marginBottom="16dip"
-            android:gravity="left"
-            android:hint="@string/money_ammount_neatural"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+
 
         <LinearLayout
             android:id="@+id/loBtSMS"

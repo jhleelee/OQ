@@ -1,55 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
-    <LinearLayout
-        android:gravity="left|top"
-        android:layout_width="@dimen/md_72dip"
-        android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
 
-        <include
-            android:id="@+id/ro_person_photo_48dip__lo_avatar_namemultilinetext_lohourlikereply"
-            android:layout_margin="@dimen/md_12dip"
-            android:layout_width="@dimen/md_48dip"
-            android:layout_height="@dimen/md_48dip"
-            layout="@layout/ro_person_photo_48dip"/>
+        <LinearLayout
+            android:layout_width="@dimen/md_72dip"
+            android:layout_height="match_parent"
+            android:gravity="left|top">
+
+            <include
+                android:id="@+id/ro_person_photo_48dip__lo_avatar_namemultilinetext_lohourlikereply"
+                layout="@layout/ro_ava_48dip"
+                android:layout_width="@dimen/md_48dip"
+                android:layout_height="@dimen/md_48dip"
+                android:layout_margin="@dimen/md_12dip"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginRight="16dip"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingTop="12dip">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvTitle__lo_avatar_namemultilinetext_lohourlikereply"
+                    android:layout_weight="1"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|left"
+                    android:text="Jack"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/md_13sp"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:id="@+id/tvTs"
+                    android:text="8 hours ago"
+                    android:textSize="@dimen/textSizeOfHourAgoFavoriteReply_lohourlikereply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/tvMultiline__lo_avatar_namemultilinetext_lohourlikereply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|left"
+                android:text="Cool Alarm \nNice to Meet you! \nSee You Again!"
+                android:textColor="@android:color/primary_text_dark"
+                android:textSize="@dimen/md_13sp"
+
+                />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"/>
+        </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:paddingTop="12dip"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:layout_width="0dip"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tvTitle__lo_avatar_namemultilinetext_lohourlikereply"
-            android:gravity="center_vertical|left"
-            android:text="Jack"
-            android:textStyle="bold"
-            android:textSize="@dimen/md_13sp"
-            android:textColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-             />
-
-        <TextView
-            android:id="@+id/tvMultiline__lo_avatar_namemultilinetext_lohourlikereply"
-            android:gravity="center_vertical|left"
-            android:text="Cool Alarm \nNice to Meet you! \nSee You Again!"
-            android:textColor="@android:color/primary_text_dark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/md_13sp"
-
-            />
-
-        <include
-            android:id="@+id/lo_hourlikereply__lo_avatar_namemultilinetext_lohourlikereply"
-            layout="@layout/lo_hourlikereply"/>
-
-    </LinearLayout>
-
+    <View
+        android:background="@color/colorItemline"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
 </LinearLayout>

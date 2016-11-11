@@ -36,7 +36,6 @@ public class DiaFragAdapter extends BaseAdapter {
 
     static class ItemDiaFragListViewHolder {
         RelativeLayout ro__i_diafraglist;
-        RelativeLayout ro_person_photo;
         ImageView ro_person_photo_iv;
         TextView tv__i_diafraglist;
     }
@@ -52,8 +51,7 @@ public class DiaFragAdapter extends BaseAdapter {
 
             viewHolder = new ItemDiaFragListViewHolder();
             viewHolder.ro__i_diafraglist = (RelativeLayout) convertView.findViewById(R.id.ro__i_diafraglist);
-            viewHolder.ro_person_photo = (RelativeLayout) convertView.findViewById(R.id.ro_person_photo);
-            viewHolder.ro_person_photo_iv = (ImageView) viewHolder.ro_person_photo.findViewById(R.id.ivAva);
+            viewHolder.ro_person_photo_iv = (ImageView) convertView.findViewById(R.id.ivAva);
             viewHolder.tv__i_diafraglist = (TextView) convertView.findViewById(R.id.tv__i_diafraglist);
             convertView.setTag(viewHolder);
 

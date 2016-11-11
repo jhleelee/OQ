@@ -7,8 +7,6 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.jackleeentertainment.oq.generalutil.J;
-import com.jackleeentertainment.oq.object.OqItem;
-import com.jackleeentertainment.oq.object.util.OqItemUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 
 import java.util.StringTokenizer;

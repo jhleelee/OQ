@@ -26,6 +26,7 @@
     <color name="payPrimaryDark">@color/material_orange700a</color>
 
 
+    <color name="colorItemline">@color/material_grey_400</color>
 
 
 

@@ -23,6 +23,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -36,6 +37,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
@@ -56,6 +58,7 @@ import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
+import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
@@ -63,6 +66,11 @@ import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag0_OQItems;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag1_Feeds;
 import com.jackleeentertainment.oq.ui.layout.fragment.MainFrag2_ChatroomList;
 import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameViewHolder;
+import com.jackleeentertainment.oq.ui.widget.LoAvaName;
+import com.jackleeentertainment.oq.ui.widget.LoIvAvatarTvNameSmallEtAmountLargeIvBtns;
+import com.jackleeentertainment.oq.ui.widget.LoIvAvatarTvTitlesIvDelete;
+import com.jackleeentertainment.oq.ui.widget.NumericKeyBoardTransformationMethod;
+import com.jackleeentertainment.oq.ui.widget.SimpleTextWatcher;
 import com.konifar.fab_transformation.FabTransformation;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -91,13 +99,10 @@ public class MainActivity extends BaseActivity
 
     //Drawer2
     TextView tvTitleDrawerHeader2;
-
-
-    TextView tvRecentTitle;
     SearchView searchViewRightDrawer;
     FirebaseRecyclerAdapter<Profile, AvatarNameViewHolder> frvAdapterMyRecent,
             frvAdapterAllMyContact;
-    RecyclerView rvRightDrawerAll, rvRightDrawerRecent;
+    RecyclerView rvRightDrawerAll;
 
     //ViewPager
     MainActivityPagerAdapter mainActivityPagerAdapter;
@@ -483,8 +488,12 @@ public class MainActivity extends BaseActivity
                 initUiDataDrawer();
             }
         };
+
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        // Beppi
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -518,20 +527,16 @@ public class MainActivity extends BaseActivity
 
         tvTitleDrawerHeader2 = (TextView) findViewById(R.id.tvTitle_DrawerHeader2);
         tvTitleDrawerHeader2.setText(JM.strById(R.string.contacts));
-        tvRecentTitle = (TextView) navigationView2.findViewById(R.id.tvRecentTitle);
-        rvRightDrawerRecent = (RecyclerView) navigationView2.findViewById(R.id.rvRightDrawerRecent);
+
         searchViewRightDrawer = (SearchView) navigationView2.findViewById(R.id.searchViewRightDrawer);
         rvRightDrawerAll = (RecyclerView) navigationView2.findViewById(R.id.rvRightDrawerAll);
 
 
-        RecyclerView rvRightDrawerAll = (RecyclerView) findViewById(R.id.rvRightDrawerAll);
-        RecyclerView rvRightDrawerRecent = (RecyclerView) findViewById(R.id.rvRightDrawerRecent);
+        rvRightDrawerAll = (RecyclerView) findViewById(R.id.rvRightDrawerAll);
 
         rvRightDrawerAll.setHasFixedSize(true);
         rvRightDrawerAll.setLayoutManager(new LinearLayoutManager(this));
 
-        rvRightDrawerRecent.setHasFixedSize(true);
-        rvRightDrawerRecent.setLayoutManager(new LinearLayoutManager(this));
 
         frvAdapterAllMyContact = new FirebaseRecyclerAdapter<Profile, AvatarNameViewHolder>
                 (Profile.class,
@@ -564,69 +569,8 @@ public class MainActivity extends BaseActivity
         rvRightDrawerAll.setAdapter(frvAdapterAllMyContact);
 
 
-        frvAdapterMyRecent = new FirebaseRecyclerAdapter<Profile, AvatarNameViewHolder>
-                (Profile.class,
-                        R.layout.lo_avatar_name,
-                        AvatarNameViewHolder.class,
-                        App.fbaseDbRef
-                                .child(FBaseNode0.MyRecent)
-                                .child(App.getUid(this))
-                ) {
-            public void populateViewHolder(
-                    final AvatarNameViewHolder avatarNameViewHolder,
-                    final Profile profile, int position) {
-
-                avatarNameViewHolder.tvTitle__lo_avatar_name
-                        .setText(profile.getFull_name()
-                        );
-
-                avatarNameViewHolder.tvTitle__lo_avatar_name
-                        .setTextColor(JM.colorById(R.color.text_black_87)
-                        );
-                //set Image
-                if (profile.getUid() != null) {
 
 
-                    JM.glideProfileThumb(
-                            profile.getUid(),
-                            profile.getFull_name(),
-
-                            avatarNameViewHolder.ro_person_photo_iv,
-                            avatarNameViewHolder.ro_person_photo_tv,
-                            mActivity
-                    );
-
-
-                }
-
-                View.OnClickListener onClickListener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("diaFragT", DiaFragT.TransactChatOrShowProfile);
-                        bundle.putString("title", profile.getFull_name() + " 님");
-                        bundle.putSerializable("Profile", profile);
-
-                        showDialogFragment(bundle);
-                    }
-                };
-
-                avatarNameViewHolder.ro_person_photo_48dip__lo_avatar_name
-                        .setOnClickListener(onClickListener);
-
-                avatarNameViewHolder.ro_person_photo_iv
-                        .setOnClickListener(onClickListener);
-
-                avatarNameViewHolder.ro_person_photo_tv
-                        .setOnClickListener(onClickListener);
-
-                avatarNameViewHolder.tvTitle__lo_avatar_name
-                        .setOnClickListener(onClickListener);
-
-
-            }
-        };
-        rvRightDrawerRecent.setAdapter(frvAdapterMyRecent);
 
 
         //the intent filter will be action = "com.example.demo_service.action.SERVICE_FINISHED"
@@ -726,6 +670,10 @@ public class MainActivity extends BaseActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+
+        // Beppi
+        if (id == R.id.action_friends)
+            drawer.openDrawer(GravityCompat.END, true);
         //noinspection SimplifiableIfStatement
 
 
@@ -841,9 +789,12 @@ public class MainActivity extends BaseActivity
 
 
             case R.id.nav_account_setting:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_logout:
+                App.logout(mActivity);
                 break;
 
         }
@@ -869,6 +820,9 @@ public class MainActivity extends BaseActivity
 
 
     }
+
+
+
 
 
     @Override
@@ -927,7 +881,7 @@ public class MainActivity extends BaseActivity
     StorageReference mTempStorageRefpx96;  //mTempStorageRef was previously used to transfer data.
     StorageReference mTempStorageRefpx144;  //mTempStorageRef was previously used to transfer data.
     ArrayList<StorageReference> arlRef = new ArrayList<>();
-    int counter =0;
+    int counter = 0;
 
     public void uploadProfPhoto(
             final Uri uri,
@@ -998,7 +952,7 @@ public class MainActivity extends BaseActivity
             arlRef.add(mTempStorageRefpx96);
             arlRef.add(mTempStorageRefpx144);
 
-              counter = 0;
+            counter = 0;
             for (int i = 0; i < 6; i++) {
 
                 Log.d(TAG, "uploadProfPhoto() loop " + J.st(i));

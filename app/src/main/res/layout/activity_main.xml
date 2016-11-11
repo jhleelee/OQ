@@ -69,30 +69,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:paddingLeft="16dip"
-                    android:paddingTop="8dip"
-                    android:paddingBottom="8dip"
-                    android:id="@+id/tvRecentTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/recent_profiles"
-                    android:textSize="12sp"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rvRightDrawerRecent"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dip"
-                    android:layout_weight="1"
-                    android:choiceMode="singleChoice"/>
-
-            </LinearLayout>
 
             <View
                 android:layout_marginTop="8dip"

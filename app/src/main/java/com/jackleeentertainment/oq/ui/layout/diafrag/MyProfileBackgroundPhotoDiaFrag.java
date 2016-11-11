@@ -47,6 +47,7 @@ public class MyProfileBackgroundPhotoDiaFrag extends BaseDiaFrag {
         super.onViewCreated(view, savedInstanceState);
 
         getDialog().setTitle(JM.strById(R.string.change_photo));
+        JM.G(viewForMarginBelow);
 
         JM.G(lo_numselectedprofiles_add__lo_diafrag);
         JM.V(lv__lo_diafragwithiconlist);
@@ -54,22 +55,22 @@ public class MyProfileBackgroundPhotoDiaFrag extends BaseDiaFrag {
         JM.G(ro_diafrag_okcancel__lo_diafragwithiconlist);
 
         //Items
-        ItemDiaFragList iProfilePhoto = new ItemDiaFragList();
-        iProfilePhoto.setText(JM.strById(R.string.change_profile_photo));
-        iProfilePhoto.setDrawableIco(
+        ItemDiaFragList iProf = new ItemDiaFragList();
+        iProf.setText(JM.strById(R.string.change_profile_photo));
+        iProf.setDrawableIco(
                 JM.tintedDrawable(
                         R.drawable.ic_person_white_48dp,
                         R.color.colorPrimary,
                         getActivity()
                 )
         );
-        iProfilePhoto.setDrawableBg(
+        iProf.setDrawableBg(
                 JM.drawableById(
                         R.drawable.btn_transparent
                 )
         );
 
-        iProfilePhoto.setOnClickListener(new View.OnClickListener() {
+        iProf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)mContext).startActivityForResultPhotoGalleryToPROFILECHANGE();
@@ -99,7 +100,7 @@ public class MyProfileBackgroundPhotoDiaFrag extends BaseDiaFrag {
             }
         });
 
-        arl.add(iProfilePhoto);
+        arl.add(iProf);
         arl.add(iBg);
 
         diaFragAdapter = new DiaFragAdapter(arl, mContext);

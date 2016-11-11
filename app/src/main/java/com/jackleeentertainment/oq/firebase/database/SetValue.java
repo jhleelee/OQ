@@ -13,8 +13,7 @@ import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.Ram;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Chat;
-import com.jackleeentertainment.oq.object.MyOppo;
-import com.jackleeentertainment.oq.object.Post;
+import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.Profile;
 
 import java.util.ArrayList;
@@ -179,45 +178,43 @@ public class SetValue {
 
 
 
-    public static void updateMyRecentProfilesWithOppo(
-            final ArrayList<MyOppo> arlMyOppo,
-            final Activity activity) {
-
-        for (MyOppo myOppo : arlMyOppo) {
-
-            App.fbaseDbRef
-                    .child(FBaseNode0.ProfileToPublic)
-                    .child(myOppo.getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()){
-                                Profile profile = dataSnapshot.getValue(Profile.class);
-                                SetValue.updateMyRecentProfile(profile, activity);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-        }
-
-
-    }
+//    public static void updateMyRecentProfilesWithOppo(
+//            final ArrayList<MyOppo> arlMyOppo,
+//            final Activity activity) {
+//
+//        for (MyOppo myOppo : arlMyOppo) {
+//
+//            App.fbaseDbRef
+//                    .child(FBaseNode0.ProfileToPublic)
+//                    .child(myOppo.getUid())
+//                    .addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            if (dataSnapshot.exists()){
+//                                Profile profile = dataSnapshot.getValue(Profile.class);
+//                                SetValue.updateMyRecentProfile(profile, activity);
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//        }
+//    }
 
 
     /*
     OQPost.class
     */
 
-    public static void post(final Post post,
+    public static void post(final OQPost post,
                             final boolean toRamLBR) {
         App.fbaseDbRef
                 .child(FBaseNode0.OQPost)
-                .child(post.getOid())
+                .child(post.getUid())
+                .child(post.getPid())
                 .setValue(post, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -230,24 +227,24 @@ public class SetValue {
                 });
     }
 
-    public static void postWithPushId(final Post post,
-                                      final boolean toRamLBR) {
-        String pushId = SetValueUtil.getPushKey(FBaseNode0.OQPost);
-        post.setOid(pushId);
-        App.fbaseDbRef
-                .child(FBaseNode0.OQPost)
-                .child(post.getOid())
-                .setValue(post, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        if (databaseError == null) {
-                            if (toRamLBR) {
-                                LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.SENT, post);
-                            }
-                        }
-                    }
-                });
-    }
+//    public static void postWithPushId(final Post post,
+//                                      final boolean toRamLBR) {
+//        String pushId = SetValueUtil.getPushKey(FBaseNode0.OQPost);
+//        post.setOid(pushId);
+//        App.fbaseDbRef
+//                .child(FBaseNode0.OQPost)
+//                .child(post.getOid())
+//                .setValue(post, new DatabaseReference.CompletionListener() {
+//                    @Override
+//                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                        if (databaseError == null) {
+//                            if (toRamLBR) {
+//                                LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.SENT, post);
+//                            }
+//                        }
+//                    }
+//                });
+//    }
 
     public static void cache(final Chat chat,
                              final boolean toRamLBR) {
@@ -258,22 +255,22 @@ public class SetValue {
     /*
 OQ
 */
-    public static void myOQItems(final Post post,
-                                 final boolean toRamLBR) {
-        App.fbaseDbRef
-                .child(FBaseNode0.MyOqWraps)
-                .child(post.getOid())
-                .setValue(post, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        if (databaseError == null) {
-                            if (toRamLBR) {
-                                LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.SENT, post);
-                            }
-                        }
-                    }
-                });
-    }
+//    public static void myOQItems(final Post post,
+//                                 final boolean toRamLBR) {
+//        App.fbaseDbRef
+//                .child(FBaseNode0.MyOqWraps)
+//                .child(post.getOid())
+//                .setValue(post, new DatabaseReference.CompletionListener() {
+//                    @Override
+//                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                        if (databaseError == null) {
+//                            if (toRamLBR) {
+//                                LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.SENT, post);
+//                            }
+//                        }
+//                    }
+//                });
+//    }
 
 
 }

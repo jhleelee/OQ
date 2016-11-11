@@ -26,8 +26,8 @@ import com.google.firebase.storage.StorageReference;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
-import com.jackleeentertainment.oq.object.MyOppo;
-import com.jackleeentertainment.oq.object.OqDo;
+ import com.jackleeentertainment.oq.object.OqDo;
+import com.jackleeentertainment.oq.object.OqDoPair;
 import com.jackleeentertainment.oq.object.OqWrap;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
@@ -333,64 +333,64 @@ public class JM {
     }
 
 
-    public static void tvAmtTextBgAboutMuOppo(TextView tvAmt, MyOppo myOppo, int
-            zeroNormalOneArguedTwoDone
-    ) {
-        if (zeroNormalOneArguedTwoDone == 0) {
-
-            long val = myOppo.getAmticlaim() - myOppo.getAmtheclaim();
-
-            if (val > 0) {
-                tvAmt.setText(J.st(val));
-                JM.BGD(tvAmt, R.drawable.tv_oppo_normal_iplus);
-            } else if (val == 0) {
-                tvAmt.setVisibility(View.GONE);
+//    public static void tvAmtTextBgAboutMuOppo(TextView tvAmt, MyOppo myOppo, int
+//            zeroNormalOneArguedTwoDone
+//    ) {
+//        if (zeroNormalOneArguedTwoDone == 0) {
+//
+//            long val = myOppo.getAmticlaim() - myOppo.getAmtheclaim();
+//
+//            if (val > 0) {
+//                tvAmt.setText(J.st(val));
+//                JM.BGD(tvAmt, R.drawable.tv_oppo_normal_iplus);
+//            } else if (val == 0) {
+//                tvAmt.setVisibility(View.GONE);
+////                tvAmt.setText(JM.strById(R.string.none));
+////                JM.BGD(tvAmt,R.drawable.tv_oppo_confirmed_zero);
+//            } else if (val < 0) {
+//                tvAmt.setText(J.st(-val));
+//                JM.BGD(tvAmt, R.drawable.tv_oppo_normal_iminus);
+//            }
+//
+//        } else if (zeroNormalOneArguedTwoDone == 1) {
+//
+//            long val = myOppo.getAmticlaimarg() - myOppo.getAmtheclaimarg();
+//
+//            if (val > 0) {
+//                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(val) + JM.strById(R.string
+//                        .request));
+//                JM.BGD(tvAmt, R.drawable.tv_oppo_argued_iplus);
+//                JM.TC(tvAmt, R.color.getPrimary);
+//
+//            } else if (val == 0) {
+//                tvAmt.setVisibility(View.GONE);
+////                tvAmt.setText(JM.strById(R.string.none));
+////                JM.BGD(tvAmt,R.drawable.tv_oppo_yet_zero);
+//            } else if (val < 0) {
+//                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(-val) + JM.strById(R.string
+//                        .request));
+//                JM.BGD(tvAmt, R.drawable.tv_oppo_argued_iminus);
+//                JM.TC(tvAmt, R.color.payPrimary);
+//
+//            }
+//
+//        } else if (zeroNormalOneArguedTwoDone == 2) {
+//            long val = myOppo.getAmticlaimdone() - myOppo.getAmtheclaimdone();
+//
+//            if (val > 0) {
+//                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(val) + JM.strById(R.string
+//                        .request));
+//                JM.TC(tvAmt, R.color.getPrimary);
+//            } else if (val == 0) {
 //                tvAmt.setText(JM.strById(R.string.none));
-//                JM.BGD(tvAmt,R.drawable.tv_oppo_confirmed_zero);
-            } else if (val < 0) {
-                tvAmt.setText(J.st(-val));
-                JM.BGD(tvAmt, R.drawable.tv_oppo_normal_iminus);
-            }
-
-        } else if (zeroNormalOneArguedTwoDone == 1) {
-
-            long val = myOppo.getAmticlaimarg() - myOppo.getAmtheclaimarg();
-
-            if (val > 0) {
-                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(val) + JM.strById(R.string
-                        .request));
-                JM.BGD(tvAmt, R.drawable.tv_oppo_argued_iplus);
-                JM.TC(tvAmt, R.color.getPrimary);
-
-            } else if (val == 0) {
-                tvAmt.setVisibility(View.GONE);
-//                tvAmt.setText(JM.strById(R.string.none));
-//                JM.BGD(tvAmt,R.drawable.tv_oppo_yet_zero);
-            } else if (val < 0) {
-                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(-val) + JM.strById(R.string
-                        .request));
-                JM.BGD(tvAmt, R.drawable.tv_oppo_argued_iminus);
-                JM.TC(tvAmt, R.color.payPrimary);
-
-            }
-
-        } else if (zeroNormalOneArguedTwoDone == 2) {
-            long val = myOppo.getAmticlaimdone() - myOppo.getAmtheclaimdone();
-
-            if (val > 0) {
-                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(val) + JM.strById(R.string
-                        .request));
-                JM.TC(tvAmt, R.color.getPrimary);
-            } else if (val == 0) {
-                tvAmt.setText(JM.strById(R.string.none));
-
-            } else if (val < 0) {
-                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(-val) + JM.strById(R.string
-                        .request));
-                JM.TC(tvAmt, R.color.payPrimary);
-            }
-        }
-    }
+//
+//            } else if (val < 0) {
+//                tvAmt.setText(JM.strById(R.string.symbol_krw) + J.st(-val) + JM.strById(R.string
+//                        .request));
+//                JM.TC(tvAmt, R.color.payPrimary);
+//            }
+//        }
+//    }
 
 
     /********************************
@@ -724,6 +724,50 @@ public class JM {
 
 
 
+
+
+
+    public static void glideProfileOrig(final String uid,
+                                         final ImageView iv, final TextView tv,
+                                         final Activity
+                                                 mActivity) {
+        //set Image
+        Glide.with(mActivity)
+                .using(new FirebaseImageLoader())
+                .load(App.fbaseStorageRef
+                        .child(FStorageNode.FirstT.PROFILE_PHOTO)
+                        .child("orig")
+                        .child(uid))
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        iv.setVisibility(View.GONE);
+                        tv.setVisibility(View.VISIBLE);
+                        tv.setText(JM.strById(R.string.file_not_found));
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        iv.setVisibility(View.VISIBLE);
+                        tv.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(iv);
+    }
+
+
+
+
+
+
+
+
+
+
    public static void  ivTwoAvaRelation(ImageView iv, OqWrap oqWrap){
 
        List<OqDo> listoqdo = oqWrap.getListoqdo();
@@ -732,7 +776,7 @@ public class JM {
        OqDo firstOqdo = listoqdo.get(0);
 
        if (firstOqdo.getOqwhat().equals(OQT.DoWhat.GET)&&
-               firstOqdo.getOqwhat().equals(OQT.DoWhen.FUTURE)){
+               firstOqdo.getOqwhen().equals(OQT.DoWhen.FUTURE)){
 
            List<OqDo> listBaPayFuture = OqDoUtil.getListBaPayFuture(listoqdo);
            long sumListBaPayFuture = OqDoUtil.getSumAmt(listBaPayFuture);
@@ -773,6 +817,11 @@ public class JM {
        }
 
    }
+
+
+
+
+
 
 
 }

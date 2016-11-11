@@ -17,6 +17,7 @@ public class FBaseNode0 {
     public final static String MyOppoOids = "my_oppo";
 
     public final static String MyOppoList = "my_oppolist";
+    public final static String MyOqPerson = "my_oqperson";
 
 
 
@@ -36,6 +37,9 @@ public class FBaseNode0 {
 
     public final static String OQPost = "post";
     public final static String OQPostPhoto = "postph";
+    public final static String OQPostComment = "postco";
+
+
 
 
 }

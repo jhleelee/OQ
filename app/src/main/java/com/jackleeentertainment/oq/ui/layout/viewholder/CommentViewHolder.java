@@ -2,6 +2,7 @@ package com.jackleeentertainment.oq.ui.layout.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,63 +17,42 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 
 
     View mView;
-    RelativeLayout ro_person_photo_48dip__lo_avatar_namemultilinetext_lohourlikereply;
-    TextView tvTitle__lo_avatar_namemultilinetext_lohourlikereply, tvMultiline__lo_avatar_namemultilinetext_lohourlikereply,
-    tvHourAgo__lo_hourlikereply, tvFavorite__lo_hourlikereply, tvReply__lo_hourlikereply;
-    LinearLayout lo_hourlikereply__lo_avatar_namemultilinetext_lohourlikereply;
+  public   RelativeLayout roAvatar;
+    public  ImageView ivAvatar;
+    public  TextView tvAvatar,tvName,
+             tvMultiline,
+            tvTs;
 
 
 
     public CommentViewHolder(View itemView) {
         super(itemView);
         mView = itemView;
-        ro_person_photo_48dip__lo_avatar_namemultilinetext_lohourlikereply =
+        roAvatar =
                 (RelativeLayout) mView
                         .findViewById(R.id.ro_person_photo_48dip__lo_avatar_namemultilinetext_lohourlikereply);
-        tvTitle__lo_avatar_namemultilinetext_lohourlikereply =
+
+        ivAvatar =
+                (ImageView) mView
+                        .findViewById(R.id.ivAva);
+
+
+        tvAvatar =
                 (TextView) mView
-                        .findViewById(R.id.tvTitle__lo_avatar_namemultilinetext_lohourlikereply);
-        tvMultiline__lo_avatar_namemultilinetext_lohourlikereply =
+                        .findViewById(R.id.tvAva);
+        tvName = (TextView) mView.findViewById(R.id
+                .tvTitle__lo_avatar_namemultilinetext_lohourlikereply);
+        tvMultiline =
                 (TextView) mView
                         .findViewById(R.id.tvMultiline__lo_avatar_namemultilinetext_lohourlikereply);
-        lo_hourlikereply__lo_avatar_namemultilinetext_lohourlikereply =
-                (LinearLayout) mView
-                        .findViewById(R.id.lo_hourlikereply__lo_avatar_namemultilinetext_lohourlikereply);
 
-        tvHourAgo__lo_hourlikereply =
-                (TextView) lo_hourlikereply__lo_avatar_namemultilinetext_lohourlikereply
-                        .findViewById(R.id.tvHourAgo__lo_hourlikereply);
-        tvFavorite__lo_hourlikereply =
-                (TextView) lo_hourlikereply__lo_avatar_namemultilinetext_lohourlikereply
-                        .findViewById(R.id.tvFavorite__lo_hourlikereply);
-        tvReply__lo_hourlikereply =
-                (TextView) lo_hourlikereply__lo_avatar_namemultilinetext_lohourlikereply
-                        .findViewById(R.id.tvReply__lo_hourlikereply);
+        tvTs =
+                (TextView) mView
+                        .findViewById(R.id.tvTs);
+
 
     }
 
 
-    public void setCommentorPhoto(String personUid) {
-        //Glide
-    }
 
-    public void setCommentorName(String personName) {
-        //tvTitle__lo_avatar_namedate_chatread.setText();
-    }
-
-    public void setBodyContent(String content) {
-        //
-    }
-
-    public void setBodyHourAgo(String hourAgo) {
-        //
-    }
-
-    public void setBodyFavoriteNum(int favoriteNum) {
-        //
-    }
-
-    public void setBodyReplyNum(int replyNum) {
-        //
-    }
 }
