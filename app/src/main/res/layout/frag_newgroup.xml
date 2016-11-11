@@ -11,7 +11,6 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/cardviewTitlePhoto"
-            android:visibility="gone"
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             card_view:cardElevation="4dp"
@@ -100,15 +99,14 @@
                         android:textSize="@dimen/md_13sp"/>
 
                     <EditText
+                        style="@style/EditText.Comment"
                         android:id="@+id/etTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="8dip"
                         android:layout_marginBottom="@dimen/md_16dip"
                         android:layout_marginLeft="@dimen/md_16dip"
                         android:layout_marginRight="@dimen/md_16dip"
                         android:lines="1"
-                        android:background="@drawable/rec_radmd2_str1_primarydark"
                         android:gravity="left|top"
                         android:hint="@string/ourfloor_group"
                         android:textSize="@dimen/textSizeOfTabToAdd"/>
@@ -122,46 +120,78 @@
 
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/cardviewMember"
-            card_view:cardElevation="4dp"
-            android:visibility="gone"
 
+
+
+        <android.support.v7.widget.CardView
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cvPeople"
             android:layout_width="match_parent"
-            android:layout_height="300dip"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            card_view:cardElevation="4dp"
             card_view:cardUseCompatPadding="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <!--Head Title-->
+                <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                          android:id="@+id/tvToGetOrPay"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:padding="@dimen/md_16dip"
+                          android:text="@string/dummyname"
+                          android:textSize="@dimen/md_24sp"/>
+
+                <LinearLayout
+                    android:id="@+id/loBtAddPeople"
+                    android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dip"
-                    android:layout_marginLeft="@dimen/md_16dip"
-                    android:layout_marginRight="@dimen/md_16dip"
-                    android:layout_marginTop="@dimen/md_16dip"
-                    android:text="@string/member_group"
-                    android:textSize="@dimen/md_13sp"/>
+                    android:layout_marginLeft="@dimen/md_12dip"
+                    android:orientation="horizontal">
 
-                <ListView
-                    android:id="@+id/lvMembers"
+                    <ImageView
+                        android:id="@+id/ivBtAddPeople"
+                        style="@style/ImageView.WhiteImageSrcTransparentBg.36"
+                        android:layout_width="40dip"
+                        android:layout_height="40dip"
+                        android:src="@drawable/ic_add_white_48dp"/>
+
+                    <TextView
+                        android:id="@+id/tvBtAddPeople"
+                        android:layout_width="0dip"
+                        android:layout_height="56dip"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|start"
+                        android:text="@string/member_group"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16dip"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/loSelectedPeople"
                     android:layout_width="match_parent"
-                    android:layout_height="0dip"
-                    android:layout_margin="16dip"
-                    android:layout_marginBottom="@dimen/md_16dip"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="16dip"/>
 
-                    android:layout_weight="1">
-                </ListView>
+                //for delete all
 
             </LinearLayout>
-
-
         </android.support.v7.widget.CardView>
+
+
+
+
 
 
         <android.support.v7.widget.CardView
@@ -189,18 +219,16 @@
                     android:text="@string/ammount_by_period"
                     android:textSize="@dimen/md_13sp"/>
 
-                <EditText
-                    android:hint="@string/won10000"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dip"
+                <com.jackleeentertainment.oq.ui.widget.LoEtMoney
+                    android:id="@+id/loetmomey"
                     android:layout_marginBottom="@dimen/md_16dip"
                     android:layout_marginLeft="@dimen/md_16dip"
                     android:layout_marginRight="@dimen/md_16dip"
-                    android:background="@drawable/rec_radmd2_str1_primarydark"
-                    android:gravity="center"
-                    android:lines="1"
-                    android:textSize="@dimen/md_24sp"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -208,6 +236,7 @@
                     android:orientation="vertical">
 
                     <Switch
+                        android:id="@+id/sw"
                         android:layout_width="match_parent"
                         android:layout_height="48dip"
                         android:paddingLeft="16dip"
@@ -252,7 +281,10 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-
+        <View
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"/>
         <include
             android:id="@+id/ro_tv_done"
             layout="@layout/ro_tv_done"

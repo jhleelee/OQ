@@ -46,7 +46,7 @@ public class App extends Application {
 
     //Firebase Ref
     public static FirebaseAuth mAuth;
-     public static FirebaseAuth.AuthStateListener mAuthListener;
+    public static FirebaseAuth.AuthStateListener mAuthListener;
     public static FirebaseDatabase firebaseDatabase;
     public static DatabaseReference fbaseDbRef;
     public static FirebaseStorage firebaseStorage;

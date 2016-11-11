@@ -15,6 +15,8 @@ public class MyOqPost {
     public MyOqPost() {
         super();
     }
+
+
     public long getTs() {
         return ts;
     }

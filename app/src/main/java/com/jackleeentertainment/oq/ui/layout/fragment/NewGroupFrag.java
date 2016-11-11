@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -37,6 +38,9 @@ import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Group;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.ui.layout.activity.NewGroupActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.ui.widget.LoEtMoney;
 
 import java.util.ArrayList;
 
@@ -48,25 +52,27 @@ public class NewGroupFrag extends Fragment {
 
     final int REQ_PEOPLE = 99;
     String TAG = this.getClass().getSimpleName();
-    SelectedPeopleListAdapter selectedPeopleListAdapter;
-    ArrayList<Profile> mArrayListProfile = new ArrayList<>();
+     ArrayList<Profile> mArrayListProfile = new ArrayList<>();
     View view;
 
-    CardView cardviewTitlePhoto, cardviewMember, cardviewAmmount;
+    CardView cardviewTitlePhoto,  cardviewAmmount, cvPeople;
 
     EditText etTitle;
     ImageView ivPhotoMain;
     ImageButton ibChangePhoto;
     RelativeLayout roEmpty;
     TextView tvEmpty;
-    ListView lvMembers;
     TextView tvFirstDate;
     Spinner spinnerPeriod;
-
+    TextView tvToGetOrPay;
     RelativeLayout ro_tv_done;
     LinearLayout lo_invoice_multi;
-
-
+    LinearLayout loBtAddPeople;
+    ImageView ivBtAddPeople;
+    TextView tvBtAddPeople;
+    LinearLayout loSelectedPeople;
+    LoEtMoney loetmomey;
+    Switch sw;
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -115,53 +121,57 @@ public class NewGroupFrag extends Fragment {
 
         cardviewTitlePhoto = (CardView) view.findViewById(R.id
                 .cardviewTitlePhoto);
-        cardviewMember = (CardView) view.findViewById(R.id
-                .cardviewMember);
-        cardviewAmmount = (CardView) view.findViewById(R.id
-                .cardviewAmmount);
-        ro_tv_done = (RelativeLayout) view.findViewById(R.id
-                .ro_tv_done);
-
-        JM.V(cardviewTitlePhoto);
-        JM.G(cardviewMember);
-        JM.G(cardviewAmmount);
-        JM.G(ro_tv_done);
-
-        etTitle = (EditText) view.findViewById(R.id
-                .etTitle);
-
         ivPhotoMain = (ImageView) view.findViewById(R.id
                 .ivPhotoMain);
         ibChangePhoto = (ImageButton) view.findViewById(R.id
                 .ibChangePhoto);
+
         roEmpty = (RelativeLayout) view.findViewById(R.id
                 .roEmpty);
+
         tvEmpty = (TextView) view.findViewById(R.id
                 .tvEmpty);
-        lvMembers = (ListView) view.findViewById(R.id
-                .lvMembers);
+
+
+        etTitle = (EditText) view.findViewById(R.id
+                .etTitle);
+
+        cvPeople= (CardView) view.findViewById(R.id
+                .cvPeople);
+
+        tvToGetOrPay= (TextView) view.findViewById(R.id
+                .tvToGetOrPay);
+
+        loBtAddPeople= (LinearLayout) view.findViewById(R.id
+                .loBtAddPeople);
+        ivBtAddPeople = (ImageView) view.findViewById(R.id
+                .ivBtAddPeople);
+        tvBtAddPeople= (TextView) view.findViewById(R.id
+                .tvBtAddPeople);
+
+        loSelectedPeople= (LinearLayout) view.findViewById(R.id
+                .loSelectedPeople);
+
+        cardviewAmmount = (CardView) view.findViewById(R.id
+                .cardviewAmmount);
+
+        loetmomey= (LoEtMoney) view.findViewById(R.id
+                .loetmomey);
+
+        lo_invoice_multi = (LinearLayout) view.findViewById(R.id
+                .lo_invoice_multi);
         tvFirstDate = (TextView) view.findViewById(R.id
                 .tvFirstDate);
         spinnerPeriod = (Spinner) view.findViewById(R.id
                 .spinnerPeriod);
 
-        lo_invoice_multi = (LinearLayout) view.findViewById(R.id
-                .lo_invoice_multi);
-
+        sw = (Switch)view.findViewById(R.id.sw);
+        ro_tv_done = (RelativeLayout) view.findViewById(R.id
+                .ro_tv_done);
 
     }
 
 
-    void uiDependOnGroup(Group group) {
-        if (group != null) {
-            if (group.getTitle() == null || group.getTitle().length() == 0) {
-                JM.V(cardviewTitlePhoto);
-                JM.G(cardviewMember);
-                JM.G(cardviewAmmount);
-                JM.G(ro_tv_done);
-            }
-        }
-    }
 
 
     void initUiData() {
@@ -183,33 +193,44 @@ public class NewGroupFrag extends Fragment {
 
 
                 if (etTitle.getText().length() > 0) {
-                    cardviewMember.animate()
-                            .translationY(-cardviewMember.getHeight())
-                            .alpha(1.0f)
-                            .setDuration(300)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    cardviewMember.setVisibility(View.VISIBLE);
-                                }
-                            });
+//                    cardviewMember.animate()
+//                            .translationY(-cardviewMember.getHeight())
+//                            .alpha(1.0f)
+//                            .setDuration(300)
+//                            .setListener(new AnimatorListenerAdapter() {
+//                                @Override
+//                                public void onAnimationEnd(Animator animation) {
+//                                    super.onAnimationEnd(animation);
+//                                    cardviewMember.setVisibility(View.VISIBLE);
+//                                }
+//                            });
                 } else {
-                    cardviewMember.animate()
-                            .translationY(cardviewMember.getHeight())
-                            .alpha(0.0f)
-                            .setDuration(100)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    cardviewMember.setVisibility(View.GONE);
-                                }
-                            });
+//                    cardviewMember.animate()
+//                            .translationY(cardviewMember.getHeight())
+//                            .alpha(0.0f)
+//                            .setDuration(100)
+//                            .setListener(new AnimatorListenerAdapter() {
+//                                @Override
+//                                public void onAnimationEnd(Animator animation) {
+//                                    super.onAnimationEnd(animation);
+//                                    cardviewMember.setVisibility(View.GONE);
+//                                }
+//                            });
                 }
             }
         });
 
+
+    }
+
+
+    void initOCL(){
+        loBtAddPeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((NewGroupActivity) getActivity()).startActivityForResultPeopleActivity();
+            }
+        });
 
     }
 
@@ -250,19 +271,13 @@ public class NewGroupFrag extends Fragment {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, JM.strById(R.string.select_receipt_photo)),
+        startActivityForResult(Intent.createChooser(intent, JM.strById(R.string.select_photo)),
                 REQ_PICK_IMAGE);
     }
 
 
-    void initAdapterData() {
-        uiDataCardViewPeopleList(mArrayListProfile);
-    }
 
 
-    void initAdapter() {
-        selectedPeopleListAdapter = new SelectedPeopleListAdapter(getActivity());
-    }
 
 
 
@@ -279,6 +294,10 @@ public class NewGroupFrag extends Fragment {
                     uiDataCardViewPeopleList(result);
                     break;
 
+                case REQ_PICK_IMAGE:
+                    Uri uri = data.getData();
+                    uiPhoto(uri);
+                    break;
 
             }
 
@@ -295,112 +314,7 @@ public class NewGroupFrag extends Fragment {
 
     }
 
-    private void uiDataCardViewPeopleList(ArrayList<Profile> arlProfiles) {
-        if (arlProfiles == null || arlProfiles.size() == 0) {
-
-        } else {
-
-        }
-    }
-
-    static class SelectedPeopleListAdapter extends BaseAdapter {
-
-        LayoutInflater mInflater;
-        Context mContext;
-        ArrayList<Profile> mArrayListProfile = new ArrayList<>();
-
-        public SelectedPeopleListAdapter(Context context) {
-            super();
-            this.mContext = context;
-            mInflater = LayoutInflater.from(this.mContext);
-        }
 
 
-        @Override
-        public int getCount() {
-            return mArrayListProfile.size();
-        }
-
-        @Override
-        public Profile getItem(int position) {
-            return mArrayListProfile.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            // create a ViewHolderReceipt reference
-            SelectedPeopleListAdapter.ProfileViewHolder holder;
-
-            //check to see if the reused view is null or not, if is not null then reuse it
-            if (convertView == null) {
-                holder = new SelectedPeopleListAdapter.ProfileViewHolder();
-                convertView = mInflater.inflate(R.layout.lo_avatar_titlesubtitle_delete, parent, false);
-
-                // get all views you need to handle from the cell and save them in the view holder
-
-                holder.ro_person_photo_48dip__lo_avatartitlesubtitle_delete = (RelativeLayout) convertView.findViewById(R.id
-                        .ro_person_photo_48dip__lo_avatartitlesubtitle_delete);
-                holder.ro_person_photo_iv = (ImageView)
-                        holder.ro_person_photo_48dip__lo_avatartitlesubtitle_delete
-                                .findViewById(R.id
-                                        .ivAva);
-                holder.tvTitle__lo_avatartitlesubtitle_delete = (TextView) convertView.findViewById(R.id.tvTitle__lo_avatartitlesubtitle_delete);
-                holder.tvSubTitle__lo_avatartitlesubtitle_delete = (TextView) convertView.findViewById(R.id.tvSubTitle__lo_avatartitlesubtitle_delete);
-                holder.ibDelete = (ImageButton) convertView.findViewById(R.id.ibDelete);
-
-                // save the view holder on the cell view to get it back latter
-                convertView.setTag(holder);
-            } else {
-                // the getTag returns the viewHolder object set as a tag to the view
-                holder = (SelectedPeopleListAdapter.ProfileViewHolder) convertView.getTag();
-            }
-
-            //get the string item from the position "position" from array list to put it on the TextView
-            Profile profile = mArrayListProfile.get(position);
-            if (profile != null) {
-                //set the item name on the TextView
-                //Glide
-                holder.tvTitle__lo_avatartitlesubtitle_delete.setText(profile.getEmail());
-                holder.tvSubTitle__lo_avatartitlesubtitle_delete.setText(profile.getFull_name());
-            }
-
-            holder.ibDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mArrayListProfile.remove(position);
-                    notifyDataSetChanged();
-                }
-            });
-
-            //this method must return the view corresponding to the data at the specified position.
-            return convertView;
-
-        }
-
-        public ArrayList<Profile> getmArrayListProfile() {
-            return mArrayListProfile;
-        }
-
-        public void setmArrayListProfile(ArrayList<Profile> mArrayListProfile) {
-            this.mArrayListProfile = mArrayListProfile;
-        }
-
-
-        class ProfileViewHolder {
-            RelativeLayout ro_person_photo_48dip__lo_avatartitlesubtitle_delete;
-            ImageView ro_person_photo_iv;
-            TextView tvTitle__lo_avatartitlesubtitle_delete,
-                    tvSubTitle__lo_avatartitlesubtitle_delete;
-            ImageButton ibDelete;
-        }
-
-
-    }
 
 }

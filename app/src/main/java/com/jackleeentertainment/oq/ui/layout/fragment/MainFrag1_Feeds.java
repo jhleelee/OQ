@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -214,23 +215,26 @@ public class MainFrag1_Feeds extends ListFrag {
                                                 OQPostPhoto oqPostPhoto = dataSnapshot.getValue
                                                         (OQPostPhoto.class);
 
-                                                if (oqPostPhoto.getPhotoids() != null &&
-                                                        oqPostPhoto.getPhotoids().size() > 0) {
+                                                List<String> oqPhotoIds = oqPostPhoto.getPhotoids();
 
+                                                if (oqPhotoIds != null &&
+                                                        oqPhotoIds.size() > 0) {
+
+                                                    Log.d(TAG, "oqPostPhoto.getPhotoids().get(0) " +
+                                                            ": " + oqPhotoIds.get
+                                                            (0));
 
                                                     Glide.with(mFragment)
                                                             .using(new FirebaseImageLoader())
                                                             .load(App.fbaseStorageRef
                                                                     .child(FStorageNode.FirstT.POST_PHOTO)
-                                                                    .child(oqPostPhoto
-                                                                            .getPhotoids().get(0)))
+                                                                    .child(oqPhotoIds.get(0)))
                                                             .crossFade()
                                                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                             .listener(new RequestListener<StorageReference, GlideDrawable>() {
                                                                 @Override
                                                                 public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
                                                                     postViewHolder.roMedia.setVisibility(View.GONE);
-
                                                                     return false;
                                                                 }
 
@@ -245,15 +249,14 @@ public class MainFrag1_Feeds extends ListFrag {
                                                             .into(postViewHolder.ivPhotoMain);
 
 
-                                                    if (oqPostPhoto.getPhotoids().size() >= 2) {
+                                                    if (oqPhotoIds.size() >= 2) {
 
                                                         //set Image
                                                         Glide.with(mFragment)
                                                                 .using(new FirebaseImageLoader())
                                                                 .load(App.fbaseStorageRef
                                                                         .child(FStorageNode.FirstT.POST_PHOTO)
-                                                                        .child(oqPostPhoto
-                                                                                .getPhotoids()
+                                                                        .child(oqPhotoIds
                                                                                 .get(1)))
                                                                 .crossFade()
                                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -275,18 +278,15 @@ public class MainFrag1_Feeds extends ListFrag {
                                                                 })
                                                                 .into(postViewHolder.ivPhotoSub);
 
-                                                        if (oqPostPhoto.getPhotoids().size() >= 3) {
-
+                                                        if (oqPhotoIds.size() >= 3) {
                                                             //tv
                                                             postViewHolder.tvPhotoSubNum
                                                                     .setVisibility(View.VISIBLE);
 
                                                             postViewHolder.tvPhotoSubNum
                                                                     .setText("+" + J.st
-                                                                            (oqPostPhoto.getPhotoids().size()
+                                                                            (oqPhotoIds.size()
                                                                                     - 2));
-
-
                                                         }
 
                                                     }

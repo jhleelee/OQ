@@ -8,31 +8,38 @@
     android:fitsSystemWindows="true"
     tools:context="com.jackleeentertainment.oq.ui.layout.activity.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:elevation="6dp"
-            />
 
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:elevation="6dp"
-            app:tabGravity="fill"
-            app:tabMode="fixed"/>
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-    </android.support.design.widget.AppBarLayout>
+
+
+            <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:elevation="6dp"
+                />
+
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:elevation="6dp"
+                app:tabGravity="fill"
+                app:tabMode="fixed"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+
 
     <include layout="@layout/content_main"/>
 
@@ -46,8 +53,8 @@
 
     <include
         android:id="@+id/vScrim"
-        android:visibility="gone"
-        layout="@layout/v_scrim_solid"/>
+        layout="@layout/v_scrim_solid"
+        android:visibility="gone"/>
 
 
     <io.codetail.widget.RevealFrameLayout
@@ -87,18 +94,18 @@
                     >
 
                     <RelativeLayout
-                        android:visibility="gone"
                         android:id="@+id/roFootTab0"
                         android:layout_width="0dip"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:visibility="gone">
 
 
                         <LinearLayout
-                            android:gravity="center"
-                            android:layout_centerInParent="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
                             android:orientation="vertical">
 
                             <ImageView
@@ -125,10 +132,10 @@
                         android:layout_weight="1">
 
                         <LinearLayout
-                            android:gravity="center"
-                            android:layout_centerInParent="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
                             android:orientation="vertical">
 
                             <ImageView
@@ -158,10 +165,10 @@
                         android:layout_weight="1">
 
                         <LinearLayout
-                            android:gravity="center"
-                            android:layout_centerInParent="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
                             android:orientation="vertical">
 
                             <ImageView

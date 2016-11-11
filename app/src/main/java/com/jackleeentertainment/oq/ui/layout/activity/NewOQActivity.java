@@ -815,6 +815,9 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 
         for (Uri uri : arluri) {
 
+
+
+
             /**
              * get Bitmap
              */
