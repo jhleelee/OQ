@@ -52,7 +52,6 @@ public class App extends Application {
     public static FirebaseStorage firebaseStorage;
     public static StorageReference fbaseStorageRef;
 
-    public static boolean GIVEN_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGES = false;
     public static int CURRENTFRAGMENT_MAINACTIVITY = 0;
 
     //Recent

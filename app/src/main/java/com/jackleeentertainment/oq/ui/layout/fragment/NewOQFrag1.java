@@ -257,12 +257,7 @@ public class NewOQFrag1 extends Fragment {
 
 
 
-    void startActivityForResultSelectedPhotoList(ArrayList<Uri> arlUri) {
-        Intent intent = new Intent(getActivity(), SelectedPhotoListActivity.class);
-        startActivityForResult(intent, REQ_SELECTED_PHOTO_LIST);
-    }
 
-    ;
 
 
 }

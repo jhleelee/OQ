@@ -135,10 +135,8 @@ public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
     }
 
     public void startActivityForResultPeopleActivity() {
-
         Intent i = new Intent(this, PeopleActivity.class);
         if (arlOqDo_Future != null && arlOqDo_Future.size() > 0) {
-
             ArrayList<String> arlUidClaimee = OqDoUtil.getArlUidBFromArlOqDo
                     (arlOqDo_Future);
             i.putExtra("beforeUids", new Gson().toJson(arlUidClaimee));

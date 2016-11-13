@@ -659,7 +659,8 @@ public class JM {
 
     public static void glideProfileThumb(final String uid,
                                          final String uname,
-                                         final ImageView iv, final TextView tv,
+                                         final ImageView iv,
+                                         final TextView tv,
                                          final Activity
                                                  mActivity) {
         //set Image

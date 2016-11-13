@@ -20,7 +20,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -38,9 +40,13 @@ import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Group;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.types.GroupT;
+import com.jackleeentertainment.oq.object.util.OqDoUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.NewGroupActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.PeopleActivity;
 import com.jackleeentertainment.oq.ui.widget.LoEtMoney;
+import com.jackleeentertainment.oq.ui.widget.LoIvAvatarTvTitlesIvDelete;
 
 import java.util.ArrayList;
 
@@ -52,10 +58,10 @@ public class NewGroupFrag extends Fragment {
 
     final int REQ_PEOPLE = 99;
     String TAG = this.getClass().getSimpleName();
-     ArrayList<Profile> mArrayListProfile = new ArrayList<>();
+    ArrayList<Profile> mArrayListProfile = new ArrayList<>();
     View view;
 
-    CardView cardviewTitlePhoto,  cardviewAmmount, cvPeople;
+    CardView cardviewTitlePhoto, cardviewAmmount, cvPeople;
 
     EditText etTitle;
     ImageView ivPhotoMain;
@@ -112,6 +118,15 @@ public class NewGroupFrag extends Fragment {
                 new IntentFilter("com.jackleeentertainment.oq." + LBR.IntentFilterT.NewGroupActivityTitlePhoto));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        uiPhoto(((NewGroupActivity) getActivity()).photoUri);
+        uiPeople(((NewGroupActivity) getActivity()).arlProfiles);
+        initOCL();
+
+    }
 
     void initUI() {
 
@@ -136,26 +151,26 @@ public class NewGroupFrag extends Fragment {
         etTitle = (EditText) view.findViewById(R.id
                 .etTitle);
 
-        cvPeople= (CardView) view.findViewById(R.id
+        cvPeople = (CardView) view.findViewById(R.id
                 .cvPeople);
 
-        tvToGetOrPay= (TextView) view.findViewById(R.id
+        tvToGetOrPay = (TextView) view.findViewById(R.id
                 .tvToGetOrPay);
 
-        loBtAddPeople= (LinearLayout) view.findViewById(R.id
+        loBtAddPeople = (LinearLayout) view.findViewById(R.id
                 .loBtAddPeople);
         ivBtAddPeople = (ImageView) view.findViewById(R.id
                 .ivBtAddPeople);
-        tvBtAddPeople= (TextView) view.findViewById(R.id
+        tvBtAddPeople = (TextView) view.findViewById(R.id
                 .tvBtAddPeople);
 
-        loSelectedPeople= (LinearLayout) view.findViewById(R.id
+        loSelectedPeople = (LinearLayout) view.findViewById(R.id
                 .loSelectedPeople);
 
         cardviewAmmount = (CardView) view.findViewById(R.id
                 .cardviewAmmount);
 
-        loetmomey= (LoEtMoney) view.findViewById(R.id
+        loetmomey = (LoEtMoney) view.findViewById(R.id
                 .loetmomey);
 
         lo_invoice_multi = (LinearLayout) view.findViewById(R.id
@@ -165,17 +180,15 @@ public class NewGroupFrag extends Fragment {
         spinnerPeriod = (Spinner) view.findViewById(R.id
                 .spinnerPeriod);
 
-        sw = (Switch)view.findViewById(R.id.sw);
+        sw = (Switch) view.findViewById(R.id.sw);
         ro_tv_done = (RelativeLayout) view.findViewById(R.id
                 .ro_tv_done);
 
     }
 
 
-
-
     void initUiData() {
-        uiPhoto(uriPhoto);
+
         etTitle.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -224,7 +237,7 @@ public class NewGroupFrag extends Fragment {
     }
 
 
-    void initOCL(){
+    void initOCL() {
         loBtAddPeople.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -232,11 +245,39 @@ public class NewGroupFrag extends Fragment {
             }
         });
 
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    buttonView.setText(JM.strById(R.string.invoice_period));
+                    ((NewGroupActivity)getActivity()).group.setReqtype(GroupT.ReqOnceOrRepeatT.INVOICE_REPEAT);
+                } else {
+                    buttonView.setText(JM.strById(R.string.invoice_once));
+                    ((NewGroupActivity)getActivity()).group.setReqtype(GroupT.ReqOnceOrRepeatT.INVOICE_ONCE);
+                }
+            }
+        });
+
+        String[] spinnerArray=
+                new String[]{JM.strById(R.string.every_week),
+                        JM.strById(R.string.every_month),
+                        JM.strById(R.string.every_year)
+                 };
+
+        ArrayAdapter<String> spinnerArrayAdapter =
+                new ArrayAdapter<String>(
+                        getActivity(),
+                        android.R.layout.simple_spinner_item,
+                        spinnerArray);
+
+        //selected item will look like a spinner set from XML
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPeriod.setAdapter(spinnerArrayAdapter);
+
+
+
     }
 
-
-    Uri uriPhoto;
-    final int REQ_PICK_IMAGE = 89;
 
     void uiPhoto(Uri uri) {
         if (uri == null) {
@@ -247,7 +288,8 @@ public class NewGroupFrag extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    startActivityForResultToTitlePhotoATGallery();
+                    ((NewGroupActivity) getActivity()).startActivityForResultPhotoGalleryForFeed
+                            ();
                 }
             });
         } else {
@@ -257,51 +299,38 @@ public class NewGroupFrag extends Fragment {
             ibChangePhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivityForResultToTitlePhotoATGallery();
+                    ((NewGroupActivity) getActivity()).startActivityForResultPhotoGalleryForFeed
+                            ();
                 }
             });
         }
     }
 
+    void uiPeople(final ArrayList<Profile> arlProfile) {
 
-    void startActivityForResultToTitlePhotoATGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, JM.strById(R.string.select_photo)),
-                REQ_PICK_IMAGE);
-    }
+        for (final Profile profile : arlProfile) {
 
-
-
-
-
-
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-
-            switch (requestCode) {
-                case REQ_PEOPLE:
-                    String result = data.getStringExtra("result");
-                    uiDataCardViewPeopleList(result);
-                    break;
-
-                case REQ_PICK_IMAGE:
-                    Uri uri = data.getData();
-                    uiPhoto(uri);
-                    break;
-
-            }
-
-
+            loSelectedPeople.removeAllViews();
+            loSelectedPeople.removeAllViewsInLayout();
+            LoIvAvatarTvTitlesIvDelete lo = new
+                    LoIvAvatarTvTitlesIvDelete(getActivity());
+            JM.glideProfileThumb(
+                    profile.getUid(),
+                    profile.getFull_name(),
+                    lo.ivAvatar,
+                    lo.tvAvatar,
+                    getActivity()
+            );
+            lo.tvName.setText(profile.getFull_name());
+            lo.tvEmail.setText(profile.getEmail());
+            lo.ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    arlProfile.remove(profile);
+                    uiPeople(arlProfile);
+                }
+            });
+            loSelectedPeople.addView(lo);
         }
     }
 
@@ -313,8 +342,6 @@ public class NewGroupFrag extends Fragment {
                 }.getType());
 
     }
-
-
 
 
 }

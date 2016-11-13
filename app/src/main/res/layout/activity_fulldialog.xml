@@ -35,9 +35,21 @@
                     android:layout_width="72dip"
                     android:layout_height="match_parent">
 
+                    <!-- before code-->
+
+                    <!--<ImageView -->
+                    <!--android:id="@+id/ivClose"-->
+                    <!--style="@style/ImageView.ToolbarIcon.Close"/>-->
+
+                    <!-- Modified code Jonas Olsberg-->
                     <ImageView
                         android:id="@+id/ivClose"
-                        style="@style/ImageView.ToolbarIcon.Close"/>
+                        android:layout_width="24dip"
+                        android:layout_height="24dip"
+                        android:layout_marginLeft="16dip"
+                        android:scaleType="centerCrop"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"/>
 
                 </RelativeLayout>
 
