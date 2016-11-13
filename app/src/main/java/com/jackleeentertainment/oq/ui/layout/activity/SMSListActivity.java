@@ -270,17 +270,21 @@ public class SMSListActivity extends BaseActivity
 //                                    LinearLayout.LayoutParams.MATCH_PARENT,
 //                                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                    ViewGroup.LayoutParams params =  vh.tvContent.getLayoutParams();
-                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    vh.tvContent.setLayoutParams(params);
+//                    ViewGroup.LayoutParams params =  vh.tvContent.getLayoutParams();
+//                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//                    vh.tvContent.setLayoutParams(params);
+                    vh.tvContent.setMaxLines(Integer.MAX_VALUE);
 
                 } else {
                     vh.tvContent.setText(JSMS.replaceLinesToSpaces(body));
                     vh.tvContent.setLines(2);
                     vh.checkBoxJack.setChecked(false);
                 }
-
-                vh.loCheckBoxJack.setOnClickListener(new View.OnClickListener() {
+				/* Bind OnClickListener to the checkbox, instead of the
+				 * LinearLayout which lies under it, to avoid situation, when
+				 * checkbox will block touch events targeted on the LinearLayout
+				 */
+                vh.checkBoxJack.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
