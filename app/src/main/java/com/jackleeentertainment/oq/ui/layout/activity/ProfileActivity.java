@@ -566,6 +566,16 @@ public class ProfileActivity extends BaseActivity {
                                     mActivity
                             ));
 
+
+
+                    ArrayList<OqDoPair> arlOqDoPair = OqDoUtil.getArlOqDoPair(oqWrap.getListoqdo());
+
+                    OqDoAdapter oqDoAdapter = new OqDoAdapter(arlOqDoPair);
+
+                    twoAvatarsWithRelationDtlVHolder.rvSub.setAdapter(oqDoAdapter);
+                    int items = oqDoAdapter.getItemCount();
+                    Log.d(TAG, J.st(items));
+
                     twoAvatarsWithRelationDtlVHolder.ivMore.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -601,11 +611,6 @@ public class ProfileActivity extends BaseActivity {
                     });
 
 
-                    ArrayList<OqDoPair> arlOqDoPair = OqDoUtil.getArlOqDoPair(oqWrap.getListoqdo());
-
-                    OqDoAdapter oqDoAdapter = new OqDoAdapter(arlOqDoPair);
-
-                    twoAvatarsWithRelationDtlVHolder.rvSub.setAdapter(oqDoAdapter);
 
 
                 }

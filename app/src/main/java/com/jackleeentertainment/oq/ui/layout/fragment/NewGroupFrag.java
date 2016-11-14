@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
@@ -121,6 +122,9 @@ public class NewGroupFrag extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getActivity()
+                .getWindow().setSoftInputMode(WindowManager.LayoutParams
+                .SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         uiPhoto(((NewGroupActivity) getActivity()).photoUri);
         uiPeople(((NewGroupActivity) getActivity()).arlProfiles);
