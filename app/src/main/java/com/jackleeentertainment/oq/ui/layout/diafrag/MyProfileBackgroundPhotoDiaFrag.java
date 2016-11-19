@@ -96,7 +96,8 @@ public class MyProfileBackgroundPhotoDiaFrag extends BaseDiaFrag {
         iBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ((MainActivity)mContext).startActivityForResultPhotoGalleryToBGCHANGE();
+                dismiss();
             }
         });
 

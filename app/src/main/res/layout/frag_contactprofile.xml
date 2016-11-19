@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+
+        <LinearLayout
+            android:id="@+id/loExist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dip"-->
+            <!--android:layout_marginBottom="8dip"-->
+            <!--android:layout_marginTop="8dip"-->
+            <!--android:background="@color/text_black_54"/>-->
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvAllMyContacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:choiceMode="singleChoice"/>
+
+        </LinearLayout>
+
+
+        <include
+
+            android:id="@+id/ro_empty_list"
+            layout="@layout/ro_empty_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            />
+
+
+        <include
+            android:id="@+id/vProgress"
+            layout="@layout/ro_prog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+
+    </RelativeLayout>
+
+
+</ScrollView>
+
+
+
+
+
+

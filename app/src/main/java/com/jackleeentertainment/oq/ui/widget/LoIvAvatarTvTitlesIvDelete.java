@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.object.Profile;
 
 /**
  * Created by Jacklee on 2016. 10. 29..
@@ -17,6 +18,8 @@ public class LoIvAvatarTvTitlesIvDelete extends LinearLayout {
     public TextView tvAvatar;
     public ImageView ivAvatar, ivDelete;
     public TextView tvName, tvEmail;
+    public Profile profile ;
+
 
     public LoIvAvatarTvTitlesIvDelete(Context context) {
         this(context, null);

@@ -44,7 +44,7 @@
 //    ViewPager viewPager;
 //    Button bt__lo_lefttext_rightoneaction;
 //    String OQSumT;
-//    String OQTWantT_Future;
+//    String mDoWhat;
 //    long ammountAsStandard;
 //
 //    @Override
@@ -55,7 +55,7 @@
 //        arlOppoProfile = ProfileUtil.getArlProfileFromJson(getIntent().getStringExtra("alreadySelected"));
 //        ammountAsStandard = getIntent().getLongExtra("ammountAsStandard", 0);
 //        OQSumT = getIntent().getStringExtra("OQSumT");
-//        OQTWantT_Future = getIntent().getStringExtra("OQTWantT_Future");
+//        mDoWhat = getIntent().getStringExtra("mDoWhat");
 //        initUI();
 //        setSupportActionBar(toolbar);
 //        initPageChangeListenerCandidates();
@@ -109,7 +109,7 @@
 //
 //    void initUIAdapter() {
 //
-//        if (OQTWantT_Future.equals(OQT.WantT.GET)) {
+//        if (mDoWhat.equals(OQT.WantT.GET)) {
 //            if (arlOppoProfile != null) {
 //                if (arlOppoProfile.size() == 1) {
 //                    viewPager.addOnPageChangeListener(onPCListener_SoIWantToGETFromYou);
@@ -122,7 +122,7 @@
 //                }
 //            }
 //
-//        } else if (OQTWantT_Future.equals(OQT.WantT.PAY)) {
+//        } else if (mDoWhat.equals(OQT.WantT.PAY)) {
 //            viewPager.addOnPageChangeListener(onPCListener_SoIWantToPAY);
 //            viewPager.setAdapter(new SumTypePagerAdapter_SoIWantToPAY(getSupportFragmentManager()));
 //

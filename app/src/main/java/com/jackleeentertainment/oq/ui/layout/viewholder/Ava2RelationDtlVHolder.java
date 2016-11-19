@@ -19,8 +19,10 @@ public class Ava2RelationDtlVHolder extends RecyclerView.ViewHolder {
     public  LinearLayout lolvTwoAvaHistory;
     public  RecyclerView rvSub;
     public  RelativeLayout roRelationTwoAva;
-    public  TextView tvTwoName;
-    public  TextView tvDate;
+    public  TextView tvOppoName;
+    public  TextView tvResultAmmount;
+    public  TextView tvResultAmmount2;
+
     public  TextView tvContent;
     public ImageView ivMore, ivRelation;
     public  RelativeLayout roAvaLeft, roAvaRight;
@@ -65,13 +67,20 @@ public class Ava2RelationDtlVHolder extends RecyclerView.ViewHolder {
                         .findViewById(R.id.ivRelation);
 
 
-        tvTwoName =
+        tvOppoName =
                 (TextView) loTwoAvaWrap
                         .findViewById(R.id.tvNameTwoAva);
 
-        tvDate =
+        tvResultAmmount =
                 (TextView) loTwoAvaWrap
-                        .findViewById(R.id.tvDateTwoAva);
+                        .findViewById(R.id.tvResultAmmount);
+
+
+
+
+        tvResultAmmount2=
+                (TextView) loTwoAvaWrap
+                        .findViewById(R.id.tvResultAmmount2);
 
         tvContent =
                 (TextView) loTwoAvaWrap
@@ -84,10 +93,7 @@ public class Ava2RelationDtlVHolder extends RecyclerView.ViewHolder {
         lolvTwoAvaHistory =
                 (LinearLayout) mView
                         .findViewById(R.id.lolvTwoAvaHistory);
-        rvSub
-                =
-                (RecyclerView) mView
-                        .findViewById(R.id.rvSub);
+
     }
 
          /*

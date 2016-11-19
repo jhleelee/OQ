@@ -11,9 +11,9 @@ public class MyOqPerson {
 
 
 
-    long ts;
+    public long ts;
 
-    Profile profile;
+    public  Profile profile;
 
     public MyOqPerson() {
         super();

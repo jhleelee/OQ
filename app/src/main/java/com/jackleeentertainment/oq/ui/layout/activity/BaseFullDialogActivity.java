@@ -44,6 +44,7 @@ public class BaseFullDialogActivity extends BaseActivity {
     TextView tvFootTab2;
     RelativeLayout ro_tv_done;
     TextView tvDone__ro_tv_done;
+    TextView tvModify__ro_tv_done;
     ImageView ivChev__ro_tv_done;
     RelativeLayout ro_prog;
     ProgressBar prog;
@@ -82,7 +83,7 @@ public class BaseFullDialogActivity extends BaseActivity {
         ro_tv_done = (RelativeLayout) findViewById(R.id.ro_tv_done);
         tvDone__ro_tv_done = (TextView) findViewById(R.id.tvDone__ro_tv_done);
         ivChev__ro_tv_done = (ImageView) findViewById(R.id.ivChev__ro_tv_done);
-
+        tvModify__ro_tv_done= (TextView) findViewById(R.id.tvModify);
         ro_prog = (RelativeLayout) findViewById(R.id.ro_prog);
         prog = (ProgressBar)ro_prog.findViewById(R.id.prog);
 

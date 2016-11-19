@@ -23,21 +23,26 @@ public class FBaseNode0 {
 
 
 
-    public final static String MyOqWraps = "my_oqw";
 
     public final static String Group_OqItem = "group_oqitem";
     public final static String Group_People = "group_oqitem";
 
 
-    public final static String MyPosts = "my_r_post";
-    public final static String MySentPosts = "my_s_post";
+    public final static String MyPosts = "my_post";
+
+    public final static String NumNumTrue = "numnumtr";
+    public final static String NumProfile = "numprof";
+
+    public final static String EmailEmailTrue = "ememtr";
+    public final static String EmailProfile = "emprof";
+
+     public final static String OqPostPhoto = "postph";
+    public final static String OqPostText = "posttxt";
+    public final static String OqPostComment = "postco";
+    public final static String OqDo = "do";
 
 
 
-
-    public final static String OQPost = "post";
-    public final static String OQPostPhoto = "postph";
-    public final static String OQPostComment = "postco";
 
 
 

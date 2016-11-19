@@ -22,8 +22,7 @@ import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.Ram;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
-import com.jackleeentertainment.oq.firebase.database.GetValue;
-import com.jackleeentertainment.oq.firebase.database.SetValue;
+ import com.jackleeentertainment.oq.firebase.database.SetValue;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Profile;
 

@@ -7,9 +7,10 @@ package com.jackleeentertainment.oq.object;
 public class MyOqPost {
 
 
-    long ts;
-    String pid;
-    Profile profile;
+   public long ts;
+    public long mts;
+    public  String pid;
+    public Profile profile;
 
 
     public MyOqPost() {
@@ -40,5 +41,11 @@ public class MyOqPost {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+    public long getMts() {
+        return mts;
+    }
 
+    public void setMts(long mts) {
+        this.mts = mts;
+    }
 }

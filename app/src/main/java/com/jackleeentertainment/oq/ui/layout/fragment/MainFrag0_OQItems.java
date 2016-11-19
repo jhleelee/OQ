@@ -1,6 +1,5 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +19,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
@@ -30,15 +28,12 @@ import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.MyOqPerson;
-import com.jackleeentertainment.oq.object.OqWrap;
-import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
-import com.jackleeentertainment.oq.object.util.ProfileUtil;
-import com.jackleeentertainment.oq.ui.layout.activity.MainActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.ProfileActivity;
 import com.jackleeentertainment.oq.ui.layout.viewholder.Ava2RelationDtlVHolder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import hugo.weaving.DebugLog;
@@ -51,6 +46,12 @@ public class MainFrag0_OQItems extends ListFrag {
     View view;
     Fragment mFragment = this;
     FirebaseRecyclerAdapter<MyOqPerson, Ava2RelationDtlVHolder> firebaseRecyclerAdapterMyOqPerson;
+    Resources res = App.getContext().getResources();
+    boolean isQueryAComplete = false;
+    boolean isQueryBComplete = false;
+    boolean isQueryAEmpty = false;
+    boolean isQueryBEmpty = false;
+
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -118,13 +119,36 @@ public class MainFrag0_OQItems extends ListFrag {
                 new IntentFilter(LBR.IntentFilterT.MainActivityDrawerMenu));
     }
 
-    Resources res = App.getContext().getResources();
+
+    void uiIsEmpty() {
+        if (isQueryAEmpty==true){
+            if (isQueryBEmpty==true){
+                ro_empty_list.setVisibility(View.VISIBLE);
+                return;
+            }
+        }
+
+
+    }
+
 
     void initRVAdapter() {
-        checkIfFirebaseListIsEmpty(getActivity());
+
+        //testPurpose
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2100);
+        calendar.set(Calendar.MONTH, 12);
+        calendar.set(Calendar.DAY_OF_MONTH, 31);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        long t = calendar.getTimeInMillis();
+        //1479440361455 or 1479513451485
 
         ro_empty_list.setVisibility(View.GONE);
-        roProgress.setVisibility(View.GONE);
+        roProgress.setVisibility(View.VISIBLE);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -137,10 +161,10 @@ public class MainFrag0_OQItems extends ListFrag {
         rts
          */
 
-        firebaseRecyclerAdapterMyOqPerson = new FirebaseRecyclerAdapter<MyOqPerson,
-                Ava2RelationDtlVHolder>
+        firebaseRecyclerAdapterMyOqPerson = new FirebaseRecyclerAdapter
+                <MyOqPerson, Ava2RelationDtlVHolder>
                 (MyOqPerson.class,
-                        R.layout.lo_twoavatars_relation_names_explain_date_detail,
+                        R.layout.item_mainfrag0,
                         Ava2RelationDtlVHolder.class,
                         query
 
@@ -151,10 +175,196 @@ public class MainFrag0_OQItems extends ListFrag {
                     final MyOqPerson oqPerson,
                     final int position) {
 
+
                 JM.G(twoAvatarsWithRelationDtlVHolder.ivMore);
 
 
                 if (oqPerson != null) {
+
+
+                    //get content data
+                    //"my_oqperson" - [uid] - {MyOqPerson(ts,{Profile})}
+
+                    final List<OqDo> oqDoList = new ArrayList<>();
+
+
+                    Query queryA =
+                            App.fbaseDbRef
+                                    .child(FBaseNode0.OqDo)
+                                    .orderByChild("uidab")
+                                    .equalTo(App.getUid(getActivity()) + ",," + oqPerson.profile.uid);
+
+                    Query queryB =
+                            App.fbaseDbRef
+                                    .child(FBaseNode0.OqDo)
+                                    .orderByChild("uidab")
+                                    .equalTo(oqPerson.profile.uid
+                                            + ",," + App.getUid(getActivity
+                                            ()));
+
+                    queryA
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+
+                                        Iterable<DataSnapshot> i = dataSnapshot.getChildren();
+
+                                        for (DataSnapshot d : i) {
+
+                                            OqDo oqDo = d.getValue(OqDo.class);
+                                            oqDoList.add(oqDo);
+                                        }
+
+                                        isQueryAComplete = true;
+                                        if (isQueryBComplete) {
+                                            uiOqDos(twoAvatarsWithRelationDtlVHolder, oqPerson,
+                                                    oqDoList);
+                                        }
+                                    } else {
+                                        isQueryAEmpty = true;
+                                        uiIsEmpty();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                    queryB
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+
+                                        Iterable<DataSnapshot> i = dataSnapshot.getChildren();
+
+                                        for (DataSnapshot d : i) {
+
+                                            OqDo oqDo = d.getValue(OqDo.class);
+
+                                            oqDoList.add(oqDo);
+
+                                        }
+                                        isQueryBComplete = true;
+                                        if (isQueryAComplete) {
+                                            uiOqDos(twoAvatarsWithRelationDtlVHolder, oqPerson, oqDoList);
+                                        }
+                                    } else {
+                                        isQueryBEmpty = true;
+                                        uiIsEmpty();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                    twoAvatarsWithRelationDtlVHolder.mView.setOnClickListener(
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(
+                                            mFragment.getActivity(),
+                                            ProfileActivity.class);
+                                    intent.putExtra("Profile", oqPerson.profile);
+                                    intent.putExtra("isMe", false);
+                                    startActivity(intent);
+
+                                }
+                            });
+                }
+
+
+            }
+
+            void uiOqDos(Ava2RelationDtlVHolder twoAvatarsWithRelationDtlVHolder, MyOqPerson
+                    oqPerson,
+                         List<OqDo> oqDoList) {
+                //(0)
+
+                long sumAmtGetListAbGetFutureOqList = OqDoUtil
+                        .getSumAmt(OqDoUtil
+                                .getListAbGetFuture(oqDoList));
+
+                long sumAmtGetListBaPayFutureOqList = OqDoUtil
+                        .getSumAmt(OqDoUtil
+                                .getListBaPayFuture(oqDoList));
+
+                long amtAbGetFutureAgreed = J.getSmallerLong(
+                        sumAmtGetListAbGetFutureOqList,
+                        sumAmtGetListBaPayFutureOqList
+                );
+
+
+                Log.d(TAG, "amtAbGetFutureAgreed : " +
+                        J.st
+                                (amtAbGetFutureAgreed));
+
+                //(1)
+                long sumAmtGetListBaGetFutureOqList = OqDoUtil.getSumAmt(OqDoUtil.getListBaGetFuture
+                        (oqDoList));
+
+                long sumAmtGetListAbPayFutureOqList = OqDoUtil.getSumAmt(OqDoUtil.getListAbPayFuture
+                        (oqDoList));
+
+
+                long amtBaGetFutureAgreed = J.getSmallerLong(
+                        sumAmtGetListBaGetFutureOqList,
+                        sumAmtGetListAbPayFutureOqList
+                );
+
+                Log.d(TAG, "amtBaGetFutureAgreed : " + J.st(amtAbGetFutureAgreed));
+
+                //(2)
+
+                long sumAmtGetListAbPayPastOqList = OqDoUtil.getSumAmt(OqDoUtil.getListAbPayPast
+                        (oqDoList));
+
+                long sumAmtGetListBaGetPastOqList = OqDoUtil.getSumAmt
+                        (OqDoUtil.getListBaGetPast
+                                (oqDoList));
+
+                long amtAbPayPastAgreed = J.getSmallerLong(
+                        sumAmtGetListAbPayPastOqList,
+                        sumAmtGetListBaGetPastOqList
+                );
+
+                Log.d(TAG, "amtAbPayPastAgreed : " + J.st(amtAbGetFutureAgreed));
+
+
+                //(3)
+
+                long sumAmtGetListBaPayPastOqList = OqDoUtil.getSumAmt(
+                        OqDoUtil.getListBaPayPast
+                                (oqDoList));
+
+                long sumAmtGetListAbGetPastOqList = OqDoUtil.getSumAmt
+                        (OqDoUtil.getListAbGetPast
+                                (oqDoList));
+
+                long amtBaPayPastAgreed = J.getSmallerLong(
+
+                        sumAmtGetListBaPayPastOqList,
+                        sumAmtGetListAbGetPastOqList
+                );
+
+                Log.d(TAG, "amtBaPayPastAgreed : " + J.st(amtAbGetFutureAgreed));
+
+
+                twoAvatarsWithRelationDtlVHolder
+                        .tvContent
+                        .setTextColor(JM.colorById(R.color.text_black_54));
+
+
+                if (J.isLarger(amtAbGetFutureAgreed - amtBaPayPastAgreed,
+                        amtBaGetFutureAgreed - amtAbPayPastAgreed) == 1
+                        ) {
 
 
                     final String uida = App.getUid(getActivity());
@@ -163,298 +373,149 @@ public class MainFrag0_OQItems extends ListFrag {
                     final String unameb = oqPerson.getProfile().getFull_name();
 
 
-                    //get content data
-                    App.fbaseDbRef
-                            .child(FBaseNode0.MyOqWraps)
-                            .child(App.getUid(getActivity()))
-                            .addListenerForSingleValueEvent(
-                                    new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dUidBWidOqWrap) {
+                    JM.glideProfileThumb(
+                            uida,
+                            unamea,
+                            twoAvatarsWithRelationDtlVHolder.ivAvaLeft,
+                            twoAvatarsWithRelationDtlVHolder.tvAvaLeft,
+                            mFragment
+                    );
 
-                                            Log.d(TAG, "onDataChange()");
-
-                                            Iterable<DataSnapshot> i = dUidBWidOqWrap.getChildren();
-                                            Log.d(TAG, "dUidBWidOqWrap.getChildrenCount() : " + J.st
-                                                    (dUidBWidOqWrap.getChildrenCount()));
-                                            List<OqDo> oqDoList = new ArrayList<>();
-
-                                            for (DataSnapshot dWidOqWrap : i) {
-
-                                                Iterable<DataSnapshot> i2 = dWidOqWrap
-                                                        .getChildren();
-                                                Log.d(TAG, "dWidOqWrap.getChildrenCount() : " + J.st
-                                                        (dWidOqWrap.getChildrenCount()));
-
-                                                for (DataSnapshot dOqWrap : i2) {
-                                                    OqWrap oqWrap = dOqWrap.getValue(OqWrap.class);
-                                                    if (oqWrap != null && oqWrap.getListoqdo() != null) {
-                                                        Log.d(TAG, "oqWrap.getListoqdo().size() : " +
-                                                                J.st(oqWrap.getListoqdo().size()));
-                                                        oqDoList.addAll(oqWrap.getListoqdo());
-                                                    }
-
-                                                }
-                                            }
-
-                                            //(0)
-
-                                            long sumAmtGetListAbGetFutureOqList = OqDoUtil
-                                                    .getSumAmt(OqDoUtil
-                                                            .getListAbGetFuture(oqDoList));
-
-                                            long sumAmtGetListBaPayFutureOqList = OqDoUtil
-                                                    .getSumAmt(OqDoUtil
-                                                            .getListBaPayFuture(oqDoList));
-
-                                            long amtAbGetFutureAgreed = J.getSmallerLong(
-                                                    sumAmtGetListAbGetFutureOqList,
-                                                    sumAmtGetListBaPayFutureOqList
-                                            );
-                                            Log.d(TAG, "amtAbGetFutureAgreed : " +
-                                                    J.st
-                                                            (amtAbGetFutureAgreed));
-
-                                            //(1)
-                                            long sumAmtGetListBaGetFutureOqList = OqDoUtil.getSumAmt(OqDoUtil.getListBaGetFuture
-                                                    (oqDoList));
-
-                                            long sumAmtGetListAbPayFutureOqList = OqDoUtil.getSumAmt(OqDoUtil.getListAbPayFuture
-                                                    (oqDoList));
+                    JM.glideProfileThumb(
+                            uidb,
+                            unameb,
+                            twoAvatarsWithRelationDtlVHolder.ivAvaRight,
+                            twoAvatarsWithRelationDtlVHolder.tvAvaRight,
+                            mFragment
+                    );
 
 
-                                            long amtBaGetFutureAgreed = J.getSmallerLong(
-                                                    sumAmtGetListBaGetFutureOqList,
-                                                    sumAmtGetListAbPayFutureOqList
-                                            );
-
-                                            Log.d(TAG, "amtBaGetFutureAgreed : " + J.st(amtAbGetFutureAgreed));
-
-                                            //(2)
-
-                                            long sumAmtGetListAbPayPastOqList = OqDoUtil.getSumAmt(OqDoUtil.getListAbPayPast
-                                                    (oqDoList));
-
-                                            long sumAmtGetListBaGetPastOqList = OqDoUtil.getSumAmt
-                                                    (OqDoUtil.getListBaGetPast
-                                                            (oqDoList));
-
-                                            long amtAbPayPastAgreed = J.getSmallerLong(
-
-                                                    sumAmtGetListAbPayPastOqList,
-                                                    sumAmtGetListBaGetPastOqList
-                                            );
-
-                                            Log.d(TAG, "amtAbPayPastAgreed : " + J.st(amtAbGetFutureAgreed));
+                    long amtToTv = (amtAbGetFutureAgreed -
+                            amtBaPayPastAgreed) - (
+                            amtBaGetFutureAgreed - amtAbPayPastAgreed);
+                    twoAvatarsWithRelationDtlVHolder.tvOppoName.setText(
+                            J.shortenName(unameb)
+                    );
 
 
-                                            //(3)
-
-                                            long sumAmtGetListBaPayPastOqList = OqDoUtil.getSumAmt(
-                                                    OqDoUtil.getListBaPayPast
-                                                            (oqDoList));
-
-                                            long sumAmtGetListAbGetPastOqList = OqDoUtil.getSumAmt
-                                                    (OqDoUtil.getListAbGetPast
-                                                            (oqDoList));
-
-                                            long amtBaPayPastAgreed = J.getSmallerLong(
-
-                                                    sumAmtGetListBaPayPastOqList,
-                                                    sumAmtGetListAbGetPastOqList
-                                            );
-
-                                            Log.d(TAG, "amtBaPayPastAgreed : " + J.st(amtAbGetFutureAgreed));
+                    Log.d(TAG, "amtToTv : " + J.st(amtToTv));
 
 
-                                            if (J.isLarger(amtAbGetFutureAgreed - amtBaPayPastAgreed,
-                                                    amtBaGetFutureAgreed - amtAbPayPastAgreed) == 1
-                                                    ) {
+//                                                String strToTv =
+//                                                        res.getString(
+//                                                                R.string.req_amtvar_whatphrasevar,
+//                                                                J.strAmt(amtToTv),
+//                                                                res.getString(R.string.whovar_all_notpaid,
+//                                                                        unameb));
+
+                    twoAvatarsWithRelationDtlVHolder.tvContent.setText(
+                            JT.str(oqPerson.getTs()) + "가장 최근 날짜 및 이벤트");
+
+                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+                            .setText("+" + J.strAmt(amtToTv) + "원");
+                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+                            .setTextColor(JM.colorById(R.color
+                                    .getPrimaryDark));
+
+                    //a : user , b : friend
+
+                } else if (J.isLarger(amtAbGetFutureAgreed - amtBaPayPastAgreed,
+                        amtBaGetFutureAgreed - amtAbPayPastAgreed) == 2) {
+
+                    //b : user , a : friend
 
 
-                                                JM.glideProfileThumb(
-                                                        uida,
-                                                        unamea,
-                                                        twoAvatarsWithRelationDtlVHolder.ivAvaLeft,
-                                                        twoAvatarsWithRelationDtlVHolder.tvAvaLeft,
-                                                        mFragment
-                                                );
-
-                                                JM.glideProfileThumb(
-                                                        uidb,
-                                                        unameb,
-                                                        twoAvatarsWithRelationDtlVHolder.ivAvaRight,
-                                                        twoAvatarsWithRelationDtlVHolder.tvAvaRight,
-                                                        mFragment
-                                                );
-
-                                                twoAvatarsWithRelationDtlVHolder.tvTwoName.setText(
-                                                        unamea + " • " + unameb
-                                                );
+                    final String uidb = App.getUid(getActivity());
+                    final String unameb = App.getUname(getActivity());
+                    final String uida = oqPerson.getProfile().getUid();
+                    final String unamea = oqPerson.getProfile()
+                            .getFull_name();
 
 
-                                                long amtToTv = (amtAbGetFutureAgreed -
-                                                        amtBaPayPastAgreed) - (
-                                                        amtBaGetFutureAgreed - amtAbPayPastAgreed);
-                                                Log.d(TAG, "amtToTv : " + J.st(amtToTv));
+                    JM.glideProfileThumb(
+                            uidb,
+                            unameb,
+                            twoAvatarsWithRelationDtlVHolder.ivAvaLeft,
+                            twoAvatarsWithRelationDtlVHolder.tvAvaLeft,
+                            mFragment
+                    );
+
+                    JM.glideProfileThumb(
+                            uida,
+                            unamea,
+                            twoAvatarsWithRelationDtlVHolder.ivAvaRight,
+                            twoAvatarsWithRelationDtlVHolder.tvAvaRight,
+                            mFragment
+                    );
+                    long amtToTv = (
+                            amtBaGetFutureAgreed -
+                                    amtAbPayPastAgreed) - (amtAbGetFutureAgreed -
+                            amtBaPayPastAgreed);
+
+                    twoAvatarsWithRelationDtlVHolder.tvOppoName.setText(
+                            J.shortenName(unamea)
+                    );
+
+                    twoAvatarsWithRelationDtlVHolder.tvContent.setText(
+                            JT.str(oqPerson.getTs()) + "가장 최근 날짜 및 이벤트");
 
 
-                                                String strToTv =
-                                                        res.getString(
-                                                                R.string.req_amtvar_whatphrasevar,
-                                                                J.strAmt(amtToTv),
-                                                                res.getString(R.string.whovar_all_notpaid,
-                                                                        unameb));
-
-                                                twoAvatarsWithRelationDtlVHolder.tvContent.setText(
-                                                        strToTv);
-                                                //a : user , b : friend
-
-                                            } else if (J.isLarger(amtAbGetFutureAgreed - amtBaPayPastAgreed,
-                                                    amtBaGetFutureAgreed - amtAbPayPastAgreed) == 2) {
-
-                                                //b : user , a : friend
-                                                JM.glideProfileThumb(
-                                                        uidb,
-                                                        unameb,
-                                                        twoAvatarsWithRelationDtlVHolder.ivAvaLeft,
-                                                        twoAvatarsWithRelationDtlVHolder.tvAvaLeft,
-                                                        mFragment
-                                                );
-
-                                                JM.glideProfileThumb(
-                                                        uida,
-                                                        unamea,
-                                                        twoAvatarsWithRelationDtlVHolder.ivAvaRight,
-                                                        twoAvatarsWithRelationDtlVHolder.tvAvaRight,
-                                                        mFragment
-                                                );
-
-                                                twoAvatarsWithRelationDtlVHolder.tvTwoName.setText(
-                                                        unameb + " • " + unamea
-                                                );
-                                                long amtToTv = (
-                                                        amtBaGetFutureAgreed -
-                                                                amtAbPayPastAgreed) - (amtAbGetFutureAgreed -
-                                                        amtBaPayPastAgreed);
-                                                String strToTv =
-                                                        res.getString(
-                                                                R.string.req_amtvar_whatphrasevar,
-                                                                J.strAmt(amtToTv),
-                                                                res.getString(R.string.whovar_all_notpaid,
-                                                                        unamea));
-                                                twoAvatarsWithRelationDtlVHolder.tvContent.setText(
-                                                        strToTv);
-                                            } else {  //the same
-
-                                                JM.glideProfileThumb(
-                                                        uida,
-                                                        unamea,
-                                                        twoAvatarsWithRelationDtlVHolder.ivAvaLeft,
-                                                        twoAvatarsWithRelationDtlVHolder.tvAvaLeft,
-                                                        mFragment
-                                                );
-
-                                                JM.glideProfileThumb(
-                                                        uidb,
-                                                        unameb,
-                                                        twoAvatarsWithRelationDtlVHolder.ivAvaRight,
-                                                        twoAvatarsWithRelationDtlVHolder.tvAvaRight,
-                                                        mFragment
-                                                );
-
-                                                twoAvatarsWithRelationDtlVHolder.tvTwoName.setText(
-                                                        unamea + " • " + unameb
-                                                );
-
-                                                twoAvatarsWithRelationDtlVHolder.tvContent.setText(
-                                                        JM.strById(R.string.no_amt_to_settle));
-                                            }
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                            Log.d(TAG, "onCancelled");
-                                        }
-                                    }
-                            );
+                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount.setText(JT.str(oqPerson.getTs()));
+                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+                            .setText("-" + J.strAmt(amtToTv) + "원");
+                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+                            .setTextColor(JM.colorById(R.color
+                                    .payPrimaryDark));
+                } else {  //the same
 
 
-                    twoAvatarsWithRelationDtlVHolder.tvDate.setText(JT.str(oqPerson.getTs()));
+                    final String uida = App.getUid(getActivity());
+                    final String unamea = App.getUname(getActivity());
+                    final String uidb = oqPerson.getProfile().getUid();
+                    final String unameb = oqPerson.getProfile().getFull_name();
 
 
-                    twoAvatarsWithRelationDtlVHolder.mView.setOnClickListener(
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+                    JM.glideProfileThumb(
+                            uida,
+                            unamea,
+                            twoAvatarsWithRelationDtlVHolder.ivAvaLeft,
+                            twoAvatarsWithRelationDtlVHolder.tvAvaLeft,
+                            mFragment
+                    );
 
-                                    App.fbaseDbRef
-                                            .child(FBaseNode0.ProfileToPublic)
-                                            .child(uidb)
-                                            .addListenerForSingleValueEvent(
-                                                    new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                                            if (dataSnapshot.exists()) {
-                                                                Profile profile = dataSnapshot.getValue
-                                                                        (Profile.class);
-                                                                Intent intent = new Intent(
-                                                                        mFragment.getActivity(),
-                                                                        ProfileActivity.class);
-                                                                intent.putExtra("Profile", profile);
-                                                                intent.putExtra("isMe", false);
-                                                                startActivity(intent);
-                                                            }
+                    JM.glideProfileThumb(
+                            uidb,
+                            unameb,
+                            twoAvatarsWithRelationDtlVHolder.ivAvaRight,
+                            twoAvatarsWithRelationDtlVHolder.tvAvaRight,
+                            mFragment
+                    );
 
-                                                        }
+                    twoAvatarsWithRelationDtlVHolder.tvOppoName.setText(
+                            J.shortenName(unameb) + "  " + JM.strById
+                                    (R.string
+                                            .no_amt_to_settle)
+                    );
 
-                                                        @Override
-                                                        public void onCancelled(DatabaseError databaseError) {
+                    twoAvatarsWithRelationDtlVHolder.tvContent.setText(
+                            JT.str(oqPerson.getTs()) + "가장 최근 날짜 및 " +
+                                    "이벤트");
 
-                                                        }
-                                                    }
-                                            );
-
-
-                                }
-                            });
+                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+                            .setText(JM.strById
+                                    (R.string
+                                            .no_amt_to_settle));
+                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+                            .setTextColor(JM.colorById(R.color
+                                    .dark_grey));
                 }
-
-
             }
+
+            ;
+
+
         };
-
         recyclerView.setAdapter(firebaseRecyclerAdapterMyOqPerson);
-    }
-
-
-    void checkIfFirebaseListIsEmpty(Activity activity) {
-
-        JM.V(roProgress);
-
-        App.fbaseDbRef
-                .child(FBaseNode0.MyOppoList)
-                .child(App.getUid(activity))
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.exists()) {
-                            JM.G(roProgress);
-                            JM.V(ro_empty_list);
-                        } else {
-                            JM.G(roProgress);
-                            JM.G(ro_empty_list);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        JM.G(roProgress);
-                        JM.V(ro_empty_list);
-                    }
-                });
-
     }
 
 }

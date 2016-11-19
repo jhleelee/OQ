@@ -24,7 +24,6 @@ import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
-import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
@@ -97,7 +96,7 @@ public class NewOQFrag0Neo extends Fragment {
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView ...");
         view = inflater.inflate(R.layout.frag_newoq_0_neo, container, false);
-        OQTWantT_Future = getArguments().getString("OQTWantT_Future");
+        OQTWantT_Future = getArguments().getString("mDoWhat");
         initUI();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
                 mMessageReceiver,
@@ -117,8 +116,8 @@ public class NewOQFrag0Neo extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
-        cvProfileApplyArlSelectedProfilesToLo();
-        cvMySpentApplyArlOqItemsPastToLo();
+        uiSelectedProfiles();
+        uiSpents();
         tvNextEnableOrNot();
         ((NewOQActivity)getActivity()).uiLsnerFrag0();
     }
@@ -142,13 +141,13 @@ public class NewOQFrag0Neo extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (((NewOQActivity) getActivity()).arlOqDo_Future != null &&
-                        ((NewOQActivity) getActivity()).arlOqDo_Future.size() > 0) {
+                if (((NewOQActivity) getActivity()).tempArl != null &&
+                        ((NewOQActivity) getActivity()).tempArl.size() > 0) {
                     Bundle bundle = new Bundle();
                     bundle.putString("diaFragT", DiaFragT.EasyInput);
-                    bundle.putString("OQTWantT_Future", OQTWantT_Future);
+                    bundle.putString("mDoWhat", OQTWantT_Future);
                     bundle.putInt("arlOQItem_FutureNum",
-                            ((NewOQActivity) getActivity()).arlOqDo_Future.size());
+                            ((NewOQActivity) getActivity()).tempArl.size());
                     ((NewOQActivity) getActivity()).showDialogFragment(bundle);
                 }
             }
@@ -159,7 +158,7 @@ public class NewOQFrag0Neo extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString("diaFragT", DiaFragT.MySpentItem);
-                bundle.putString("OQTWantT_Future", OQTWantT_Future);
+                bundle.putString("mDoWhat", OQTWantT_Future);
 
                 ((NewOQActivity) getActivity()).showDialogFragment(bundle);
 
@@ -170,26 +169,28 @@ public class NewOQFrag0Neo extends Fragment {
             @Override
             public void onClick(View v) {
 
-                int othersNum = ((NewOQActivity) getActivity()).arlOqDo_Future.size();
+                int othersNum = ((NewOQActivity) getActivity()).tempArl.size();
                 //sumAmmountMySpent / (n+1)
 
+                long sumSpent = 0;
+                for (NewOQActivity.TempSpent tSpent :
+                        ((NewOQActivity)getActivity()).tempArlSpent){
+                    sumSpent +=tSpent.ammount;
+                }
+
                 long div = OqDoUtil.getDivideByMeAndOthers(
-                        OqDoUtil.getSumOqDoAmmounts(
-                                ((NewOQActivity) getActivity()).arlOqDo_Paid
-                        ),
+                        sumSpent,
                         othersNum);
 
-                for (OqDo oqItem : ((NewOQActivity) getActivity()).arlOqDo_Future) {
-                    oqItem.setAmmount(div);
-                    //update view
+                long divSum = 0;
+                for (NewOQActivity.TempProAmt t :
+                        ((NewOQActivity)getActivity()).tempArl){
+                    t.ammount = div;
+                    divSum += div;
                 }
 
-                long divSum = 0;
-                for (OqDo oqItem : ((NewOQActivity) getActivity()).arlOqDo_Future) {
-                    divSum += oqItem.getAmmount();
-                }
-                cvMySpentApplyArlOqItemsPastToLo();
-                //update sum view
+                tvSumOqItems .setText( J.st1000(divSum));
+                uiSpents();
 
             }
         });
@@ -212,55 +213,54 @@ public class NewOQFrag0Neo extends Fragment {
      */
 
 
-    public void cvProfileApplyArlSelectedProfilesToLo() {
-        Log.d(TAG, "cvProfileApplyArlSelectedProfilesToLo()");
+    public void uiSelectedProfiles() {
+        Log.d(TAG, "uiSelectedProfiles()");
 
         loSelectedPeople.removeAllViews();
 
-        if (((NewOQActivity) getActivity()).arlOqDo_Future == null ||
+        if (((NewOQActivity) getActivity()).tempArl == null ||
                 ((NewOQActivity) getActivity
-                ()).arlOqDo_Future.size() == 0) {
+                ()).tempArl.size() == 0) {
             JM.btEnable(btEasyInput, false);
 
         } else {
             JM.btEnable(btEasyInput, true);
 
-
-            Log.d(TAG, "((NewOQActivity) getActivity()).arlOqDo_Future " +
-                    J.st(((NewOQActivity) getActivity()).arlOqDo_Future.size()));
-
-            for (final OqDo oqDo : ((NewOQActivity) getActivity()).arlOqDo_Future) {
+            for (final NewOQActivity.TempProAmt t : ((NewOQActivity) getActivity())
+                    .tempArl) {
 
                 final LoIvAvatarTvNameSmallEtAmountLargeIvBtns lo = new
                         LoIvAvatarTvNameSmallEtAmountLargeIvBtns(getActivity());
 
+                lo.tempProAmt = t;
+
 
                 JM.glideProfileThumb(
-                        oqDo.getUidb(),
-                        oqDo.getNameb(),
+                        t.profile,
                         lo.ivAvatar,
                         lo.tvAvatar,
                         this
                 );
 
 
-                lo.tvName.setText(oqDo.getNameb());
+                lo.tvName.setText(t.profile.full_name);
                 lo.setOnIvTocClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        long l = oqDo.getAmmount();
-                        for (OqDo oqDo1 : ((NewOQActivity) getActivity()).arlOqDo_Future){
-                            oqDo1.setAmmount(l);
-                        }
-                        cvProfileApplyArlSelectedProfilesToLo();
+                        long l = Long.parseLong(lo.loetmomey.etMoneyAmmount.getText().toString());
+                        //...
+                        uiSelectedProfiles();
                     }
                 });
+
                 lo.setOnIvDeleteClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((NewOQActivity) getActivity()).arlOqDo_Future.remove(oqDo);
-                        cvProfileApplyArlSelectedProfilesToLo();
+                        ((NewOQActivity) getActivity()).tempArl.remove(t);
+                        loSelectedPeople.removeView(lo);
+                        uiSelectedProfiles();
+                        tvNextEnableOrNot();
                     }
                 });
 
@@ -279,17 +279,18 @@ public class NewOQFrag0Neo extends Fragment {
                                 getActivity()
                         )
                 );
-                lo.loetmomey.etMoneyAmmount.setText(J.st(oqDo.getAmmount()));
+                lo.loetmomey.etMoneyAmmount.setText(J.st1000(t.ammount));
                 lo.loetmomey.etMoneyAmmount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
                 lo.loetmomey.etMoneyAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
                 lo.loetmomey.etMoneyAmmount.addTextChangedListener(
                         new SimpleTextWatcher(
                                 lo.loetmomey.etMoneyAmmount,
-                                oqDo,
+                                t,
                                 (NewOQActivity) getActivity(),
                                 mFragment
                         ));
 
+                lo.setTag(t);
 
                 loSelectedPeople.addView(lo);
 
@@ -303,13 +304,13 @@ public class NewOQFrag0Neo extends Fragment {
     }
 
 
-    public void cvMySpentApplyArlOqItemsPastToLo() {
-        Log.d(TAG, "cvMySpentApplyArlOqItemsPastToLo()");
+    public void uiSpents() {
+        Log.d(TAG, "uiSpents()");
 
         loMySpent.removeAllViews();
 
-        if (((NewOQActivity) getActivity()).arlOqDo_Paid == null ||
-                ((NewOQActivity) getActivity()).arlOqDo_Paid.size() == 0) {
+        if (((NewOQActivity) getActivity()).tempArlSpent == null ||
+                ((NewOQActivity) getActivity()).tempArlSpent.size() == 0) {
 
             JM.btEnable(btApplyMySpentToReq, false);
 
@@ -317,27 +318,35 @@ public class NewOQFrag0Neo extends Fragment {
 
             JM.btEnable(btApplyMySpentToReq, true);
 
-            for (final OqDo oqDo : ((NewOQActivity) getActivity()).arlOqDo_Paid) {
+
+
+            for (final NewOQActivity.TempSpent t : ((NewOQActivity) getActivity())
+                    .tempArlSpent) {
 
                 final LoIvAvatarTvNameSmallEtAmountLargeIvBtnsAtchSpent lo = new
                         LoIvAvatarTvNameSmallEtAmountLargeIvBtnsAtchSpent(getActivity());
 
+                lo.tempProAmt = t;
 
-                lo.tvName.setText(oqDo.getNameb());
+                lo.tvName.setText(t.profile .full_name);
+
                 lo.setOnIvTocClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Bundle bundle = new Bundle();
                         bundle.putString("diaFragT", DiaFragT.MySpentItem);
-                        bundle.putSerializable("oqItem", oqDo);
+                        bundle.putSerializable("TempSpent", t);
                         ((NewOQActivity) getActivity()).showDialogFragment(bundle);
                     }
                 });
+
                 lo.setOnIvDeleteClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((NewOQActivity) getActivity()).arlOqDo_Paid.remove(oqDo);
-                        cvMySpentApplyArlOqItemsPastToLo();
+                        ((NewOQActivity) getActivity()).tempArlSpent.remove(t);
+                        uiSpents();
+                        tvNextEnableOrNot();
+
                     }
                 });
 
@@ -361,7 +370,7 @@ public class NewOQFrag0Neo extends Fragment {
                 lo.loetmomey.etMoneyAmmount.addTextChangedListener(new
                         SimpleTextWatcher2(
                         lo.loetmomey.etMoneyAmmount,
-                        oqDo,
+                        t,
                         (NewOQActivity) getActivity(),
                         mFragment
                 ));
@@ -382,21 +391,21 @@ public class NewOQFrag0Neo extends Fragment {
     public void tvNextEnableOrNot() {
 
         if (
-                ((NewOQActivity) getActivity()).arlOqDo_Future == null ||
-                        ((NewOQActivity) getActivity()).arlOqDo_Future.size() == 0 ||
-                        OqDoUtil.isFalseOqItem(((NewOQActivity) getActivity()).arlOqDo_Future)
+                ((NewOQActivity) getActivity()).tempArl == null ||
+                        ((NewOQActivity) getActivity()).tempArl.size() == 0 ||
+                        OqDoUtil.isFalseOqItem(((NewOQActivity) getActivity()).tempArl)
                 ) {
 
 
-            if (((NewOQActivity) getActivity()).arlOqDo_Future == null) {
+            if (((NewOQActivity) getActivity()).tempArl == null) {
                 Log.d(TAG, "((NewOQActivity) getActivity()).arlOqDo_Future == null");
             }
 
-            if (((NewOQActivity) getActivity()).arlOqDo_Future.size() == 0) {
+            if (((NewOQActivity) getActivity()).tempArl.size() == 0) {
                 Log.d(TAG, "((NewOQActivity) getActivity()).arlOqDo_Future.size() == 0");
             }
 
-            if (OqDoUtil.isFalseOqItem(((NewOQActivity) getActivity()).arlOqDo_Future)) {
+            if (OqDoUtil.isFalseOqItem(((NewOQActivity) getActivity()).tempArl)) {
                 Log.d(TAG, "OqDoUtil.isFalseOqItem(((NewOQActivity) getActivity()).arlOqDo_Future");
             }
 

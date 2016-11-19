@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -64,7 +63,7 @@ public class Ava2RelationDtlSmallVHolder extends RecyclerView.ViewHolder {
 
         tvDate =
                 (TextView) loTwoAvaWrap
-                        .findViewById(R.id.tvDateTwoAva);
+                        .findViewById(R.id.tvResultAmmount);
 
         tvContent =
                 (TextView) loTwoAvaWrap

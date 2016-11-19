@@ -413,6 +413,7 @@ public class SMSListActivity extends BaseActivity
     void initUIDataOnResume() {
         super.initUIDataOnResume();
         tvToolbarTitle.setText(JM.strById(R.string.load_sms));
+
     }
 
     @Override
@@ -438,6 +439,7 @@ public class SMSListActivity extends BaseActivity
                 }
             }
         });
+        swFilter.setChecked(true);
     }
 
     static void bottomSheetControl(int selectedSmsNum) {

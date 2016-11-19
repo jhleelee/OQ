@@ -5,8 +5,7 @@ import android.view.View;
 
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.object.OQPost;
-import com.jackleeentertainment.oq.object.Profile;
+ import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.ui.layout.fragment.PostCommentFrag;
 
 
@@ -42,14 +41,14 @@ public class ViewPhotoActivity extends BaseFragmentContainFullDialogActivity {
         Bundle bundle = new Bundle();
 
         Profile  profile = (Profile)getIntent().getSerializableExtra("Profile");
-        OQPost  oqPost = (OQPost)getIntent().getSerializableExtra("OQPost");
+        String pid  = getIntent().getStringExtra("pid");
 
         if (profile!=null) {
             bundle.putSerializable("Profile", profile);
         }
 
-        if (oqPost!=null) {
-            bundle.putSerializable("OQPost", oqPost);
+        if (pid!=null) {
+            bundle.putString("pid", pid);
         }
 
 //        showFrag(ViewPhotoFrag.newInstance(bundle), R.id.fr_content);

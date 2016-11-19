@@ -32,17 +32,23 @@ import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.generalutil.StringGenerator;
 import com.jackleeentertainment.oq.object.Comment;
-import com.jackleeentertainment.oq.object.OQPost;
+import com.jackleeentertainment.oq.object.MyOqPost;
 import com.jackleeentertainment.oq.object.OQPostPhoto;
+import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQPostT;
+import com.jackleeentertainment.oq.object.util.OqDoUtil;
+import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.PostCommentActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.ProfileActivity;
 import com.jackleeentertainment.oq.ui.layout.viewholder.PostViewHolder;
 import com.jackleeentertainment.oq.ui.widget.EndlessRecyclerViewScrollListener;
+import com.jackleeentertainment.oq.ui.widget.LoComment;
 import com.jackleeentertainment.oq.ui.widget.LoMyOppo;
+import com.jackleeentertainment.oq.ui.widget.LoOppoFeed;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -66,10 +72,11 @@ public class MainFrag1_Feeds extends ListFrag {
     }
 
     LinearLayoutManager linearLayoutManager;
+
     @Override
     public void initUI() {
         super.initUI();
-          linearLayoutManager = new LinearLayoutManager(App.getContext());
+        linearLayoutManager = new LinearLayoutManager(App.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         // Add the scroll listener
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -99,7 +106,7 @@ public class MainFrag1_Feeds extends ListFrag {
         if (App.fbaseDbRef != null) {
 
             initRVAdapter();
-            linearLayoutManager   .scrollToPositionWithOffset(0, 0);
+            linearLayoutManager.scrollToPositionWithOffset(0, 0);
 
 
         } else {
@@ -110,7 +117,7 @@ public class MainFrag1_Feeds extends ListFrag {
 
     void initRVAdapter() {
 
-        checkIfFirebaseListIsEmpty(getActivity());
+//        checkIfFirebaseListIsEmpty(getActivity());
 
         ro_empty_list.setVisibility(View.GONE);
         roProgress.setVisibility(View.GONE);
@@ -118,8 +125,8 @@ public class MainFrag1_Feeds extends ListFrag {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OQPost, PostViewHolder>
-                (OQPost.class,
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<MyOqPost, PostViewHolder>
+                (MyOqPost.class,
                         R.layout.i_post,
                         PostViewHolder.class,
                         App.fbaseDbRef
@@ -127,256 +134,341 @@ public class MainFrag1_Feeds extends ListFrag {
                                 .child(App.getUid(getActivity()))
                 ) {
 
+
+            @Override
+            public int getItemCount() {
+                int i = super.getItemCount();
+                if (i==0){
+                    ro_empty_list.setVisibility(View.VISIBLE);
+                } else {
+                    ro_empty_list.setVisibility(View.GONE);
+                }
+                return i;
+            }
+
+
+
             public void populateViewHolder(
                     final PostViewHolder postViewHolder,
-                    final OQPost oqPost,
+                    final MyOqPost myOqPost,
                     int position) {
 
 
+                /*
+                MyOqPost - Avatar, Name, Ts / by pid - OqDo, Comment
+                 */
 
-
-                //avatar ..
-
-                if (oqPost.getUid() != null) {
-
-
+                if (myOqPost.getProfile().getUid() != null) {
                     JM.glideProfileThumb(
-                            oqPost.getUid(),
-                            oqPost.getUname(),
+                            myOqPost.profile,
                             postViewHolder.ivAvatar,
                             postViewHolder.tvAvatar,
                             mFragment
                     );
-
-
                 }
+
+
                 postViewHolder.roAvatar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        if (oqPost!=null&&oqPost.getUid()!=null){
-                            App.fbaseDbRef
-                                    .child(FBaseNode0.ProfileToPublic)
-                                    .child(oqPost.getUid())
-                                    .child(oqPost.getPid())
-                                    .addListenerForSingleValueEvent(
-                                            new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    if (dataSnapshot.exists()) {
-                                                        Profile profile = dataSnapshot.getValue(Profile
-                                                                .class);
-                                                        Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                                                        intent.putExtra("Profile", profile);
-                                                        if(profile.getUid().equals(App.getUid(getActivity()))){
-                                                            intent.putExtra("isMe", true);
-                                                        }
-                                                        startActivity(intent);
-                                                    }
-                                                }
+                        if (myOqPost != null && myOqPost.profile != null) {
 
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-
-                                                }
-                                            }
-                                    );
+                            Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                            intent.putExtra("Profile", myOqPost.profile);
+                            if (myOqPost.profile.uid.equals(App.getUid(getActivity()))) {
+                                intent.putExtra("isMe", true);
+                            }
+                            startActivity(intent);
                         }
-
-
-
-
                     }
                 });
 
+                postViewHolder.tvName.setText(myOqPost.profile.full_name);
+                postViewHolder.tvDate.setText(JT.str(myOqPost.getTs()));
 
-                postViewHolder.tvName.setText(oqPost.getUname());
-                postViewHolder.tvDeed.setText(StringGenerator.deed(oqPost));
-                postViewHolder.tvDate.setText(JT.str(oqPost.getTs()));
+
+                //OqDo
+
+                Query queryOqDo = App.fbaseDbRef
+                        .child(FBaseNode0.OqDo)
+                        .orderByChild("pid")
+                        .equalTo(myOqPost.pid);
+                queryOqDo
+                        .addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+
+                                            List<OqDo> list = new ArrayList<OqDo>();
+                                            long childrenCount = dataSnapshot.getChildrenCount();
+
+                                            Iterable<DataSnapshot> i = dataSnapshot.getChildren();
+
+                                            for (DataSnapshot d : i) {
+                                                OqDo oqDo = d.getValue(OqDo.class);
+                                                list.add(oqDo);
+                                            }
+
+                                            //(1) classify by Person
+                                            ArrayList<ArrayList<OqDo>> arlArlOqDoPerPeople =
+                                                    OqDoUtil
+                                                    .getArlArlOqDoPerPeople(list, getActivity());
+
+                                            for (ArrayList<OqDo> arlOqDoPerPeople :
+                                                    arlArlOqDoPerPeople){ //For
+                                                // each Person
+
+                                                OqDoUtil.sortList(arlOqDoPerPeople);
+                                                Profile profileOppo = OqDoUtil
+                                                        .getOppoProfileFromOqDo(
+                                                        arlOqDoPerPeople.get(0),
+                                                                getActivity()
+                                                );
+
+                                                LoOppoFeed loMyOppo = new LoOppoFeed(getActivity());
+                                                JM.glideProfileThumb(
+                                                        profileOppo,
+                                                        postViewHolder.ivAvatar,
+                                                        postViewHolder.tvAvatar,
+                                                        mFragment
+                                                );
+                                                loMyOppo.tvName.setText(profileOppo.full_name);
+
+
+                                                {
+                                                    loMyOppo.tvAmmount.setText(
+                                                            J.st(OqDoUtil.getSumOqDoAmmounts
+                                                                    (arlOqDoPerPeople))
+                                                    );
+                                                    loMyOppo.tvDeed.setText(OqDoUtil
+                                                            .getOqDoListStr(arlOqDoPerPeople));
+                                                }
+
+                                                postViewHolder.loOqOppo.addView(loMyOppo);
+                                            }
+
+
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                }
+                        );
+
+                //Comment
+
+                Query query = App.fbaseDbRef
+                        .child(FBaseNode0.OqPostComment)
+                        .child(myOqPost.pid)
+                        .orderByChild("ts")
+                        .limitToLast(1);
+
+
+                query
+                        .addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        if (dataSnapshot.exists()) {
+                                            Comment comment = dataSnapshot.getValue(Comment.class);
+                                            if (comment != null) {
+
+                                                postViewHolder.loCommentOne.removeAllViews();
+                                                postViewHolder.loCommentOne.removeAllViewsInLayout();
+
+                                                LoComment loComment = new LoComment(getActivity());
+
+                                                JM.glideProfileThumb(
+                                                        comment.profile,
+                                                        loComment.ivAvatar,
+                                                        loComment.tvAvatar,
+                                                        mFragment
+                                                );
+
+                                                loComment.tvName.setText(comment.profile.full_name);
+
+                                                loComment.tvTs.setText(JT.str(comment.ts));
+
+                                                loComment.tvMultilineTxt.setText(comment.txt);
+
+                                                postViewHolder.loCommentOne.addView(loComment);
+                                            } else {
+                                                postViewHolder.loCommentOne.setVisibility(View.GONE);
+                                            }
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.d(TAG, databaseError.toString());
+                                    }
+                                }
+                        );
+
+
+                /*
+                OqPost - Media, Comment
+                 */
 
 
                 //media ..
 
 
-                if (oqPost.getPosttype()==null||oqPost.getPosttype().equals(OQPostT.NONE)) {
-                    postViewHolder.roMedia.setVisibility(View.GONE);
-                } else if (oqPost.getPosttype().equals(OQPostT.PHOTO)) {
+                App.fbaseDbRef
+                        .child(FBaseNode0.OqPostPhoto)
+                        .child(myOqPost.getPid())
+                        .addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    App.fbaseDbRef
-                            .child(FBaseNode0.OQPostPhoto)
-                            .child(oqPost.getPid())
-                            .addListenerForSingleValueEvent(
-                                    new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
 
-                                            if (dataSnapshot.exists()) {
+                                            postViewHolder.roMedia.setVisibility(View.VISIBLE);
+                                            postViewHolder.ivPhotoMain.setVisibility(View.VISIBLE);
 
-                                                OQPostPhoto oqPostPhoto = dataSnapshot.getValue
-                                                        (OQPostPhoto.class);
+                                            OQPostPhoto oqPostPhoto = dataSnapshot.getValue
+                                                    (OQPostPhoto.class);
 
-                                                List<String> oqPhotoIds = oqPostPhoto.getPhotoids();
+                                            List<String> oqPhotoIds = oqPostPhoto.getPhotoids();
 
-                                                if (oqPhotoIds != null &&
-                                                        oqPhotoIds.size() > 0) {
+                                            if (oqPhotoIds != null &&
+                                                    oqPhotoIds.size() > 0) {
 
-                                                    Log.d(TAG, "oqPostPhoto.getPhotoids().get(0) " +
-                                                            ": " + oqPhotoIds.get
-                                                            (0));
+                                                Log.d(TAG, "oqPostPhoto.getPhotoids().get(0) " +
+                                                        ": " + oqPhotoIds.get
+                                                        (0));
 
+                                                postViewHolder.roMedia.setVisibility(View.VISIBLE);
+                                                postViewHolder.ivPhotoMain.setVisibility(View.VISIBLE);
+
+                                                Glide.with(mFragment)
+                                                        .using(new FirebaseImageLoader())
+                                                        .load(App.fbaseStorageRef
+                                                                .child(FStorageNode.FirstT.POST_PHOTO)
+                                                                .child(oqPhotoIds.get(0)))
+                                                        .crossFade()
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                                                            @Override
+                                                            public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                                                postViewHolder.roMedia.setVisibility(View.GONE);
+                                                                return false;
+                                                            }
+
+                                                            @Override
+                                                            public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                                                return false;
+                                                            }
+                                                        })
+                                                        .into(postViewHolder.ivPhotoMain);
+
+
+                                                if (oqPhotoIds.size() >= 2) {
+
+                                                    postViewHolder.roPhotoSub
+                                                            .setVisibility(View.VISIBLE);
+
+                                                    //set Image
                                                     Glide.with(mFragment)
                                                             .using(new FirebaseImageLoader())
                                                             .load(App.fbaseStorageRef
                                                                     .child(FStorageNode.FirstT.POST_PHOTO)
-                                                                    .child(oqPhotoIds.get(0)))
+                                                                    .child(oqPhotoIds
+                                                                            .get(1)))
                                                             .crossFade()
                                                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                             .listener(new RequestListener<StorageReference, GlideDrawable>() {
                                                                 @Override
                                                                 public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                                                    postViewHolder.roMedia.setVisibility(View.GONE);
+                                                                    postViewHolder.roPhotoSub.setVisibility(View.GONE);
+
                                                                     return false;
                                                                 }
 
                                                                 @Override
                                                                 public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                                                    postViewHolder.roMedia.setVisibility(View.VISIBLE);
-                                                                    postViewHolder.ivPhotoMain.setVisibility(View.VISIBLE);
 
                                                                     return false;
                                                                 }
                                                             })
-                                                            .into(postViewHolder.ivPhotoMain);
+                                                            .into(postViewHolder.ivPhotoSub);
 
+                                                    if (oqPhotoIds.size() >= 3) {
+                                                        //tv
+                                                        postViewHolder.tvPhotoSubNum
+                                                                .setVisibility(View.VISIBLE);
 
-                                                    if (oqPhotoIds.size() >= 2) {
-
-                                                        //set Image
-                                                        Glide.with(mFragment)
-                                                                .using(new FirebaseImageLoader())
-                                                                .load(App.fbaseStorageRef
-                                                                        .child(FStorageNode.FirstT.POST_PHOTO)
-                                                                        .child(oqPhotoIds
-                                                                                .get(1)))
-                                                                .crossFade()
-                                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                                .listener(new RequestListener<StorageReference, GlideDrawable>() {
-                                                                    @Override
-                                                                    public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                                                        postViewHolder.roPhotoSub.setVisibility(View.GONE);
-
-                                                                        return false;
-                                                                    }
-
-                                                                    @Override
-                                                                    public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                                                        postViewHolder.roPhotoSub
-                                                                                .setVisibility(View.VISIBLE);
-
-                                                                        return false;
-                                                                    }
-                                                                })
-                                                                .into(postViewHolder.ivPhotoSub);
-
-                                                        if (oqPhotoIds.size() >= 3) {
-                                                            //tv
-                                                            postViewHolder.tvPhotoSubNum
-                                                                    .setVisibility(View.VISIBLE);
-
-                                                            postViewHolder.tvPhotoSubNum
-                                                                    .setText("+" + J.st
-                                                                            (oqPhotoIds.size()
-                                                                                    - 2));
-                                                        }
-
+                                                        postViewHolder.tvPhotoSubNum
+                                                                .setText("+" + J.st
+                                                                        (oqPhotoIds.size()
+                                                                                - 2));
                                                     }
-
 
                                                 }
 
 
-                                            } else {
-                                                postViewHolder.roMedia.setVisibility(View.GONE);
                                             }
 
 
+                                        } else {
+                                            postViewHolder.roMedia.setVisibility(View.GONE);
                                         }
 
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
 
-                                        }
                                     }
-                            );
 
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
-                }
-
-                if (oqPost.getPosttype()!=null&&oqPost.getPosttype().equals(OQPostT.VIDEO)) {
-                    postViewHolder.roMedia.setVisibility(View.VISIBLE);
-                    postViewHolder.ivPhotoMain.setVisibility(View.GONE);
-                    postViewHolder.vvPhotoMain.setVisibility(View.VISIBLE);
-
-                }
-
-                postViewHolder.tvSupportingText.setText(oqPost.getTxt());
-
-
-                if (oqPost.getWids() != null) {
-                    List<String> listWids = oqPost.getWids();
-
-                    for (final String wid : listWids) {
-
-                        final LoMyOppo lo = new
-                                LoMyOppo(getActivity());
-
-                        //set Image
-
-                        JM.glideProfileThumb(
-                                oqPost.getUid(),
-                                oqPost.getUname(),
-                                lo.ivAvatar,
-                                lo.tvAvatar,
-                                mFragment
+                                    }
+                                }
                         );
 
 
-                        lo.ro_person_photo_48dip__i_oppo.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                                Bundle bundle = new Bundle();
-                                intent.putExtra("uid", oqPost.getUid());
-                                intent.putExtra("uname", oqPost.getUname());
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                            }
-                        });
+                App.fbaseDbRef
+                        .child(FBaseNode0.OqPostText)
+                        .child(myOqPost.getPid())
+                        .addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        if (dataSnapshot.exists()) {
+
+                                            postViewHolder.tvSupportingText.setVisibility(View.VISIBLE);
+                                            postViewHolder.tvSupportingText.setText(dataSnapshot
+                                                    .getValue(String.class));
+
+                                        } else {
+                                            postViewHolder.tvSupportingText.setVisibility(View.GONE);
+                                        }
 
 
-                        lo.tvTitle__i_oppo.setText(oqPost.getUname());
-                        lo.tvDeed.setText("text temp");
+                                    }
 
-                        postViewHolder.loOqOppo.addView(lo);
-                    }
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
-
-                }
-
-
-                if (oqPost.getLastcmt() != null) {
-                    Comment comment = oqPost.getLastcmt();
-
-                    //comment layout
-
-                }
+                                    }
+                                }
+                        );
 
 
                 postViewHolder.tvAddComment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), PostCommentActivity.class);
-                        intent.putExtra("pid", oqPost.getPid());
+                        intent.putExtra("pid", myOqPost.getPid());
                         startActivity(intent);
                     }
                 });
@@ -388,72 +480,72 @@ public class MainFrag1_Feeds extends ListFrag {
     }
 
 
-    private void get100ObjIdOfFeedsFromFirebase(int lastLoadedObjIdDx) {
+//    private void get100ObjIdOfFeedsFromFirebase(int lastLoadedObjIdDx) {
+//
+//        Query query = App.fbaseDbRef
+//                .child("m_fd")
+//                .child(App.getUid(getActivity()))
+//                .startAt(lastLoadedObjIdDx + 1)
+//                .endAt(lastLoadedObjIdDx + 1 + 100);
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Iterable<DataSnapshot> i = dataSnapshot.getChildren();
+//                int fidcount = 0;
+//                int intTotalMemberNum = (int) dataSnapshot.getChildrenCount();
+//
+//                for (DataSnapshot d : i) {
+//                    String keyPostOId = d.getKey();
+//                    long valuePostLastUpdatedTs = d.getValue(Long.class);
+//                    Ram.addKeyPostOIdValueLastTs(keyPostOId, valuePostLastUpdatedTs);
+//                }
+//
+//                Ram.sortArlPostsByTs();
+//                getContentsOfFirstEmpty20OfRAMArlPosts();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//    }
 
-        Query query = App.fbaseDbRef
-                .child("m_fd")
-                .child(App.getUid(getActivity()))
-                .startAt(lastLoadedObjIdDx + 1)
-                .endAt(lastLoadedObjIdDx + 1 + 100);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> i = dataSnapshot.getChildren();
-                int fidcount = 0;
-                int intTotalMemberNum = (int) dataSnapshot.getChildrenCount();
-
-                for (DataSnapshot d : i) {
-                    String keyPostOId = d.getKey();
-                    long valuePostLastUpdatedTs = d.getValue(Long.class);
-                    Ram.addKeyPostOIdValueLastTs(keyPostOId, valuePostLastUpdatedTs);
-                }
-
-                Ram.sortArlPostsByTs();
-                getContentsOfFirstEmpty20OfRAMArlPosts();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-
-    void getContentsOfFirstEmpty20OfRAMArlPosts() {
-
-        //specify first empty up to 20 items
-        ArrayList<Integer> arlDx = new ArrayList<>();
-        for (int i = 0; i < Ram.arlPosts.size(); i++) {
-            if (Ram.arlPosts.get(i).getPosttype() == null) {
-                arlDx.add(i);
-            }
-        }
-
-        for (dxArlPostsToUpdate = 0; dxArlPostsToUpdate < arlDx.size(); dxArlPostsToUpdate++) {
-
-            App.fbaseDbRef
-                    .child(FBaseNode0.OQPost)
-                    .child(Ram.arlPosts.get(arlDx.get(dxArlPostsToUpdate)).getUid())
-                    .child(Ram.arlPosts.get(arlDx.get(dxArlPostsToUpdate)).getPid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String key = dataSnapshot.getKey();
-                            OQPost post = dataSnapshot.getValue(OQPost.class);
-                            post.setPid(key);
-                            Ram.arlPosts.set(dxArlPostsToUpdate, post);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-        }
-    }
+//    void getContentsOfFirstEmpty20OfRAMArlPosts() {
+//
+//        //specify first empty up to 20 items
+//        ArrayList<Integer> arlDx = new ArrayList<>();
+//        for (int i = 0; i < Ram.arlPosts.size(); i++) {
+//            if (Ram.arlPosts.get(i).getPosttype() == null) {
+//                arlDx.add(i);
+//            }
+//        }
+//
+//        for (dxArlPostsToUpdate = 0; dxArlPostsToUpdate < arlDx.size(); dxArlPostsToUpdate++) {
+//
+//            App.fbaseDbRef
+//                    .child(FBaseNode0.OQPost)
+//                    .child(Ram.arlPosts.get(arlDx.get(dxArlPostsToUpdate)).profile.uid)
+//                    .child(Ram.arlPosts.get(arlDx.get(dxArlPostsToUpdate)).getPid())
+//                    .addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            String key = dataSnapshot.getKey();
+//                            OQPost post = dataSnapshot.getValue(OQPost.class);
+//                            post.setPid(key);
+//                            Ram.arlPosts.set(dxArlPostsToUpdate, post);
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//        }
+//    }
 
 
     @Override

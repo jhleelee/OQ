@@ -10,75 +10,22 @@ public class OqDo implements Serializable {
 
 
 
-    String oid;
-
-
-    String referoid;
-    String wid;
-    String uida;
-    String namea;
-    String emaila;
-    String uidb;
-    String nameb;
-    String emailb;
-    long ammount;
-    long ts;
-    String currency;
-    String oqwhen;//point - future=obligation, now=paying, past=paid
-    String oqwhat;//get ; pa
+  public   String oid;
+    public String referoid;
+    public  String uidab;
+    public Profile profilea;
+    public Profile profileb;
+    public long ammount;
+    public  long ts;
+    public  String currency;
+    public  String oqwhen;//point - future=obligation, now=paying, past=paid
+    public  String oqwhat;//get ; pa
 
 
     public OqDo() {
         super();
     }
 
-    public String getUida() {
-        return uida;
-    }
-
-    public void setUida(String uida) {
-        this.uida = uida;
-    }
-
-    public String getNamea() {
-        return namea;
-    }
-
-    public void setNamea(String namea) {
-        this.namea = namea;
-    }
-
-    public String getEmaila() {
-        return emaila;
-    }
-
-    public void setEmaila(String emaila) {
-        this.emaila = emaila;
-    }
-
-    public String getUidb() {
-        return uidb;
-    }
-
-    public void setUidb(String uidb) {
-        this.uidb = uidb;
-    }
-
-    public String getNameb() {
-        return nameb;
-    }
-
-    public void setNameb(String nameb) {
-        this.nameb = nameb;
-    }
-
-    public String getEmailb() {
-        return emailb;
-    }
-
-    public void setEmailb(String emailb) {
-        this.emailb = emailb;
-    }
 
     public long getAmmount() {
         return ammount;
@@ -130,13 +77,7 @@ public class OqDo implements Serializable {
         this.oid = oid;
     }
 
-    public String getWid() {
-        return wid;
-    }
 
-    public void setWid(String wid) {
-        this.wid = wid;
-    }
 
     public String getReferoid() {
         return referoid;
@@ -144,6 +85,29 @@ public class OqDo implements Serializable {
 
     public void setReferoid(String referoid) {
         this.referoid = referoid;
+    }
+    public Profile getProfileb() {
+        return profileb;
+    }
+
+    public void setProfileb(Profile profileb) {
+        this.profileb = profileb;
+    }
+
+    public String getUidab() {
+        return uidab;
+    }
+
+    public void setUidab(String uidab) {
+        this.uidab = uidab;
+    }
+
+    public Profile getProfilea() {
+        return profilea;
+    }
+
+    public void setProfilea(Profile profilea) {
+        this.profilea = profilea;
     }
 
 }

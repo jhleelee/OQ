@@ -21,13 +21,13 @@ public class SimpleTextWatcher2  implements TextWatcher {
     private EditText mEditText;
     NewOQActivity mNewOQActivity;
     NewOQFrag0Neo mNewOQFrag0;
-    OqDo mOqDo;
+    NewOQActivity.TempSpent mTempSpent;
 
-    public SimpleTextWatcher2(EditText editText, OqDo oqItem,
+    public SimpleTextWatcher2(EditText editText, NewOQActivity.TempSpent t,
                              NewOQActivity newOQActivity,
                              NewOQFrag0Neo newOQFrag0Neo) {
         mEditText = editText;
-        mOqDo = oqItem;
+        mTempSpent = t;
         mNewOQActivity = newOQActivity;
         mNewOQFrag0= newOQFrag0Neo;
     }
@@ -45,27 +45,38 @@ public class SimpleTextWatcher2  implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
 
-
         Log.d(TAG, "afterTextChanged");
-        if (mNewOQActivity!=null){
-            OqDo oqDo = OqDoUtil.getOqDoWithUidB(
-                    (mNewOQActivity).arlOqDo_Paid,
-                    mOqDo.getUidb());
+
+        mEditText.removeTextChangedListener(this);
+
+        if (mNewOQActivity != null) {
+
             long l = 0;
             try {
                 l = Long.parseLong(
                         mEditText.getText().toString());
-                oqDo.setAmmount(l);
-                long sum = OqDoUtil.getSumOqDoAmmounts(
-                        (mNewOQActivity).arlOqDo_Paid
-                );
-                mNewOQFrag0.tvSumOqItems.setText(JM.strById(R.string.symbol_krw)+String.valueOf(sum));
+                mTempSpent.ammount = l;
 
-            } catch (Exception e){
+                long sum = 0;
+                for (NewOQActivity.TempSpent t :
+                        mNewOQActivity.tempArlSpent) {
+                    sum += t.ammount;
+                }
+
+                mNewOQFrag0.tvSumMySpent.setText(String.valueOf(sum));
+                mNewOQFrag0.tvNextEnableOrNot();
+
+            } catch (Exception e) {
                 Log.d(TAG, e.toString());
+
             }
 
 
+        } else {
+            Log.d(TAG, "mNewOQActivity!=null");
         }
+
+        mEditText.addTextChangedListener(this);
+
     }
 }

@@ -17,10 +17,10 @@ import com.jackleeentertainment.oq.R;
 public class LoMyOppo extends LinearLayout {
 
 
-    public RelativeLayout ro_person_photo_48dip__i_oppo;
+    public RelativeLayout roAvatar;
     public ImageView ivAvatar;
     public TextView tvAvatar;
-    public TextView tvTitle__i_oppo, tvDate__i_oppo, tvAmtConfirmed, tvAmtYet, tvAmtDone, tvDeed;
+    public TextView tvName, tvDate__i_oppo, tvAmtConfirmed, tvAmtYet, tvAmtDone, tvDeed;
 
 
     public LoMyOppo(Context context) {
@@ -30,14 +30,14 @@ public class LoMyOppo extends LinearLayout {
     public LoMyOppo(final Context context, AttributeSet attrs) {
         super(context, attrs);
         View view = inflate(context, R.layout.i_oppo, this);
-        ro_person_photo_48dip__i_oppo = (RelativeLayout) view.findViewById(R.id
+        roAvatar = (RelativeLayout) view.findViewById(R.id
                 .ro_person_photo_48dip__i_oppo);
 
         ivAvatar = (ImageView) view.findViewById(R.id
                 .ivAva);
         tvAvatar = (TextView) view.findViewById(R.id
                 .tvAva);
-        tvTitle__i_oppo = (TextView) view.findViewById(R.id
+        tvName = (TextView) view.findViewById(R.id
                 .tvTitle__i_oppo);
         tvDate__i_oppo = (TextView) view.findViewById(R.id
                 .tvDate__i_oppo);

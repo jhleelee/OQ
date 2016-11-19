@@ -125,7 +125,7 @@
 //        );
 //
 //        uiDataCardViewSumType(
-//                ((NewOQActivity) getActivity()).OQTWantT_Future,
+//                ((NewOQActivity) getActivity()).mDoWhat,
 //                ((NewOQActivity) getActivity()).arlOppoProfile,
 //                ((NewOQActivity) getActivity()).ammountAsStandard,
 //                ((NewOQActivity) getActivity()).OQSumT
@@ -139,7 +139,7 @@
 //        initViewPagerChangeListenerCandidates();
 //        initViewPagerAdapter(
 //                ((NewOQActivity) getActivity())
-//                        .OQTWantT_Future,
+//                        .mDoWhat,
 //                ((NewOQActivity) getActivity())
 //                        .arlOppoProfile
 //        );
@@ -344,12 +344,12 @@
 //            JM.V(loMain_PERSON);
 //
 //            if (((NewOQActivity) getActivity())
-//                    .OQTWantT_Future.equals(
+//                    .mDoWhat.equals(
 //                            OQT.WantT.GET)) {
 //                Log.d(TAG, "GET");
 //                tvTitle_PERSON.setText(JM.strById(R.string.payer));
 //            } else if (((NewOQActivity) getActivity())
-//                    .OQTWantT_Future.equals(OQT.WantT
+//                    .mDoWhat.equals(OQT.WantT
 //                            .PAY)) {
 //                Log.d(TAG, "PAY");
 //
@@ -379,10 +379,10 @@
 //    }
 //
 //
-//    void initViewPagerAdapter(String OQTWantT_Future,
+//    void initViewPagerAdapter(String mDoWhat,
 //                              ArrayList<Profile> arlOppoProfile) {
 //        Log.d(TAG, "initViewPagerAdapter()");
-//        if (OQTWantT_Future.equals(OQT.WantT.GET)) {
+//        if (mDoWhat.equals(OQT.WantT.GET)) {
 //            if (arlOppoProfile != null) {
 //                if (arlOppoProfile.size() == 1) {
 //                    viewPager__cardview_titleedittextillust.addOnPageChangeListener(onPCListener_SoIWantToGETFromYou);
@@ -395,7 +395,7 @@
 //                }
 //            }
 //
-//        } else if (OQTWantT_Future.equals(OQT.WantT.PAY)) {
+//        } else if (mDoWhat.equals(OQT.WantT.PAY)) {
 //            viewPager__cardview_titleedittextillust.addOnPageChangeListener(onPCListener_SoIWantToPAY);
 //            viewPager__cardview_titleedittextillust.setAdapter(
 //                    new SumTypePagerAdapter_SoIWantToPAY(getFragmentManager()));
@@ -513,14 +513,14 @@
 //
 //
 //    void uiDataCardViewSumType(
-//            String OQTWantT_Future,
+//            String mDoWhat,
 //            ArrayList<Profile> arlOppoProfile,
 //            long ammountAsStandard,
 //            String OQSumT
 //    ) {
 //        //set default OQSumT
 //        if (OQSumT == null) {
-//            if (((NewOQActivity) getActivity()).OQTWantT_Future.equals(OQT.WantT.GET)) {
+//            if (((NewOQActivity) getActivity()).mDoWhat.equals(OQT.WantT.GET)) {
 //
 //                if (arlOppoProfile.size() == 1) {
 //                    OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYou.I_PAID_FOR_YOU_AND_ME;
@@ -528,7 +528,7 @@
 //                    OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToGETFromYouGuys.I_PAID_FOR_ALL_INCLUDING_YOU__INCLUDING_ME;
 //                }
 //
-//            } else if (((NewOQActivity) getActivity()).OQTWantT_Future.equals(OQT.WantT.PAY)) {
+//            } else if (((NewOQActivity) getActivity()).mDoWhat.equals(OQT.WantT.PAY)) {
 //                OQSumT = com.jackleeentertainment.oq.object.types.OQSumT.SoIWantToPAY.YOU_PAID_FOR_ME;
 //            }
 //        }

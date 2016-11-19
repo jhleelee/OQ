@@ -10,11 +10,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
-import com.jackleeentertainment.oq.Ram;
-import com.jackleeentertainment.oq.generalutil.LBR;
+ import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Chat;
-import com.jackleeentertainment.oq.object.OQPost;
-import com.jackleeentertainment.oq.object.Profile;
+ import com.jackleeentertainment.oq.object.Profile;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -65,8 +63,8 @@ public class SetValue {
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                         if (databaseError == null) {
                             if (toRamLBR) {
-                                Ram.myProfile = myProfile;
-                                LBR.send(FBaseNode0T + LBR.SendSuffixT.SENT, Ram.myProfile);
+//                                Ram.myProfile = myProfile;
+//                                LBR.send(FBaseNode0T + LBR.SendSuffixT.SENT, Ram.myProfile);
                             }
                         }
                     }
@@ -204,28 +202,28 @@ public class SetValue {
 //        }
 //    }
 
-
-    /*
-    OQPost.class
-    */
-
-    public static void post(final OQPost post,
-                            final boolean toRamLBR) {
-        App.fbaseDbRef
-                .child(FBaseNode0.OQPost)
-                .child(post.getUid())
-                .child(post.getPid())
-                .setValue(post, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        if (databaseError == null) {
-                            if (toRamLBR) {
-                                LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.SENT, post);
-                            }
-                        }
-                    }
-                });
-    }
+//
+//    /*
+//    OQPost.class
+//    */
+//
+//    public static void post(final OQPost post,
+//                            final boolean toRamLBR) {
+//        App.fbaseDbRef
+//                .child(FBaseNode0.OQPost)
+//                .child(post.getUid())
+//                .child(post.getPid())
+//                .setValue(post, new DatabaseReference.CompletionListener() {
+//                    @Override
+//                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                        if (databaseError == null) {
+//                            if (toRamLBR) {
+//                                LBR.send(FBaseNode0.OQPost + LBR.SendSuffixT.SENT, post);
+//                            }
+//                        }
+//                    }
+//                });
+//    }
 
 //    public static void postWithPushId(final Post post,
 //                                      final boolean toRamLBR) {

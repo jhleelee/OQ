@@ -24,25 +24,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.Ram;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.object.Comment;
-import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.ProfileActivity;
 import com.jackleeentertainment.oq.ui.layout.viewholder.CommentViewHolder;
 import com.jackleeentertainment.oq.ui.widget.EndlessRecyclerViewScrollListener;
-import com.jackleeentertainment.oq.ui.widget.LoMyOppo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Jacklee on 2016. 11. 8..
@@ -130,12 +124,11 @@ public class PostCommentFrag extends Fragment {
                 Comment comment = new Comment();
                 comment.setTs(System.currentTimeMillis());
                 comment.setTxt(etWrite.getText().toString());
-                comment.setUid(App.getUid(getActivity()));
-                comment.setUname(App.getUname(getActivity()));
+                comment.profile = ProfileUtil.getMyProfileWithUidNameEmail(getActivity());
 
                 if (App.fbaseDbRef != null && pid != null) {
                     App.fbaseDbRef
-                            .child(FBaseNode0.OQPostComment)
+                            .child(FBaseNode0.OqPostComment)
                             .child(pid)
                             .push()
                             .setValue(comment)
@@ -213,7 +206,7 @@ public class PostCommentFrag extends Fragment {
 
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Comment, CommentViewHolder>
                 (Comment.class,
-                        R.layout.lo_avatar_namemultilinetext_lohourlikereply,
+                        R.layout.lo_commentlayout,
                         CommentViewHolder.class,
                         App.fbaseDbRef
                                 .child(FBaseNode0.MyPosts)
@@ -227,12 +220,11 @@ public class PostCommentFrag extends Fragment {
 
                 //avatar ..
 
-                if (comment.getUid() != null) {
+                if (comment.profile.uid != null) {
 
 
                     JM.glideProfileThumb(
-                            comment.getUid(),
-                            comment.getUname(),
+                            comment.profile,
                             commentViewHolder.ivAvatar,
                             commentViewHolder.tvAvatar,
                             mFragment
@@ -244,10 +236,10 @@ public class PostCommentFrag extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if (comment != null && comment.getUid() != null) {
+                        if (comment != null && comment.profile.uid != null) {
                             App.fbaseDbRef
                                     .child(FBaseNode0.ProfileToPublic)
-                                    .child(comment.getUid())
+                                    .child(comment.profile.uid)
                                     .addListenerForSingleValueEvent(
                                             new ValueEventListener() {
                                                 @Override
@@ -277,7 +269,7 @@ public class PostCommentFrag extends Fragment {
                 });
 
 
-                commentViewHolder.tvName.setText(comment.getUname());
+                commentViewHolder.tvName.setText(comment.profile.full_name);
                 commentViewHolder.tvMultiline.setText(comment.getTxt());
                 commentViewHolder.tvTs.setText(JT.str(comment.getTs()));
 
@@ -294,7 +286,7 @@ public class PostCommentFrag extends Fragment {
         JM.V(roProgress);
 
         App.fbaseDbRef
-                .child(FBaseNode0.OQPostComment)
+                .child(FBaseNode0.OqPostComment)
                 .child(pid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

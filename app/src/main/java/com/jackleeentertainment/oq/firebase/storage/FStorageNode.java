@@ -27,6 +27,8 @@ public class FStorageNode {
         public final static String PROFILE_PHOTO = "profile_photo";
         public final static String PROFILE_PHOTO_THUMB = "profile_photo_thumb";
 
+        public final static String BG_PHOTO = "bg_photo";
+
         public final static String PROFILE_VIDEO = "profile_video";
         public final static String PROFILE_VIDEO_THUMB = "profile_video_thumb";
 

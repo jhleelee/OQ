@@ -1,5 +1,7 @@
 package com.jackleeentertainment.oq.object;
 
+import java.util.List;
+
 /**
  * Created by Jacklee on 2016. 9. 29..
  */
@@ -10,11 +12,13 @@ public class Group {
     String title;
     String ico;
     String bg;
-    String member;
     String reqtype;
     String reqammount;
     String reqfrom;
     long ts;
+
+    List<Profile> listprofile;
+
 
     public Group() {
         super();
@@ -29,13 +33,7 @@ public class Group {
         this.title = title;
     }
 
-    public String getMember() {
-        return member;
-    }
 
-    public void setMember(String member) {
-        this.member = member;
-    }
 
     public String getReqtype() {
         return reqtype;
@@ -94,7 +92,13 @@ public class Group {
     public void setTs(long ts) {
         this.ts = ts;
     }
+    public List<Profile> getListprofile() {
+        return listprofile;
+    }
 
+    public void setListprofile(List<Profile> listprofile) {
+        this.listprofile = listprofile;
+    }
 }
 
 

@@ -14,7 +14,8 @@ import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.OqDoPair;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
-import com.jackleeentertainment.oq.object.types.OqWrapT;
+import com.jackleeentertainment.oq.object.types.OqDoListT;
+import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,27 +31,121 @@ public class OqDoUtil {
     static String TAG = "OqDoUtil";
 
 
+    public static Profile getOppoProfileFromOqDo(OqDo oqDo, Activity activity) {
+        if (!oqDo.profilea.uid.equals(App.getUid(activity))) {
+            return oqDo.profilea;
+        } else {
+            return oqDo.profileb;
+        }
+    }
 
 
-    public static    ArrayList<OqDoPair>  getArlOqDoPair(List<OqDo> oqDoList){
+
+    public static String getOqDoListMostRecentStr(List<OqDo> oqDoList){
+
+        String str = null;
+
+        sortList(oqDoList);
+
+        OqDo oqDoMostRecent = oqDoList.get(oqDoList.size()-1);
+
+        str = getOqDoDeedStr(oqDoMostRecent);
+
+        return str;
+
+    }
+
+
+
+
+    public static ArrayList<ArrayList<OqDo>> getArlArlOqDoPerReferOid(List<OqDo> oqDoList,
+                                                                      Activity activity) {
+
+        ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid = new ArrayList<ArrayList<OqDo>>();
+
+        ArrayList<String> arlReferOid = new ArrayList<>();
+
+        for (OqDo oqDo : oqDoList) {
+            if (!arlReferOid.contains(oqDo.referoid)) {
+                arlReferOid.add(oqDo.referoid);
+            }
+        }
+
+        for (String referOid : arlReferOid) {
+            ArrayList<OqDo> arrayListItem = new ArrayList<>();
+            for (OqDo oqDo : oqDoList) {
+                if (oqDo.referoid.equals(referOid)) {
+                    arrayListItem.add(oqDo);
+                }
+            }
+            arlArlOqDoPerReferOid.add(arrayListItem);
+        }
+        return arlArlOqDoPerReferOid;
+    }
+
+
+    public static ArrayList<ArrayList<OqDo>> getArlArlOqDoPerPeople(List<OqDo> oqDoList,
+                                                                    Activity activity) {
+
+        ArrayList<ArrayList<OqDo>> arlArlOqDoPerPeople = new ArrayList<ArrayList<OqDo>>();
+
+        ArrayList<String> arlUid = new ArrayList<>();
+
+        for (OqDo oqDo : oqDoList) {
+            if (!arlUid.contains(oqDo.profilea.uid)) {
+                arlUid.add(oqDo.profilea.uid);
+            }
+            if (!arlUid.contains(oqDo.profileb.uid)) {
+                arlUid.add(oqDo.profileb.uid);
+            }
+        }
+
+
+        for (String uid : arlUid) {
+
+            if (!uid.equals(App.getUid(activity))) {
+
+                ArrayList<OqDo> arrayList = new ArrayList<>();
+
+                for (OqDo oqDo : oqDoList) {
+
+                    if (oqDo.profilea.uid.equals(uid) || oqDo.profileb.uid.equals(uid)) {
+
+                        arrayList.add(oqDo);
+
+                    }
+
+                }
+
+                arlArlOqDoPerPeople.add(arrayList);
+
+            }
+        }
+
+
+        return arlArlOqDoPerPeople;
+    }
+
+
+    public static ArrayList<OqDoPair> getArlOqDoPair(List<OqDo> oqDoList) {
 
         ArrayList<OqDoPair> arlOqDoPair = new ArrayList<>();
         boolean isAddedToExistingOqDoPair = false;
-        for (OqDo oqDo : oqDoList){
+        for (OqDo oqDo : oqDoList) {
 
             //search if there is oqDoPair already containning referoid
-            if (arlOqDoPair!=null&&arlOqDoPair.size()>0) {
+            if (arlOqDoPair != null && arlOqDoPair.size() > 0) {
                 for (OqDoPair oqDoPair : arlOqDoPair) {
-                    if (oqDoPair.listOqDo!=null&&oqDoPair.listOqDo.size()>0) {
+                    if (oqDoPair.listOqDo != null && oqDoPair.listOqDo.size() > 0) {
                         String referOid = oqDoPair.listOqDo.get(0).getReferoid();
-                        if (referOid!=null&&referOid.equals(oqDo.getReferoid())){
+                        if (referOid != null && referOid.equals(oqDo.getReferoid())) {
                             oqDoPair.listOqDo.add(oqDo);
                             isAddedToExistingOqDoPair = true;
                         }
                     }
                 }
             }
-            if (!isAddedToExistingOqDoPair){
+            if (!isAddedToExistingOqDoPair) {
                 OqDoPair oqDoPair = new OqDoPair();
                 oqDoPair.listOqDo = new ArrayList<>();
                 oqDoPair.listOqDo.add(oqDo);
@@ -61,15 +156,13 @@ public class OqDoUtil {
     }
 
 
-
-
-    public static long getLastTs(List<OqDo> oqDoList){
+    public static long getLastTs(List<OqDo> oqDoList) {
 
         long ts = 0;
 
-        for (OqDo oqDo : oqDoList){
+        for (OqDo oqDo : oqDoList) {
 
-            if (ts < oqDo.getTs()){
+            if (ts < oqDo.getTs()) {
                 ts = oqDo.getTs();
             }
 
@@ -79,24 +172,21 @@ public class OqDoUtil {
     }
 
 
-
-    public static ArrayList<String> getUidsNotMe(OqDo oqDo, Activity activity){
+    public static ArrayList<String> getUidsNotMe(OqDo oqDo, Activity activity) {
         ArrayList<String> arl = new ArrayList<>();
-        if (!oqDo.getUida().equals(App.getUid(activity))){
-            arl.add(oqDo.getUida());
+        if (!oqDo.profilea.uid.equals(App.getUid(activity))) {
+            arl.add(oqDo.profilea.uid);
         }
-        if (!oqDo.getUidb().equals(App.getUid(activity))){
-            arl.add(oqDo.getUidb());
+        if (!oqDo.profileb.uid.equals(App.getUid(activity))) {
+            arl.add(oqDo.profileb.uid);
         }
         return arl;
     }
 
 
+    public static void sortList(List<OqDo> listoqdo) {
 
-
-    public static void sortList(List<OqDo> listoqdo){
-
-        if (listoqdo==null||listoqdo.size()==0){
+        if (listoqdo == null || listoqdo.size() == 0) {
             return;
         }
 
@@ -105,7 +195,7 @@ public class OqDoUtil {
     }
 
 
-    public  static class OqDoComparator implements Comparator<OqDo> {
+    public static class OqDoComparator implements Comparator<OqDo> {
         @Override
         public int compare(OqDo t1, OqDo t2) {
             return Long.compare(t1.getTs(), t2.getTs());
@@ -113,13 +203,12 @@ public class OqDoUtil {
     }
 
 
-
     public static long getSumAmt(List<OqDo> arloqdo) {
         Log.d(TAG, "getSumAmt()");
         long returnVal = 0;
 
         for (int i = 0; i < arloqdo.size(); i++) {
-            Log.d(TAG , "getSumAmt() "+String.valueOf(arloqdo.get(i).getAmmount()));
+            Log.d(TAG, "getSumAmt() " + String.valueOf(arloqdo.get(i).getAmmount()));
             returnVal += arloqdo.get(i).getAmmount();
         }
         Log.d(TAG, "getSumAmt() return : " + J.st(returnVal));
@@ -127,25 +216,24 @@ public class OqDoUtil {
     }
 
 
+    public static List<OqDo> getListAbGetFuture(List<OqDo> allSortedList) {
 
-    public static List<OqDo> getListAbGetFuture(List<OqDo> allSortedList){
-
-        Log.d(TAG, "getListAbGetFuture()" );
+        Log.d(TAG, "getListAbGetFuture()");
 
         List<OqDo> rtnList = new ArrayList<>();
 
-        if (allSortedList!=null&&allSortedList.size()>0){
+        if (allSortedList != null && allSortedList.size() > 0) {
 
             OqDo firstOqdo = allSortedList.get(0);
 
-            for (OqDo oqDo : allSortedList){
+            for (OqDo oqDo : allSortedList) {
 
-                if(oqDo.getUida().equals(firstOqdo.getUida())&&
-                        oqDo.getUidb().equals(firstOqdo.getUidb())){
+                if (oqDo.profilea.uid.equals(firstOqdo.profilea.uid) &&
+                        oqDo.profileb.uid.equals(firstOqdo.profileb.uid)) {
 
-                    if (oqDo.getOqwhat().equals(OQT.DoWhat.GET)&&
-                            oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)){
-                        Log.d(TAG,  "getListAbGetFuture() " + "GET, FUTURE");
+                    if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
+                            oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)) {
+                        Log.d(TAG, "getListAbGetFuture() " + "GET, FUTURE");
                         rtnList.add(oqDo);
 
                     }
@@ -155,7 +243,7 @@ public class OqDoUtil {
             }
 
         }
-        if (rtnList==null){
+        if (rtnList == null) {
             Log.d(TAG, "rtnList==null");
         } else {
             Log.d(TAG, "rtnList.size() : " + J.st(rtnList.size()));
@@ -164,22 +252,22 @@ public class OqDoUtil {
         return rtnList;
     }
 
-    public static List<OqDo> getListAbGetPast(List<OqDo> allSortedList){
+    public static List<OqDo> getListAbGetPast(List<OqDo> allSortedList) {
 
         List<OqDo> rtnList = new ArrayList<>();
 
-        if (allSortedList!=null&&allSortedList.size()>0){
+        if (allSortedList != null && allSortedList.size() > 0) {
 
             OqDo firstOqdo = allSortedList.get(0);
 
-            for (OqDo oqDo : allSortedList){
+            for (OqDo oqDo : allSortedList) {
 
-                if(oqDo.getUida().equals(firstOqdo.getUida())&&
-                        oqDo.getUidb().equals(firstOqdo.getUidb())){
+                if (oqDo.profilea.uid.equals(firstOqdo.profilea.uid) &&
+                        oqDo.profileb.uid.equals(firstOqdo.profileb.uid)) {
 
-                    if (oqDo.getOqwhat().equals(OQT.DoWhat.GET)&&
-                            oqDo.getOqwhen().equals(OQT.DoWhen.PAST)){
-                        Log.d(TAG,  "getListAbGetPast() " + "GET, PAST");
+                    if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
+                            oqDo.getOqwhen().equals(OQT.DoWhen.PAST)) {
+                        Log.d(TAG, "getListAbGetPast() " + "GET, PAST");
 
                         rtnList.add(oqDo);
 
@@ -195,23 +283,22 @@ public class OqDoUtil {
     }
 
 
-
-    public static List<OqDo> getListAbPayFuture(List<OqDo> allSortedList){
+    public static List<OqDo> getListAbPayFuture(List<OqDo> allSortedList) {
 
         List<OqDo> rtnList = new ArrayList<>();
 
-        if (allSortedList!=null&&allSortedList.size()>0){
+        if (allSortedList != null && allSortedList.size() > 0) {
 
             OqDo firstOqdo = allSortedList.get(0);
 
-            for (OqDo oqDo : allSortedList){
+            for (OqDo oqDo : allSortedList) {
 
-                if(oqDo.getUida().equals(firstOqdo.getUida())&&
-                        oqDo.getUidb().equals(firstOqdo.getUidb())){
+                if (oqDo.profilea.uid.equals(firstOqdo.profilea.uid) &&
+                        oqDo.profileb.uid.equals(firstOqdo.profileb.uid)) {
 
-                    if (oqDo.getOqwhat().equals(OQT.DoWhat.PAY)&&
-                            oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)){
-                        Log.d(TAG,  "getListAbPayFuture() " + "PAY, FUTURE");
+                    if (oqDo.getOqwhat().equals(OQT.DoWhat.PAY) &&
+                            oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)) {
+                        Log.d(TAG, "getListAbPayFuture() " + "PAY, FUTURE");
 
                         rtnList.add(oqDo);
 
@@ -227,22 +314,22 @@ public class OqDoUtil {
     }
 
 
-    public static List<OqDo> getListAbPayPast(List<OqDo> allSortedList){
+    public static List<OqDo> getListAbPayPast(List<OqDo> allSortedList) {
 
         List<OqDo> rtnList = new ArrayList<>();
 
-        if (allSortedList!=null&&allSortedList.size()>0){
+        if (allSortedList != null && allSortedList.size() > 0) {
 
             OqDo firstOqdo = allSortedList.get(0);
 
-            for (OqDo oqDo : allSortedList){
+            for (OqDo oqDo : allSortedList) {
 
-                if(oqDo.getUida().equals(firstOqdo.getUida())&&
-                        oqDo.getUidb().equals(firstOqdo.getUidb())){
+                if (oqDo.profilea.uid.equals(firstOqdo.profilea.uid) &&
+                        oqDo.profileb.uid.equals(firstOqdo.profileb.uid)) {
 
-                    if (oqDo.getOqwhat().equals(OQT.DoWhat.PAY)&&
-                            oqDo.getOqwhen().equals(OQT.DoWhen.PAST)){
-                        Log.d(TAG,  "getListAbPayPast() " + "PAY, PAST");
+                    if (oqDo.getOqwhat().equals(OQT.DoWhat.PAY) &&
+                            oqDo.getOqwhen().equals(OQT.DoWhen.PAST)) {
+                        Log.d(TAG, "getListAbPayPast() " + "PAY, PAST");
 
                         rtnList.add(oqDo);
 
@@ -256,28 +343,22 @@ public class OqDoUtil {
     }
 
 
-
-
-
-
-
-
-    public static List<OqDo> getListBaGetFuture(List<OqDo> allSortedList){
+    public static List<OqDo> getListBaGetFuture(List<OqDo> allSortedList) {
 
         List<OqDo> rtnList = new ArrayList<>();
 
-        if (allSortedList!=null&&allSortedList.size()>0){
+        if (allSortedList != null && allSortedList.size() > 0) {
 
             OqDo firstOqdo = allSortedList.get(0);
 
-            for (OqDo oqDo : allSortedList){
+            for (OqDo oqDo : allSortedList) {
 
-                if(oqDo.getUidb().equals(firstOqdo.getUida())&&
-                        oqDo.getUida().equals(firstOqdo.getUidb())){
+                if (oqDo.profileb.uid.equals(firstOqdo.profilea.uid) &&
+                        oqDo.profilea.uid.equals(firstOqdo.profileb.uid)) {
 
-                    if (oqDo.getOqwhat().equals(OQT.DoWhat.GET)&&
-                            oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)){
-                        Log.d(TAG,  "getListBaGetFuture() " + "GET, FUTURE");
+                    if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
+                            oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)) {
+                        Log.d(TAG, "getListBaGetFuture() " + "GET, FUTURE");
 
                         rtnList.add(oqDo);
 
@@ -293,24 +374,22 @@ public class OqDoUtil {
     }
 
 
-
-
-    public static List<OqDo> getListBaGetPast(List<OqDo> allSortedList){
+    public static List<OqDo> getListBaGetPast(List<OqDo> allSortedList) {
 
         List<OqDo> rtnList = new ArrayList<>();
 
-        if (allSortedList!=null&&allSortedList.size()>0){
+        if (allSortedList != null && allSortedList.size() > 0) {
 
             OqDo firstOqdo = allSortedList.get(0);
 
-            for (OqDo oqDo : allSortedList){
+            for (OqDo oqDo : allSortedList) {
 
-                if(oqDo.getUidb().equals(firstOqdo.getUida())&&
-                        oqDo.getUida().equals(firstOqdo.getUidb())){
+                if (oqDo.profileb.uid.equals(firstOqdo.profilea.uid) &&
+                        oqDo.profilea.uid.equals(firstOqdo.profileb.uid)) {
 
-                    if (oqDo.getOqwhat().equals(OQT.DoWhat.GET)&&
-                            oqDo.getOqwhen().equals(OQT.DoWhen.PAST)){
-                        Log.d(TAG,  "getListBaGetPast() " + "GET, PAST");
+                    if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
+                            oqDo.getOqwhen().equals(OQT.DoWhen.PAST)) {
+                        Log.d(TAG, "getListBaGetPast() " + "GET, PAST");
 
                         rtnList.add(oqDo);
 
@@ -326,30 +405,28 @@ public class OqDoUtil {
     }
 
 
-
-    public static List<OqDo> getListBaPayFuture(List<OqDo> allSortedList){
+    public static List<OqDo> getListBaPayFuture(List<OqDo> allSortedList) {
 
         Log.d(TAG, "getListBaPayFuture()");
 
         List<OqDo> rtnList = new ArrayList<>();
 
-        if (allSortedList!=null&&allSortedList.size()>0){
+        if (allSortedList != null && allSortedList.size() > 0) {
 
             OqDo firstOqdo = allSortedList.get(0);
 
-            for (OqDo oqDo : allSortedList){
+            for (OqDo oqDo : allSortedList) {
 
-                Log.d(TAG, oqDo.getUida() + " " + oqDo.getUidb());
-                Log.d(TAG, firstOqdo.getUida() + " " + firstOqdo.getUidb());
+                Log.d(TAG, oqDo.profilea.uid + " " + oqDo.profileb.uid);
+                Log.d(TAG, firstOqdo.profilea.uid + " " + firstOqdo.profileb.uid);
 
-                if(oqDo.getUidb().equals(firstOqdo.getUida())&&
-                        oqDo.getUida().equals(firstOqdo.getUidb())){
+                if (oqDo.profileb.uid.equals(firstOqdo.profilea.uid) &&
+                        oqDo.profilea.uid.equals(firstOqdo.profileb.uid)) {
 
 
-
-                    if (oqDo.getOqwhat().equals(OQT.DoWhat.PAY)&&
-                            oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)){
-                        Log.d(TAG,  "getListBaPayFuture() " + "PAY, FUTURE");
+                    if (oqDo.getOqwhat().equals(OQT.DoWhat.PAY) &&
+                            oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)) {
+                        Log.d(TAG, "getListBaPayFuture() " + "PAY, FUTURE");
                         rtnList.add(oqDo);
                     }
                 }
@@ -360,22 +437,22 @@ public class OqDoUtil {
         return rtnList;
     }
 
-    public static List<OqDo> getListBaPayPast(List<OqDo> allSortedList){
+    public static List<OqDo> getListBaPayPast(List<OqDo> allSortedList) {
 
         List<OqDo> rtnList = new ArrayList<>();
 
-        if (allSortedList!=null&&allSortedList.size()>0){
+        if (allSortedList != null && allSortedList.size() > 0) {
 
             OqDo firstOqdo = allSortedList.get(0);
 
-            for (OqDo oqDo : allSortedList){
+            for (OqDo oqDo : allSortedList) {
 
-                if(oqDo.getUidb().equals(firstOqdo.getUida())&&
-                        oqDo.getUida().equals(firstOqdo.getUidb())){
+                if (oqDo.profileb.uid.equals(firstOqdo.profilea.uid) &&
+                        oqDo.profilea.uid.equals(firstOqdo.profileb.uid)) {
 
-                    if (oqDo.getOqwhat().equals(OQT.DoWhat.PAY)&&
-                            oqDo.getOqwhen().equals(OQT.DoWhen.PAST)){
-                        Log.d(TAG,  "getListBaPayPast() " + "PAY, PAST");
+                    if (oqDo.getOqwhat().equals(OQT.DoWhat.PAY) &&
+                            oqDo.getOqwhen().equals(OQT.DoWhen.PAST)) {
+                        Log.d(TAG, "getListBaPayPast() " + "PAY, PAST");
 
                         rtnList.add(oqDo);
 
@@ -398,9 +475,9 @@ public class OqDoUtil {
 
         ArrayList<String> arlUidB = new ArrayList<>();
 
-        if (arlOqDo!=null&&arlOqDo.size()>0){
-            for (OqDo oqDo : arlOqDo){
-                String uidB = oqDo.getUidb();
+        if (arlOqDo != null && arlOqDo.size() > 0) {
+            for (OqDo oqDo : arlOqDo) {
+                String uidB = oqDo.profileb.uid;
                 arlUidB.add(uidB);
             }
         }
@@ -409,16 +486,11 @@ public class OqDoUtil {
     }
 
 
+    public static boolean isFalseOqItem(ArrayList<NewOQActivity.TempProAmt> arl) {
 
+        for (NewOQActivity.TempProAmt t : arl) {
 
-
-
-
-    public static boolean isFalseOqItem(ArrayList<OqDo> arlOqDo){
-
-        for (OqDo oqDo : arlOqDo){
-
-            if (oqDo.getAmmount()==0){
+            if (t.ammount == 0) {
                 return true;
             }
 
@@ -428,12 +500,12 @@ public class OqDoUtil {
     }
 
 
-    public static OqDo getOqDoWithUidB(ArrayList<OqDo> arrayList, String uidclaimee){
+    public static OqDo getOqDoWithUidB(ArrayList<OqDo> arrayList, String uidclaimee) {
 
-        for (OqDo oqItem : arrayList){
+        for (OqDo oqItem : arrayList) {
 
-            if (oqItem.getUidb()!=null &&
-                    oqItem.getUidb().equals(uidclaimee)){
+            if (oqItem.profileb.uid != null &&
+                    oqItem.profileb.uid.equals(uidclaimee)) {
                 return oqItem;
             }
 
@@ -441,9 +513,6 @@ public class OqDoUtil {
 
         return null;
     }
-
-
-
 
 
     public static OqDo getInstanceIClaimThatIGet(Profile profilePayerAndClaimee, Activity activity) {
@@ -465,23 +534,26 @@ public class OqDoUtil {
          */
 
 
-
         String oid = App.fbaseDbRef.child("push").push().getKey();
         OqDo oqDo = new OqDo();
         oqDo.setOid(oid);
-        oqDo.setUida(App.getUid(activity));
-        oqDo.setNamea(App.getUname(activity));
-        oqDo.setEmaila(App.getUemail(activity));
-        oqDo.setUidb(profilePayerAndClaimee.getUid());
-        oqDo.setNameb(profilePayerAndClaimee.getFull_name());
-        oqDo.setNameb(profilePayerAndClaimee.getEmail());
+        oqDo.setUidab(App.getUid(activity) + ",," + profilePayerAndClaimee.uid);
+        Profile profilea = new Profile();
+        profilea.setUid(App.getUid(activity));
+        profilea.setFull_name(App.getUname(activity));
+        profilea.setEmail(App.getUemail(activity));
+        Profile profileb = new Profile();
+        profileb.setUid(profilePayerAndClaimee.getUid());
+        profileb.setFull_name(profilePayerAndClaimee.getFull_name());
+        profileb.setEmail(profilePayerAndClaimee.getEmail());
+
 
         oqDo.setAmmount(0);
         oqDo.setTs(0);
-         oqDo.setOqwhat(OQT.DoWhat.GET);
+        oqDo.setOqwhat(OQT.DoWhat.GET);
         oqDo.setOqwhen(OQT.DoWhen.FUTURE);
         oqDo.setCurrency(JM.strById(R.string.currency_code));
-         return oqDo;
+        return oqDo;
     }
 
     public static OqDo getInstanceIClaimThatIPay(Profile profileGettorAndClaimee, Activity
@@ -491,12 +563,15 @@ public class OqDoUtil {
         String oid = App.fbaseDbRef.child("push").push().getKey();
         OqDo oqDo = new OqDo();
         oqDo.setOid(oid);
-        oqDo.setUida(App.getUid(activity));
-        oqDo.setNamea(App.getUname(activity));
-        oqDo.setEmaila(App.getUemail(activity));
-        oqDo.setUidb(profileGettorAndClaimee.getUid());
-        oqDo.setNameb(profileGettorAndClaimee.getFull_name());
-        oqDo.setNameb(profileGettorAndClaimee.getEmail());
+        oqDo.setUidab(App.getUid(activity) + ",," + profileGettorAndClaimee.uid);
+        Profile profilea = new Profile();
+        profilea.setUid(App.getUid(activity));
+        profilea.setFull_name(App.getUname(activity));
+        profilea.setEmail(App.getUemail(activity));
+        Profile profileb = new Profile();
+        profileb.setUid(profileGettorAndClaimee.getUid());
+        profileb.setFull_name(profileGettorAndClaimee.getFull_name());
+        profileb.setEmail(profileGettorAndClaimee.getEmail());
 
         oqDo.setAmmount(0);
         oqDo.setTs(0);
@@ -507,8 +582,6 @@ public class OqDoUtil {
 
 
     }
-
-
 
 
 //    public static     ArrayList<OqDo> getInstances(
@@ -612,8 +685,6 @@ public class OqDoUtil {
     }
 
 
-
-
     public static OqDo copyOqItemValues(OqDo oqdo) {
         Gson gson = new Gson();
         String strItem = gson.toJson(oqdo);
@@ -622,19 +693,105 @@ public class OqDoUtil {
     }
 
 
-
-
     public static long getSumOqDoAmmounts(ArrayList<OqDo> arlOqItems) {
 
         long returnVal = 0;
 
         for (int i = 0; i < arlOqItems.size(); i++) {
-            Log.d(TAG , "getSumOqItemAmmounts() "+String.valueOf(arlOqItems.get(i).getAmmount()));
+            Log.d(TAG, "getSumOqItemAmmounts() " + String.valueOf(arlOqItems.get(i).getAmmount()));
             returnVal += arlOqItems.get(i).getAmmount();
         }
 
         return returnVal;
     }
+
+
+    public static long getSumOqDoAmmountsAgreed(ArrayList<OqDo> arlOqItems, Activity activity) {
+
+        long returnVal = 0;
+
+        ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid = getArlArlOqDoPerReferOid(arlOqItems,
+                activity);
+
+        for (ArrayList<OqDo> arlItem : arlArlOqDoPerReferOid) {
+            if (getOqDoListT(arlItem).equals(OqDoListT.ASentGetReq__BNoArgued_NotPaidAll)) {
+                returnVal += arlItem.get(0).ammount;
+            }
+        }
+
+        return returnVal;
+    }
+
+
+    public static long getSumOqDoAmmountsDisAgreed(ArrayList<OqDo> arlOqItems, Activity activity) {
+
+        long returnVal = 0;
+
+        ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid = getArlArlOqDoPerReferOid(arlOqItems,
+                activity);
+
+        for (ArrayList<OqDo> arlItem : arlArlOqDoPerReferOid) {
+            if (getOqDoListT(arlItem).equals(OqDoListT.ASentGetReq__BArgued)
+                    ) {
+                returnVal += arlItem.get(0).ammount;
+            }
+        }
+
+        return returnVal;
+    }
+
+
+
+
+    public static String getOqDoDeedStr(OqDo oqDo) {
+
+        Resources res = App.getContext().getResources();
+
+
+
+        if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
+                oqDo.getOqwhat().equals(OQT.DoWhen.FUTURE)) {
+
+            return res.getString(
+                    R.string.deed_req_a_get_future);
+
+        }
+
+
+        if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
+                oqDo.getOqwhat().equals(OQT.DoWhen.PAST)) {
+
+            return res.getString(
+                    R.string.deed_a_get_past);
+
+        }
+
+        return null;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -668,36 +825,36 @@ public class OqDoUtil {
 
                     if (firstOqdo.getAmmount() == sumListAbGetPast) { // A admits is is paid all
 
-                        //return OqWrapT.ASentGetReq__BNoArgued_ClaimPaidAll__ADidConfirmed;
+                        //return OqDoListT.ASentGetReq__BNoArgued_ClaimPaidAll__ADidConfirmed;
                         return res.getString(
                                 R.string.req_amtvar_whatphrasevar,
                                 J.strAmt(firstOqdo.getAmmount()),
                                 res.getString(R.string.whovar_all_paid_confirmed, firstOqdo
-                                        .getNameb()));
+                                        .profileb.full_name));
 
 
                     } else {
-                        //return OqWrapT.ASentGetReq__BNoArgued_ClaimPaidAll__AYetConfirmed;
+                        //return OqDoListT.ASentGetReq__BNoArgued_ClaimPaidAll__AYetConfirmed;
 
                         return res.getString(
                                 R.string.req_amtvar_whatphrasevar,
                                 J.strAmt(firstOqdo.getAmmount()),
                                 res.getString(R.string.whovar_all_claimpaid,
-                                        firstOqdo.getNameb()));
+                                        firstOqdo.profileb.full_name));
 
 
                     }
 
 
                 } else { //not paid all (incl partially paid)
-                    //return OqWrapT.ASentGetReq__BNoArgued_NotPaidAll;
+                    //return OqDoListT.ASentGetReq__BNoArgued_NotPaidAll;
 
-                    if (sumListBaPayPast==0){
+                    if (sumListBaPayPast == 0) {
                         return res.getString(
                                 R.string.req_amtvar_whatphrasevar,
                                 J.strAmt(firstOqdo.getAmmount()),
                                 res.getString(R.string.whovar_all_notpaid,
-                                        firstOqdo.getNameb()));
+                                        firstOqdo.profileb.full_name));
                     } else {
 
                     }
@@ -707,7 +864,7 @@ public class OqDoUtil {
 
 
             } else if (firstOqdo.getAmmount() > sumListBaPayFuture) { // B does not agree with A's req
-                return OqWrapT.ASentGetReq__BArgued;
+                return OqDoListT.ASentGetReq__BArgued;
 
             }
 
@@ -721,10 +878,10 @@ public class OqDoUtil {
             long sumListBaPayPast = OqDoUtil.getSumAmt(listBaPayPast);
 
             if (firstOqdo.getAmmount() == sumListBaPayPast) {
-                return OqWrapT.ASentGetPastNoti__BNoArgued;
+                return OqDoListT.ASentGetPastNoti__BNoArgued;
 
             } else {
-                return OqWrapT.ASentGetPastNoti__BArgued;
+                return OqDoListT.ASentGetPastNoti__BArgued;
 
             }
 
@@ -743,16 +900,16 @@ public class OqDoUtil {
             if (firstOqdo.getAmmount() == sumListBaGetFuture) {
 
                 if (firstOqdo.getAmmount() == sumListBaGetPast) {
-                    return OqWrapT.ASentPaySuggest__BNoArgued_DidReceivedAll;
+                    return OqDoListT.ASentPaySuggest__BNoArgued_DidReceivedAll;
 
                 } else {
-                    return OqWrapT.ASentPaySuggest__BNoArgued_NotReceivedAll;
+                    return OqDoListT.ASentPaySuggest__BNoArgued_NotReceivedAll;
 
                 }
 
 
             } else {
-                return OqWrapT.ASentPaySuggest__BArgued;
+                return OqDoListT.ASentPaySuggest__BArgued;
 
 
             }
@@ -768,10 +925,10 @@ public class OqDoUtil {
             long sumListBaGetPast = OqDoUtil.getSumAmt(listBaGetPast);
 
             if (firstOqdo.getAmmount() == sumListBaGetPast) {
-                return OqWrapT.ASentPayPastNoti__BDidConfirmed;
+                return OqDoListT.ASentPayPastNoti__BDidConfirmed;
 
             } else {
-                return OqWrapT.ASentPayPastNoti__BYetConfirmed;
+                return OqDoListT.ASentPayPastNoti__BYetConfirmed;
 
             }
 
@@ -784,12 +941,9 @@ public class OqDoUtil {
     }
 
 
-
-
-
     public static String getOqDoListT(List<OqDo> listoqdo) {
 
-         OqDoUtil.sortList(listoqdo);
+        OqDoUtil.sortList(listoqdo);
 
         OqDo firstOqdo = listoqdo.get(0);
 
@@ -812,22 +966,22 @@ public class OqDoUtil {
 
                     if (firstOqdo.getAmmount() == sumListAbGetPast) { // A admits is is paid all
 
-                        return OqWrapT.ASentGetReq__BNoArgued_ClaimPaidAll__ADidConfirmed;
+                        return OqDoListT.ASentGetReq__BNoArgued_ClaimPaidAll__ADidConfirmed;
 
                     } else { //not paid all (incl partially paid)
-                        return OqWrapT.ASentGetReq__BNoArgued_ClaimPaidAll__AYetConfirmed;
+                        return OqDoListT.ASentGetReq__BNoArgued_ClaimPaidAll__AYetConfirmed;
 
                     }
 
 
                 } else { //not paid all (incl partially paid)
-                    return OqWrapT.ASentGetReq__BNoArgued_NotPaidAll;
+                    return OqDoListT.ASentGetReq__BNoArgued_NotPaidAll;
 
                 }
 
 
             } else if (firstOqdo.getAmmount() > sumListBaPayFuture) { // B does not agree with A's req
-                return OqWrapT.ASentGetReq__BArgued;
+                return OqDoListT.ASentGetReq__BArgued;
 
             }
 
@@ -841,10 +995,10 @@ public class OqDoUtil {
             long sumListBaPayPast = OqDoUtil.getSumAmt(listBaPayPast);
 
             if (firstOqdo.getAmmount() == sumListBaPayPast) {
-                return OqWrapT.ASentGetPastNoti__BNoArgued;
+                return OqDoListT.ASentGetPastNoti__BNoArgued;
 
             } else {
-                return OqWrapT.ASentGetPastNoti__BArgued;
+                return OqDoListT.ASentGetPastNoti__BArgued;
 
             }
 
@@ -863,16 +1017,16 @@ public class OqDoUtil {
             if (firstOqdo.getAmmount() == sumListBaGetFuture) {
 
                 if (firstOqdo.getAmmount() == sumListBaGetPast) {
-                    return OqWrapT.ASentPaySuggest__BNoArgued_DidReceivedAll;
+                    return OqDoListT.ASentPaySuggest__BNoArgued_DidReceivedAll;
 
                 } else {
-                    return OqWrapT.ASentPaySuggest__BNoArgued_NotReceivedAll;
+                    return OqDoListT.ASentPaySuggest__BNoArgued_NotReceivedAll;
 
                 }
 
 
             } else {
-                return OqWrapT.ASentPaySuggest__BArgued;
+                return OqDoListT.ASentPaySuggest__BArgued;
 
 
             }
@@ -888,10 +1042,10 @@ public class OqDoUtil {
             long sumListBaGetPast = OqDoUtil.getSumAmt(listBaGetPast);
 
             if (firstOqdo.getAmmount() == sumListBaGetPast) {
-                return OqWrapT.ASentPayPastNoti__BDidConfirmed;
+                return OqDoListT.ASentPayPastNoti__BDidConfirmed;
 
             } else {
-                return OqWrapT.ASentPayPastNoti__BYetConfirmed;
+                return OqDoListT.ASentPayPastNoti__BYetConfirmed;
 
             }
 
@@ -903,44 +1057,42 @@ public class OqDoUtil {
     }
 
 
-
-
     public static void ivTwoAvaRelation(ImageView iv, List<OqDo> oqDoList) {
 
 
         String t = getOqDoListT(oqDoList);
 
 
-        if (t.equals(OqWrapT.ASentGetReq__BArgued)) {
+        if (t.equals(OqDoListT.ASentGetReq__BArgued)) {
             JM.BGD(iv, R.drawable.cir_requested_but_argued);
             JM.ID(iv, R.drawable.ic_arrow_forward_white_24dp);
 
-        } else if (t.equals(OqWrapT.ASentGetReq__BNoArgued_NotPaidAll)) {
+        } else if (t.equals(OqDoListT.ASentGetReq__BNoArgued_NotPaidAll)) {
             JM.BGD(iv, R.drawable.cir_requested);
             JM.ID(iv, R.drawable.ic_arrow_forward_white_24dp);
 
-        } else if (t.equals(OqWrapT.ASentGetReq__BNoArgued_ClaimPaidAll__AYetConfirmed)) {
+        } else if (t.equals(OqDoListT.ASentGetReq__BNoArgued_ClaimPaidAll__AYetConfirmed)) {
             JM.BGD(iv, R.drawable.cir_requested_so_claimpaid);
             JM.ID(iv, R.drawable.ic_check_white_24dp);
 
-        } else if (t.equals(OqWrapT.ASentGetReq__BNoArgued_ClaimPaidAll__ADidConfirmed)) {
+        } else if (t.equals(OqDoListT.ASentGetReq__BNoArgued_ClaimPaidAll__ADidConfirmed)) {
             JM.BGD(iv, R.drawable.cir_requested_so_paid);
             JM.ID(iv, R.drawable.ic_check_white_24dp);
 
-        } else if (t.equals(OqWrapT.ASentGetPastNoti__BArgued)) {
+        } else if (t.equals(OqDoListT.ASentGetPastNoti__BArgued)) {
             // consider a/b avatar position shift?
 
-        } else if (t.equals(OqWrapT.ASentGetPastNoti__BNoArgued)) {
+        } else if (t.equals(OqDoListT.ASentGetPastNoti__BNoArgued)) {
 
-        } else if (t.equals(OqWrapT.ASentPaySuggest__BArgued)) {
+        } else if (t.equals(OqDoListT.ASentPaySuggest__BArgued)) {
 
-        } else if (t.equals(OqWrapT.ASentPaySuggest__BNoArgued_NotReceivedAll)) {
+        } else if (t.equals(OqDoListT.ASentPaySuggest__BNoArgued_NotReceivedAll)) {
 
-        } else if (t.equals(OqWrapT.ASentPaySuggest__BNoArgued_DidReceivedAll)) {
+        } else if (t.equals(OqDoListT.ASentPaySuggest__BNoArgued_DidReceivedAll)) {
 
-        } else if (t.equals(OqWrapT.ASentPayPastNoti__BYetConfirmed)) {
+        } else if (t.equals(OqDoListT.ASentPayPastNoti__BYetConfirmed)) {
 
-        } else if (t.equals(OqWrapT.ASentPayPastNoti__BDidConfirmed)) {
+        } else if (t.equals(OqDoListT.ASentPayPastNoti__BDidConfirmed)) {
 
         }
 

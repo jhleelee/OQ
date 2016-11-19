@@ -22,20 +22,19 @@ public class Profile implements Serializable{
 
 
 
-    String uid;
-    String email;
-    String full_name;
-    String first_name;
-    String middle_name;
-    String last_name;
-    String birthday;
-    String interested_in;
-    String timezone;
-    String locale;
-    String gender;
-    String age;
-    String phone;
-    String updated_time;
+ public    String uid;
+    public   String email;
+    public   String full_name;
+    public  String first_name;
+    public  String middle_name;
+    public  String last_name;
+
+
+    public  String locale;
+    public  String gender;
+    public   String age;
+    public  String phone;
+    public   String updated_time;
 
     public String getUid() {
 
@@ -78,29 +77,7 @@ public class Profile implements Serializable{
         this.full_name = full_name;
     }
 
-    public String getBirthday() {
-        return birthday;
-    }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getInterested_in() {
-        return interested_in;
-    }
-
-    public void setInterested_in(String interested_in) {
-        this.interested_in = interested_in;
-    }
-
-    public String getTimezone() {
-        return timezone;
-    }
-
-    public void setTimezone(String timezone) {
-        this.timezone = timezone;
-    }
 
     public String getLocale() {
         return locale;

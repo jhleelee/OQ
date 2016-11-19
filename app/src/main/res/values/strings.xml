@@ -24,7 +24,7 @@
     <string name="dummytext">좋구나</string>
     <string name="dummyname">박개똥</string>
 
-    <string name="easy_input">간편 입력</string>
+    <string name="easy_input">금액 간편 입력</string>
     <string name="add_myspent">나의 지출내역 추가</string>
     <string name="myspent">나의 지출</string>
     <string name="write_comment">댓글 쓰기</string>
@@ -59,7 +59,7 @@
 
 
     Takes the user to the next step of a multi-step process
-    <string name="google_next">Next</string>
+    <string name="google_next">다음</string>
 
 
     Allows a user to decline
@@ -81,6 +81,9 @@
 
 
     <!--Button-->
+
+    <string name="modify_">수정</string>
+
     <string name="change">변경</string>
     <string name="changeperiod">기간 변경</string>
     <string name="money_sum">총액</string>
@@ -149,6 +152,7 @@
 
     <string name="change_profile_photo">프로필 사진 변경</string>
     <string name="change_background_photo">배경 사진 변경</string>
+    <string name="fail_upload_bg">배경사진 업로드에 실패하였습니다.</string>
 
 
     <string name="add_opponents">상대방 추가</string>
@@ -276,8 +280,10 @@
 
 
     <string name="learn_more">더 알아보기</string>
-    <string name="begin_sync_contact">연락처가 없습니다</string>
-    <string name="begin_sync_contact_long">메뉴에서 나의 전화번호부, 이메일 연락처에 저장된 회원 목록을 업데이트할 수 있습니다.\n소셜 아이디로 로그인한 경우에는 친구목록상의 친구를 검색할 수도 있습니다.</string>
+    <string name="update">업데이트</string>
+
+    <string name="update_contact">연락처 업데이트</string>
+    <string name="begin_sync_contact_long">메뉴에서 나의 전화번호부, 이메일 연락처에 저장된 회원 목록을 업데이트할 수 있습니다.</string>
 
     <string name="no_contacts">연락처가 없습니다</string>
 
@@ -364,9 +370,12 @@
     <string name="contacts_phone">전화번호부</string>
     <string name="contacts_email">이메일</string>
     <string name="contacts_facebook">Facebook</string>
-    <string name="contacts_google">Google</string>
+    <string name="contacts_google">Google+</string>
 
-
+    <string name="contacts_phone_long">전화번호부 연락처와 동기화</string>
+    <string name="contacts_email_long">이메일 연락처와 동기화</string>
+    <string name="contacts_facebook_long">Facebook 친구 목록</string>
+    <string name="contacts_google_long">Google+ 친구 목록</string>
     <!--ACCOUNT-->
     <string name="my_account">나의 계정</string>
     <string name="account_buy">점포 계정 구입</string>
@@ -382,14 +391,16 @@
     <!--PeopleActivity-->
     select_oponent
     <string name="select_oponent">상대방을 선택하세요</string>
+    <string name="selected_oponent">선택된 상대방</string>
 
+    <string name="sync_phone">전화번호부와 동기화</string>
 
     <string name="sync_phone_contact">내 전화번호부에 등록된 사람이 이 앱을 사용하고 있는지 확인합니다</string>
     <string name="sync_email_contact">내 이메일 연락처에 등록된 사람이 이 앱을 사용하고 있는지 확인합니다</string>
 
 
     <!--SMSListActivity-->
-    <string name="sms_empty">SMS보관함이\n비어 있습니다</string>
+    <string name="sms_empty">SMS 보관함이 비어 있습니다.</string>
     <string name="card_filter_on">카드 필터 : 켬</string>
     <string name="card_filter_off">카드 필터 : 끔</string>
 
@@ -516,7 +527,7 @@
 
 
     no_amt_to_settle
-    <string name="no_amt_to_settle">정산할 금액 없음</string>
+    <string name="no_amt_to_settle">없음</string>
 
     <string name="req_amtvar_whatphrasevar">청구액 %1$s원 : %2$s</string>
     <string name="whovar_argues">%1$s님이 이의제기</string>
@@ -529,6 +540,14 @@
     <string name="whovar_all_paid_confirmed">%1$s님이 전액 지급하였음</string>
     <string name="whovar_amtvar_paid_confirmed">%1$s님이 %2$s원 지급하였음</string>
 
+
+    <string name="deed_req_a_get_future">청구하였습니다.</string>
+    <string name="argueagainst_req_a_get_future">청구에 대해 이의하였습니다.</string>
+    <string name="req_a_pay_past">지급하고 확인 요청하였습니다.</string>
+    <string name="argueagainst_req_a_pay_past">지급에 대해 이의하였습니다.</string>
+    <string name="admit_req_a_pay_past">지급받았음을 확인하였습니다.</string>
+
+    <string name="deed_a_get_past">지급받았습니다.</string>
 
 
     public static String ASentGetPastNoti__BArgued = "h";

@@ -44,8 +44,7 @@ public class NewOQFrag1 extends Fragment {
     ImageView ivBtAddPhoto;
     TextView tvBtAddPhoto;
     RelativeLayout roPhoto;
-    String content = "";
-    Bundle bundleFromFrag0;
+     Bundle bundleFromFrag0;
 
     public NewOQFrag1() {
         super();
@@ -82,6 +81,7 @@ public class NewOQFrag1 extends Fragment {
         Log.d(TAG, "onResume()");
         uiPhotoData();
         initUiCosmetic();
+
         initClickListener();
         ((NewOQActivity)getActivity()).uiLsnerFrag1(bundleFromFrag0);
 
@@ -156,7 +156,7 @@ public class NewOQFrag1 extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d(TAG, "onClick which :" + J.st(which));
 
-                        ((NewOQActivity)getActivity()).doUploadAll(etContent);
+                        ((NewOQActivity)getActivity()).doUploadAll();
 
                     }
                 };
@@ -167,33 +167,46 @@ public class NewOQFrag1 extends Fragment {
                 if ((((NewOQActivity)getActivity()).arlUriPhoto == null ||
                         ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) &&
                         etContent.getText().length() == 0) {
+
+                    ((NewOQActivity)getActivity()).strPostText = null;
+
                     s = JM.strById(R.string.newoq_nophoto_nowriting);
                     s += "\n";
                     s += StringGenerator
                             .xAndXPeopleOqItemClaimee(
-                                    ((NewOQActivity) getActivity()).arlOqDo_Future
+                                    ((NewOQActivity) getActivity()).tempArl
                             );
                 } else if (((NewOQActivity)getActivity()).arlUriPhoto == null ||
                         ((NewOQActivity)getActivity()).arlUriPhoto.size() == 0) {
+
+                    ((NewOQActivity)getActivity()).strPostText = etContent.getText().toString();
+
+
                     s = JM.strById(R.string.newoq_nophoto);
                     s += "\n";
                     s += StringGenerator
                             .xAndXPeopleOqItemClaimee(
-                                    ((NewOQActivity) getActivity()).arlOqDo_Future
+                                    ((NewOQActivity) getActivity()).tempArl
                             );
                 } else if (etContent.getText().length() == 0) {
+
+                    ((NewOQActivity)getActivity()).strPostText = null;
+
                     s = JM.strById(R.string.newoq_nowriting);
                     s += "\n";
                     s += StringGenerator
                             .xAndXPeopleOqItemClaimee(
-                                    ((NewOQActivity) getActivity()).arlOqDo_Future
+                                    ((NewOQActivity) getActivity()).tempArl
                             );
                 } else {
+
+                    ((NewOQActivity)getActivity()).strPostText = etContent.getText().toString();
+
                     s = JM.strById(R.string.newoq_send);
                     s += "\n";
                     s += StringGenerator
                             .xAndXPeopleOqItemClaimee(
-                                    ((NewOQActivity) getActivity()).arlOqDo_Future
+                                    ((NewOQActivity) getActivity()).tempArl
                             );
                 }
 

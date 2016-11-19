@@ -408,7 +408,7 @@
 //                                String jsonSelectedProfilesArrayList
 //                                         = gson.toJson(profileObjects);
 //                                Bundle bundle = new Bundle();
-//                                bundle.putString("diaFragT", DiaFragT.SelectedFriendsAndMore);
+//                                bundle.putString("diaFragT", DiaFragT.SelectedPeople);
 //                                bundle.putString("jsonSelectedProfilesArrayList", jsonSelectedProfilesArrayList);
 //                                ((BaseActivity)mFragment.getActivity()).showDialogFragment(bundle);
 //                                break;

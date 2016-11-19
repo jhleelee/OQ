@@ -22,8 +22,15 @@
 
 
 
-    <color name="getPrimaryDark">@color/material_green800</color>
-    <color name="payPrimaryDark">@color/material_orange700a</color>
+    <color name="payPrimaryDark">@color/material_green800</color>
+    <color name="getPrimaryDark">@color/material_orange700a</color>
+
+
+    <color name="payPrimaryDarkWeak">@color/material_green800</color>
+    <color name="getPrimaryDarkWeak">@color/material_orange700a</color>
+
+
+
 
 
     <color name="colorItemline">@color/material_grey_400</color>

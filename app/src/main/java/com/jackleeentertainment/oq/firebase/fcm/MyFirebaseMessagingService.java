@@ -14,7 +14,6 @@ import com.jackleeentertainment.oq.Ram;
 import com.jackleeentertainment.oq.debug.L;
 import com.jackleeentertainment.oq.generalutil.StringGenerator;
 import com.jackleeentertainment.oq.object.Chat;
-import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.ui.layout.activity.MainActivity;
 
@@ -45,23 +44,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String tag = remoteMessage.getNotification().getTag();
 
-        if (tag.equals("post")) {
-            //Objects
-            NotificationBody body = gson.fromJson(
-                    remoteMessage.getNotification().getBody(),
-                    NotificationBody.class);
-            Profile profile = body.getProfile();
-            OQPost post = gson.fromJson(
-                    body.getObj().toString(),
-                    OQPost.class);
-            //RAM
-            Ram.addProfile(profile.getUid(), profile);
-            Ram.addPost(post.getPid(), post);
-            //Upload To Fireabse
-            //Notification
-            doPostNotifiation(profile, post);
-
-        } else if (tag.equals("chat")) {
+        if (tag.equals("chat")) {
 
             //Objects
             NotificationBody body = gson.fromJson(remoteMessage.getNotification().getBody(),
@@ -71,7 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     Chat.class);
 
             //RAM
-            Ram.addProfile(profile.getUid(), profile);
+//            Ram.addProfile(profile.getUid(), profile);
 
             //Upload To Fireabse
 
@@ -90,34 +73,34 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
 
-
-
-    private void doPostNotifiation(Profile profile, OQPost post) {
-
-                Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("fragment", 2);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0 /* Request code */,
-                intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_check_white_48dp)
-                .setContentTitle(profile.getFull_name())
-                .setContentText(StringGenerator.postedx(post))
-                //.addAction(new NotificationCompat.Action())
-                //.addPerson(uriPerson)
-                .setAutoCancel(true)
-                .setCategory(NotificationCompat.CATEGORY_SOCIAL)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-    }
+//
+//
+//    private void doPostNotifiation(Profile profile, OQPost post) {
+//
+//                Intent intent = new Intent(this, MainActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        intent.putExtra("fragment", 2);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+//                0 /* Request code */,
+//                intent,
+//                PendingIntent.FLAG_ONE_SHOT);
+//
+//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+//                .setSmallIcon(R.drawable.ic_check_white_48dp)
+//                .setContentTitle(profile.getFull_name())
+//                .setContentText(StringGenerator.postedx(post))
+//                //.addAction(new NotificationCompat.Action())
+//                //.addPerson(uriPerson)
+//                .setAutoCancel(true)
+//                .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+//                .setDefaults(NotificationCompat.DEFAULT_ALL)
+//                .setContentIntent(pendingIntent);
+//
+//        NotificationManager notificationManager =
+//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+//    }
 
     private void doChatNotifiation(Profile profile , Chat chat) {
 

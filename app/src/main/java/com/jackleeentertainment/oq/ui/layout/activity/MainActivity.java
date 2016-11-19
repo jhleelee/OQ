@@ -43,7 +43,13 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.OnPausedListener;
@@ -86,7 +92,7 @@ public class MainActivity extends BaseActivity
     String TAG = this.getClass().getSimpleName();
     final int REQ_PICK_SMS = 98;
     final int REQ_PICK_IMAGE_FOR_PROFILECHANGE = 95;
-    Uri outputCropUri;
+    final int REQ_PICK_IMAGE_FOR_BACKGROUND = 96;
 
 
     //Drawer
@@ -96,13 +102,16 @@ public class MainActivity extends BaseActivity
     RelativeLayout ro_person_photo_48dip__lessmargin;
     TextView tvAvaDrawer;
     ImageView ivAvaDrawer;
+    ImageView ivBG;
 
     //Drawer2
     TextView tvTitleDrawerHeader2;
+    TextView tvUpdateContacts;
     SearchView searchViewRightDrawer;
     FirebaseRecyclerAdapter<Profile, AvatarNameViewHolder> frvAdapterMyRecent,
             frvAdapterAllMyContact;
     RecyclerView rvRightDrawerAll;
+    RelativeLayout ro_empty_list_rightdrawer;
 
     //ViewPager
     MainActivityPagerAdapter mainActivityPagerAdapter;
@@ -118,6 +127,9 @@ public class MainActivity extends BaseActivity
     Activity mActivity = this;
     View vScrim;
 
+    //from DiaFrag :onResume
+    public boolean isToStartPhoneSync= false;
+    public boolean  isToStartEmailSync= false;
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -468,7 +480,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, NewOQActivity.class);
-                intent.putExtra("OQTWantT_Future", OQT.DoWhat.GET);
+                intent.putExtra("mDoWhat", OQT.DoWhat.GET);
                 startActivity(intent);
             }
         });
@@ -508,6 +520,9 @@ public class MainActivity extends BaseActivity
                 .tvAva);
         ivAvaDrawer = (ImageView) ro_person_photo_48dip__lessmargin.findViewById(R.id
                 .ivAva);
+        ivBG = (ImageView) header.findViewById(R.id
+                .ivBG);
+
 
         header.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -528,15 +543,46 @@ public class MainActivity extends BaseActivity
         tvTitleDrawerHeader2 = (TextView) findViewById(R.id.tvTitle_DrawerHeader2);
         tvTitleDrawerHeader2.setText(JM.strById(R.string.contacts));
 
-        searchViewRightDrawer = (SearchView) navigationView2.findViewById(R.id.searchViewRightDrawer);
-        rvRightDrawerAll = (RecyclerView) navigationView2.findViewById(R.id.rvRightDrawerAll);
+        tvUpdateContacts = (TextView) findViewById(R.id.tvUpdateContacts);
+
+        searchViewRightDrawer = (SearchView) findViewById(R.id.searchViewRightDrawer);
+//        rvRightDrawerAll = (RecyclerView) navigationView2.findViewById(R.id.rvRightDrawerAll);
 
 
         rvRightDrawerAll = (RecyclerView) findViewById(R.id.rvRightDrawerAll);
+        ro_empty_list_rightdrawer = (RelativeLayout)findViewById(R.id.ro_empty_list_rightdrawer);
+
+
+
 
         rvRightDrawerAll.setHasFixedSize(true);
         rvRightDrawerAll.setLayoutManager(new LinearLayoutManager(this));
 
+
+        rvRightDrawerAll.setAdapter(frvAdapterAllMyContact);
+
+        tvUpdateContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("diaFragT", DiaFragT.UpdateContacts);
+                showDialogFragment(bundle);
+            }
+        });
+
+
+        //the intent filter will be action = "com.example.demo_service.action.SERVICE_FINISHED"
+        IntentFilter filter = new IntentFilter("com.jackleeentertainment.oq." + LBR.IntentFilterT.MainActivityDrawerMenu);
+        // register the receiver:
+        registerReceiver(mMessageReceiver, filter);
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initUiDataDrawer();
 
         frvAdapterAllMyContact = new FirebaseRecyclerAdapter<Profile, AvatarNameViewHolder>
                 (Profile.class,
@@ -566,25 +612,23 @@ public class MainActivity extends BaseActivity
             }
         };
 
-        rvRightDrawerAll.setAdapter(frvAdapterAllMyContact);
+        if (isToStartPhoneSync){
+            Intent intent = new Intent(this, ProgressActivity.class);
+            intent.putExtra("progressT",ProgressT.UPDATE_CONTACT_PHONE);
+            startActivity(intent);
+            isToStartPhoneSync=false;
+        }
+
+        if (isToStartEmailSync){
+            Intent intent = new Intent(this, ProgressActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("progressT",ProgressT.UPDATE_CONTACT_EMAIL);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            isToStartEmailSync=false;
+        }
 
 
-
-
-
-
-        //the intent filter will be action = "com.example.demo_service.action.SERVICE_FINISHED"
-        IntentFilter filter = new IntentFilter("com.jackleeentertainment.oq." + LBR.IntentFilterT.MainActivityDrawerMenu);
-        // register the receiver:
-        registerReceiver(mMessageReceiver, filter);
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initUiDataDrawer();
     }
 
     @Override
@@ -748,7 +792,7 @@ public class MainActivity extends BaseActivity
             case R.id.nav_input_manually_get:
 
                 Intent intentManualGet = new Intent(this, NewOQActivity.class);
-                intentManualGet.putExtra("OQTWantT_Future", OQT.DoWhat.GET);
+                intentManualGet.putExtra("mDoWhat", OQT.DoWhat.GET);
                 startActivity(intentManualGet);
                 break;
 
@@ -762,7 +806,7 @@ public class MainActivity extends BaseActivity
 
             case R.id.nav_input_manually_pay:
                 Intent intentManualPay = new Intent(this, NewOQActivity.class);
-                intentManualPay.putExtra("OQTWantT_Future", OQT.DoWhat.PAY);
+                intentManualPay.putExtra("mDoWhat", OQT.DoWhat.PAY);
                 startActivity(intentManualPay);
                 break;
 
@@ -822,9 +866,6 @@ public class MainActivity extends BaseActivity
     }
 
 
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -857,6 +898,23 @@ public class MainActivity extends BaseActivity
             }
 
 
+            if (requestCode == REQ_PICK_IMAGE_FOR_BACKGROUND) {
+
+                if (data != null
+                        && data.getData() != null) {
+                    Log.d(TAG, "data available");
+                    Uri imageUri = data.getData();
+                    {
+
+                        uploadBgPhoto(imageUri, App.getUid(this));
+
+                    }
+                }
+
+
+            }
+
+
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -873,7 +931,7 @@ public class MainActivity extends BaseActivity
 
     }
 
-
+    StorageReference mTempStorageRefBG;
     StorageReference mTempStorageRefORIG;  //mTempStorageRef was previously used to transfer data.
     StorageReference mTempStorageRefpx36;  //mTempStorageRef was previously used to transfer data.
     StorageReference mTempStorageRefpx48;  //mTempStorageRef was previously used to transfer data.
@@ -1056,6 +1114,125 @@ public class MainActivity extends BaseActivity
     }
 
 
+    public void uploadBgPhoto(
+            final Uri uri,
+          final  String uid
+    ) {
+        Log.d(TAG, "uploadBgPhoto()");
+
+        if (uri == null) {
+            Log.d(TAG, "uri==null");
+
+            return;
+        }
+        if (uid == null) {
+            Log.d(TAG, "uid==null");
+            return;
+        }
+
+        /**
+         * get Bitmap
+         */
+
+        try {
+
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)) {
+                byte[] bytes = os.toByteArray();
+
+                /**
+                 metaData
+                 **/
+                StorageMetadata metadata = new StorageMetadata.Builder()
+                        .setContentType("image/jpg")
+                        .setCustomMetadata("uid", uid)
+                        .build();
+                /**
+                 path
+                 **/
+                mTempStorageRefBG =
+                        App.fbaseStorageRef
+                                .child(FStorageNode.FirstT.BG_PHOTO)
+                                .child(uid);
+
+                /**
+                 main
+                 **/
+                UploadTask uploadTask =
+                        mTempStorageRefBG
+                                .putBytes(bytes, metadata);
+
+                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                        System.out.println("Upload is " + progress + "% done");
+                    }
+                }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                        System.out.println("Upload is paused");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Log.d(TAG, "onFailure");
+                        Log.d(TAG, exception.toString());
+
+                        J.TOAST(JM.strById(R.string.fail_upload_bg));
+
+
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Handle successful uploads on complete
+                        Log.d(TAG, "onSuccess");
+                        Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+
+                        //set Image
+                        Glide.with(mActivity)
+                                .using(new FirebaseImageLoader())
+                                .load(App.fbaseStorageRef
+                                        .child(FStorageNode.FirstT.BG_PHOTO)
+                                        .child(uid))
+                                .crossFade()
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .listener(new RequestListener<StorageReference, GlideDrawable>() {
+                                    @Override
+                                    public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                        ivBG.setVisibility(View.GONE);
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                        ivBG.setVisibility(View.VISIBLE);
+                                        return false;
+                                    }
+                                })
+                                .into(ivBG);
+
+                    }
+                });
+
+
+            }
+
+
+        } catch (FileNotFoundException e) {
+            Log.d(TAG, e.toString());
+        } catch (IOException e) {
+            Log.d(TAG, e.toString());
+        }
+    }
+
+
     /**
      * A simple pager frvAdapterAllMyContact that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
@@ -1096,13 +1273,19 @@ public class MainActivity extends BaseActivity
     public void startActivityForResultPhotoGalleryToPROFILECHANGE() {
         Intent intent = new Intent();
         intent.setType("image/*");
-        if (android.os.Build.VERSION.SDK_INT >= 18) { //API18 and above
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,
                 JM.strById(R.string.change_profile_photo)),
                 REQ_PICK_IMAGE_FOR_PROFILECHANGE);
+    }
+
+    public void startActivityForResultPhotoGalleryToBGCHANGE() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                JM.strById(R.string.change_background_photo)),
+                REQ_PICK_IMAGE_FOR_BACKGROUND);
     }
 
 

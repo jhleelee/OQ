@@ -1,35 +1,24 @@
 package com.jackleeentertainment.oq.ui.layout.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Receipt;
 import com.jackleeentertainment.oq.ui.layout.diafrag.ChatroomAttrDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
@@ -39,11 +28,10 @@ import com.jackleeentertainment.oq.ui.layout.diafrag.MyProfileBackgroundPhotoDia
 import com.jackleeentertainment.oq.ui.layout.diafrag.MySpentItemDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.OneLineInputDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.ReceiptBreakdownDiaFrag;
-import com.jackleeentertainment.oq.ui.layout.diafrag.SelectedFriendsAndMoreDiaFrag;
+import com.jackleeentertainment.oq.ui.layout.diafrag.SelectedPeopleDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.TransactChatOrShowProfileDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.TransactOrChatDiaFrag;
-
-import java.util.ArrayList;
+import com.jackleeentertainment.oq.ui.layout.diafrag.UpdateContactsDiaFrag;
 
 /**
  * Created by Jacklee on 2016. 9. 30..
@@ -96,11 +84,11 @@ public class BaseActivity extends AppCompatActivity {
             ChatroomAttrDiaFrag chatroomAttrDiaFrag = ChatroomAttrDiaFrag.newInstance(
                     bundle, this);
             chatroomAttrDiaFrag.show(fm, "chatroomAttrDiaFrag");
-        } else if (diaFragT.equals(DiaFragT.SelectedFriendsAndMore)) {
-            SelectedFriendsAndMoreDiaFrag selectedFriendsAndMoreDiaFrag = SelectedFriendsAndMoreDiaFrag
+        } else if (diaFragT.equals(DiaFragT.SelectedPeople)) {
+            SelectedPeopleDiaFrag selectedPeopleDiaFrag = SelectedPeopleDiaFrag
                     .newInstance(
                             bundle, this);
-            selectedFriendsAndMoreDiaFrag.show(fm, "selectedFriendsAndMoreDiaFrag");
+            selectedPeopleDiaFrag.show(fm, "selectedPeopleDiaFrag");
         } else if (diaFragT.equals(DiaFragT.OneLineInput)) {
             OneLineInputDiaFrag oneLineInputDiaFrag = OneLineInputDiaFrag
                     .newInstance(
@@ -154,6 +142,12 @@ public class BaseActivity extends AppCompatActivity {
                             .newInstance(
                                     bundle, this);
             frag.show(fm, "TransactOrChatDiaFrag");
+        } else if (diaFragT.equals(DiaFragT.UpdateContacts)){
+            UpdateContactsDiaFrag frag =
+                    UpdateContactsDiaFrag
+                            .newInstance(
+                                    bundle, this);
+            frag.show(fm, "UpdateContacts");
         }
 
 
@@ -221,11 +215,12 @@ public class BaseActivity extends AppCompatActivity {
                         });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-//        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-//        nbutton.setTextColor(JM.colorById(R.color.text_black_54));
-//        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-//        pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
         alertDialog.show();
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setTextColor(JM.colorById(R.color.text_black_54));
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
+
     }
 
 

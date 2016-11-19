@@ -5,9 +5,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.jackleeentertainment.oq.object.OqDo;
- import com.jackleeentertainment.oq.object.util.OqDoUtil;
- import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
 
 /**
@@ -15,19 +13,22 @@ import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
  */
 
 public class SimpleTextWatcher implements TextWatcher {
-    String TAG  = "SimpleTextWatcher";
+    String TAG = "SimpleTextWatcher";
     private EditText mEditText;
     NewOQActivity mNewOQActivity;
     NewOQFrag0Neo mNewOQFrag0;
-    OqDo mOqItem;
+    NewOQActivity.TempProAmt mTempProAmt;
 
-    public SimpleTextWatcher(EditText editText, OqDo oqDo,
-                             NewOQActivity newOQActivity,
-                             NewOQFrag0Neo newOQFrag0Neo) {
+    public SimpleTextWatcher(
+            EditText editText,
+            NewOQActivity.TempProAmt t,
+            NewOQActivity newOQActivity,
+            NewOQFrag0Neo newOQFrag0Neo
+    ) {
         mEditText = editText;
-        mOqItem = oqDo;
+        mTempProAmt = t;
         mNewOQActivity = newOQActivity;
-        mNewOQFrag0= newOQFrag0Neo;
+        mNewOQFrag0 = newOQFrag0Neo;
     }
 
     @Override
@@ -47,32 +48,24 @@ public class SimpleTextWatcher implements TextWatcher {
 
         mEditText.removeTextChangedListener(this);
 
-//        if (s.equals("")){
-//            mEditText.setText(JM.strById(R.string.symbol_krw) +" "+ "0");
-//        } else
-//
-//        if (s.equals(JM.strById(R.string.symbol_krw) +" "+"0")){
-//
-//        } else {
-//
-//        }
-
-
-
-        if (mNewOQActivity!=null){
+        if (mNewOQActivity != null) {
 
             long l = 0;
             try {
                 l = Long.parseLong(
                         mEditText.getText().toString());
-                mOqItem.setAmmount(l);
-                long sum = OqDoUtil.getSumOqDoAmmounts(
-                        (mNewOQActivity).arlOqDo_Future
-                );
+                mTempProAmt.ammount = l;
+
+                long sum = 0;
+                for (NewOQActivity.TempProAmt t :
+                        mNewOQActivity.tempArl) {
+                    sum += t.ammount;
+                }
 
                 mNewOQFrag0.tvSumOqItems.setText(String.valueOf(sum));
                 mNewOQFrag0.tvNextEnableOrNot();
-            } catch (Exception e){
+
+            } catch (Exception e) {
                 Log.d(TAG, e.toString());
 
             }

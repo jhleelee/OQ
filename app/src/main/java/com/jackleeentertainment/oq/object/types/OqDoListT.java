@@ -4,7 +4,7 @@ package com.jackleeentertainment.oq.object.types;
  * Created by Jacklee on 2016. 11. 4..
  */
 
-public class OqWrapT {
+public class OqDoListT {
 
     public static String ASentGetReq__BArgued = "a";
     public static String ASentGetReq__BNoArgued_NotPaidAll = "b";

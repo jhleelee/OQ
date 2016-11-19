@@ -57,7 +57,7 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
 
         frag.setArguments(bundle);
         selectedProfileNum =   bundle.getInt("selectedProfileNum");
-        OQTWantT_Future =   bundle.getString("OQTWantT_Future");
+        OQTWantT_Future =   bundle.getString("mDoWhat");
         mContext = context;
         return frag;
     }

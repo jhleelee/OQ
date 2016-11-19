@@ -179,6 +179,7 @@ public class MainFrag2_ChatroomList extends Fragment implements
         calendarNow.set(Calendar.SECOND, 0);
         calendarNow.set(Calendar.MILLISECOND, 0);
         dateToday = calendarNow.getTime();
+        getLoaderManager().restartLoader(LOADER_CHATROOMLIST, null, mCallbacks);
 
 
     }
@@ -188,7 +189,6 @@ public class MainFrag2_ChatroomList extends Fragment implements
     public void onResume() {
         Log.d(TAG, "onResume() ... ");
         super.onResume();
-        getLoaderManager().restartLoader(LOADER_CHATROOMLIST, null, mCallbacks);
         IS_RELOADING_LOADER_CHATROOMLIST_CUZ_ONRESUME = true;
     }
 

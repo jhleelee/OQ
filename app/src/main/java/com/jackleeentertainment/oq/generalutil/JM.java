@@ -28,7 +28,6 @@ import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
  import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.OqDoPair;
-import com.jackleeentertainment.oq.object.OqWrap;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
@@ -45,6 +44,62 @@ public class JM {
     /********************************
      * Machine Configuration
      ********************************/
+
+
+
+
+
+
+
+    public static void uiTvResultAmmount(TextView textView, long amt) {
+
+        String str = "";
+
+        if (amt>0){
+            textView.setTextColor(JM.colorById(R.color.getPrimary
+            ));
+            J.st1000(amt);
+            str +="+" + J.st1000(amt);
+
+        } else if (amt<0){
+            textView.setTextColor(JM.colorById(R.color.payPrimary));
+
+            str +="-" + J.st1000(amt);
+        } else {
+            textView.setTextColor(JM.colorById(R.color.text_black_54));
+
+            str = JM.strById(R.string.none);
+
+        }
+        textView.setText(str);
+
+    }
+
+
+
+
+    public static void uiTvResultAmmount2(TextView textView, long amt) {
+
+        String str = "";
+
+        if (amt>0){
+            textView.setTextColor(JM.colorById(R.color.getPrimaryDark));
+            J.st1000(amt);
+            str +="(+" + J.st1000(amt)+")";
+
+        } else if (amt<0){
+            textView.setTextColor(JM.colorById(R.color.payPrimaryDark));
+
+            str +="(-" + J.st1000(amt)+")";
+        } else {
+            textView.setVisibility(View.GONE);
+
+        }
+        textView.setText(str);
+
+    }
+
+
 
 
     public static int getDeviceDpi() {
@@ -657,6 +712,38 @@ public class JM {
      ********************************/
 
 
+
+
+ public static void glideProfileThumb(final Profile profile,
+
+                                         final ImageView iv,
+                                         final TextView tv,
+                                         final Activity
+                                                 mActivity) {
+        glideProfileThumb(   profile. uid,
+                profile.full_name,
+                iv,
+                tv,
+
+                mActivity);
+    }
+
+
+
+    public static void glideProfileThumb(final Profile profile,
+
+                                         final ImageView iv,
+                                         final TextView tv,
+                                         final Fragment
+                                                 fragment) {
+        glideProfileThumb(   profile. uid,
+                profile.full_name,
+                iv,
+                tv,
+
+                fragment);
+    }
+
     public static void glideProfileThumb(final String uid,
                                          final String uname,
                                          final ImageView iv,
@@ -765,59 +852,59 @@ public class JM {
 
 
 
-
-
-
-
-   public static void  ivTwoAvaRelation(ImageView iv, OqWrap oqWrap){
-
-       List<OqDo> listoqdo = oqWrap.getListoqdo();
-       OqDoUtil.sortList(listoqdo);
-
-       OqDo firstOqdo = listoqdo.get(0);
-
-       if (firstOqdo.getOqwhat().equals(OQT.DoWhat.GET)&&
-               firstOqdo.getOqwhen().equals(OQT.DoWhen.FUTURE)){
-
-           List<OqDo> listBaPayFuture = OqDoUtil.getListBaPayFuture(listoqdo);
-           long sumListBaPayFuture = OqDoUtil.getSumAmt(listBaPayFuture);
-
-           List<OqDo> listAbGetPast = OqDoUtil.getListAbGetPast(listoqdo);
-           long sumListAbGetPast = OqDoUtil.getSumAmt(listAbGetPast);
-
-           List<OqDo> listBaPayPast = OqDoUtil.getListBaPayPast(listoqdo);
-           long sumListBaPayPast = OqDoUtil.getSumAmt(listBaPayPast);
-
-
-           if (firstOqdo.getAmmount()==sumListBaPayFuture){ //Basic - B agrees with A's req
-
-               if (firstOqdo.getAmmount()==sumListBaPayPast){ // B claims he paid to A. is it true?
-
-                   if (firstOqdo.getAmmount()==sumListAbGetPast){ // A admits is is paid all
-
-                       JM.BGD(iv, R.drawable.cir_requested_so_paid);
-                       JM.ID(iv, R.drawable.ic_check_white_24dp);
-
-                   } else { //not paid all (incl partially paid)
-                       JM.BGD(iv, R.drawable.cir_requested_so_claimpaid);
-                       JM.ID(iv, R.drawable.ic_check_white_24dp);
-                   }
-
-
-               } else { //not paid all (incl partially paid)
-                   JM.BGD(iv, R.drawable.cir_requested);
-                   JM.ID(iv, R.drawable.ic_arrow_forward_white_24dp);
-               }
-
-
-           } else if (firstOqdo.getAmmount()>sumListBaPayFuture){ // B does not agree with A's req
-               JM.BGD(iv, R.drawable.cir_requested_but_argued);
-               JM.ID(iv, R.drawable.ic_arrow_forward_white_24dp);
-           }
-
-       }
-
-   }
+//
+//
+//
+//
+//   public static void  ivTwoAvaRelation(ImageView iv, OqWrap oqWrap){
+//
+//       List<OqDo> listoqdo = oqWrap.getListoqdo();
+//       OqDoUtil.sortList(listoqdo);
+//
+//       OqDo firstOqdo = listoqdo.get(0);
+//
+//       if (firstOqdo.getOqwhat().equals(OQT.DoWhat.GET)&&
+//               firstOqdo.getOqwhen().equals(OQT.DoWhen.FUTURE)){
+//
+//           List<OqDo> listBaPayFuture = OqDoUtil.getListBaPayFuture(listoqdo);
+//           long sumListBaPayFuture = OqDoUtil.getSumAmt(listBaPayFuture);
+//
+//           List<OqDo> listAbGetPast = OqDoUtil.getListAbGetPast(listoqdo);
+//           long sumListAbGetPast = OqDoUtil.getSumAmt(listAbGetPast);
+//
+//           List<OqDo> listBaPayPast = OqDoUtil.getListBaPayPast(listoqdo);
+//           long sumListBaPayPast = OqDoUtil.getSumAmt(listBaPayPast);
+//
+//
+//           if (firstOqdo.getAmmount()==sumListBaPayFuture){ //Basic - B agrees with A's req
+//
+//               if (firstOqdo.getAmmount()==sumListBaPayPast){ // B claims he paid to A. is it true?
+//
+//                   if (firstOqdo.getAmmount()==sumListAbGetPast){ // A admits is is paid all
+//
+//                       JM.BGD(iv, R.drawable.cir_requested_so_paid);
+//                       JM.ID(iv, R.drawable.ic_check_white_24dp);
+//
+//                   } else { //not paid all (incl partially paid)
+//                       JM.BGD(iv, R.drawable.cir_requested_so_claimpaid);
+//                       JM.ID(iv, R.drawable.ic_check_white_24dp);
+//                   }
+//
+//
+//               } else { //not paid all (incl partially paid)
+//                   JM.BGD(iv, R.drawable.cir_requested);
+//                   JM.ID(iv, R.drawable.ic_arrow_forward_white_24dp);
+//               }
+//
+//
+//           } else if (firstOqdo.getAmmount()>sumListBaPayFuture){ // B does not agree with A's req
+//               JM.BGD(iv, R.drawable.cir_requested_but_argued);
+//               JM.ID(iv, R.drawable.ic_arrow_forward_white_24dp);
+//           }
+//
+//       }
+//
+//   }
 
 
 

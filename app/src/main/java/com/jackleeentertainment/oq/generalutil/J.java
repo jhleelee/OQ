@@ -9,9 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jackleeentertainment.oq.App;
+
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -36,6 +37,44 @@ public class J {
     public static String strAmt(long amt){
 
         return MessageFormat.format("{0}", amt);
+    }
+
+
+    public static String shortenName(String strName){
+
+
+        return  abbreviate(strName, 0,8) ;
+
+
+    }
+
+    public static String abbreviate(final String str, int offset, final int maxWidth) {
+        if (str == null) {
+            return null;
+        }
+        if (maxWidth < 4) {
+            throw new IllegalArgumentException("Minimum abbreviation width is 4");
+        }
+        if (str.length() <= maxWidth) {
+            return str;
+        }
+        if (offset > str.length()) {
+            offset = str.length();
+        }
+        if (str.length() - offset < maxWidth - 3) {
+            offset = str.length() - (maxWidth - 3);
+        }
+        final String abrevMarker = "...";
+        if (offset <= 4) {
+            return str.substring(0, maxWidth - 3) + abrevMarker;
+        }
+        if (maxWidth < 7) {
+            throw new IllegalArgumentException("Minimum abbreviation width with offset is 7");
+        }
+        if (offset + maxWidth - 3 < str.length()) {
+            return abrevMarker + abbreviate(str.substring(offset), 0, maxWidth - 3);
+        }
+        return abrevMarker + str.substring(str.length() - (maxWidth - 3));
     }
 
 
@@ -193,6 +232,12 @@ public class J {
 
 
     }
+
+
+    public static String st1000(Long l) {
+        return String.valueOf(l);
+    }
+
 
 
     @Nullable

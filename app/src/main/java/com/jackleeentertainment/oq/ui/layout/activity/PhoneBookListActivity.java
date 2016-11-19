@@ -253,7 +253,7 @@
 //                final long date = cursor.getLong(cursor.getColumnIndex("date"));
 //                vh.tvSender.setText(person);
 //                final String strDate = String.valueOf(date);
-//                vh.tvDate.setText(strDate);
+//                vh.tvResultAmmount.setText(strDate);
 //
 //                // if size is larger than 1, it is a problem.
 //                ArrayList<SMSHighlight> arlSMSHighlight = JSMS.getArlSMSHighlight(body,
@@ -857,8 +857,8 @@
 //    }
 //
 //    @Override
-//    void initUIDataOnResume() {
-//        super.initUIDataOnResume();
+//    void initOnResume() {
+//        super.initOnResume();
 //        tvToolbarTitle.setText(JM.strById(R.string.load_sms));
 //    }
 //

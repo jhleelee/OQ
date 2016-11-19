@@ -4,13 +4,13 @@ import android.content.Context;
 import android.util.Log;
 
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.object.OQPost;
 import com.jackleeentertainment.oq.object.OqDo;
  import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.DeedT;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.types.OQPostT;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
+import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 
 import java.util.ArrayList;
 
@@ -33,16 +33,16 @@ public class StringGenerator {
 //
 //    }
 
-    public static String deed (OQPost oqPost){
-        Log.d(TAG, "deed() ");
-
-        if (oqPost.getUdeed()!=null&&oqPost.getUdeed().equals(DeedT.RequesterSENT_IWantGet_REQ)){
-            return oqPost.getUname() + "님이 " + JM.strById(R.string.sent_getreq);
-        } else {
-            return null;
-        }
-
-    }
+//    public static String deed (OQPost oqPost){
+//        Log.d(TAG, "deed() ");
+//
+//        if (oqPost.getUdeed()!=null&&oqPost.getUdeed().equals(DeedT.RequesterSENT_IWantGet_REQ)){
+//            return oqPost.getUname() + "님이 " + JM.strById(R.string.sent_getreq);
+//        } else {
+//            return null;
+//        }
+//
+//    }
 
 
 
@@ -112,16 +112,16 @@ public class StringGenerator {
 
 
 
-    public static String xAndXPeopleOqItemClaimee(ArrayList<OqDo> arl) {
+    public static String xAndXPeopleOqItemClaimee(ArrayList<NewOQActivity.TempProAmt> arl) {
 
         if (arl != null && arl.size() > 0) {
 
             if (arl.size() == 1) {
-                return arl.get(0).getNameb() + "님";
+                return arl.get(0).profile.getFull_name() + "님";
             } else if (arl.size() == 2) {
-                return arl.get(0).getNameb() + "님" + "," + arl.get(1).getNameb() + "님";
+                return arl.get(0).profile.getFull_name() + "님" + "," + arl.get(1).profile.getFull_name() + "님";
             } else {
-                return arl.get(0).getNameb() + "님 외 " + J.st(arl.size() - 1) + "명";
+                return arl.get(0).profile.getFull_name() + "님 외 " + J.st(arl.size() - 1) + "명";
             }
         }
 
@@ -156,25 +156,25 @@ public class StringGenerator {
     }
 
 
-    public static String postedx(OQPost post) {
-
-        // get locale
-
-        return JM.strById(R.string.posted) + " " + postT(post) + ".";
-    }
-
-
-    public static String xPostedx(String name, OQPost post, int postNum, Context context) {
-
-        // get locale
-
-        if (postNum == 1) {
-            return name + " " + JM.strById(R.string.posted, context) + " " + postT(post) + ".";
-        } else {
-            return name + " " + JM.strById(R.string.posted, context) + " " + J.st(postNum) + " " + postT(post) + "s.";
-        }
-
-    }
+//    public static String postedx(OQPost post) {
+//
+//        // get locale
+//
+//        return JM.strById(R.string.posted) + " " + postT(post) + ".";
+//    }
+//
+//
+//    public static String xPostedx(String name, OQPost post, int postNum, Context context) {
+//
+//        // get locale
+//
+//        if (postNum == 1) {
+//            return name + " " + JM.strById(R.string.posted, context) + " " + postT(post) + ".";
+//        } else {
+//            return name + " " + JM.strById(R.string.posted, context) + " " + J.st(postNum) + " " + postT(post) + "s.";
+//        }
+//
+//    }
 
 
     /**
@@ -310,22 +310,22 @@ public class StringGenerator {
     }
 
 
-    public static String postT(OQPost post) {
-        switch (post.getPosttype()) {
-            case OQPostT.NONE:
-                return JM.strById(R.string.post);
-
-            case OQPostT.PHOTO:
-                return JM.strById(R.string.photo);
-
-            case OQPostT.VIDEO:
-                return JM.strById(R.string.video);
-
-            default:
-                return null;
-
-        }
-    }
+//    public static String postT(OQPost post) {
+//        switch (post.getPosttype()) {
+//            case OQPostT.NONE:
+//                return JM.strById(R.string.post);
+//
+//            case OQPostT.PHOTO:
+//                return JM.strById(R.string.photo);
+//
+//            case OQPostT.VIDEO:
+//                return JM.strById(R.string.video);
+//
+//            default:
+//                return null;
+//
+//        }
+//    }
 
 
 }

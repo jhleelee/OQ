@@ -4,59 +4,59 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/lo"
-              style="@style/loDiaFragWrapTop"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/lo"
+                  style="@style/loDiaFragWrapTop"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
 
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:checkedButton="@+id/n"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/n">
 
 
-        <RadioButton
-            android:layout_margin="16dip"
+            <RadioButton
+                android:id="@+id/r0"
 
-            android:id="@+id/r0"
-            style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
+                style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dip"/>
+
+
+            <RadioButton
+                android:id="@+id/r1"
+                style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
+                android:text="@string/dummyperiod"/>
+
+
+            <RadioButton
+                android:id="@+id/r2"
+                style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dip"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"/>
+
+        </RadioGroup>
+
+
+        <com.jackleeentertainment.oq.ui.widget.LoEtMoney
+            android:id="@+id/loetmoney"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-
-        <RadioButton
-            android:layout_marginBottom="16dip"
-            android:layout_marginLeft="16dip"
-            android:layout_marginRight="16dip"
-            android:id="@+id/r1"
-            android:text="@string/dummyperiod"
-            style="@style/Widget.AppCompat.CompoundButton.RadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-
-        <RadioButton
-            android:layout_marginBottom="16dip"
-            android:layout_marginLeft="16dip"
-            android:layout_marginRight="16dip"
-            android:id="@+id/r2"
-            style="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </RadioGroup>
-
-
-    <com.jackleeentertainment.oq.ui.widget.LoEtMoney
-        android:id="@+id/loetmoney"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-</LinearLayout>
+    </LinearLayout>
 
     <!--https://material.google.com/components/dialogs.html#dialogs-specs-->
     <View
@@ -65,9 +65,9 @@
 
     <include
         android:id="@+id/ro_diafrag_okcancel__lo_diafrag"
+        layout="@layout/ro_diafrag_okcancel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/ro_diafrag_okcancel" />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
 

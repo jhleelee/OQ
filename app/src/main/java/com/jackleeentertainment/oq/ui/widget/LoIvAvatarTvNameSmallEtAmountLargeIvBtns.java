@@ -3,13 +3,12 @@ package com.jackleeentertainment.oq.ui.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 
 /**
  * Created by Jacklee on 2016. 10. 29..
@@ -20,6 +19,9 @@ public class LoIvAvatarTvNameSmallEtAmountLargeIvBtns extends LinearLayout {
     public ImageView ivAvatar, ivToc, ivDelete;
     public TextView tvName;
     public LoEtMoney loetmomey;
+    public NewOQActivity.TempProAmt tempProAmt;
+
+
     public LoIvAvatarTvNameSmallEtAmountLargeIvBtns(Context context) {
         this(context, null);
     }

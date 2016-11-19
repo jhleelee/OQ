@@ -329,6 +329,14 @@ public class App extends Application {
             }
         }
     }
+
+    public static String getUphone(Activity activity){
+        String num = "00000";
+        return num;
+    }
+
+
+
     /*
     User
      */

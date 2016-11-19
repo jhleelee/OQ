@@ -7,14 +7,13 @@ import java.util.List;
  */
 
 public class Comment {
-    String uid;
 
 
+ public    Profile profile;
+    public   String txt;
+    public long ts;
+    public List<Comment> comments;
 
-    String uname;
-    String txt;
-    long ts;
-    List<Comment> comments;
 
     public Comment() {
         super();
@@ -28,15 +27,14 @@ public class Comment {
         this.comments = comments;
     }
 
-    public String getUid() {
-        return uid;
+
+    public Profile getProfile() {
+        return profile;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
-
-
 
     public String getTxt() {
         return txt;
@@ -54,11 +52,5 @@ public class Comment {
         this.ts = ts;
     }
 
-    public String getUname() {
-        return uname;
-    }
 
-    public void setUname(String uname) {
-        this.uname = uname;
-    }
 }

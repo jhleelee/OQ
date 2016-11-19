@@ -17,6 +17,23 @@
 
     </TextView>
 
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvModify"
+        android:paddingLeft="16dip"
+        android:paddingRight="16dip"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:textSize="14dip"
+        android:text="@string/modify_"
+        android:textColor="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:gravity="center"
+        android:layout_height="56dip"/>
+
+
+
     <ImageView
         android:visibility="gone"
         android:id="@+id/ivChev__ro_tv_done"

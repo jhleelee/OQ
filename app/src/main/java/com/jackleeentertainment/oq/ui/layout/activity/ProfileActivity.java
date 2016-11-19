@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
@@ -44,15 +45,13 @@ import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.OqDoPair;
-import com.jackleeentertainment.oq.object.OqWrap;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.ChatUtil;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
-import com.jackleeentertainment.oq.object.util.OqWrapUtil;
-import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
 import com.jackleeentertainment.oq.ui.layout.viewholder.Ava2RelationDtlSmallVHolder;
 import com.jackleeentertainment.oq.ui.layout.viewholder.Ava2RelationDtlVHolder;
+import com.jackleeentertainment.oq.ui.widget.LoOppoFeed;
 import com.konifar.fab_transformation.FabTransformation;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -208,7 +207,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, NewOQActivity.class);
-                intent.putExtra("OQTWantT_Future", OQT.DoWhat.GET);
+                intent.putExtra("mDoWhat", OQT.DoWhat.GET);
                 startActivity(intent);
             }
         });
@@ -491,177 +490,57 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    FirebaseRecyclerAdapter recyclerAdapter;
-
-    void initRVAdapter() {
-        checkIfFirebaseListIsEmpty(mActivity);
-
-        ro_empty_list.setVisibility(View.GONE);
-        roProgress.setVisibility(View.GONE);
-        rvOQ.setHasFixedSize(true);
-        rvOQ.setLayoutManager(new LinearLayoutManager(mActivity));
+    ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid;
+    boolean isQueryAComplete = false;
+    boolean isQueryBComplete = false;
 
 
-        recyclerAdapter = new FirebaseRecyclerAdapter<OqWrap,
-                Ava2RelationDtlVHolder
-                >
-                (OqWrap.class,
-                        R.layout.lo_twoavatars_relation_names_explain_date_detail,
-                        Ava2RelationDtlVHolder.class,
-                        App.fbaseDbRef
-                                .child(FBaseNode0.MyOqWraps)
-                                .child(App.getUid(mActivity))
-                                .child(profile.getUid())
-                ) {
+    void uiOqDos(ArrayList<OqDo> oqDoList) {
 
-            public void populateViewHolder(
-                    final Ava2RelationDtlVHolder twoAvatarsWithRelationDtlVHolder,
-                    final OqWrap oqWrap,
-                    final int position) {
+        OqDoUtil.sortList(oqDoList);
+        arlArlOqDoPerReferOid = OqDoUtil.getArlArlOqDoPerReferOid
+                (oqDoList,
+                        this);
+        rvOQ.setAdapter(oqDoRVAdapter);
 
-                List<OqDo> oqDoList = oqWrap.getListoqdo();
-                long ts = oqWrap.getTs();
-                String gid = oqWrap.getGid();
-                String qid = oqWrap.getQid();
-                String wid = oqWrap.getWid();
-
-                if (oqDoList != null && oqDoList.size() > 0) {
-                    OqDoUtil.sortList(oqDoList);
-                    OqDo oqDoFirst = oqDoList.get(0);
-
-                    JM.glideProfileThumb(
-                            oqDoFirst.getUida(),
-                            oqDoFirst.getNamea(),
-                            twoAvatarsWithRelationDtlVHolder.ivAvaLeft,
-                            twoAvatarsWithRelationDtlVHolder.tvAvaLeft,
-                            mActivity
-                    );
-
-                    JM.glideProfileThumb(
-                            oqDoFirst.getUidb(),
-                            oqDoFirst.getNameb(),
-                            twoAvatarsWithRelationDtlVHolder.ivAvaRight,
-                            twoAvatarsWithRelationDtlVHolder.tvAvaRight,
-                            mActivity
-                    );
-
-                    OqWrapUtil.ivTwoAvaRelation(
-                            twoAvatarsWithRelationDtlVHolder.ivRelation,
-                            oqWrap);
-
-
-                    twoAvatarsWithRelationDtlVHolder.tvTwoName.setText(
-                            oqDoFirst.getNamea() + " • " + oqDoFirst.getNameb()
-                    );
-
-                    twoAvatarsWithRelationDtlVHolder.tvDate.setText(JT.str(oqWrap.getTs()));
-
-                    twoAvatarsWithRelationDtlVHolder.tvContent.setText(OqWrapUtil.getOqWrapStr(
-                            oqWrap));
-
-                    twoAvatarsWithRelationDtlVHolder.ivMore.setImageDrawable(
-                            JM.tintedDrawable(
-                                    R.drawable.ic_expand_more_white_48dp,
-                                    R.color.text_black_54,
-                                    mActivity
-                            ));
-
-
-
-                    ArrayList<OqDoPair> arlOqDoPair = OqDoUtil.getArlOqDoPair(oqWrap.getListoqdo());
-
-                    OqDoAdapter oqDoAdapter = new OqDoAdapter(arlOqDoPair);
-
-                    twoAvatarsWithRelationDtlVHolder.rvSub.setAdapter(oqDoAdapter);
-                    int items = oqDoAdapter.getItemCount();
-                    Log.d(TAG, J.st(items));
-
-                    twoAvatarsWithRelationDtlVHolder.ivMore.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            if (twoAvatarsWithRelationDtlVHolder.lolvTwoAvaHistory
-                                    .getVisibility() == View.GONE) {
-                                twoAvatarsWithRelationDtlVHolder.lolvTwoAvaHistory
-                                        .setVisibility(View.VISIBLE);
-
-                                twoAvatarsWithRelationDtlVHolder.ivMore.setImageDrawable(
-                                        JM.tintedDrawable(
-                                                R.drawable.ic_expand_less_white_24dp,
-                                                R.color.text_black_54,
-                                                mActivity
-                                        ));
-
-                                rvOQ.requestLayout();
-                            } else if (twoAvatarsWithRelationDtlVHolder.lolvTwoAvaHistory
-                                    .getVisibility() == View.VISIBLE) {
-                                twoAvatarsWithRelationDtlVHolder.lolvTwoAvaHistory
-                                        .setVisibility(View.GONE);
-                                twoAvatarsWithRelationDtlVHolder.ivMore.setImageDrawable(
-                                        JM.tintedDrawable(
-                                                R.drawable.ic_expand_more_white_48dp,
-                                                R.color.text_black_54,
-                                                mActivity
-                                        ));
-                                rvOQ.requestLayout();
-
-                            }
-
-                        }
-                    });
-
-
-
-
-                }
-
-
-//                JM.tvAmtTextBgAboutMuOppo(twoAvatarsWithRelationDtlVHolder.tvAmtConfirmed, myOppo, 0);
-//                JM.tvAmtTextBgAboutMuOppo(twoAvatarsWithRelationDtlVHolder.tvAmtArgued, myOppo, 1);
-//                JM.tvAmtTextBgAboutMuOppo(twoAvatarsWithRelationDtlVHolder.tvAmtDone, myOppo, 2);
-
-
-            }
-        };
-
-        rvOQ.setAdapter(recyclerAdapter);
     }
 
+    public class OqDoRVAdapter extends RecyclerView.Adapter<Ava2RelationDtlVHolder> {
 
-    public class OqDoAdapter extends RecyclerView.Adapter<Ava2RelationDtlSmallVHolder> {
+        public ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid = new ArrayList();
 
-        public ArrayList<OqDoPair> mOqDoArrayList = new ArrayList();
-
-        public OqDoAdapter(ArrayList<OqDoPair> oqDoPairs) {
+        public OqDoRVAdapter(ArrayList<ArrayList<OqDo>> arl) {
             super();
-            mOqDoArrayList = oqDoPairs;
+            arlArlOqDoPerReferOid = arl;
         }
 
         @Override
-        public Ava2RelationDtlSmallVHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public Ava2RelationDtlVHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(App.getContext())
-                    .inflate(R.layout.i_2ava_oqdo_small, parent, false);
-            return new Ava2RelationDtlSmallVHolder(view);
+                    .inflate(R.layout.item_mainfrag0, parent, false);
+            return new Ava2RelationDtlVHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(Ava2RelationDtlSmallVHolder holder, int position, List<Object> payloads) {
+        public void onBindViewHolder(final Ava2RelationDtlVHolder holder,
+                                     int position,
+                                     List<Object>
+                                             payloads) {
             super.onBindViewHolder(holder, position, payloads);
 
-            OqDoPair oqDoPair = mOqDoArrayList.get(position);
+            final ArrayList<OqDo> listOqDo = arlArlOqDoPerReferOid.get(position);
+            OqDoUtil.sortList(listOqDo);
 
 
             JM.glideProfileThumb(
-                    oqDoPair.listOqDo.get(0).getUida(),
-                    oqDoPair.listOqDo.get(0).getNamea(),
+                    listOqDo.get(0).profilea,
                     holder.ivAvaLeft,
                     holder.tvAvaLeft,
                     mActivity
             );
 
             JM.glideProfileThumb(
-                    oqDoPair.listOqDo.get(0).getUidb(),
-                    oqDoPair.listOqDo.get(0).getNameb(),
+                    listOqDo.get(0).profileb,
                     holder.ivAvaRight,
                     holder.tvAvaRight,
                     mActivity
@@ -669,12 +548,90 @@ public class ProfileActivity extends BaseActivity {
 
             OqDoUtil.ivTwoAvaRelation(
                     holder.ivRelation,
-                    oqDoPair.listOqDo
+                    listOqDo
             );
 
-            long ts = OqDoUtil.getLastTs(oqDoPair.listOqDo);
-            holder.tvDate.setText(JT.str(ts));
-            holder.tvContent.setText(OqDoUtil.getOqDoListStr(oqDoPair.listOqDo));
+
+            JM.uiTvResultAmmount(
+                    holder.tvResultAmmount,
+                    OqDoUtil.getSumOqDoAmmountsAgreed(listOqDo, mActivity)
+            );
+
+
+            JM.uiTvResultAmmount2(
+                    holder.tvResultAmmount2,
+                    OqDoUtil.getSumOqDoAmmountsDisAgreed(listOqDo, mActivity)
+            );
+
+            holder.tvContent.setText(OqDoUtil.getOqDoListMostRecentStr(listOqDo));
+
+            holder.ivMore.setImageDrawable(
+                    JM.tintedDrawable(
+                            R.drawable.ic_expand_more_white_48dp,
+                            R.color.text_black_54,
+                            mActivity
+                    ));
+
+            holder.ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (holder.lolvTwoAvaHistory
+                            .getVisibility() == View.GONE) {
+                        holder.lolvTwoAvaHistory
+                                .setVisibility(View.VISIBLE);
+
+                        holder.ivMore.setImageDrawable(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_expand_less_white_24dp,
+                                        R.color.text_black_54,
+                                        mActivity
+                                ));
+
+                        holder.lolvTwoAvaHistory.removeAllViews();
+                        holder.lolvTwoAvaHistory.removeAllViewsInLayout();
+
+                        for (OqDo oqDo : listOqDo) {
+
+                            LoOppoFeed loMyOppo = new LoOppoFeed(mActivity);
+
+                            JM.glideProfileThumb(
+                                    oqDo.profilea,
+                                    loMyOppo.ivAvatar,
+                                    loMyOppo.tvAvatar,
+                                    mActivity
+                            );
+
+                            loMyOppo.tvName.setText(oqDo.profilea.full_name);
+
+                            loMyOppo.tvAmmount.setText(J.st1000(oqDo.ammount));
+
+                            loMyOppo.tvDeed.setText(
+                                    OqDoUtil.getOqDoDeedStr(oqDo)
+                            );
+
+                            holder.lolvTwoAvaHistory.addView(loMyOppo);
+                        }
+
+
+                        rvOQ.requestLayout();
+                    } else if (holder.lolvTwoAvaHistory
+                            .getVisibility() == View.VISIBLE) {
+                        holder.lolvTwoAvaHistory
+                                .setVisibility(View.GONE);
+                        holder.ivMore.setImageDrawable(
+                                JM.tintedDrawable(
+                                        R.drawable.ic_expand_more_white_48dp,
+                                        R.color.text_black_54,
+                                        mActivity
+                                ));
+                        rvOQ.requestLayout();
+
+                    }
+
+                }
+            });
+
 
         }
 
@@ -686,45 +643,103 @@ public class ProfileActivity extends BaseActivity {
 
 
         @Override
-        public void onBindViewHolder(Ava2RelationDtlSmallVHolder holder, int position) {
+        public void onBindViewHolder(Ava2RelationDtlVHolder holder, int position) {
 
         }
 
         @Override
         public int getItemCount() {
-            return mOqDoArrayList.size();
+            return arlArlOqDoPerReferOid.size();
         }
     }
 
+    OqDoRVAdapter oqDoRVAdapter;
+    void initRVAdapter() {
 
-    void checkIfFirebaseListIsEmpty(Activity activity) {
+        ro_empty_list.setVisibility(View.GONE);
+        roProgress.setVisibility(View.GONE);
+        rvOQ.setHasFixedSize(true);
+        rvOQ.setLayoutManager(new LinearLayoutManager(mActivity));
+          oqDoRVAdapter = new OqDoRVAdapter(arlArlOqDoPerReferOid);
+        rvOQ.setAdapter(oqDoRVAdapter);
 
-        JM.V(roProgress);
 
-        App.fbaseDbRef
-                .child(FBaseNode0.MyOqWraps)
-                .child(App.getUid(activity))
-                .child(profile.getUid())
+
+        final ArrayList<OqDo> oqDoList = new ArrayList<>();
+
+        Query queryA =
+                App.fbaseDbRef
+                        .child(FBaseNode0.OqDo)
+                        .orderByChild("uidab")
+                        .equalTo(App.getUid(this) + ",," + profile.uid);
+
+        Query queryB =
+                App.fbaseDbRef
+                        .child(FBaseNode0.OqDo)
+                        .orderByChild("uidab")
+                        .equalTo(profile.uid + ",," + App.getUid(this));
+
+        queryA
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.exists()) {
-                            JM.G(roProgress);
-                            JM.V(ro_empty_list);
-                        } else {
-                            JM.G(roProgress);
-                            JM.G(ro_empty_list);
+                        if (dataSnapshot.exists()) {
+
+                            Iterable<DataSnapshot> i = dataSnapshot.getChildren();
+
+                            for (DataSnapshot d : i) {
+
+                                OqDo oqDo = d.getValue(OqDo.class);
+                                oqDoList.add(oqDo);
+                            }
+
+                            isQueryAComplete = true;
+                            if (isQueryBComplete) {
+                                uiOqDos(oqDoList);
+                            }
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        JM.G(roProgress);
-                        JM.V(ro_empty_list);
+
                     }
                 });
 
+
+        queryB
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+
+                            Iterable<DataSnapshot> i = dataSnapshot.getChildren();
+
+                            for (DataSnapshot d : i) {
+
+                                OqDo oqDo = d.getValue(OqDo.class);
+
+                                oqDoList.add(oqDo);
+
+                            }
+                            isQueryBComplete = true;
+                            if (isQueryAComplete) {
+                                uiOqDos(oqDoList);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+
     }
+
 
     int REQ_PICK_SMS = 98;
 
@@ -751,8 +766,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-
-    void setOcl(){
+    void setOcl() {
         ivChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
