@@ -1,4 +1,4 @@
-package com.jackleeentertainment.oq.ui.layout.activity;
+package com.jackleeentertainment.oq.ui.layout.activity.progress;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.generalutil.ContactsUtil;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
+import com.jackleeentertainment.oq.ui.layout.activity.ProgressT;
 
 import java.util.ArrayList;
 

@@ -40,6 +40,7 @@
 
                         <ImageView
                             android:id="@+id/ivPhotoMain"
+                            android:scaleType="centerCrop"
                             android:layout_width="match_parent"
                             android:layout_height="200dip"/>
 
@@ -91,7 +92,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dip"
                         android:layout_marginLeft="@dimen/md_16dip"
                         android:layout_marginRight="@dimen/md_16dip"
                         android:layout_marginTop="@dimen/md_16dip"
@@ -144,7 +144,7 @@
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:padding="@dimen/md_16dip"
-                          android:text="@string/dummyname"
+                          android:text="@string/member_group"
                           android:textSize="@dimen/md_24sp"/>
 
                 <LinearLayout
@@ -168,7 +168,7 @@
                         android:layout_height="56dip"
                         android:layout_weight="1"
                         android:gravity="center_vertical|start"
-                        android:text="@string/member_group"
+                        android:text="@string/add_member_group"
                         android:textColor="@color/colorPrimary"
                         android:textSize="16dip"/>
                 </LinearLayout>
@@ -242,6 +242,7 @@
                         android:paddingLeft="16dip"
                         android:paddingRight="16dip"
                         android:text="@string/invoice_once"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="18dip"/>
 
                     <LinearLayout

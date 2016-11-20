@@ -193,6 +193,9 @@ public class NewGroupFrag extends Fragment {
 
     void initUiData() {
 
+
+
+
         etTitle.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -255,9 +258,11 @@ public class NewGroupFrag extends Fragment {
                 if (isChecked) {
                     buttonView.setText(JM.strById(R.string.invoice_period));
                     ((NewGroupActivity)getActivity()).group.setReqtype(GroupT.ReqOnceOrRepeatT.INVOICE_REPEAT);
+                    lo_invoice_multi.setVisibility(View.VISIBLE);
                 } else {
                     buttonView.setText(JM.strById(R.string.invoice_once));
                     ((NewGroupActivity)getActivity()).group.setReqtype(GroupT.ReqOnceOrRepeatT.INVOICE_ONCE);
+                    lo_invoice_multi.setVisibility(View.GONE);
                 }
             }
         });
@@ -278,7 +283,12 @@ public class NewGroupFrag extends Fragment {
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPeriod.setAdapter(spinnerArrayAdapter);
 
+        tvFirstDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
 
     }
 

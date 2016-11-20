@@ -1,6 +1,7 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,9 +21,8 @@ import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.object.Profile;
+import com.jackleeentertainment.oq.ui.layout.activity.PeopleActivity;
 import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameEmailChkViewHolder;
-
-import java.util.ArrayList;
 
 /**
  * Created by jaehaklee on 2016. 10. 2..
@@ -30,12 +30,12 @@ import java.util.ArrayList;
 
 public class ContactProfileFrag extends Fragment {
     View view;
+
     boolean isContactItemExists = false;
     boolean isEmptyViewShown = false;
     boolean isProgressViewShown = true;
 
-    ArrayList<Profile> arlProfileIHavePhoneOrEmail;
-     String TAG = "RtCtctProfileFrag";
+      String TAG = "RtCtctProfileFrag";
 
     RecyclerView rvAllMyContacts;
     FirebaseRecyclerAdapter<Profile, AvatarNameEmailChkViewHolder>
@@ -78,6 +78,8 @@ public class ContactProfileFrag extends Fragment {
         tvEmptyLearnMore.setText(JM.strById(R.string.learn_more));
 
         vProgress .setVisibility(View.VISIBLE);
+        boolean isProgressViewShown = true;
+
     }
 
 
@@ -91,6 +93,113 @@ public class ContactProfileFrag extends Fragment {
         rvAllMyContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
+//        frvAdapterAllMyContact = new FirebaseRecyclerAdapter<Profile, AvatarNameEmailChkViewHolder>
+//                (Profile.class,
+//                        R.layout.lo_avatar_titlesubtitle_chk,
+//                        AvatarNameEmailChkViewHolder.class,
+//                        App.fbaseDbRef
+//                                .child(FBaseNode0.MyContacts)
+//                                .child(App.getUid(getActivity()))
+//                ) {
+//            public void populateViewHolder(AvatarNameEmailChkViewHolder avatarNameEmailChkViewHolder,
+//                                           Profile profile,
+//                                           int position) {
+//
+//                avatarNameEmailChkViewHolder.tvTitle__lo_avatartitlesubtitle_chk
+//                        .setText(profile.getFull_name()
+//                        );
+//
+//                avatarNameEmailChkViewHolder.tvSubTitle__lo_avatartitlesubtitle_chk
+//                        .setText(profile.getEmail()
+//                        );
+//
+//                //set Image
+//                JM.glideProfileThumb(
+//                        profile.getUid(),
+//                        profile.getFull_name(),
+//                        avatarNameEmailChkViewHolder.ro_person_photo_iv,
+//                        avatarNameEmailChkViewHolder.ro_person_photo_tv,
+//                        getActivity()
+//                );
+//
+//                ;
+//
+//                avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk
+//                        .setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                //
+//
+//                            }
+//                        });
+//
+//                isContactItemExists = true;
+//
+//                if (isProgressViewShown){
+//                    vProgress.setVisibility(View.GONE);
+//                    isProgressViewShown = false;
+//                }
+//
+//                if (isEmptyViewShown){
+//                    ro_empty_list.setVisibility(View.GONE);
+//                    isEmptyViewShown=false;
+//                }
+//
+//
+//            }
+//        };
+        initRvAdapter();
+
+        rvAllMyContacts.setAdapter(frvAdapterAllMyContact);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (isContactItemExists=false) {
+
+                    if (frvAdapterAllMyContact.getItemCount() == 0) {
+
+                        vProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.VISIBLE);
+                        isEmptyViewShown = true;
+
+                        isContactItemExists = false;
+
+
+                    } else {
+                        vProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.GONE);
+                        isEmptyViewShown = false;
+
+                        isContactItemExists = true;
+
+                    }
+                } else {
+                    vProgress.setVisibility(View.GONE);
+                    isProgressViewShown = false;
+
+                    ro_empty_list.setVisibility(View.VISIBLE);
+                    isEmptyViewShown = true;
+
+                }
+            }
+        }, 3000);
+
+    }
+
+
+
+
+
+
+
+    void initRvAdapter(){
         frvAdapterAllMyContact = new FirebaseRecyclerAdapter<Profile, AvatarNameEmailChkViewHolder>
                 (Profile.class,
                         R.layout.lo_avatar_titlesubtitle_chk,
@@ -99,9 +208,20 @@ public class ContactProfileFrag extends Fragment {
                                 .child(FBaseNode0.MyContacts)
                                 .child(App.getUid(getActivity()))
                 ) {
-            public void populateViewHolder(AvatarNameEmailChkViewHolder avatarNameEmailChkViewHolder,
-                                           Profile profile,
-                                           int position) {
+            public void populateViewHolder(
+                    final AvatarNameEmailChkViewHolder avatarNameEmailChkViewHolder,
+                    final Profile profile,
+                    int position) {
+
+                avatarNameEmailChkViewHolder.tvTitle__lo_avatartitlesubtitle_chk.setTextColor(
+                        JM.colorById(R.color.text_black_87)
+                );
+
+
+                avatarNameEmailChkViewHolder.tvSubTitle__lo_avatartitlesubtitle_chk.setTextColor(
+                        JM.colorById(R.color.text_black_54)
+                );
+
 
                 avatarNameEmailChkViewHolder.tvTitle__lo_avatartitlesubtitle_chk
                         .setText(profile.getFull_name()
@@ -112,6 +232,8 @@ public class ContactProfileFrag extends Fragment {
                         );
 
                 //set Image
+
+                //set Image
                 JM.glideProfileThumb(
                         profile.getUid(),
                         profile.getFull_name(),
@@ -120,42 +242,61 @@ public class ContactProfileFrag extends Fragment {
                         getActivity()
                 );
 
-                ;
+
+
+
+
+                // if size is larger than 1, it is a problem.
+
+
+                if (((PeopleActivity)getActivity()).arlSelectedProfile.contains(profile)) {
+                    avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk
+                            .setChecked(true);
+                } else {
+                    avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk
+                            .setChecked(false);
+                }
 
                 avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //
-
+                                if (((PeopleActivity)getActivity()).arlSelectedProfile.contains
+                                        (profile )) {
+                                    ((PeopleActivity)getActivity()).arlSelectedProfile.remove(profile);
+                                    avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk.setChecked(false);
+                                } else {
+                                    ((PeopleActivity)getActivity()).arlSelectedProfile.add(profile);
+                                    avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk.setChecked(true);
+                                }
+                                ((PeopleActivity)getActivity()).bottomSheetControl((
+                                        (PeopleActivity)getActivity()).arlSelectedProfile.size());
+//                                notifyDataSetChanged();
                             }
                         });
 
+
                 isContactItemExists = true;
 
-                if (isProgressViewShown){
+                if (isProgressViewShown) {
                     vProgress.setVisibility(View.GONE);
                     isProgressViewShown = false;
                 }
 
-                if (isEmptyViewShown){
+                if (isEmptyViewShown) {
                     ro_empty_list.setVisibility(View.GONE);
-                    isEmptyViewShown=false;
+                    isEmptyViewShown = false;
                 }
-
-
             }
         };
+    }
 
-        rvAllMyContacts.setAdapter(frvAdapterAllMyContact);
-        if (frvAdapterAllMyContact.getItemCount()==0){
-
-                vProgress.setVisibility(View.GONE);
-                isProgressViewShown = false;
-
-                ro_empty_list.setVisibility(View.VISIBLE);
-                isEmptyViewShown=true;
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(frvAdapterAllMyContact!=null){
+            frvAdapterAllMyContact.cleanup();
         }
     }
+
 }

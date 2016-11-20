@@ -18,7 +18,6 @@ public class PostCommentActivity extends BaseFragmentContainFullDialogActivity {
         super.onCreate(savedInstanceState);
         Bundle bundle = new Bundle();
         bundle.putString("pid", getIntent().getStringExtra("pid"));
-
         showFrag(PostCommentFrag.newInstance(bundle), R.id.fr_content);
     }
 
@@ -28,6 +27,7 @@ public class PostCommentActivity extends BaseFragmentContainFullDialogActivity {
         super.initUIOnCreate();
         fab.setVisibility(View.GONE);
         tabLayout.setVisibility(View.GONE);
+        ivClose.setImageDrawable(JM.drawableById(R.drawable.ic_close_white_48dp));
     }
 
     @Override

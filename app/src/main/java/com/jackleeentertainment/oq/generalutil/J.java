@@ -235,10 +235,12 @@ public class J {
 
 
     public static String st1000(Long l) {
-        return String.valueOf(l);
+        return String.format("%,d", l);
     }
 
-
+    public static String st1000won(Long l) {
+        return String.format("%,d", l) + "원";
+    }
 
     @Nullable
     public static String stFromArlWithComma(@Nullable ArrayList<String> arrayList) {

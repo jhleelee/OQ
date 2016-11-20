@@ -83,6 +83,7 @@ public class ListFrag extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        uiProgressOrEmptyOnResume();
         initAdapterOnResume();
     }
 
@@ -91,7 +92,10 @@ public class ListFrag extends Fragment {
 
     }
 
+    void uiProgressOrEmptyOnResume(){
 
+
+    }
 
     @Override
     public void onDestroyView() {

@@ -41,20 +41,53 @@ public class OqDoUtil {
 
 
 
-    public static String getOqDoListMostRecentStr(List<OqDo> oqDoList){
+    public static OqDo getOqDoOidTheSameReferOid(ArrayList<OqDo> oqDoListWithSameReferOid){
+        for (OqDo oqDo : oqDoListWithSameReferOid){
+            if (oqDo.oid.equals(oqDo.referoid)){
+                return oqDo;
+            }
+        }
+        return null;
+    };
 
+
+    public static String getOqDoListMostRecentStr(ArrayList<OqDo> oqDoList, Activity activity) {
+
+
+
+        ArrayList<OqDo> lastOqDos =  getLastTsOqDos(oqDoList);
         String str = null;
 
-        sortList(oqDoList);
+        if (lastOqDos.size()==1){
+            str = getOqDoDeedStr(lastOqDos.get(0));
 
-        OqDo oqDoMostRecent = oqDoList.get(oqDoList.size()-1);
+        } else if (lastOqDos.size()>1){
+            str = getOqDoDeedStr(getOqDoOidTheSameReferOid(oqDoList));
 
-        str = getOqDoDeedStr(oqDoMostRecent);
+        }
 
         return str;
 
     }
 
+
+    public static String getOqDoListMostRecentStrShort(ArrayList<OqDo> oqDoList, Activity
+            activity) {
+
+        ArrayList<OqDo> lastOqDos =  getLastTsOqDos(oqDoList);
+        String str = null;
+
+        if (lastOqDos.size()==1){
+            str = getOqDoDeedStrShort(lastOqDos.get(0));
+
+        } else if (lastOqDos.size()>1){
+            str = getOqDoDeedStrShort(getOqDoOidTheSameReferOid(oqDoList));
+
+        }
+
+        return str;
+
+    }
 
 
 
@@ -169,6 +202,19 @@ public class OqDoUtil {
         }
 
         return ts;
+    }
+
+
+    public static ArrayList<OqDo> getLastTsOqDos(ArrayList<OqDo> oqDoList) {
+        ArrayList<OqDo> arl = new ArrayList<OqDo>();
+        long ts = getLastTs(oqDoList);
+
+        for (OqDo oqDo : oqDoList) {
+            if (oqDo.ts == ts) {
+                arl.add(oqDo);
+            }
+        }
+        return arl;
     }
 
 
@@ -741,6 +787,257 @@ public class OqDoUtil {
     }
 
 
+    public static long getSumOqDoAmmountsAgreedTwo(ArrayList<OqDo> oqDoList, Activity activity) {
+
+        long returnVal = 0;
+
+        long sumAmtGetListAbGetFutureOqList = OqDoUtil
+                .getSumAmt(OqDoUtil
+                        .getListAbGetFuture(oqDoList));
+
+        long sumAmtGetListBaPayFutureOqList = OqDoUtil
+                .getSumAmt(OqDoUtil
+                        .getListBaPayFuture(oqDoList));
+
+        long amtAbGetFutureAgreed = J.getSmallerLong(
+                sumAmtGetListAbGetFutureOqList,
+                sumAmtGetListBaPayFutureOqList
+        );
+
+
+        Log.d(TAG, "amtAbGetFutureAgreed : " +
+                J.st
+                        (amtAbGetFutureAgreed));
+
+        //(1)
+        long sumAmtGetListBaGetFutureOqList = OqDoUtil.getSumAmt(OqDoUtil.getListBaGetFuture
+                (oqDoList));
+
+        long sumAmtGetListAbPayFutureOqList = OqDoUtil.getSumAmt(OqDoUtil.getListAbPayFuture
+                (oqDoList));
+
+
+        long amtBaGetFutureAgreed = J.getSmallerLong(
+                sumAmtGetListBaGetFutureOqList,
+                sumAmtGetListAbPayFutureOqList
+        );
+
+        Log.d(TAG, "amtBaGetFutureAgreed : " + J.st(amtAbGetFutureAgreed));
+
+        //(2)
+
+        long sumAmtGetListAbPayPastOqList = OqDoUtil.getSumAmt(OqDoUtil.getListAbPayPast
+                (oqDoList));
+
+        long sumAmtGetListBaGetPastOqList = OqDoUtil.getSumAmt
+                (OqDoUtil.getListBaGetPast
+                        (oqDoList));
+
+        long amtAbPayPastAgreed = J.getSmallerLong(
+                sumAmtGetListAbPayPastOqList,
+                sumAmtGetListBaGetPastOqList
+        );
+
+        Log.d(TAG, "amtAbPayPastAgreed : " + J.st(amtAbGetFutureAgreed));
+
+
+        //(3)
+
+        long sumAmtGetListBaPayPastOqList = OqDoUtil.getSumAmt(
+                OqDoUtil.getListBaPayPast
+                        (oqDoList));
+
+        long sumAmtGetListAbGetPastOqList = OqDoUtil.getSumAmt
+                (OqDoUtil.getListAbGetPast
+                        (oqDoList));
+
+        long amtBaPayPastAgreed = J.getSmallerLong(
+
+                sumAmtGetListBaPayPastOqList,
+                sumAmtGetListAbGetPastOqList
+        );
+
+        Log.d(TAG, "amtBaPayPastAgreed : " + J.st(amtAbGetFutureAgreed));
+
+
+        returnVal= (amtAbGetFutureAgreed - amtBaPayPastAgreed)-
+                (amtBaGetFutureAgreed - amtAbPayPastAgreed);
+
+
+        return returnVal;
+    }
+
+
+
+    /*
+
+
+                //(0)
+
+                long sumAmtGetListAbGetFutureOqList = OqDoUtil
+                        .getSumAmt(OqDoUtil
+                                .getListAbGetFuture(oqDoList));
+
+                long sumAmtGetListBaPayFutureOqList = OqDoUtil
+                        .getSumAmt(OqDoUtil
+                                .getListBaPayFuture(oqDoList));
+
+                long amtAbGetFutureAgreed = J.getSmallerLong(
+                        sumAmtGetListAbGetFutureOqList,
+                        sumAmtGetListBaPayFutureOqList
+                );
+
+
+                Log.d(TAG, "amtAbGetFutureAgreed : " +
+                        J.st
+                                (amtAbGetFutureAgreed));
+
+                //(1)
+                long sumAmtGetListBaGetFutureOqList = OqDoUtil.getSumAmt(OqDoUtil.getListBaGetFuture
+                        (oqDoList));
+
+                long sumAmtGetListAbPayFutureOqList = OqDoUtil.getSumAmt(OqDoUtil.getListAbPayFuture
+                        (oqDoList));
+
+
+                long amtBaGetFutureAgreed = J.getSmallerLong(
+                        sumAmtGetListBaGetFutureOqList,
+                        sumAmtGetListAbPayFutureOqList
+                );
+
+                Log.d(TAG, "amtBaGetFutureAgreed : " + J.st(amtAbGetFutureAgreed));
+
+                //(2)
+
+                long sumAmtGetListAbPayPastOqList = OqDoUtil.getSumAmt(OqDoUtil.getListAbPayPast
+                        (oqDoList));
+
+                long sumAmtGetListBaGetPastOqList = OqDoUtil.getSumAmt
+                        (OqDoUtil.getListBaGetPast
+                                (oqDoList));
+
+                long amtAbPayPastAgreed = J.getSmallerLong(
+                        sumAmtGetListAbPayPastOqList,
+                        sumAmtGetListBaGetPastOqList
+                );
+
+                Log.d(TAG, "amtAbPayPastAgreed : " + J.st(amtAbGetFutureAgreed));
+
+
+                //(3)
+
+                long sumAmtGetListBaPayPastOqList = OqDoUtil.getSumAmt(
+                        OqDoUtil.getListBaPayPast
+                                (oqDoList));
+
+                long sumAmtGetListAbGetPastOqList = OqDoUtil.getSumAmt
+                        (OqDoUtil.getListAbGetPast
+                                (oqDoList));
+
+                long amtBaPayPastAgreed = J.getSmallerLong(
+
+                        sumAmtGetListBaPayPastOqList,
+                        sumAmtGetListAbGetPastOqList
+                );
+
+                Log.d(TAG, "amtBaPayPastAgreed : " + J.st(amtAbGetFutureAgreed));
+
+
+                if (J.isLarger(amtAbGetFutureAgreed - amtBaPayPastAgreed,
+                        amtBaGetFutureAgreed - amtAbPayPastAgreed) == 1
+                        ) {
+
+
+                    final String uida = App.getUid(getActivity());
+                    final String unamea = App.getUname(getActivity());
+                    final String uidb = oqPerson.getProfile().getUid();
+                    final String unameb = oqPerson.getProfile().getFull_name();
+
+
+                    long amtToTv = (amtAbGetFutureAgreed -
+                            amtBaPayPastAgreed) - (
+                            amtBaGetFutureAgreed - amtAbPayPastAgreed);
+
+                    OqDoUtil.getSumOqDoAmmountsDisAgreed(oqDoList, getActivity());
+
+
+                    Log.d(TAG, "amtToTv : " + J.st(amtToTv));
+
+
+//                                                String strToTv =
+//                                                        res.getString(
+//                                                                R.string.req_amtvar_whatphrasevar,
+//                                                                J.strAmt(amtToTv),
+//                                                                res.getString(R.string.whovar_all_notpaid,
+//                                                                        unameb));
+
+
+                    JM.uiTvResultAmmount(avaDtlVHolderMainFrag0Item.tvResultAmmount,
+                            OqDoUtil.getSumOqDoAmmountsDisAgreed(oqDoList, getActivity()));
+
+
+                    JM.uiTvResultAmmount2(avaDtlVHolderMainFrag0Item.tvResultAmmount2,
+                            OqDoUtil.getSumOqDoAmmountsDisAgreed(oqDoList, getActivity()));
+
+
+                    //a : user , b : friend
+
+                } else if (J.isLarger(amtAbGetFutureAgreed - amtBaPayPastAgreed,
+                        amtBaGetFutureAgreed - amtAbPayPastAgreed) == 2) {
+
+                    //b : user , a : friend
+
+
+                    final String uidb = App.getUid(getActivity());
+                    final String unameb = App.getUname(getActivity());
+                    final String uida = oqPerson.getProfile().getUid();
+                    final String unamea = oqPerson.getProfile()
+                            .getFull_name();
+
+
+                    long amtToTv = (
+                            amtBaGetFutureAgreed -
+                                    amtAbPayPastAgreed) - (amtAbGetFutureAgreed -
+                            amtBaPayPastAgreed);
+
+
+//                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount.setText(JT.str(oqPerson.getTs()));
+//                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+//                            .setText("-" + J.strAmt(amtToTv) + "원");
+//                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+//                            .setTextColor(JM.colorById(R.color
+//                                    .payPrimaryDark));
+
+
+                } else {  //the same
+
+
+                    final String uida = App.getUid(getActivity());
+                    final String unamea = App.getUname(getActivity());
+                    final String uidb = oqPerson.getProfile().getUid();
+                    final String unameb = oqPerson.getProfile().getFull_name();
+
+
+                    avaDtlVHolderMainFrag0Item.tvName.setText(
+                            (unameb)
+                    );
+
+//                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+//                            .setText(JM.strById
+//                                    (R.string
+//                                            .no_amt_to_settle));
+//                    twoAvatarsWithRelationDtlVHolder.tvResultAmmount
+//                            .setTextColor(JM.colorById(R.color
+//                                    .dark_grey));
+
+                    JM.uiTvResultAmmount(avaDtlVHolderMainFrag0Item.tvResultAmmount,
+                            OqDoUtil.getSumOqDoAmmountsDisAgreed(oqDoList, getActivity()));
+
+
+                    JM.uiTvResultAmmount2(avaDtlVHolderMainFrag0Item.tvResultAmmount2,
+                            OqDoUtil.getSumOqDoAmmountsDisAgreed(oqDoList, getActivity()));
+                }
+     */
 
 
     public static String getOqDoDeedStr(OqDo oqDo) {
@@ -748,18 +1045,17 @@ public class OqDoUtil {
         Resources res = App.getContext().getResources();
 
 
+        if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
+                oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)) {
+
+            return "귀하가 +"+J.st1000won(oqDo.ammount) +"을 " + res.getString(
+                    R.string.deed_req);
+
+        } else
+
 
         if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
-                oqDo.getOqwhat().equals(OQT.DoWhen.FUTURE)) {
-
-            return res.getString(
-                    R.string.deed_req_a_get_future);
-
-        }
-
-
-        if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
-                oqDo.getOqwhat().equals(OQT.DoWhen.PAST)) {
+                oqDo.getOqwhen().equals(OQT.DoWhen.PAST)) {
 
             return res.getString(
                     R.string.deed_a_get_past);
@@ -773,27 +1069,32 @@ public class OqDoUtil {
 
 
 
+    public static String getOqDoDeedStrShort(OqDo oqDo) {
+
+        Resources res = App.getContext().getResources();
 
 
+        if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
+                oqDo.getOqwhen().equals(OQT.DoWhen.FUTURE)) {
+
+            return res.getString(
+                    R.string.deed_req);
+
+        } else
 
 
+        if (oqDo.getOqwhat().equals(OQT.DoWhat.GET) &&
+                oqDo.getOqwhen().equals(OQT.DoWhen.PAST)) {
+
+            return res.getString(
+                    R.string.deed_a_get_past);
+
+        }
+
+        return null;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 

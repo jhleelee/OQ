@@ -3,6 +3,7 @@ package com.jackleeentertainment.oq.ui.layout.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -44,21 +45,25 @@ import com.jackleeentertainment.oq.ui.widget.EndlessRecyclerViewScrollListener;
 
 public class PostCommentFrag extends Fragment {
 
+    boolean isContactItemExists = false;
+    boolean isEmptyViewShown = false;
+    boolean isProgressViewShown = true;
+
 
     String TAG = this.getClass().getSimpleName();
 
     View view;
     RecyclerView recyclerView;
-    FirebaseRecyclerAdapter firebaseRecyclerAdapter;
-    SearchView searchView;
-    RelativeLayout ro_tv_done;
-    RelativeLayout roProgress, ro_empty_list;
-
-    LinearLayout loEmpty;
-    ImageView ivEmpty;
-    TextView tvEmptyTitle, tvEmptyDetail, tvEmptyLearnMore;
+    LinearLayout lo_chat_writesend;
     EditText etWrite;
     ImageView ivWrite;
+
+
+    FirebaseRecyclerAdapter firebaseRecyclerAdapter;
+    RelativeLayout roProgress, ro_empty_list;
+
+
+    TextView tvEmptyTitle, tvEmptyDetail ;
     Fragment mFragment = this;
     int dxArlPostsToUpdate = 0;
     String pid = "";
@@ -94,21 +99,25 @@ public class PostCommentFrag extends Fragment {
 
 
     public void initUI() {
-        searchView = (SearchView) view.findViewById(R.id.searchView);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        ro_tv_done = (RelativeLayout) view.findViewById(R.id.ro_tv_done);
-        recyclerView.setHasFixedSize(true);
-        ro_tv_done.setVisibility(View.GONE);
-        roProgress = (RelativeLayout) view.findViewById(R.id.vProgress);
-        ro_empty_list = (RelativeLayout) view.findViewById(R.id.ro_empty_list);
-        loEmpty = (LinearLayout) ro_empty_list.findViewById(R.id.loEmpty);
-        ivEmpty = (ImageView) ro_empty_list.findViewById(R.id.ivEmpty);
-        tvEmptyTitle = (TextView) ro_empty_list.findViewById(R.id.tvEmptyTitle);
-        tvEmptyDetail = (TextView) ro_empty_list.findViewById(R.id.tvEmptyDetail);
-        tvEmptyLearnMore = (TextView) ro_empty_list.findViewById(R.id.tvEmptyLearnMore);
+        lo_chat_writesend = (LinearLayout) view.findViewById(R.id.lo_chat_writesend);
         etWrite = (EditText) view.findViewById(R.id.etWrite);
         ivWrite = (ImageView) view.findViewById(R.id.ivWrite);
+        ro_empty_list = (RelativeLayout) view.findViewById(R.id.ro_empty_list);
+        roProgress = (RelativeLayout) view.findViewById(R.id.vProgress);
 
+        tvEmptyTitle = (TextView) ro_empty_list.findViewById(R.id.tvEmptyTitle);
+        tvEmptyDetail = (TextView) ro_empty_list.findViewById(R.id.tvEmptyDetail);
+
+        recyclerView.setHasFixedSize(true);
+
+        ivWrite.setImageDrawable(
+                JM.tintedDrawable(
+                        R.drawable.ic_send_white_48dp,
+                        R.color.colorAccent,
+                        getActivity()
+                )
+        );
     }
 
     @Override
@@ -181,22 +190,14 @@ public class PostCommentFrag extends Fragment {
 //                get100ObjIdOfFeedsFromFirebase(page);
             }
         });
-        searchView.setVisibility(View.GONE);
-        loEmpty.setBackgroundColor(JM.colorById(R.color.material_grey500));
-        tvEmptyTitle.setText(JM.strById(R.string.no_comment));
+         tvEmptyTitle.setText(JM.strById(R.string.no_comment));
         tvEmptyDetail.setText(JM.strById(R.string.add_firstcomment));
-        tvEmptyLearnMore.setVisibility(View.GONE);
-        ivEmpty.setImageDrawable(JM.tintedDrawable(
-                R.drawable.ic_comment_white_48dp,
-                R.color.text_black_54,
-                getActivity()));
+
 
     }
 
 
     void initRVAdapter(String pid) {
-
-        checkIfFirebaseListIsEmpty(pid, getActivity());
 
         ro_empty_list.setVisibility(View.GONE);
         roProgress.setVisibility(View.GONE);
@@ -209,7 +210,7 @@ public class PostCommentFrag extends Fragment {
                         R.layout.lo_commentlayout,
                         CommentViewHolder.class,
                         App.fbaseDbRef
-                                .child(FBaseNode0.MyPosts)
+                                .child(FBaseNode0.OqPostComment)
                                 .child(pid)
                 ) {
 
@@ -273,39 +274,65 @@ public class PostCommentFrag extends Fragment {
                 commentViewHolder.tvMultiline.setText(comment.getTxt());
                 commentViewHolder.tvTs.setText(JT.str(comment.getTs()));
 
+                isContactItemExists = true;
 
+                if (isProgressViewShown) {
+                    roProgress.setVisibility(View.GONE);
+                    isProgressViewShown = false;
+                }
+
+                if (isEmptyViewShown) {
+                    ro_empty_list.setVisibility(View.GONE);
+                    isEmptyViewShown = false;
+                }
             }
         };
 
         recyclerView.setAdapter(firebaseRecyclerAdapter);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (isContactItemExists=false) {
+
+                    if (firebaseRecyclerAdapter.getItemCount() == 0) {
+
+                        roProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.VISIBLE);
+                        isEmptyViewShown = true;
+
+                        isContactItemExists = false;
+
+
+                    } else {
+                        roProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.GONE);
+                        isEmptyViewShown = false;
+
+                        isContactItemExists = true;
+
+                    }
+                } else {
+                    roProgress.setVisibility(View.GONE);
+                    isProgressViewShown = false;
+
+                    ro_empty_list.setVisibility(View.GONE);
+                    isEmptyViewShown = true;
+
+                }
+            }
+        }, 3000);
+
+
+
     }
 
 
-    void checkIfFirebaseListIsEmpty(String pid, Activity activity) {
 
-        JM.V(roProgress);
-
-        App.fbaseDbRef
-                .child(FBaseNode0.OqPostComment)
-                .child(pid)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.exists()) {
-                            JM.G(roProgress);
-                            JM.V(ro_empty_list);
-                        } else {
-                            JM.G(roProgress);
-                            JM.G(ro_empty_list);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        JM.G(roProgress);
-                        JM.V(ro_empty_list);
-                    }
-                });
-
-    }
 }

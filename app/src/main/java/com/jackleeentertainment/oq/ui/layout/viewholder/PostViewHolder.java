@@ -30,7 +30,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public  ImageView ivPhotoSub;
     public  TextView tvPhotoSubNum;
     public RelativeLayout roPhotoSub;
-    public TextView tvAddComment;
+    public TextView tvAddComment,tvNumComment;
 
     public PostViewHolder(View itemView) {
         super(itemView);
@@ -54,6 +54,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         loOqOppo = (LinearLayout) mView.findViewById(R.id.loOqOppo);
         loCommentOne = (LinearLayout) mView.findViewById(R.id.loCommentOne);
         tvAddComment= (TextView) mView.findViewById(R.id.tvAddComment);
+
+        tvNumComment = (TextView) mView.findViewById(R.id.tvNumComment);
     };
 
 

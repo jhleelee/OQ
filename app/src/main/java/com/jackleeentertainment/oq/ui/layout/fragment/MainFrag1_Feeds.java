@@ -3,6 +3,7 @@ package com.jackleeentertainment.oq.ui.layout.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,7 @@ import com.jackleeentertainment.oq.ui.layout.activity.PostCommentActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.ProfileActivity;
 import com.jackleeentertainment.oq.ui.layout.viewholder.PostViewHolder;
 import com.jackleeentertainment.oq.ui.widget.EndlessRecyclerViewScrollListener;
+import com.jackleeentertainment.oq.ui.widget.Lo2AvaSmall;
 import com.jackleeentertainment.oq.ui.widget.LoComment;
 import com.jackleeentertainment.oq.ui.widget.LoMyOppo;
 import com.jackleeentertainment.oq.ui.widget.LoOppoFeed;
@@ -50,11 +52,18 @@ import com.jackleeentertainment.oq.ui.widget.LoOppoFeed;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jacklee on 2016. 9. 14..
  */
 public class MainFrag1_Feeds extends ListFrag {
+
+
+    boolean isContactItemExists = false;
+    boolean isEmptyViewShown = false;
+    boolean isProgressViewShown = true;
+
 
     String TAG = this.getClass().getSimpleName();
     View view;
@@ -138,14 +147,13 @@ public class MainFrag1_Feeds extends ListFrag {
             @Override
             public int getItemCount() {
                 int i = super.getItemCount();
-                if (i==0){
+                if (i == 0) {
                     ro_empty_list.setVisibility(View.VISIBLE);
                 } else {
                     ro_empty_list.setVisibility(View.GONE);
                 }
                 return i;
             }
-
 
 
             public void populateViewHolder(
@@ -211,44 +219,62 @@ public class MainFrag1_Feeds extends ListFrag {
                                                 list.add(oqDo);
                                             }
 
+
                                             //(1) classify by Person
                                             ArrayList<ArrayList<OqDo>> arlArlOqDoPerPeople =
                                                     OqDoUtil
-                                                    .getArlArlOqDoPerPeople(list, getActivity());
+                                                            .getArlArlOqDoPerPeople(list, getActivity());
+
+
+                                            //(1.5) overall deed txt
+                                            JM.uiTvContentMainFrag1(
+                                                    postViewHolder.tvDeed,
+                                                    arlArlOqDoPerPeople,
+                                                    getActivity()
+                                            );
+
 
                                             for (ArrayList<OqDo> arlOqDoPerPeople :
-                                                    arlArlOqDoPerPeople){ //For
+                                                    arlArlOqDoPerPeople) { //For
                                                 // each Person
 
                                                 OqDoUtil.sortList(arlOqDoPerPeople);
-                                                Profile profileOppo = OqDoUtil
-                                                        .getOppoProfileFromOqDo(
-                                                        arlOqDoPerPeople.get(0),
-                                                                getActivity()
-                                                );
 
-                                                LoOppoFeed loMyOppo = new LoOppoFeed(getActivity());
+                                                OqDo mainOqDo =OqDoUtil.getOqDoOidTheSameReferOid
+                                                        (arlOqDoPerPeople);
+
+
+
+                                                Lo2AvaSmall lo2AvaSmall = new Lo2AvaSmall(getActivity());
                                                 JM.glideProfileThumb(
-                                                        profileOppo,
-                                                        postViewHolder.ivAvatar,
-                                                        postViewHolder.tvAvatar,
+                                                        mainOqDo.profilea,
+                                                        lo2AvaSmall.ivAvaLeft,
+                                                        lo2AvaSmall.tvAvaLeft,
                                                         mFragment
                                                 );
-                                                loMyOppo.tvName.setText(profileOppo.full_name);
+
+                                                JM.glideProfileThumb(
+                                                        mainOqDo.profileb,
+                                                        lo2AvaSmall.ivAvaRight,
+                                                        lo2AvaSmall.tvAvaRight,
+                                                        mFragment
+                                                );
+
+                                                lo2AvaSmall.tvName.setText( mainOqDo.profilea.full_name);
 
 
                                                 {
-                                                    loMyOppo.tvAmmount.setText(
+                                                    lo2AvaSmall.tvAmmount.setText(
                                                             J.st(OqDoUtil.getSumOqDoAmmounts
                                                                     (arlOqDoPerPeople))
                                                     );
-                                                    loMyOppo.tvDeed.setText(OqDoUtil
+                                                    lo2AvaSmall.tvDeed.setText(OqDoUtil
                                                             .getOqDoListStr(arlOqDoPerPeople));
                                                 }
 
-                                                postViewHolder.loOqOppo.addView(loMyOppo);
-                                            }
 
+                                                postViewHolder.loOqOppo.addView(lo2AvaSmall);
+                                            }
 
 
                                         }
@@ -277,31 +303,60 @@ public class MainFrag1_Feeds extends ListFrag {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                                         if (dataSnapshot.exists()) {
-                                            Comment comment = dataSnapshot.getValue(Comment.class);
-                                            if (comment != null) {
 
-                                                postViewHolder.loCommentOne.removeAllViews();
-                                                postViewHolder.loCommentOne.removeAllViewsInLayout();
+                                            /*
+                                            pid - cid - Comment.class
+                                             */
 
-                                                LoComment loComment = new LoComment(getActivity());
+                                            postViewHolder.tvNumComment.setText(
 
-                                                JM.glideProfileThumb(
-                                                        comment.profile,
-                                                        loComment.ivAvatar,
-                                                        loComment.tvAvatar,
-                                                        mFragment
-                                                );
+                                                    J.st(dataSnapshot.getChildrenCount()) + "건의 댓글"
 
-                                                loComment.tvName.setText(comment.profile.full_name);
+                                            );
 
-                                                loComment.tvTs.setText(JT.str(comment.ts));
+                                            for (DataSnapshot d : dataSnapshot.getChildren()) {
 
-                                                loComment.tvMultilineTxt.setText(comment.txt);
+                                                Comment comment = d.getValue(Comment.class);
+                                                if (comment != null) {
 
-                                                postViewHolder.loCommentOne.addView(loComment);
-                                            } else {
-                                                postViewHolder.loCommentOne.setVisibility(View.GONE);
+                                                    postViewHolder.loCommentOne.removeAllViews();
+                                                    postViewHolder.loCommentOne.removeAllViewsInLayout();
+
+                                                    LoComment loComment = new LoComment(getActivity());
+
+                                                    JM.glideProfileThumb(
+                                                            comment.profile,
+                                                            loComment.ivAvatar,
+                                                            loComment.tvAvatar,
+                                                            mFragment
+                                                    );
+
+                                                    loComment.tvName.setText(comment.profile.full_name);
+
+                                                    loComment.tvTs.setText(JT.str(comment.ts));
+
+                                                    loComment.tvMultilineTxt.setText(comment.txt);
+
+                                                    loComment.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+
+                                                            Intent intent = new Intent(getActivity(), PostCommentActivity.class);
+                                                            intent.putExtra("pid", myOqPost.getPid());
+                                                            startActivity(intent);
+
+                                                        }
+                                                    });
+
+
+                                                    postViewHolder.loCommentOne.addView(loComment);
+                                                } else {
+                                                    postViewHolder.loCommentOne.setVisibility(View.GONE);
+                                                }
+
                                             }
+
+
                                         }
 
 
@@ -463,20 +518,73 @@ public class MainFrag1_Feeds extends ListFrag {
                                 }
                         );
 
-
-                postViewHolder.tvAddComment.setOnClickListener(new View.OnClickListener() {
+                View.OnClickListener ocl = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), PostCommentActivity.class);
                         intent.putExtra("pid", myOqPost.getPid());
                         startActivity(intent);
                     }
-                });
+                };
+                postViewHolder.tvAddComment.setOnClickListener(ocl);
+                postViewHolder.tvNumComment.setOnClickListener(ocl);
+
+                isContactItemExists = true;
+
+                if (isProgressViewShown) {
+                    roProgress.setVisibility(View.GONE);
+                    isProgressViewShown = false;
+                }
+
+                if (isEmptyViewShown) {
+                    ro_empty_list.setVisibility(View.GONE);
+                    isEmptyViewShown = false;
+                }
 
             }
         };
 
         recyclerView.setAdapter(firebaseRecyclerAdapter);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (isContactItemExists = false) {
+
+                    if (firebaseRecyclerAdapter.getItemCount() == 0) {
+
+                        roProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.VISIBLE);
+                        isEmptyViewShown = true;
+
+                        isContactItemExists = false;
+
+
+                    } else {
+                        roProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.GONE);
+                        isEmptyViewShown = false;
+
+                        isContactItemExists = true;
+
+                    }
+                } else {
+                    roProgress.setVisibility(View.GONE);
+                    isProgressViewShown = false;
+
+                    ro_empty_list.setVisibility(View.GONE);
+                    isEmptyViewShown = true;
+
+                }
+            }
+        }, 3000);
+
+
     }
 
 
@@ -549,37 +657,12 @@ public class MainFrag1_Feeds extends ListFrag {
 
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (firebaseRecyclerAdapter != null) {
+            firebaseRecyclerAdapter.cleanup();
+        }
     }
 
-    void checkIfFirebaseListIsEmpty(Activity activity) {
-
-        JM.V(roProgress);
-
-        App.fbaseDbRef
-                .child(FBaseNode0.MyPosts)
-                .child(App.getUid(activity))
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.exists()) {
-                            JM.G(roProgress);
-                            JM.V(ro_empty_list);
-                        } else {
-                            JM.G(roProgress);
-                            JM.G(ro_empty_list);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        JM.G(roProgress);
-                        JM.V(ro_empty_list);
-                    }
-                });
-
-    }
 
 }

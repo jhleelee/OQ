@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,12 +52,12 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
     String oqSumT = "";
     LoEtMoney loetmomey;
 
+
+
     public static EasyInputDiaFrag  newInstance(Bundle bundle, Context context) {
         EasyInputDiaFrag frag = new EasyInputDiaFrag();
-
-
-
         frag.setArguments(bundle);
+
         selectedProfileNum =   bundle.getInt("selectedProfileNum");
         OQTWantT_Future =   bundle.getString("mDoWhat");
         mContext = context;
@@ -85,6 +87,11 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        selectedProfileNum =   getArguments().getInt("selectedProfileNum");
+        OQTWantT_Future =   getArguments().getString("mDoWhat");
+
+
 
         lo= (LinearLayout) view.findViewById(R.id
                 .lo);
@@ -152,7 +159,24 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
 
                 //(4)onTextWatcher - Edittext
 
+                loetmomey.etMoneyAmmount.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        r0.setText(String.valueOf(loetmomey.getAmt()));
+                        r1.setText(String.valueOf(loetmomey.getAmt()));
+                        r2.setText(String.valueOf(loetmomey.getAmt()));
+                    }
+                });
 
 
             } else if (selectedProfileNum>1){
@@ -197,6 +221,23 @@ public class EasyInputDiaFrag extends   android.support.v4.app.DialogFragment {
                 r0.setText(JM.strById(R.string.dummydate));
                 r1.setText(JM.strById(R.string.dummydate));
                 r2.setText(JM.strById(R.string.dummydate));
+
+                loetmomey.etMoneyAmmount.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
             }
 
         } else if (OQTWantT_Future !=null&& OQTWantT_Future.equals(OQT.DoWhat.PAY)){

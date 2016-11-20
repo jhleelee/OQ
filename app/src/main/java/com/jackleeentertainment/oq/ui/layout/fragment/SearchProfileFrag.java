@@ -1,19 +1,16 @@
 package com.jackleeentertainment.oq.ui.layout.fragment;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.SearchView;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -21,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
-import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Profile;
@@ -31,13 +27,19 @@ import com.jackleeentertainment.oq.ui.layout.viewholder.AvatarNameEmailChkViewHo
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 /**
  * Created by jaehaklee on 2016. 10. 2..
  */
 
 public class SearchProfileFrag extends ListFrag {
+
+    boolean isContactItemExists = false;
+    boolean isEmptyViewShown = false;
+    boolean isProgressViewShown = true;
+
+
+
+    String queryEmail = "";
 
     String TAG = this.getClass().getSimpleName();
     int numDone = 0;
@@ -56,43 +58,34 @@ public class SearchProfileFrag extends ListFrag {
     }
 
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ro_empty_list.setVisibility(View.VISIBLE);
         searchView.setVisibility(View.GONE);
-        tempGetPubProfiles();
-
-
 
 
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        queryGetPubProfiles(queryEmail);
+
+    }
 
     @Override
     public void initUI() {
         super.initUI();
         searchView.setVisibility(View.VISIBLE);
+        loEmpty.setBackgroundColor(JM.colorById(R.color.colorPrimaryDark));
+        ivEmpty.setImageDrawable(JM.drawableById(R.drawable.ic_search_white_48dp));
+        ivEmpty.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        tvEmptyTitle.setText(JM.strById(R.string.search_people));
+        tvEmptyDetail.setText(JM.strById(R.string.search_people_long));
+        tvEmptyLearnMore.setVisibility(View.GONE);
 
-    }
-
-
-    @Override
-    void initAdapterOnResume() {
-        super.initAdapterOnResume();
-
-        tempGetPubProfiles();
-
-//        if (arlProfiles!=null && arlProfiles.size()==0) {
-//            JM.G(recyclerView);
-//
-//        } else {
-//            JM.V(recyclerView);
-//            profileArlRVAdapter = new ProfileArlCheckableRVAdapter(this, arlProfiles);
-//            recyclerView.setAdapter(profileArlRVAdapter);
-//        }
     }
 
 
@@ -168,21 +161,33 @@ public class SearchProfileFrag extends ListFrag {
     }
 
 
-    void tempGetPubProfiles(){
+    void queryGetPubProfiles(String email) {
+
+        if (queryEmail==null||queryEmail.length()==0){
+            return;
+        }
+
 
         ro_empty_list.setVisibility(View.GONE);
         roProgress.setVisibility(View.GONE);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        Query queryEmail =
+                App.fbaseDbRef
+                        .child(FBaseNode0.ProfileToPublic)
+                        .orderByChild("email")
+                        .startAt(email)
+                        .limitToFirst(50);
 
         frvAdapterPub = new FirebaseRecyclerAdapter<Profile, AvatarNameEmailChkViewHolder>
                 (Profile.class,
                         R.layout.lo_avatar_titlesubtitle_chk,
                         AvatarNameEmailChkViewHolder.class,
-                        App.fbaseDbRef
-                                .child(FBaseNode0.ProfileToPublic)
+                        queryEmail
                 ) {
+
+
             public void populateViewHolder(
                     final AvatarNameEmailChkViewHolder avatarNameEmailChkViewHolder,
                     final Profile profile,
@@ -218,13 +223,10 @@ public class SearchProfileFrag extends ListFrag {
                 );
 
 
-
-
-
                 // if size is larger than 1, it is a problem.
 
 
-                if (((PeopleActivity)getActivity()).arlSelectedProfile.contains(profile)) {
+                if (((PeopleActivity) getActivity()).arlSelectedProfile.contains(profile)) {
                     avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk
                             .setChecked(true);
                 } else {
@@ -236,25 +238,84 @@ public class SearchProfileFrag extends ListFrag {
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (((PeopleActivity)getActivity()).arlSelectedProfile.contains
-                                        (profile )) {
-                                    ((PeopleActivity)getActivity()).arlSelectedProfile.remove(profile);
+                                if (((PeopleActivity) getActivity()).arlSelectedProfile.contains
+                                        (profile)) {
+                                    ((PeopleActivity) getActivity()).arlSelectedProfile.remove(profile);
                                     avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk.setChecked(false);
                                 } else {
-                                    ((PeopleActivity)getActivity()).arlSelectedProfile.add(profile);
+                                    ((PeopleActivity) getActivity()).arlSelectedProfile.add(profile);
                                     avatarNameEmailChkViewHolder.checkboxJack__lo_avatartitlesubtitle_chk.setChecked(true);
                                 }
-                                ((PeopleActivity)getActivity()).bottomSheetControl((
-                                        (PeopleActivity)getActivity()).arlSelectedProfile.size());
+                                ((PeopleActivity) getActivity()).bottomSheetControl((
+                                        (PeopleActivity) getActivity()).arlSelectedProfile.size());
 //                                notifyDataSetChanged();
                             }
                         });
+
+                isContactItemExists = true;
+
+                if (isProgressViewShown) {
+                    roProgress.setVisibility(View.GONE);
+                    isProgressViewShown = false;
+                }
+
+                if (isEmptyViewShown) {
+                    ro_empty_list.setVisibility(View.GONE);
+                    isEmptyViewShown = false;
+                }
             }
         };
 
         recyclerView.setAdapter(frvAdapterPub);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (isContactItemExists=false) {
+
+                    if (frvAdapterPub.getItemCount() == 0) {
+
+                        roProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.VISIBLE);
+                        isEmptyViewShown = true;
+
+                        isContactItemExists = false;
+
+
+                    } else {
+                        roProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.GONE);
+                        isEmptyViewShown = false;
+
+                        isContactItemExists = true;
+
+                    }
+                } else {
+                    roProgress.setVisibility(View.GONE);
+                    isProgressViewShown = false;
+
+                    ro_empty_list.setVisibility(View.GONE);
+                    isEmptyViewShown = true;
+
+                }
+            }
+        }, 3000);
+
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(frvAdapterPub!=null){
+            frvAdapterPub.cleanup();
+        }
+    }
 
 
 }

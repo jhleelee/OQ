@@ -19,9 +19,9 @@ import com.jackleeentertainment.oq.object.Profile;
 
 public class LoEtMoney extends LinearLayout {
 
-   public  LinearLayout loMoney;
-    public  TextView tvMoneySym;
-    public  EditText etMoneyAmmount;
+    public LinearLayout loMoney;
+    public TextView tvMoneySym;
+    public EditText etMoneyAmmount;
 
     public LoEtMoney(Context context) {
         this(context, null);
@@ -40,7 +40,7 @@ public class LoEtMoney extends LinearLayout {
 
     }
 
-    void common(View view){
+    void common(View view) {
         loMoney = (LinearLayout) view.findViewById(R.id.loMoney);
         tvMoneySym = (TextView) view.findViewById(R.id.tvMoneySym);
         etMoneyAmmount = (EditText) view.findViewById(R.id.etMoneyAmmount);
@@ -49,7 +49,7 @@ public class LoEtMoney extends LinearLayout {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                if (hasFocus){
+                if (hasFocus) {
                     loMoney.setBackground(JM.drawableById(R.drawable.et_comment_focused));
                     tvMoneySym.setTextColor(JM.colorById(R.color.white));
                 } else {
@@ -65,6 +65,9 @@ public class LoEtMoney extends LinearLayout {
         etMoneyAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
     }
 
-
+    public long getAmt() {
+        String amt = etMoneyAmmount.getText().toString().replaceAll(",", "");
+        return Long.parseLong(amt);
+    }
 }
 

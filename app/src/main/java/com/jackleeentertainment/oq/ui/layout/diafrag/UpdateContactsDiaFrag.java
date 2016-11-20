@@ -37,7 +37,7 @@ public class UpdateContactsDiaFrag extends BaseDiaFrag {
     ArrayList<ItemDiaFragList> arl = new ArrayList<>();
     static String mActivityT = "";
 
-    class ActivityT{
+    public  static class ActivityT{
         public final static String MainActivity = "a";
         public final static String PeopleActivity = "b";
     }

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,11 +20,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -42,15 +41,12 @@ import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
-import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.object.OqDo;
-import com.jackleeentertainment.oq.object.OqDoPair;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.ChatUtil;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
-import com.jackleeentertainment.oq.ui.layout.viewholder.Ava2RelationDtlSmallVHolder;
-import com.jackleeentertainment.oq.ui.layout.viewholder.Ava2RelationDtlVHolder;
+import com.jackleeentertainment.oq.ui.layout.viewholder.ItemProfileActivityVHolder;
 import com.jackleeentertainment.oq.ui.widget.LoOppoFeed;
 import com.konifar.fab_transformation.FabTransformation;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -67,6 +63,11 @@ import java.util.List;
  */
 
 public class ProfileActivity extends BaseActivity {
+
+    boolean isContactItemExists = false;
+    boolean isEmptyViewShown = false;
+    boolean isProgressViewShown = true;
+
     static String TAG = "ProfileActivity";
     Activity mActivity = this;
     final int REQ_PICK_IMAGE = 99;
@@ -74,7 +75,7 @@ public class ProfileActivity extends BaseActivity {
     Profile profile;
     ImageView ivClose;
     RecyclerView rvOQ;
-    LinearLayout nav_header_main;
+    RelativeLayout nav_header_main;
 
     RelativeLayout ro_person_photo_48dip__lessmargin;
     TextView tvTitle_DrawerHeader;
@@ -95,6 +96,22 @@ public class ProfileActivity extends BaseActivity {
 
     boolean isMe;
 
+    StorageReference mTempStorageRefORIG;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx36;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx48;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx72;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx96;  //mTempStorageRef was previously used to transfer data.
+    StorageReference mTempStorageRefpx144;  //mTempStorageRef was previously used to transfer data.
+    ArrayList<StorageReference> arlRef = new ArrayList<>();
+
+    ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid;
+    boolean isQueryAComplete = false;
+    boolean isQueryBComplete = false;
+
+    int REQ_PICK_SMS = 98;
+    final int REQ_PICK_IMAGE_FOR_PROFILECHANGE = 95;
+    OqDoRVAdapter oqDoRVAdapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +121,7 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile);
         ivClose = (ImageView) findViewById(R.id.ivClose);
         rvOQ = (RecyclerView) findViewById(R.id.rvOQ);
-        nav_header_main = (LinearLayout) findViewById(R.id.nav_header_main);
+        nav_header_main = (RelativeLayout) findViewById(R.id.nav_header_main);
         ivChat = (ImageView) findViewById(R.id.ivChat);
         ivAddTran = (ImageView) findViewById(R.id.ivAddTran);
         ro_person_photo_48dip__lessmargin = (RelativeLayout) findViewById(R.id
@@ -218,6 +235,7 @@ public class ProfileActivity extends BaseActivity {
         super.onResume();
         uiDecoration(this);
         setOcl();
+        twoQueriesAndMore();
     }
 
     @Override
@@ -274,7 +292,6 @@ public class ProfileActivity extends BaseActivity {
         );
 
 
-        initRVAdapter();
 
     }
 
@@ -331,7 +348,6 @@ public class ProfileActivity extends BaseActivity {
 
     }
 
-    final int REQ_PICK_IMAGE_FOR_PROFILECHANGE = 95;
 
     public void startActivityForResultPhotoGalleryToPROFILECHANGE() {
         Intent intent = new Intent();
@@ -346,13 +362,6 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    StorageReference mTempStorageRefORIG;  //mTempStorageRef was previously used to transfer data.
-    StorageReference mTempStorageRefpx36;  //mTempStorageRef was previously used to transfer data.
-    StorageReference mTempStorageRefpx48;  //mTempStorageRef was previously used to transfer data.
-    StorageReference mTempStorageRefpx72;  //mTempStorageRef was previously used to transfer data.
-    StorageReference mTempStorageRefpx96;  //mTempStorageRef was previously used to transfer data.
-    StorageReference mTempStorageRefpx144;  //mTempStorageRef was previously used to transfer data.
-    ArrayList<StorageReference> arlRef = new ArrayList<>();
 
 
     public void uploadProfPhoto(
@@ -490,9 +499,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid;
-    boolean isQueryAComplete = false;
-    boolean isQueryBComplete = false;
+
 
 
     void uiOqDos(ArrayList<OqDo> oqDoList) {
@@ -501,34 +508,36 @@ public class ProfileActivity extends BaseActivity {
         arlArlOqDoPerReferOid = OqDoUtil.getArlArlOqDoPerReferOid
                 (oqDoList,
                         this);
+        initRVAdapter(arlArlOqDoPerReferOid);
+
         rvOQ.setAdapter(oqDoRVAdapter);
 
     }
 
-    public class OqDoRVAdapter extends RecyclerView.Adapter<Ava2RelationDtlVHolder> {
+    public class OqDoRVAdapter extends RecyclerView.Adapter<ItemProfileActivityVHolder> {
 
-        public ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid = new ArrayList();
+        public ArrayList<ArrayList<OqDo>> mArlArlOqDoPerReferOid = new ArrayList();
 
         public OqDoRVAdapter(ArrayList<ArrayList<OqDo>> arl) {
             super();
-            arlArlOqDoPerReferOid = arl;
+            mArlArlOqDoPerReferOid = arl;
         }
 
         @Override
-        public Ava2RelationDtlVHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ItemProfileActivityVHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(App.getContext())
-                    .inflate(R.layout.item_mainfrag0, parent, false);
-            return new Ava2RelationDtlVHolder(view);
+                    .inflate(R.layout.item_profileactivity , parent, false);
+            return new ItemProfileActivityVHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final Ava2RelationDtlVHolder holder,
+        public void onBindViewHolder(final ItemProfileActivityVHolder holder,
                                      int position,
                                      List<Object>
                                              payloads) {
             super.onBindViewHolder(holder, position, payloads);
 
-            final ArrayList<OqDo> listOqDo = arlArlOqDoPerReferOid.get(position);
+            final ArrayList<OqDo> listOqDo = mArlArlOqDoPerReferOid.get(position);
             OqDoUtil.sortList(listOqDo);
 
 
@@ -563,7 +572,7 @@ public class ProfileActivity extends BaseActivity {
                     OqDoUtil.getSumOqDoAmmountsDisAgreed(listOqDo, mActivity)
             );
 
-            holder.tvContent.setText(OqDoUtil.getOqDoListMostRecentStr(listOqDo));
+            holder.tvContent.setText(OqDoUtil.getOqDoListMostRecentStr(listOqDo, mActivity));
 
             holder.ivMore.setImageDrawable(
                     JM.tintedDrawable(
@@ -604,7 +613,7 @@ public class ProfileActivity extends BaseActivity {
 
                             loMyOppo.tvName.setText(oqDo.profilea.full_name);
 
-                            loMyOppo.tvAmmount.setText(J.st1000(oqDo.ammount));
+                            loMyOppo.tvAmmount.setText(J.st1000won(oqDo.ammount));
 
                             loMyOppo.tvDeed.setText(
                                     OqDoUtil.getOqDoDeedStr(oqDo)
@@ -632,6 +641,17 @@ public class ProfileActivity extends BaseActivity {
                 }
             });
 
+            isContactItemExists = true;
+
+            if (isProgressViewShown) {
+                roProgress.setVisibility(View.GONE);
+                isProgressViewShown = false;
+            }
+
+            if (isEmptyViewShown) {
+                ro_empty_list.setVisibility(View.GONE);
+                isEmptyViewShown = false;
+            }
 
         }
 
@@ -643,26 +663,22 @@ public class ProfileActivity extends BaseActivity {
 
 
         @Override
-        public void onBindViewHolder(Ava2RelationDtlVHolder holder, int position) {
+        public void onBindViewHolder(ItemProfileActivityVHolder holder, int position) {
 
         }
 
         @Override
         public int getItemCount() {
-            return arlArlOqDoPerReferOid.size();
+            if (mArlArlOqDoPerReferOid !=null) {
+                return mArlArlOqDoPerReferOid.size();
+            } else {
+                return 0;
+            }
         }
     }
 
-    OqDoRVAdapter oqDoRVAdapter;
-    void initRVAdapter() {
 
-        ro_empty_list.setVisibility(View.GONE);
-        roProgress.setVisibility(View.GONE);
-        rvOQ.setHasFixedSize(true);
-        rvOQ.setLayoutManager(new LinearLayoutManager(mActivity));
-          oqDoRVAdapter = new OqDoRVAdapter(arlArlOqDoPerReferOid);
-        rvOQ.setAdapter(oqDoRVAdapter);
-
+    void twoQueriesAndMore(){
 
 
         final ArrayList<OqDo> oqDoList = new ArrayList<>();
@@ -685,9 +701,7 @@ public class ProfileActivity extends BaseActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
 
-                            Iterable<DataSnapshot> i = dataSnapshot.getChildren();
-
-                            for (DataSnapshot d : i) {
+                            for (DataSnapshot d : dataSnapshot.getChildren()) {
 
                                 OqDo oqDo = d.getValue(OqDo.class);
                                 oqDoList.add(oqDo);
@@ -713,9 +727,8 @@ public class ProfileActivity extends BaseActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
 
-                            Iterable<DataSnapshot> i = dataSnapshot.getChildren();
 
-                            for (DataSnapshot d : i) {
+                            for (DataSnapshot d :  dataSnapshot.getChildren()) {
 
                                 OqDo oqDo = d.getValue(OqDo.class);
 
@@ -737,11 +750,59 @@ public class ProfileActivity extends BaseActivity {
 
 
 
-
     }
 
 
-    int REQ_PICK_SMS = 98;
+
+
+
+    void initRVAdapter(ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid) {
+        rvOQ.setHasFixedSize(true);
+        rvOQ.setLayoutManager(new LinearLayoutManager(mActivity));
+        oqDoRVAdapter = new OqDoRVAdapter(arlArlOqDoPerReferOid);
+
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (isContactItemExists = false) {
+
+                    if (oqDoRVAdapter.getItemCount() == 0) {
+
+                        roProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.VISIBLE);
+                        isEmptyViewShown = true;
+
+                        isContactItemExists = false;
+
+
+                    } else {
+                        roProgress.setVisibility(View.GONE);
+                        isProgressViewShown = false;
+
+                        ro_empty_list.setVisibility(View.GONE);
+                        isEmptyViewShown = false;
+
+                        isContactItemExists = true;
+
+                    }
+                } else {
+                    roProgress.setVisibility(View.GONE);
+                    isProgressViewShown = false;
+
+                    ro_empty_list.setVisibility(View.GONE);
+                    isEmptyViewShown = true;
+
+                }
+            }
+        }, 3000);
+     }
+
+
 
     public void startActivityForResultToLoadSMS() {
         Intent intentLoadSMS = new Intent(this, SMSListActivity.class);

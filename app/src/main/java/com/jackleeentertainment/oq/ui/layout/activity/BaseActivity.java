@@ -146,7 +146,7 @@ public class BaseActivity extends AppCompatActivity {
             UpdateContactsDiaFrag frag =
                     UpdateContactsDiaFrag
                             .newInstance(
-                                    bundle, this);
+                                    bundle, this, bundle.getString("activityT"));
             frag.show(fm, "UpdateContacts");
         }
 

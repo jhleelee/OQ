@@ -13,12 +13,11 @@ import com.jackleeentertainment.oq.R;
  * Created by jaehaklee on 2016. 10. 4..
  */
 
-public class Ava2RelationDtlVHolder extends RecyclerView.ViewHolder {
+public class ItemProfileActivityVHolder extends RecyclerView.ViewHolder {
     public   View mView;
  public   LinearLayout loTwoAvaWrap;
     public  LinearLayout lolvTwoAvaHistory;
-    public  RecyclerView rvSub;
-    public  RelativeLayout roRelationTwoAva;
+     public  RelativeLayout roRelationTwoAva;
     public  TextView tvOppoName;
     public  TextView tvResultAmmount;
     public  TextView tvResultAmmount2;
@@ -29,17 +28,20 @@ public class Ava2RelationDtlVHolder extends RecyclerView.ViewHolder {
     public  ImageView ivAvaLeft, ivAvaRight;
     public  TextView tvAvaLeft, tvAvaRight;
 
-    public Ava2RelationDtlVHolder(View itemView) {
+    public ItemProfileActivityVHolder(View itemView) {
         super(itemView);
         mView = itemView;
-        loTwoAvaWrap
-                =
-                (LinearLayout) mView
-                        .findViewById(R.id.loTwoAvaWrap);
-        //loTwoAvaWrap
+
+
+
+
+
+
+
+
 
         roRelationTwoAva =
-                (RelativeLayout) loTwoAvaWrap
+                (RelativeLayout) mView
                         .findViewById(R.id.roRelationTwoAva);
 
         roAvaLeft =
@@ -67,32 +69,35 @@ public class Ava2RelationDtlVHolder extends RecyclerView.ViewHolder {
                         .findViewById(R.id.ivRelation);
 
 
+
+
+
+
+
         tvOppoName =
-                (TextView) loTwoAvaWrap
+                (TextView) mView
                         .findViewById(R.id.tvNameTwoAva);
 
         tvResultAmmount =
-                (TextView) loTwoAvaWrap
+                (TextView) mView
                         .findViewById(R.id.tvResultAmmount);
 
 
-
-
         tvResultAmmount2=
-                (TextView) loTwoAvaWrap
+                (TextView) mView
                         .findViewById(R.id.tvResultAmmount2);
 
         tvContent =
-                (TextView) loTwoAvaWrap
+                (TextView) mView
                         .findViewById(R.id.tvContentTwoAva);
 
         ivMore =
-                (ImageView) loTwoAvaWrap
+                (ImageView) mView
                         .findViewById(R.id.ivMoreTwoAvaHistory);
 
         lolvTwoAvaHistory =
                 (LinearLayout) mView
-                        .findViewById(R.id.lolvTwoAvaHistory);
+                        .findViewById(R.id.loBreakDown);
 
     }
 

@@ -156,7 +156,7 @@ public class NewOQFrag1 extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d(TAG, "onClick which :" + J.st(which));
 
-                        ((NewOQActivity)getActivity()).doUploadAll();
+                        ((NewOQActivity)getActivity()).startNewOQProgActivity();
 
                     }
                 };

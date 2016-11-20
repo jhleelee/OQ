@@ -50,6 +50,7 @@ public class NewGroupActivity extends BaseFragmentContainFullDialogActivity {
         super.initUIOnCreate();
         fab.setVisibility(View.GONE);
         tabLayout.setVisibility(View.GONE);
+        ivClose.setImageDrawable(JM.drawableById(R.drawable.ic_close_white_48dp));
     }
 
     @Override

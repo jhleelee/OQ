@@ -58,7 +58,7 @@
                     android:layout_weight="1"/>
 
                 <LinearLayout
-                    android:gravity="center"
+                    android:gravity="center_vertical|left"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -67,7 +67,6 @@
                     <ImageView
                         android:id="@+id/ivPeopleIcon2"
                         style="@style/ImageView.WhiteImageSrcTransparentBg.36"
-                        android:layout_gravity="bottom"
                         android:src="@drawable/ic_people_white_48dp"/>
 
                     <TextView
@@ -75,8 +74,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="36dip"
-                        android:layout_gravity="bottom"
-                        android:layout_marginLeft="8dip"
+                         android:layout_marginLeft="8dip"
                         android:text="나의 연락처"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textColor="@color/white"
@@ -87,8 +85,7 @@
                         android:id="@+id/tvUpdateContacts"
                         android:layout_width="wrap_content"
                         android:layout_height="36dip"
-                        android:layout_gravity="bottom"
-                        android:layout_marginLeft="@dimen/md_16dip"
+                         android:layout_marginLeft="@dimen/md_16dip"
                         android:gravity="center"
                         android:text="@string/update"
                         android:textColor="@color/colorAccent"
@@ -118,6 +115,7 @@
                     </android.support.v7.widget.SearchView>
 
                     <android.support.v7.widget.RecyclerView
+                        android:layout_marginTop="16dip"
                         android:id="@+id/rvRightDrawerAll"
                         android:layout_width="match_parent"
                         android:layout_height="0dip"
@@ -132,6 +130,17 @@
                     layout="@layout/ro_empty_list"
                     android:visibility="gone"
                     />
+
+
+                <include
+                    android:id="@+id/vProgress_rightdrawer"
+                    layout="@layout/ro_prog"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
+
+
+
 
             </RelativeLayout>
 

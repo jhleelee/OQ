@@ -20,7 +20,7 @@ public class OqDo implements Serializable {
     public  String currency;
     public  String oqwhen;//point - future=obligation, now=paying, past=paid
     public  String oqwhat;//get ; pa
-
+    public String pid; //postId
 
     public OqDo() {
         super();
@@ -108,6 +108,13 @@ public class OqDo implements Serializable {
 
     public void setProfilea(Profile profilea) {
         this.profilea = profilea;
+    }
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 
 }

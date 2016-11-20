@@ -15,7 +15,7 @@ import com.jackleeentertainment.oq.R;
 public class AvatarNameViewHolder extends RecyclerView.ViewHolder{
 
 
-    View mView;
+    public View mView;
   public   RelativeLayout ro_person_photo_48dip__lo_avatar_name;
     public  TextView tvTitle__lo_avatar_name   ;
     public TextView ro_person_photo_tv;

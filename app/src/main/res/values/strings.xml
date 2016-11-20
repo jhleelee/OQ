@@ -112,7 +112,10 @@
     <!--MainActivity-->
     <string name="search_chatroom">Search Chatroom</string>
     <string name="search_friend">Search Friend</string>
+    <string name="search_dotdot">검색..</string>
+
     <string name="search_people">회원 검색</string>
+    <string name="search_people_long">이메일 주소를 입력하여 회원 검색을 합니다</string>
 
 
     <!--    MainActivity Frag0-->
@@ -345,14 +348,14 @@
     <string name="group">그룹</string>
     <string name="title_group">그룹 이름</string>
     <string name="ammount_by_period">회비</string>
-    <string name="invoice_once">1회 청구</string>
-    <string name="invoice_period">정기적 청구</string>
+    <string name="invoice_once">지금 1회만 청구</string>
+    <string name="invoice_period">앞으로 정기적으로 청구</string>
     <string name="every_week">매주</string>
     <string name="every_month">매월</string>
     <string name="every_year">매년</string>
     <string name="ourfloor_group">우리 층 회비 모임</string>
-
     <string name="member_group">그룹 회원</string>
+    <string name="add_member_group">그룹 회원 추가</string>
 
     <string name="new_group">새 그룹 만들기</string>
     <string name="list_i_am_master">내가 회장인 그룹 목록</string>
@@ -542,6 +545,8 @@
 
 
     <string name="deed_req_a_get_future">청구하였습니다.</string>
+    <string name="deed_req">청구</string>
+
     <string name="argueagainst_req_a_get_future">청구에 대해 이의하였습니다.</string>
     <string name="req_a_pay_past">지급하고 확인 요청하였습니다.</string>
     <string name="argueagainst_req_a_pay_past">지급에 대해 이의하였습니다.</string>

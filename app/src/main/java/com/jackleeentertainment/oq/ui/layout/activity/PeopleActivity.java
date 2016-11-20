@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
@@ -32,13 +31,14 @@ import com.google.gson.Gson;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
-import com.jackleeentertainment.oq.firebase.database.SetValue;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
+import com.jackleeentertainment.oq.ui.layout.activity.progress.ProgressActivity;
 import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
+import com.jackleeentertainment.oq.ui.layout.diafrag.UpdateContactsDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.fragment.ContactProfileFrag;
 import com.jackleeentertainment.oq.ui.layout.fragment.SearchProfileFrag;
 import com.konifar.fab_transformation.FabTransformation;
@@ -52,54 +52,57 @@ import java.util.HashSet;
  */
 public class PeopleActivity extends BaseViewPagerFullDialogActivity {
 
-        Activity mActivity = this;
-
+    Activity mActivity = this;
     final int REQ_SNS_FRIEND = 93;
 
     //ViewPager
     PeopleActivityPagerAdapter peopleActivityPagerAdapter;
-   View vScrim;
+    View vScrim;
 
 
     public ArrayList<Profile> arlSelectedProfile = new ArrayList<>();
 
 
     //from DiaFrag :onResume
-    public boolean isToStartPhoneSync= false;
-    public boolean  isToStartEmailSync= false;
-
+    public boolean isToStartPhoneSync = false;
+    public boolean isToStartEmailSync = false;
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (arlSelectedProfile!=null) {
+        if (arlSelectedProfile != null) {
             bottomSheetControl(arlSelectedProfile.size());
         }
 
-        if (isToStartPhoneSync){
+        if (isToStartPhoneSync) {
             Intent intent = new Intent(this, ProgressActivity.class);
-            intent.putExtra("progressT",ProgressT.UPDATE_CONTACT_PHONE);
+            intent.putExtra("progressT", ProgressT.UPDATE_CONTACT_PHONE);
             startActivity(intent);
-            isToStartPhoneSync=false;
+            isToStartPhoneSync = false;
         }
 
-        if (isToStartEmailSync){
+        if (isToStartEmailSync) {
             Intent intent = new Intent(this, ProgressActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("progressT",ProgressT.UPDATE_CONTACT_EMAIL);
+            bundle.putString("progressT", ProgressT.UPDATE_CONTACT_EMAIL);
             intent.putExtras(bundle);
             startActivity(intent);
-            isToStartEmailSync=false;
+            isToStartEmailSync = false;
         }
 
     }
+
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_onlysearch, menu);
+        inflater.inflate(R.menu.menu_peopleactivity, menu);
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =
@@ -114,35 +117,50 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-                        Toast.makeText(getApplicationContext(), "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
 
                         return false;
                     }
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
-                        Toast.makeText(getApplicationContext(), "newText", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(getApplicationContext(), newText, Toast.LENGTH_SHORT).show();
 
                         return false;
                     }
                 });
 
 
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
+
+        View vFriends =
+                MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        vFriends.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Begin", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("diaFragT",DiaFragT.UpdateContacts);
+                bundle.putString("activityT", UpdateContactsDiaFrag.ActivityT.PeopleActivity);
+                showDialogFragment(bundle);
             }
         });
-
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        // Beppi
+        if (id == R.id.action_addcontacts){
+            Bundle bundle = new Bundle();
+            bundle.putString("diaFragT",DiaFragT.UpdateContacts);
+            bundle.putString("activityT", UpdateContactsDiaFrag.ActivityT.PeopleActivity);
+            showDialogFragment(bundle);
+        }
+
         return super.onOptionsItemSelected(item);
+
     }
 
 
@@ -163,21 +181,21 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
         super.initUIDataOnResume();
 
         String beforeProfiles = getIntent().getStringExtra("beforeProfiles");
-        if (beforeProfiles!=null) {
+        if (beforeProfiles != null) {
             ArrayList<Profile> arlBeforeProfiles = ProfileUtil.getArlProfileFromJson
                     (beforeProfiles);
 
-            if (arlBeforeProfiles.size()>0) {
+            if (arlBeforeProfiles.size() > 0) {
                 arlSelectedProfile.addAll(arlBeforeProfiles);
             }
             int size = arlSelectedProfile.size();
         }
 
         String beforeUids = getIntent().getStringExtra("beforeUids");
-        if (beforeUids!=null) {
+        if (beforeUids != null) {
             final ArrayList<String> arlBeforeUids = J.arlStringFromjsonArlString(beforeUids);
 
-            for (String uid : arlBeforeUids){
+            for (String uid : arlBeforeUids) {
                 App.fbaseDbRef
                         .child(FBaseNode0.ProfileToPublic)
                         .child(uid)
@@ -185,7 +203,7 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
                                 new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.exists()){
+                                        if (dataSnapshot.exists()) {
                                             Profile profile = dataSnapshot.getValue(Profile.class);
                                             profile.setUid(dataSnapshot.getKey());
                                             arlSelectedProfile.add(profile);
@@ -206,7 +224,7 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
 
         tvToolbarTitle.setText(JM.strById(R.string.select_oponent));
         tvFootTitle.setText(JM.strById(R.string.see_people_at_my_contact));
-
+        fab.setVisibility(View.GONE);
     }
 
     @Override
@@ -225,7 +243,7 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
                         .duration(300)
                         .transformTo(toolbarFooter);
                 vScrim.setVisibility(View.VISIBLE);
-                if (ro_tv_done.getVisibility()==View.VISIBLE) {
+                if (ro_tv_done.getVisibility() == View.VISIBLE) {
                     ro_tv_done.setVisibility(View.GONE);
 
                 }
@@ -240,7 +258,7 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
                         .transformFrom(toolbarFooter);
                 v.setVisibility(View.GONE);
                 bottomSheetControl(
-                       arlSelectedProfile.size());
+                        arlSelectedProfile.size());
                 return false;
             }
         });
@@ -272,32 +290,32 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
                 )
         );
 
-        roFootTab0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlertDialogWithOkCancel(
-                        R.string.sync_phone_contact,
-                        new SyncPhoneContactTask()
-                );
-            }
-        });
-
-        roFootTab1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlertDialogWithOkCancel(
-                        R.string.sync_email_contact,
-                        new SyncEmailContactTask()
-                );
-            }
-        });
-
-        roFootTab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResultPickSNSFriends();
-            }
-        });
+//        roFootTab0.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showAlertDialogWithOkCancel(
+//                        R.string.sync_phone_contact,
+//                        new SyncPhoneContactTask()
+//                );
+//            }
+//        });
+//
+//        roFootTab1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showAlertDialogWithOkCancel(
+//                        R.string.sync_email_contact,
+//                        new SyncEmailContactTask()
+//                );
+//            }
+//        });
+//
+//        roFootTab2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivityForResultPickSNSFriends();
+//            }
+//        });
         tvFootTab0.setText(JM.strById(R.string.contacts_phone));
         tvFootTab1.setText(JM.strById(R.string.contacts_email));
         tvFootTab2.setText(JM.strById(R.string.contacts_facebook));
@@ -307,12 +325,12 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "ro_tv_done");
-                if (arlSelectedProfile!=null&& arlSelectedProfile.size()>0){
-                    Log.d(TAG, "arlSelectedProfile.size() : "+ J.st(arlSelectedProfile.size()));
+                if (arlSelectedProfile != null && arlSelectedProfile.size() > 0) {
+                    Log.d(TAG, "arlSelectedProfile.size() : " + J.st(arlSelectedProfile.size()));
 
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("result", new Gson().toJson(arlSelectedProfile));
-                    setResult(Activity.RESULT_OK,returnIntent);
+                    setResult(Activity.RESULT_OK, returnIntent);
                     finish();
 
                 } else {
@@ -330,7 +348,7 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("diaFragT", DiaFragT.SelectedPeople);
                 Gson gson = new Gson();
-                String st=gson.toJson(arlSelectedProfile);
+                String st = gson.toJson(arlSelectedProfile);
                 bundle.putString("arlProfileJson", st);
                 showDialogFragment(bundle);
             }
@@ -343,12 +361,12 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQ_SNS_FRIEND) {
-                String[] ar = {"aa", "bb"};
-                new SyncSnsFriendTask().execute(ar);
-            }
-        }
+//        if (resultCode == Activity.RESULT_OK) {
+//            if (requestCode == REQ_SNS_FRIEND) {
+//                String[] ar = {"aa", "bb"};
+//                new SyncSnsFriendTask().execute(ar);
+//            }
+//        }
     }
 
     @Override
@@ -550,10 +568,6 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
     }
 
 
-
-
-
-
     public ArrayList<String> getPhoneContacts() {
         //show prog dia
         Log.d(TAG, "getPhoneContacts()  ");
@@ -591,8 +605,6 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
     }
 
 
-
-
     public ArrayList<String> getNameEmailDetails() {
 
         //show prog dia
@@ -602,11 +614,11 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
         HashSet<String> emlRecsHS = new HashSet<String>();
         Context context = this;
         ContentResolver cr = context.getContentResolver();
-        String[] PROJECTION = new String[] { ContactsContract.RawContacts._ID,
+        String[] PROJECTION = new String[]{ContactsContract.RawContacts._ID,
                 ContactsContract.Contacts.DISPLAY_NAME,
                 ContactsContract.Contacts.PHOTO_ID,
                 ContactsContract.CommonDataKinds.Email.DATA,
-                ContactsContract.CommonDataKinds.Photo.CONTACT_ID };
+                ContactsContract.CommonDataKinds.Photo.CONTACT_ID};
         String order = "CASE WHEN "
                 + ContactsContract.Contacts.DISPLAY_NAME
                 + " NOT LIKE '%@%' THEN 1 ELSE 2 END, "
@@ -636,7 +648,6 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
 
         return emlRecs;
     }
-
 
 
     //    @Override
@@ -683,7 +694,7 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
 //        return true;
 //    }
 
-//    @Override
+    //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //        // Handle action bar item clicks here. The action bar will
 //        // automatically handle clicks on the Home/Up button, so long
@@ -700,13 +711,13 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
     String TAG = "PeopleActivity";
 
 
-    public  void bottomSheetControl(int selectedNum) {
+    public void bottomSheetControl(int selectedNum) {
         Log.d(TAG, "bottomSheetControl()");
         if (selectedNum == 0) {
-            Log.d(TAG, "bottomSheetControl() :" + J.st(selectedNum)  );
+            Log.d(TAG, "bottomSheetControl() :" + J.st(selectedNum));
             ro_tv_done.setVisibility(View.GONE);
         } else {
-            Log.d(TAG, "bottomSheetControl() :" + J.st(selectedNum)  );
+            Log.d(TAG, "bottomSheetControl() :" + J.st(selectedNum));
             String sumStr = "명 선택됨";
             tvDone__ro_tv_done.setText(selectedNum + sumStr);
             ro_tv_done.setVisibility(View.VISIBLE);
@@ -714,9 +725,6 @@ public class PeopleActivity extends BaseViewPagerFullDialogActivity {
 
         }
     }
-
-
-
 
 
 }

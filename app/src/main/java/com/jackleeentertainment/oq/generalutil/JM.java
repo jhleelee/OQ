@@ -2,8 +2,10 @@ package com.jackleeentertainment.oq.generalutil;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -26,11 +28,12 @@ import com.google.firebase.storage.StorageReference;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
- import com.jackleeentertainment.oq.object.OqDo;
+import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.OqDoPair;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
+import com.jackleeentertainment.oq.object.util.ProfileUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -46,25 +49,92 @@ public class JM {
      ********************************/
 
 
+    public static void uiTvContentMainFrag0(TextView tvContent, ArrayList<OqDo> oqDoList, Activity
+            activity) {
+        Resources res = App.getContext().getResources();
 
 
+        String str = OqDoUtil.getOqDoListMostRecentStr(oqDoList, activity);
+
+        tvContent.setText(
+                str
+        );
+
+        OqDo mainOqDo = OqDoUtil.getOqDoOidTheSameReferOid(oqDoList);
+
+        if (str.contains(res.getString(R.string.deed_req))) {
+            if (mainOqDo.profilea.uid.equals(App.getUid(activity))) {
+//                tvContent.setTextColor(JM.colorById(R.color.getPrimary));
+            }
+        }
+
+        /// more
+    }
+
+    public static void uiTvContentMainFrag1(
+            TextView tvContent,
+            ArrayList<ArrayList<OqDo>> arlarl,
+            Activity activity) {
+
+        boolean needToGetTxt = false;
+        Resources res = App.getContext().getResources();
+        ArrayList<Profile> arlProfile = new ArrayList<>();
+        int pplNum = arlarl.size();
+        long amt = 0;
+        String strDeed= null;
+
+        for (ArrayList<OqDo> oqDoList : arlarl){
+            OqDo mainOqDo = OqDoUtil.getOqDoOidTheSameReferOid(oqDoList);
+            amt += mainOqDo.ammount;
+            arlProfile.add(OqDoUtil.getOppoProfileFromOqDo(mainOqDo, activity));
+            strDeed= OqDoUtil.getOqDoListMostRecentStrShort(oqDoList, activity);
+        }
+
+        String str = null;
+
+        if (pplNum==1){
+            str += arlProfile.get(0).full_name;
+        } else if (pplNum>1){
+            str += arlProfile.get(0).full_name;
+            str += " 외 " + J.st(pplNum)+"명";
+        }
+        str+="에게 ";
 
 
+        if (pplNum==1){
+            //nothing
+        } else if (pplNum>1){
+            str += "합계 ";
+        }
+
+        str += J.st1000won(amt);
+        str+="을 ";
+
+        str +=strDeed;
+
+        tvContent.setText(
+                str
+        );
+
+        //more
+
+
+     }
 
     public static void uiTvResultAmmount(TextView textView, long amt) {
 
         String str = "";
 
-        if (amt>0){
+        if (amt > 0) {
             textView.setTextColor(JM.colorById(R.color.getPrimary
             ));
-            J.st1000(amt);
-            str +="+" + J.st1000(amt);
+            J.st1000won(amt);
+            str += "누적 +" + J.st1000won(amt);
 
-        } else if (amt<0){
+        } else if (amt < 0) {
             textView.setTextColor(JM.colorById(R.color.payPrimary));
 
-            str +="-" + J.st1000(amt);
+            str += "누적 -" + J.st1000won(amt);
         } else {
             textView.setTextColor(JM.colorById(R.color.text_black_54));
 
@@ -72,25 +142,24 @@ public class JM {
 
         }
         textView.setText(str);
+        textView.setTypeface(null, Typeface.BOLD);
 
     }
-
-
 
 
     public static void uiTvResultAmmount2(TextView textView, long amt) {
 
         String str = "";
 
-        if (amt>0){
+        if (amt > 0) {
             textView.setTextColor(JM.colorById(R.color.getPrimaryDark));
-            J.st1000(amt);
-            str +="(+" + J.st1000(amt)+")";
 
-        } else if (amt<0){
+            str += "(+" + J.st1000won(amt) + ")";
+
+        } else if (amt < 0) {
             textView.setTextColor(JM.colorById(R.color.payPrimaryDark));
 
-            str +="(-" + J.st1000(amt)+")";
+            str += "(-" + J.st1000won(amt) + ")";
         } else {
             textView.setVisibility(View.GONE);
 
@@ -98,8 +167,6 @@ public class JM {
         textView.setText(str);
 
     }
-
-
 
 
     public static int getDeviceDpi() {
@@ -712,15 +779,13 @@ public class JM {
      ********************************/
 
 
-
-
- public static void glideProfileThumb(final Profile profile,
+    public static void glideProfileThumb(final Profile profile,
 
                                          final ImageView iv,
                                          final TextView tv,
                                          final Activity
                                                  mActivity) {
-        glideProfileThumb(   profile. uid,
+        glideProfileThumb(profile.uid,
                 profile.full_name,
                 iv,
                 tv,
@@ -729,18 +794,17 @@ public class JM {
     }
 
 
-
     public static void glideProfileThumb(final Profile profile,
 
                                          final ImageView iv,
                                          final TextView tv,
                                          final Fragment
                                                  fragment) {
-        glideProfileThumb(   profile. uid,
+        glideProfileThumb(
+                profile.uid,
                 profile.full_name,
                 iv,
                 tv,
-
                 fragment);
     }
 
@@ -811,14 +875,10 @@ public class JM {
     }
 
 
-
-
-
-
     public static void glideProfileOrig(final String uid,
-                                         final ImageView iv, final TextView tv,
-                                         final Activity
-                                                 mActivity) {
+                                        final ImageView iv, final TextView tv,
+                                        final Activity
+                                                mActivity) {
         //set Image
         Glide.with(mActivity)
                 .using(new FirebaseImageLoader())
@@ -846,10 +906,6 @@ public class JM {
                 })
                 .into(iv);
     }
-
-
-
-
 
 
 //
@@ -905,11 +961,6 @@ public class JM {
 //       }
 //
 //   }
-
-
-
-
-
 
 
 }

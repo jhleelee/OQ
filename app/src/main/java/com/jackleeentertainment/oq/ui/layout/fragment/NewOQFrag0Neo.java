@@ -189,7 +189,7 @@ public class NewOQFrag0Neo extends Fragment {
                     divSum += div;
                 }
 
-                tvSumOqItems .setText( J.st1000(divSum));
+                tvSumOqItems .setText( J.st1000won(divSum));
                 uiSpents();
 
             }
@@ -279,7 +279,7 @@ public class NewOQFrag0Neo extends Fragment {
                                 getActivity()
                         )
                 );
-                lo.loetmomey.etMoneyAmmount.setText(J.st1000(t.ammount));
+                lo.loetmomey.etMoneyAmmount.setText(J.st1000won(t.ammount));
                 lo.loetmomey.etMoneyAmmount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
                 lo.loetmomey.etMoneyAmmount.setTransformationMethod(new NumericKeyBoardTransformationMethod());
                 lo.loetmomey.etMoneyAmmount.addTextChangedListener(
