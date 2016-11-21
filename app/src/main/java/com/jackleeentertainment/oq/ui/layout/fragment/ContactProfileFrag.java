@@ -117,8 +117,8 @@ public class ContactProfileFrag extends Fragment {
 //                JM.glideProfileThumb(
 //                        profile.getUid(),
 //                        profile.getFull_name(),
-//                        avatarNameEmailChkViewHolder.ro_person_photo_iv,
-//                        avatarNameEmailChkViewHolder.ro_person_photo_tv,
+//                        avatarNameEmailChkViewHolder.ivAva,
+//                        avatarNameEmailChkViewHolder.tvAva,
 //                        getActivity()
 //                );
 //

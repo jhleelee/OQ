@@ -7,6 +7,8 @@
     <color name="colorTabTextColor">@color/colorAccent</color>
     <color name="colorTabTextColorUnselected">@color/alphawhite_70</color>
 
+    <color name="colorListBackground">@color/material_grey_400</color>
+    <color name="colorListItemBackground">@color/material_light_white</color>
 
 
 

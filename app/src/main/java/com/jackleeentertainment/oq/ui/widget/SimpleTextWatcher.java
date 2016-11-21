@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempProAmt;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
 
 /**
@@ -17,11 +18,11 @@ public class SimpleTextWatcher implements TextWatcher {
     private EditText mEditText;
     NewOQActivity mNewOQActivity;
     NewOQFrag0Neo mNewOQFrag0;
-    NewOQActivity.TempProAmt mTempProAmt;
+    TempProAmt mTempProAmt;
 
     public SimpleTextWatcher(
             EditText editText,
-            NewOQActivity.TempProAmt t,
+            TempProAmt t,
             NewOQActivity newOQActivity,
             NewOQFrag0Neo newOQFrag0Neo
     ) {
@@ -57,7 +58,7 @@ public class SimpleTextWatcher implements TextWatcher {
                 mTempProAmt.ammount = l;
 
                 long sum = 0;
-                for (NewOQActivity.TempProAmt t :
+                for (TempProAmt t :
                         mNewOQActivity.tempArl) {
                     sum += t.ammount;
                 }

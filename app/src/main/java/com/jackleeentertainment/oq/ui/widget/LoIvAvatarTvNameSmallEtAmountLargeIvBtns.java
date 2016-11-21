@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempProAmt;
 
 /**
  * Created by Jacklee on 2016. 10. 29..
@@ -19,7 +20,7 @@ public class LoIvAvatarTvNameSmallEtAmountLargeIvBtns extends LinearLayout {
     public ImageView ivAvatar, ivToc, ivDelete;
     public TextView tvName;
     public LoEtMoney loetmomey;
-    public NewOQActivity.TempProAmt tempProAmt;
+    public TempProAmt tempProAmt;
 
 
     public LoIvAvatarTvNameSmallEtAmountLargeIvBtns(Context context) {

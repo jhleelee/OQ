@@ -24,6 +24,7 @@ public class ChatroomDB_OpenHelper extends SQLiteOpenHelper {
 
     public static final String _ID = "_id";
     public static final String RoomId = "rid";
+    public static final String IsGroup = "isgroup";
     public static final String GroupTitle = "gti";
 
     //    public static final String CId_ALARM = "cid";
@@ -46,6 +47,7 @@ public class ChatroomDB_OpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + CHATROOM_TABLE + " ( "
                 + _ID + " INTEGER primary key autoincrement, "
                 + RoomId + " TEXT UNIQUE, "
+                + IsGroup + " TEXT, "
                 + GroupTitle + " TEXT, "
                 + ChatMemberProfilesJson + " TEXT, "
                 + LASTMESSAGE + " TEXT, "

@@ -19,5 +19,7 @@ public class DiaFragT {
     public final static String EasyInput="i";
 
     public final static String UpdateContacts="z";
+    public final static String PostOqDoListDiaFrag="x";
+
 
 }

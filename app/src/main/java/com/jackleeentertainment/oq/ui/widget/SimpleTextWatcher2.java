@@ -10,6 +10,7 @@ import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.object.OqDo;
  import com.jackleeentertainment.oq.object.util.OqDoUtil;
  import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempSpent;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
 
 /**
@@ -21,9 +22,9 @@ public class SimpleTextWatcher2  implements TextWatcher {
     private EditText mEditText;
     NewOQActivity mNewOQActivity;
     NewOQFrag0Neo mNewOQFrag0;
-    NewOQActivity.TempSpent mTempSpent;
+    TempSpent mTempSpent;
 
-    public SimpleTextWatcher2(EditText editText, NewOQActivity.TempSpent t,
+    public SimpleTextWatcher2(EditText editText, TempSpent t,
                              NewOQActivity newOQActivity,
                              NewOQFrag0Neo newOQFrag0Neo) {
         mEditText = editText;
@@ -58,7 +59,7 @@ public class SimpleTextWatcher2  implements TextWatcher {
                 mTempSpent.ammount = l;
 
                 long sum = 0;
-                for (NewOQActivity.TempSpent t :
+                for (TempSpent t :
                         mNewOQActivity.tempArlSpent) {
                     sum += t.ammount;
                 }

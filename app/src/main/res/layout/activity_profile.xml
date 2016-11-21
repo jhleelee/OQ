@@ -19,9 +19,11 @@
                 layout="@layout/nav_header_main"/>
 
             <LinearLayout
-                android:layout_margin="16dip"
+                android:layout_marginTop="8dip"
+
+                android:layout_marginRight="16dip"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
+                android:layout_alignParentTop="true"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -30,24 +32,56 @@
                     android:id="@+id/ivChat"
                     android:background="@drawable/cir_1whitestr_white"
                     android:src="@drawable/ic_chat_white_24dp"
-                    android:layout_width="40dip"
-                    android:layout_height="40dip"
+                    android:layout_width="32dip"
+                    android:layout_height="32dip"
                     android:scaleType="centerCrop"
-                    android:padding="12dip"
-                    android:layout_marginRight="16dip"/>
+                    android:padding="8dip"
+                    android:layout_marginRight="8dip"/>
                 <ImageView
                     android:id="@+id/ivAddTran"
                     android:background="@drawable/cir_1whitestr_white"
                     android:src="@drawable/ic_add_white_48dp"
-                    android:layout_width="40dip"
-                    android:layout_height="40dip"
+                    android:layout_width="32dip"
+                    android:layout_height="32dip"
                     android:scaleType="centerCrop"
-                    android:padding="12dip"
+                    android:padding="8dip"
                     />
 
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_marginBottom="16dip"
+                android:background="@drawable/rec_rad10_white"
+
+                android:layout_marginRight="16dip"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvAmmountAgreed"
+                    android:gravity="right"
+                    android:text="잔액 +30,000원"
+                    android:textColor="@color/getPrimary"
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:padding="8dip"
+                   />
+                <TextView
+                    android:id="@+id/tvAmmountDisAgreed"
+                    android:gravity="right"
+                    android:textColor="@color/text_black_54"
+                    android:text="(잔액 +30,000원)"
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:padding="8dip"
+                    />
+
+
+            </LinearLayout>
 
 
 
@@ -125,8 +159,8 @@
     <ImageView
         android:id="@+id/ivClose"
         style="@style/ImageButton.WhiteImageSrcTransparentBg.40"
-        android:layout_width="40dip"
-        android:layout_height="40dip"
+        android:layout_width="32dip"
+        android:layout_height="32dip"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_margin="8dip"

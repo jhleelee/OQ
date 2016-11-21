@@ -8,6 +8,7 @@ public class Chat {
 
     String rid; //receiverId or roomId?
     String sid;
+    String sname;
     long ts;
     String txt;
     String atch;
@@ -41,6 +42,13 @@ public class Chat {
         this.sid = sid;
     }
 
+    public String getSname() {
+        return sname;
+    }
+
+    public void setSname(String sname) {
+        this.sname = sname;
+    }
     public long getTs() {
         return ts;
     }

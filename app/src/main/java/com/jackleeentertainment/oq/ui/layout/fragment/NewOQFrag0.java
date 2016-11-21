@@ -673,10 +673,10 @@
 //                holder.ro_person_photo_48dip__lo_avatartitlesubtitle_delete =
 //                        (RelativeLayout) convertView.findViewById(R.id
 //                                .ro_person_photo_48dip__lo_avatartitlesubtitle_delete);
-//                holder.ro_person_photo_iv = (ImageView)
+//                holder.ivAva = (ImageView)
 //                        holder.ro_person_photo_48dip__lo_avatartitlesubtitle_delete
 //                                .findViewById(R.id
-//                                        .ro_person_photo_iv);
+//                                        .ivAva);
 //                holder.tvTitle__lo_avatartitlesubtitle_delete = (TextView) convertView.findViewById(R.id.tvTitle__lo_avatartitlesubtitle_delete);
 //                holder.tvSubTitle__lo_avatartitlesubtitle_delete = (TextView) convertView.findViewById(R.id.tvSubTitle__lo_avatartitlesubtitle_delete);
 //                holder.ibDelete = (ImageView) convertView.findViewById(R.id.ivDelete);
@@ -729,7 +729,7 @@
 //
 //        class ProfileViewHolder {
 //            RelativeLayout ro_person_photo_48dip__lo_avatartitlesubtitle_delete;
-//            ImageView ro_person_photo_iv;
+//            ImageView ivAva;
 //            TextView tvTitle__lo_avatartitlesubtitle_delete,
 //                    tvSubTitle__lo_avatartitlesubtitle_delete;
 //            ImageView ibDelete;

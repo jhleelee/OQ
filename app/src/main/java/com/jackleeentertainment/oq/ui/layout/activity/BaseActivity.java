@@ -27,6 +27,7 @@ import com.jackleeentertainment.oq.ui.layout.diafrag.GalleryOrCameraDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.MyProfileBackgroundPhotoDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.MySpentItemDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.OneLineInputDiaFrag;
+import com.jackleeentertainment.oq.ui.layout.diafrag.PostOqDoListDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.ReceiptBreakdownDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.SelectedPeopleDiaFrag;
 import com.jackleeentertainment.oq.ui.layout.diafrag.TransactChatOrShowProfileDiaFrag;
@@ -70,9 +71,6 @@ public class BaseActivity extends AppCompatActivity {
     void initOnClickListenerOnResume() {
 
     }
-
-
-
 
 
     public void showDialogFragment(Bundle bundle) {
@@ -136,18 +134,24 @@ public class BaseActivity extends AppCompatActivity {
                                     bundle, this);
             frag.show(fm, "EasyInputDiaFrag");
 
-        } else if (diaFragT.equals(DiaFragT.TransactOrChat)){
+        } else if (diaFragT.equals(DiaFragT.TransactOrChat)) {
             TransactOrChatDiaFrag frag =
                     TransactOrChatDiaFrag
                             .newInstance(
                                     bundle, this);
             frag.show(fm, "TransactOrChatDiaFrag");
-        } else if (diaFragT.equals(DiaFragT.UpdateContacts)){
+        } else if (diaFragT.equals(DiaFragT.UpdateContacts)) {
             UpdateContactsDiaFrag frag =
                     UpdateContactsDiaFrag
                             .newInstance(
                                     bundle, this, bundle.getString("activityT"));
             frag.show(fm, "UpdateContacts");
+        } else if (diaFragT.equals(DiaFragT.PostOqDoListDiaFrag)) {
+            PostOqDoListDiaFrag frag =
+                    PostOqDoListDiaFrag
+                            .newInstance(
+                                    bundle, this);
+            frag.show(fm, "PostOqDoListDiaFrag");
         }
 
 
@@ -174,12 +178,6 @@ public class BaseActivity extends AppCompatActivity {
         Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         pbutton.setTextColor(JM.colorById(R.color.colorPrimary));
     }
-
-
-
-
-
-
 
 
     public void showAlertDialogWithOkCancel(
@@ -254,7 +252,7 @@ public class BaseActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
 
 
-        if(dialog == null)
+        if (dialog == null)
             return;
         dialog.show();
         Button nbutton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
@@ -302,20 +300,18 @@ public class BaseActivity extends AppCompatActivity {
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
-            if ( v instanceof EditText) {
+            if (v instanceof EditText) {
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
                     v.clearFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
         }
-        return super.dispatchTouchEvent( event );
+        return super.dispatchTouchEvent(event);
     }
-
-
 
 
 }

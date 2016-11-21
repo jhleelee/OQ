@@ -1,8 +1,12 @@
 package com.jackleeentertainment.oq.object.util;
 
+import android.app.Activity;
+
 import com.jackleeentertainment.oq.App;
+import com.jackleeentertainment.oq.generalutil.J;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -11,7 +15,7 @@ import java.util.Collections;
 
 public class ChatUtil {
 
-    public static String createRidWith2Ids(String uidA, String uidB){
+    public static String createRidWith2Ids(String uidA, String uidB) {
         ArrayList<String> arl = new ArrayList<String>();
         arl.add(uidA);
         arl.add(uidB);
@@ -20,5 +24,20 @@ public class ChatUtil {
         return rid;
 
     }
+
+    public static String getOppoUidFromRidWith2Ids(String rid, Activity activity) {
+
+
+        if (rid != null) {
+            ArrayList<String> arl = new ArrayList<String>(Arrays.asList(rid.split("__")));
+            arl.remove(App.getUid(activity));
+            return arl.get(0);
+        } else {
+            return null;
+        }
+
+
+    }
+
 
 }

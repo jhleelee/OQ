@@ -27,14 +27,20 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
+import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.ChatroomRingT;
+import com.jackleeentertainment.oq.object.util.ChatUtil;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.sql.ChatroomSQL.ChatroomDBCP;
 import com.jackleeentertainment.oq.sql.ChatroomSQL.ChatroomDB_OpenHelper;
@@ -45,7 +51,6 @@ import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import hugo.weaving.DebugLog;
 
@@ -57,7 +62,6 @@ import static android.text.format.DateUtils.WEEK_IN_MILLIS;
  * Created by Jacklee on 2016. 9. 14..
  */
 public class MainFrag2_ChatroomList extends Fragment implements
-        View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "MainFrag2_ChatroomList";
@@ -66,25 +70,21 @@ public class MainFrag2_ChatroomList extends Fragment implements
 
     static Calendar calendarNow;
     static Date dateToday;
-    static String LASTMESSAGE_TIME_PROCESSED;
-    boolean IS_SEARCH_ACTIVATED = false;
-
     private static final int LOADER_CHATROOMLIST = 41;
     private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
-
 
     //UI
     ListView lvChatroomList;
     RelativeLayout ro_empty_list__frag_main_2_chat;
-
-
     ChatroomListCursorAdapter chatroomListCursorAdapter;
-
+    LinearLayout loEmpty;
+    ImageView ivEmpty;
+    TextView tvEmptyTitle, tvEmptyDetail, tvEmptyLearnMore;
 
     @Nullable
     SearchView.OnQueryTextListener onQueryTextListener_frag2;
     private View view;
-    public MainActivity mainActivity;
+    public static MainActivity mainActivity;
 
 
     @NonNull
@@ -193,11 +193,6 @@ public class MainFrag2_ChatroomList extends Fragment implements
     }
 
 
-    public void onClick(@NonNull View view) {
-        switch (view.getId()) {
-        }
-    }
-
     @Override
 
     public void onDestroy() {
@@ -206,9 +201,6 @@ public class MainFrag2_ChatroomList extends Fragment implements
         LocalBroadcastManager.getInstance(mainActivity).unregisterReceiver(mFragmentChangedReceiver);
     }
 
-    LinearLayout  loEmpty;
-    ImageView ivEmpty;
-    TextView tvEmptyTitle, tvEmptyDetail, tvEmptyLearnMore;
 
     private void initUI() {
         lvChatroomList = (ListView) view.findViewById(R.id.lvChatroomList);
@@ -216,9 +208,8 @@ public class MainFrag2_ChatroomList extends Fragment implements
         loEmpty = (LinearLayout) ro_empty_list__frag_main_2_chat.findViewById(R.id.loEmpty);
         ivEmpty = (ImageView) ro_empty_list__frag_main_2_chat.findViewById(R.id.ivEmpty);
         tvEmptyTitle = (TextView) ro_empty_list__frag_main_2_chat.findViewById(R.id.tvEmptyTitle);
-        tvEmptyDetail= (TextView) ro_empty_list__frag_main_2_chat.findViewById(R.id.tvEmptyDetail);
-        tvEmptyLearnMore= (TextView) ro_empty_list__frag_main_2_chat.findViewById(R.id.tvEmptyLearnMore);
-
+        tvEmptyDetail = (TextView) ro_empty_list__frag_main_2_chat.findViewById(R.id.tvEmptyDetail);
+        tvEmptyLearnMore = (TextView) ro_empty_list__frag_main_2_chat.findViewById(R.id.tvEmptyLearnMore);
         tvEmptyTitle.setText(JM.strById(R.string.begin_chat));
         tvEmptyDetail.setText(JM.strById(R.string.begin_chat_long));
         tvEmptyLearnMore.setText(JM.strById(R.string.learn_more));
@@ -233,15 +224,14 @@ public class MainFrag2_ChatroomList extends Fragment implements
         private Context mContext;
 
         class ViewHolder_Chatroom {
-            RelativeLayout ro_person_photo_48dip__lo_avatar_namedate_chatread;
-            ImageView ro_person_photo_iv;
-            TextView ro_person_photo_tv;
-
-            TextView tvTitle__lo_avatar_namedate_chatread;
-            TextView tvSubTitle__lo_avatar_namedate_chatread;
-            TextView tvDate__lo_avatar_namedate_chatread;
-            TextView tvUnread__lo_avatar_namedate_chatread;
-            ImageView ivRing__lo_avatar_namedate_chatread;
+            RelativeLayout roAva;
+            ImageView ivAva;
+            TextView tvAva;
+            TextView tvTitle;
+            TextView tvContent;
+            TextView tvDate;
+            TextView tvUnread;
+            ImageView ivRing;
         }
 
 
@@ -252,42 +242,40 @@ public class MainFrag2_ChatroomList extends Fragment implements
         }
 
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            View view = inflater.inflate(R.layout.lo_avatar_namedate_chatread, parent, false);
+            View view = inflater.inflate(R.layout.lo_ava_namedate_chatread, parent, false);
             ViewHolder_Chatroom viewHolder = new ViewHolder_Chatroom();
             viewHolder.
-                    ro_person_photo_48dip__lo_avatar_namedate_chatread =
+                    roAva =
                     (RelativeLayout) view
                             .findViewById(R.id.ro_person_photo_48dip__lo_avatar_namedate_chatread);
 
-            viewHolder.ro_person_photo_iv = (ImageView) viewHolder.
-                    ro_person_photo_48dip__lo_avatar_namedate_chatread.findViewById(R.id
+            viewHolder.ivAva = (ImageView) viewHolder.
+                    roAva.findViewById(R.id
                     .ivAva);
-            viewHolder.ro_person_photo_tv = (TextView) viewHolder.
-                    ro_person_photo_48dip__lo_avatar_namedate_chatread.findViewById(R.id
+            viewHolder.tvAva = (TextView) viewHolder.
+                    roAva.findViewById(R.id
                     .tvAva);
             viewHolder.
-                    tvTitle__lo_avatar_namedate_chatread =
+                    tvTitle =
                     (TextView) view
                             .findViewById(R.id.tvTitle__lo_avatar_namedate_chatread);
             viewHolder.
-                    tvSubTitle__lo_avatar_namedate_chatread =
+                    tvContent =
                     (TextView) view
                             .findViewById(R.id.tvSubTitle__lo_avatar_namedate_chatread);
             viewHolder.
-                    tvDate__lo_avatar_namedate_chatread =
+                    tvDate =
                     (TextView) view
                             .findViewById(R.id.tvDate__lo_avatar_namedate_chatread);
             viewHolder.
-                    tvUnread__lo_avatar_namedate_chatread =
+                    tvUnread =
                     (TextView) view
                             .findViewById(R.id.tvUnread__lo_avatar_namedate_chatread);
 
             viewHolder.
-                    ivRing__lo_avatar_namedate_chatread =
+                    ivRing =
                     (ImageView) view
                             .findViewById(R.id.ivRing__lo_avatar_namedate_chatread);
-
-
             view.setTag(viewHolder);
             return view;
         }
@@ -302,10 +290,9 @@ public class MainFrag2_ChatroomList extends Fragment implements
 
                 final int _ID = cursor.getInt(cursor.getColumnIndex(ChatroomDB_OpenHelper._ID));
                 final String RoomId = cursor.getString(cursor.getColumnIndex(ChatroomDB_OpenHelper.RoomId));
+                final String IsGroup = cursor.getString(cursor.getColumnIndex(ChatroomDB_OpenHelper.IsGroup));
                 final String GroupTitle = cursor.getString(cursor.getColumnIndex
                         (ChatroomDB_OpenHelper.GroupTitle));
-                final String ChatMemberProfilesJson = cursor.getString(cursor.getColumnIndex(ChatroomDB_OpenHelper
-                        .ChatMemberProfilesJson));
                 final String LASTMESSAGE = cursor.getString(cursor.getColumnIndex(ChatroomDB_OpenHelper.LASTMESSAGE));
                 final String strLastMsgReceiveTs = cursor.getString(cursor.getColumnIndex(ChatroomDB_OpenHelper.LASTMESSAGE_TIME));
                 final int intNotReadMessageNum = cursor.getInt(cursor.getColumnIndex(ChatroomDB_OpenHelper.intNotReadMessageNum));
@@ -315,95 +302,117 @@ public class MainFrag2_ChatroomList extends Fragment implements
                 /**
                  * Data
                  */
-                Log.d(TAG, "ChatMemberProfilesJson : " + ChatMemberProfilesJson);
 
-                ArrayList<Profile> arlChatMemberProfiles = new Gson().fromJson
-                        (ChatMemberProfilesJson, new TypeToken<ArrayList<Profile>>() {
-                        }.getType());
-                ArrayList<String> arlChatMemberUids = ProfileUtil.getArlUid
-                        (arlChatMemberProfiles);
-                ArrayList<String> arlChatMemberNames = ProfileUtil.getArlUid
-                        (arlChatMemberProfiles);
-                long lastMsgReceiveTs = Long.parseLong(strLastMsgReceiveTs);
+                if (IsGroup == null || IsGroup.equals("x")) {
 
-                /**
-                 * Room Title
-                 */
+                    String oppoUId = ChatUtil.getOppoUidFromRidWith2Ids(RoomId, mainActivity);
 
-                String roomTitleAsNamesOfMembersOrGroupTitle = "";
-                if (GroupTitle != null) {
-                    roomTitleAsNamesOfMembersOrGroupTitle = GroupTitle;
-                } else {
-                    roomTitleAsNamesOfMembersOrGroupTitle = J.stFromArlWithComma(
-                            arlChatMemberNames
-                    );
+                    App.fbaseDbRef
+                            .child(FBaseNode0.ProfileToPublic)
+                            .child(oppoUId)
+                            .addListenerForSingleValueEvent(
+                                    new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Profile hisProfile = dataSnapshot.getValue(Profile
+                                                    .class);
+                                            JM.glideProfileThumb(
+                                                    hisProfile.getUid(),
+                                                    hisProfile.getFull_name(),
+                                                    viewHolder.ivAva,
+                                                    viewHolder.tvAva,
+                                                    (Activity) context
+                                            );
+                                            viewHolder.tvTitle.setText(hisProfile.full_name);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    }
+                            );
+
+                } else if (IsGroup.equals("o")) {
+
+                    App.fbaseDbRef
+                            .child(FBaseNode0.Chatroom)
+                            .child(RoomId)
+                            .addListenerForSingleValueEvent(
+                                    new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            ArrayList<Profile> arl = new ArrayList<Profile>();
+
+                                            for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                                Profile p = d.getValue(Profile.class);
+                                                arl.add(p);
+                                            }
+
+                                            /**
+                                             * Room Photo
+                                             */
+
+                                            arl.remove(ProfileUtil.getMyProfileWithUidNameEmail
+                                                    (mainActivity));
+
+                                            JM.glideProfileThumb(
+                                                    arl.get(0).getUid(),
+                                                    arl.get(0).getFull_name(),
+                                                    viewHolder.ivAva,
+                                                    viewHolder.tvAva,
+                                                    (Activity) context
+                                            );
+
+                                            /**
+                                             * roomTitle
+                                             */
+
+                                            String roomTitleAsNamesOfMembersOrGroupTitle = "";
+                                            if (GroupTitle != null) {
+                                                roomTitleAsNamesOfMembersOrGroupTitle = GroupTitle;
+                                            } else {
+                                                roomTitleAsNamesOfMembersOrGroupTitle = J.stFromArlWithComma(
+                                                        ProfileUtil.getArlName(arl)
+                                                );
+                                            }
+                                            viewHolder.tvTitle.setText(roomTitleAsNamesOfMembersOrGroupTitle);
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    }
+                            );
+
                 }
-                viewHolder.tvTitle__lo_avatar_namedate_chatread.setText(roomTitleAsNamesOfMembersOrGroupTitle);
 
-                /**
-                 * Room Photo
-                 */
-                JM.glideProfileThumb(
-                        arlChatMemberProfiles.get(0).getUid(),
-                        arlChatMemberProfiles.get(0).getFull_name(),
-                        viewHolder.ro_person_photo_iv,
-                        viewHolder.ro_person_photo_tv,
-                        (Activity)context
-                );
 
+
+
+
+                long lastMsgReceiveTs = Long.parseLong(strLastMsgReceiveTs);
 
                 /**
                  * Last Chat Message
                  */
 
                 if (LASTMESSAGE != null && LASTMESSAGE.length() > 0) {
-                    viewHolder.tvTitle__lo_avatar_namedate_chatread.setSingleLine(true);
-                    viewHolder.tvSubTitle__lo_avatar_namedate_chatread.setText(LASTMESSAGE);
-                    viewHolder.tvSubTitle__lo_avatar_namedate_chatread.setVisibility(View.VISIBLE);
-                    viewHolder.tvDate__lo_avatar_namedate_chatread.setVisibility(View.VISIBLE);
+                    viewHolder.tvTitle.setSingleLine(true);
+                    viewHolder.tvContent.setText(LASTMESSAGE);
+                    viewHolder.tvContent.setVisibility(View.VISIBLE);
+                    viewHolder.tvDate.setVisibility(View.VISIBLE);
                 } else {
-                    viewHolder.tvTitle__lo_avatar_namedate_chatread.setSingleLine(false);
-                    viewHolder.tvSubTitle__lo_avatar_namedate_chatread.setVisibility(View.GONE);
-                    viewHolder.tvDate__lo_avatar_namedate_chatread.setVisibility(View.GONE);
+                    viewHolder.tvTitle.setSingleLine(false);
+                    viewHolder.tvContent.setVisibility(View.GONE);
+                    viewHolder.tvDate.setVisibility(View.GONE);
                 }
 
-                /**
-                 * Last Chat Time
-                 */
-                /**
-                 * Return string describing the elapsed time since startTime formatted like
-                 * "[relative time/date], [time]".
-                 *
-                 * (Context c, long time, long minResolution,
-                 * long transitionResolution, int flags)
-                 * <p>
-                 * Example output strings for the US date format.
-                 * <ul>
-                 * <li>3 min. ago, 10:15 AM</li>
-                 * <li>Yesterday, 12:20 PM</li>
-                 * <li>Dec 12, 4:12 AM</li>
-                 * <li>11/14/2007, 8:20 AM</li>
-                 * </ul>
-                 *
-                 * @param time some time in the past.
-                 * @param minResolution the minimum elapsed time (in milliseconds) to report
-                 *            when showing relative times. For example, a time 3 seconds in
-                 *            the past will be reported as "0 minutes ago" if this is set to
-                 *            {@link #MINUTE_IN_MILLIS}.
-                 * @param transitionResolution the elapsed time (in milliseconds) at which
-                 *            to stop reporting relative measurements. Elapsed times greater
-                 *            than this resolution will default to normal date formatting.
-                 *            For example, will transition from "7 days ago" to "Dec 12"
-                 *            when using {@link #WEEK_IN_MILLIS}.
-                 */
-                viewHolder.tvDate__lo_avatar_namedate_chatread.setText(
-                        DateUtils.getRelativeDateTimeString(
-                                context,
-                                lastMsgReceiveTs,
-                                MINUTE_IN_MILLIS,
-                                WEEK_IN_MILLIS,
-                                FORMAT_NUMERIC_DATE
-                        )
+                viewHolder.tvDate.setText(
+                        JT.str(lastMsgReceiveTs)
                 );
 
 
@@ -411,10 +420,10 @@ public class MainFrag2_ChatroomList extends Fragment implements
                  * UnRead Chat Message
                  */
                 if (intNotReadMessageNum > 0) {
-                    viewHolder.tvUnread__lo_avatar_namedate_chatread.setText(
+                    viewHolder.tvUnread.setText(
                             J.st(intNotReadMessageNum));
                 } else {
-                    viewHolder.tvUnread__lo_avatar_namedate_chatread.setText(
+                    viewHolder.tvUnread.setText(
                             J.st(intNotReadMessageNum));
                 }
 
@@ -422,9 +431,9 @@ public class MainFrag2_ChatroomList extends Fragment implements
                  * Ring On/Off
                  */
                 if (RING_ONOFF != null && RING_ONOFF.equals(ChatroomRingT.ON)) {
-                    viewHolder.ivRing__lo_avatar_namedate_chatread.setVisibility(View.GONE);
+                    viewHolder.ivRing.setVisibility(View.GONE);
                 } else if (RING_ONOFF != null && RING_ONOFF.equals(ChatroomRingT.OFF)) {
-                    viewHolder.ivRing__lo_avatar_namedate_chatread.setVisibility(View.VISIBLE);
+                    viewHolder.ivRing.setVisibility(View.VISIBLE);
                 }
 
 
@@ -435,20 +444,25 @@ public class MainFrag2_ChatroomList extends Fragment implements
                 View.OnClickListener oclGoChatActivity = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startChatActivity(RoomId);
+                        startChatActivity(RoomId, IsGroup);
                     }
                 };
+
+                view.setOnClickListener(oclGoChatActivity);
+
 
                 View.OnLongClickListener olclShowDialogChatroomAttr = new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         Bundle bundle = new Bundle();
                         bundle.putString("diaFragT", DiaFragT.ChatroomAttr_atChatRoomList);
+
                         ((MainActivity) mContext).showDialogFragment(bundle);
                         return false;
                     }
 
                 };
+                view.setOnLongClickListener(olclShowDialogChatroomAttr);
 
 
             }
@@ -496,7 +510,7 @@ public class MainFrag2_ChatroomList extends Fragment implements
 //                    break;
 //                }
 
-                if (cursor!=null&&
+                if (cursor != null &&
                         !cursor.isClosed()) {
 
                     if (cursor.getCount() == 0) {
@@ -530,17 +544,60 @@ public class MainFrag2_ChatroomList extends Fragment implements
 
 
     public static void startChatActivity(
-            String rid
+            final String rid,
+            final String isGroup
+
     ) {
-        Intent i = new Intent(App.getContext(), ChatActivity.class);
-        i.putExtra("rid", rid);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        App.getContext().startActivity(i);
+
+        if (isGroup == null || isGroup.equals("x")) {
+            ArrayList<Profile> arl = new ArrayList<Profile>();
+            Intent i = new Intent(App.getContext(), ChatActivity.class);
+            i.putExtra("rid", rid);
+            arl.add(ProfileUtil.getMyProfileWithUidNameEmail(mainActivity));
+            i.putExtra("arlProfilesButMe", arl);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            App.getContext().startActivity(i);
+
+        } else if (isGroup.equals("o")) {
+
+            App.fbaseDbRef
+                    .child(FBaseNode0.Chatroom)
+                    .child(rid)
+                    .addListenerForSingleValueEvent(
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        ArrayList<Profile> arl = new ArrayList<Profile>();
+                                        for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                            Profile p = (Profile) d.getValue();
+                                            arl.add(p);
+                                        }
+                                        if (arl.size() > 1) {
+                                            Intent i = new Intent(App.getContext(), ChatActivity.class);
+                                            i.putExtra("rid", rid);
+                                            arl.remove(ProfileUtil.getMyProfileWithUidNameEmail
+                                                    (mainActivity));
+                                            i.putExtra("arlProfilesButMe", arl);
+                                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                            App.getContext().startActivity(i);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            }
+                    );
+
+        }
+
+
     }
-
-
-
 
 
 }

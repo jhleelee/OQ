@@ -253,23 +253,23 @@
 //                final long date = cursor.getLong(cursor.getColumnIndex("date"));
 //                vh.tvSender.setText(person);
 //                final String strDate = String.valueOf(date);
-//                vh.tvResultAmmount.setText(strDate);
+//                vh.tvTs.setText(strDate);
 //
 //                // if size is larger than 1, it is a problem.
 //                ArrayList<SMSHighlight> arlSMSHighlight = JSMS.getArlSMSHighlight(body,
 //                        SMSHighlightT.SUM);
-//                JSMS.highlight(vh.tvContent, arlSMSHighlight);
+//                JSMS.highlight(vh.tvAfterallContent, arlSMSHighlight);
 //
 //                if (arlSelectedSmsId.contains(new Long(_id))) {
 //                    vh.checkBoxJack.setChecked(true);
-//                    vh.tvContent.setText(body);
-//                    vh.tvContent
+//                    vh.tvAfterallContent.setText(body);
+//                    vh.tvAfterallContent
 //                            .setLayoutParams(new ViewGroup.LayoutParams(
 //                                    ViewGroup.LayoutParams.MATCH_PARENT,
 //                                    ViewGroup.LayoutParams.WRAP_CONTENT));
 //                } else {
-//                    vh.tvContent.setText(JSMS.replaceLinesToSpaces(body));
-//                    vh.tvContent
+//                    vh.tvAfterallContent.setText(JSMS.replaceLinesToSpaces(body));
+//                    vh.tvAfterallContent
 //                            .setLines(2);
 //                    vh.checkBoxJack.setChecked(false);
 //                }

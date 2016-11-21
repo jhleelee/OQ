@@ -38,10 +38,13 @@ import com.jackleeentertainment.oq.object.OQPostPhoto;
 import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQPostT;
+import com.jackleeentertainment.oq.object.types.OqDoListT;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
+import com.jackleeentertainment.oq.ui.layout.activity.MainActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.PostCommentActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.ProfileActivity;
+import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
 import com.jackleeentertainment.oq.ui.layout.viewholder.PostViewHolder;
 import com.jackleeentertainment.oq.ui.widget.EndlessRecyclerViewScrollListener;
 import com.jackleeentertainment.oq.ui.widget.Lo2AvaSmall;
@@ -159,12 +162,14 @@ public class MainFrag1_Feeds extends ListFrag {
             public void populateViewHolder(
                     final PostViewHolder postViewHolder,
                     final MyOqPost myOqPost,
-                    int position) {
+                    final int position) {
 
 
                 /*
                 MyOqPost - Avatar, Name, Ts / by pid - OqDo, Comment
                  */
+
+
 
                 if (myOqPost.getProfile().getUid() != null) {
                     JM.glideProfileThumb(
@@ -209,7 +214,7 @@ public class MainFrag1_Feeds extends ListFrag {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.exists()) {
 
-                                            List<OqDo> list = new ArrayList<OqDo>();
+                                           final  ArrayList<OqDo> list = new ArrayList<OqDo>();
                                             long childrenCount = dataSnapshot.getChildrenCount();
 
                                             Iterable<DataSnapshot> i = dataSnapshot.getChildren();
@@ -234,47 +239,89 @@ public class MainFrag1_Feeds extends ListFrag {
                                             );
 
 
-                                            for (ArrayList<OqDo> arlOqDoPerPeople :
-                                                    arlArlOqDoPerPeople) { //For
-                                                // each Person
+                                            int numppl = list.size();
 
-                                                OqDoUtil.sortList(arlOqDoPerPeople);
+                                            if (numppl==1){
+                                                postViewHolder.ivMore.setVisibility(View.GONE);
+                                            } else {
+                                                postViewHolder.ivMore.setVisibility(View.VISIBLE);
+                                                postViewHolder.ivMore.setOnClickListener(
+                                                        new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
 
-                                                OqDo mainOqDo =OqDoUtil.getOqDoOidTheSameReferOid
-                                                        (arlOqDoPerPeople);
+                                                                Bundle bundle = new Bundle();
+                                                                bundle.putString("diaFragT",
+                                                                        DiaFragT
+                                                                                .PostOqDoListDiaFrag);
+                                                                bundle.putSerializable("oqDos", list);
+                                                                bundle.putSerializable("hProfile",
+                                                                        myOqPost.profile);
+                                                                bundle.putString("hDeed",
+                                                                        postViewHolder.tvDeed
+                                                                                .getText().toString()
+                                                                                );
+                                                                bundle.putString("hTs",JT.str
+                                                                        (myOqPost.getTs()) );
+                                                                ((MainActivity)getActivity())
+                                                                        .showDialogFragment( bundle);
 
 
-
-                                                Lo2AvaSmall lo2AvaSmall = new Lo2AvaSmall(getActivity());
-                                                JM.glideProfileThumb(
-                                                        mainOqDo.profilea,
-                                                        lo2AvaSmall.ivAvaLeft,
-                                                        lo2AvaSmall.tvAvaLeft,
-                                                        mFragment
+                                                            }
+                                                        }
                                                 );
-
-                                                JM.glideProfileThumb(
-                                                        mainOqDo.profileb,
-                                                        lo2AvaSmall.ivAvaRight,
-                                                        lo2AvaSmall.tvAvaRight,
-                                                        mFragment
-                                                );
-
-                                                lo2AvaSmall.tvName.setText( mainOqDo.profilea.full_name);
-
-
-                                                {
-                                                    lo2AvaSmall.tvAmmount.setText(
-                                                            J.st(OqDoUtil.getSumOqDoAmmounts
-                                                                    (arlOqDoPerPeople))
-                                                    );
-                                                    lo2AvaSmall.tvDeed.setText(OqDoUtil
-                                                            .getOqDoListStr(arlOqDoPerPeople));
-                                                }
-
-
-                                                postViewHolder.loOqOppo.addView(lo2AvaSmall);
                                             }
+
+
+//
+//
+//                                            for (ArrayList<OqDo> arlOqDoPerPeople :
+//                                                    arlArlOqDoPerPeople) { //For
+//                                                // each Person
+//
+//                                                OqDoUtil.sortList(arlOqDoPerPeople);
+//
+//                                                OqDo mainOqDo = OqDoUtil.getOqDoOidTheSameReferOid
+//                                                        (arlOqDoPerPeople);
+//
+//
+//
+//
+//
+//
+//                                                Lo2AvaSmall lo2AvaSmall = new Lo2AvaSmall(getActivity());
+//                                                JM.glideProfileThumb(
+//                                                        mainOqDo.profilea,
+//                                                        lo2AvaSmall.ivAvaLeft,
+//                                                        lo2AvaSmall.tvAvaLeft,
+//                                                        mFragment
+//                                                );
+//
+//                                                JM.glideProfileThumb(
+//                                                        mainOqDo.profileb,
+//                                                        lo2AvaSmall.ivAvaRight,
+//                                                        lo2AvaSmall.tvAvaRight,
+//                                                        mFragment
+//                                                );
+//
+//                                                lo2AvaSmall.tvName.setText(
+//                                                        mainOqDo.profilea.full_name
+//                                                                + "•" +
+//                                                                mainOqDo.profileb.full_name
+//
+//                                                );
+//
+//
+//                                                lo2AvaSmall.tvAmmount.setText(
+//                                                        J.st1000won(OqDoUtil.getSumOqDoAmmounts
+//                                                                (arlOqDoPerPeople))
+//                                                );
+//                                                lo2AvaSmall.tvDeed.setText(OqDoUtil
+//                                                        .getOqDoListStr(arlOqDoPerPeople));
+//
+//
+//                                                postViewHolder.loOqOppo.addView(lo2AvaSmall);
+//                                            }
 
 
                                         }
@@ -286,6 +333,12 @@ public class MainFrag1_Feeds extends ListFrag {
                                     }
                                 }
                         );
+
+
+
+
+
+
 
                 //Comment
 
@@ -356,6 +409,11 @@ public class MainFrag1_Feeds extends ListFrag {
 
                                             }
 
+
+                                        } else {
+                                            postViewHolder.tvNumComment.setText(
+                                                    JM.strById(R.string.no_comment)
+                                            );
 
                                         }
 

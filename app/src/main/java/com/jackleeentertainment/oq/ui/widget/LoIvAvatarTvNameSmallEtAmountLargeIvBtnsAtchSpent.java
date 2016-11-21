@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.jackleeentertainment.oq.R;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempSpent;
 
 /**
  * Created by Jacklee on 2016. 10. 30..
@@ -22,7 +23,7 @@ public class LoIvAvatarTvNameSmallEtAmountLargeIvBtnsAtchSpent extends LinearLay
      public TextView tvSms;
     public ImageView ivReceipt;
     public LoEtMoney loetmomey ;
-    public NewOQActivity.TempSpent tempProAmt;
+    public TempSpent tempProAmt;
 
     public LoIvAvatarTvNameSmallEtAmountLargeIvBtnsAtchSpent(Context context) {
         this(context, null);

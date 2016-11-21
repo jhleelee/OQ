@@ -17,9 +17,9 @@
 //public class TwoAvatarsWithRelationHolder extends RecyclerView.ViewHolder {
 //    public View mView;
 //     public RelativeLayout roRelationTwoAva;
-//    public TextView tvOppoName;
+//    public TextView tvMainContent;
 //    public  TextView tvDate;
-//    public  TextView tvContent;
+//    public  TextView tvAfterallContent;
 //    public ImageView ivMore, ivRelation;
 //    public  RelativeLayout roAvaLeft, roAvaRight;
 //    public  ImageView ivAvaLeft, ivAvaRight;
@@ -60,7 +60,7 @@
 //                        .findViewById(R.id.ivRelation);
 //
 //
-//        tvOppoName =
+//        tvMainContent =
 //                (TextView) mView
 //                        .findViewById(R.id.tvNameTwoAva);
 //
@@ -68,7 +68,7 @@
 //                (TextView) mView
 //                        .findViewById(R.id.tvDateTwoAva);
 //
-//        tvContent =
+//        tvAfterallContent =
 //                (TextView) mView
 //                        .findViewById(R.id.tvContentTwoAva);
 //

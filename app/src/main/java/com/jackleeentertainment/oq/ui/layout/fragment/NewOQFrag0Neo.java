@@ -27,6 +27,8 @@ import com.jackleeentertainment.oq.generalutil.LBR;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempProAmt;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempSpent;
 import com.jackleeentertainment.oq.ui.layout.diafrag.DiaFragT;
 import com.jackleeentertainment.oq.ui.widget.LoIvAvatarTvNameSmallEtAmountLargeIvBtns;
 import com.jackleeentertainment.oq.ui.widget.LoIvAvatarTvNameSmallEtAmountLargeIvBtnsAtchSpent;
@@ -173,7 +175,7 @@ public class NewOQFrag0Neo extends Fragment {
                 //sumAmmountMySpent / (n+1)
 
                 long sumSpent = 0;
-                for (NewOQActivity.TempSpent tSpent :
+                for (TempSpent tSpent :
                         ((NewOQActivity)getActivity()).tempArlSpent){
                     sumSpent +=tSpent.ammount;
                 }
@@ -183,7 +185,7 @@ public class NewOQFrag0Neo extends Fragment {
                         othersNum);
 
                 long divSum = 0;
-                for (NewOQActivity.TempProAmt t :
+                for (TempProAmt t :
                         ((NewOQActivity)getActivity()).tempArl){
                     t.ammount = div;
                     divSum += div;
@@ -226,7 +228,7 @@ public class NewOQFrag0Neo extends Fragment {
         } else {
             JM.btEnable(btEasyInput, true);
 
-            for (final NewOQActivity.TempProAmt t : ((NewOQActivity) getActivity())
+            for (final TempProAmt t : ((NewOQActivity) getActivity())
                     .tempArl) {
 
                 final LoIvAvatarTvNameSmallEtAmountLargeIvBtns lo = new
@@ -320,7 +322,7 @@ public class NewOQFrag0Neo extends Fragment {
 
 
 
-            for (final NewOQActivity.TempSpent t : ((NewOQActivity) getActivity())
+            for (final TempSpent t : ((NewOQActivity) getActivity())
                     .tempArlSpent) {
 
                 final LoIvAvatarTvNameSmallEtAmountLargeIvBtnsAtchSpent lo = new

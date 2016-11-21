@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.jackleeentertainment.oq.object.Profile;
@@ -236,7 +237,16 @@ public class App extends Application {
 
 
 
+    public static String getToken(){
+       if ( App.token !=null){
+           return  App.token;
 
+       } else {
+           App.token = FirebaseInstanceId.getInstance().getToken();
+           return App.token;
+       }
+
+    }
 
 
     public static String getUid(Activity activity){

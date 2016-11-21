@@ -24,6 +24,8 @@ public class ChatDB_OpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN__ID = "_id";
     public static final String RoomId = "rid";
     public static final String SenderId = "sid";
+    public static final String SenderName = "sna";
+
     public static final String TIMESTAMP = "ts";
     public static final String TXT = "txt";
     public static final String ATTACH_SRC = "atch";
@@ -43,7 +45,8 @@ public class ChatDB_OpenHelper extends SQLiteOpenHelper {
                 + COLUMN__ID + " INTEGER primary key autoincrement, "
                 + RoomId + " TEXT, "
                 + SenderId + " TEXT, "
-                    + TIMESTAMP + " TEXT, "
+                + SenderName + " TEXT, "
+                + TIMESTAMP + " TEXT, "
                 + TXT + " TEXT, "
                 + SENTSTAT + " INTEGER, "
                 + ATTACH_TYPE + " TEXT, "

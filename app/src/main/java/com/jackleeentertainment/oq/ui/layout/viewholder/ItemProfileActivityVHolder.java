@@ -7,7 +7,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
+import com.jackleeentertainment.oq.generalutil.JM;
 
 /**
  * Created by jaehaklee on 2016. 10. 4..
@@ -18,11 +20,11 @@ public class ItemProfileActivityVHolder extends RecyclerView.ViewHolder {
  public   LinearLayout loTwoAvaWrap;
     public  LinearLayout lolvTwoAvaHistory;
      public  RelativeLayout roRelationTwoAva;
-    public  TextView tvOppoName;
-    public  TextView tvResultAmmount;
+    public  TextView tvMainContent;
+    public  TextView tvTs;
     public  TextView tvResultAmmount2;
 
-    public  TextView tvContent;
+    public  TextView tvAfterallContent;
     public ImageView ivMore, ivRelation;
     public  RelativeLayout roAvaLeft, roAvaRight;
     public  ImageView ivAvaLeft, ivAvaRight;
@@ -74,31 +76,55 @@ public class ItemProfileActivityVHolder extends RecyclerView.ViewHolder {
 
 
 
-        tvOppoName =
+        tvMainContent =
                 (TextView) mView
-                        .findViewById(R.id.tvNameTwoAva);
+                        .findViewById(R.id.tvMainContent);
 
-        tvResultAmmount =
+        tvAfterallContent =
                 (TextView) mView
-                        .findViewById(R.id.tvResultAmmount);
+                        .findViewById(R.id.tvAfterContent);
+
+
+
+        tvTs =
+                (TextView) mView
+                        .findViewById(R.id.tvProfileActivityTs);
 
 
         tvResultAmmount2=
                 (TextView) mView
                         .findViewById(R.id.tvResultAmmount2);
 
-        tvContent =
-                (TextView) mView
-                        .findViewById(R.id.tvContentTwoAva);
 
-        ivMore =
-                (ImageView) mView
-                        .findViewById(R.id.ivMoreTwoAvaHistory);
+
+
 
         lolvTwoAvaHistory =
                 (LinearLayout) mView
                         .findViewById(R.id.loBreakDown);
+        ivMore =
+                (ImageView) mView
+                        .findViewById(R.id.ivMoreTwoAvaHistory);
+        ivMore.setImageDrawable(
+                JM.tintedDrawable(
+                        R.drawable.ic_more_vert_white_48dp,
+                        R.color.colorPrimary,
+                        App.getContext()
+                )
+        );
 
+        ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int visi = lolvTwoAvaHistory.getVisibility();
+                if (visi==View.GONE){
+                    lolvTwoAvaHistory.setVisibility(View.VISIBLE);
+                } else if (visi==View.VISIBLE){
+                    lolvTwoAvaHistory.setVisibility(View.GONE);
+                }
+
+            }
+        });
     }
 
          /*

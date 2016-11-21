@@ -11,6 +11,7 @@ import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.types.OQPostT;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempProAmt;
 
 import java.util.ArrayList;
 
@@ -112,7 +113,9 @@ public class StringGenerator {
 
 
 
-    public static String xAndXPeopleOqItemClaimee(ArrayList<NewOQActivity.TempProAmt> arl) {
+    public static String xAndXPeopleOqItemClaimee(ArrayList<
+
+            TempProAmt> arl) {
 
         if (arl != null && arl.size() > 0) {
 

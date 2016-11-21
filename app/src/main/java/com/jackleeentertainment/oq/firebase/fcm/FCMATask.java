@@ -78,7 +78,7 @@ public class FCMATask extends AsyncTask<Void, Void, Void> {
 
 
 
-        if (App.token != null) {
+        if (App.getToken() != null) {
 
             if (rid != null &&
                     (arlReceiverUid == null || arlReceiverUid.size() == 0)) {
@@ -93,7 +93,7 @@ public class FCMATask extends AsyncTask<Void, Void, Void> {
                      **/
 
                     messagingEndpoint.messagingEndpoint().checkTokenSendMessageToSingleReceiver(
-                            App.token,
+                            App.getToken(),
                             rid,
                             getJsonMeta(fcmMetaData),
                             txt
@@ -115,7 +115,7 @@ public class FCMATask extends AsyncTask<Void, Void, Void> {
                      **/
 
                     messagingEndpoint.messagingEndpoint().checkTokenSendMessageToMultipleReceiver(
-                            App.token,
+                            App.getToken(),
                             getArlReceiverUid(arlReceiverUid),
                             getJsonMeta(fcmMetaData),
                             txt

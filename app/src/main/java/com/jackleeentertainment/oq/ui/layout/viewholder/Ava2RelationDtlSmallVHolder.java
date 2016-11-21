@@ -63,11 +63,11 @@ public class Ava2RelationDtlSmallVHolder extends RecyclerView.ViewHolder {
 
         tvDate =
                 (TextView) loTwoAvaWrap
-                        .findViewById(R.id.tvResultAmmount);
+                        .findViewById(R.id.tvProfileActivityTs);
 
         tvContent =
                 (TextView) loTwoAvaWrap
-                        .findViewById(R.id.tvContentTwoAva);
+                        .findViewById(R.id.tvAfterContent);
 
 
     }

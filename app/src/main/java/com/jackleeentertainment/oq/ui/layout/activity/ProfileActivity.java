@@ -41,11 +41,13 @@ import com.jackleeentertainment.oq.firebase.database.FBaseNode0;
 import com.jackleeentertainment.oq.firebase.storage.FStorageNode;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
+import com.jackleeentertainment.oq.generalutil.JT;
 import com.jackleeentertainment.oq.object.OqDo;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.ChatUtil;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
+import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.viewholder.ItemProfileActivityVHolder;
 import com.jackleeentertainment.oq.ui.widget.LoOppoFeed;
 import com.konifar.fab_transformation.FabTransformation;
@@ -92,7 +94,7 @@ public class ProfileActivity extends BaseActivity {
     TextView tvFootTitle;
     ImageView ivFootTab0, ivFootTab1, ivFootTab2;
     View vScrim;
-
+    TextView tvAmmountAgreed, tvAmmountDisAgreed;
 
     boolean isMe;
 
@@ -228,6 +230,10 @@ public class ProfileActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        tvAmmountAgreed = (TextView) findViewById(R.id.tvAmmountAgreed);
+        tvAmmountDisAgreed = (TextView) findViewById(R.id.tvAmmountDisAgreed);
+
     }
 
     @Override
@@ -290,7 +296,6 @@ public class ProfileActivity extends BaseActivity {
                 ro_person_photo_tv,
                 this
         );
-
 
 
     }
@@ -360,8 +365,6 @@ public class ProfileActivity extends BaseActivity {
                 JM.strById(R.string.change_profile_photo)),
                 REQ_PICK_IMAGE_FOR_PROFILECHANGE);
     }
-
-
 
 
     public void uploadProfPhoto(
@@ -499,12 +502,20 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-
-
-
     void uiOqDos(ArrayList<OqDo> oqDoList) {
 
         OqDoUtil.sortList(oqDoList);
+
+        //sum
+        JM.uiTvResultAmmount(tvAmmountAgreed,
+                OqDoUtil.getSumOqDoAmmountsAgreedTwo(oqDoList, mActivity));
+
+
+        JM.uiTvResultAmmount2(tvAmmountDisAgreed,
+                OqDoUtil.getSumOqDoAmmountsDisAgreed(oqDoList, mActivity));
+
+
+        //list
         arlArlOqDoPerReferOid = OqDoUtil.getArlArlOqDoPerReferOid
                 (oqDoList,
                         this);
@@ -526,7 +537,7 @@ public class ProfileActivity extends BaseActivity {
         @Override
         public ItemProfileActivityVHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(App.getContext())
-                    .inflate(R.layout.item_profileactivity , parent, false);
+                    .inflate(R.layout.item_profileactivity, parent, false);
             return new ItemProfileActivityVHolder(view);
         }
 
@@ -540,16 +551,18 @@ public class ProfileActivity extends BaseActivity {
             final ArrayList<OqDo> listOqDo = mArlArlOqDoPerReferOid.get(position);
             OqDoUtil.sortList(listOqDo);
 
+            OqDo mainOqDo = OqDoUtil.getOqDoOidTheSameReferOid
+                    (listOqDo);
 
             JM.glideProfileThumb(
-                    listOqDo.get(0).profilea,
+                    mainOqDo.profilea,
                     holder.ivAvaLeft,
                     holder.tvAvaLeft,
                     mActivity
             );
 
             JM.glideProfileThumb(
-                    listOqDo.get(0).profileb,
+                    mainOqDo.profileb,
                     holder.ivAvaRight,
                     holder.tvAvaRight,
                     mActivity
@@ -562,8 +575,8 @@ public class ProfileActivity extends BaseActivity {
 
 
             JM.uiTvResultAmmount(
-                    holder.tvResultAmmount,
-                    OqDoUtil.getSumOqDoAmmountsAgreed(listOqDo, mActivity)
+                    holder.tvTs,
+                    OqDoUtil.getSumOqDoAmmountsAgreedTwo(listOqDo, mActivity)
             );
 
 
@@ -572,12 +585,23 @@ public class ProfileActivity extends BaseActivity {
                     OqDoUtil.getSumOqDoAmmountsDisAgreed(listOqDo, mActivity)
             );
 
-            holder.tvContent.setText(OqDoUtil.getOqDoListMostRecentStr(listOqDo, mActivity));
+            holder.tvMainContent.setText(
+                    OqDoUtil.getOqDoDeedStr(mainOqDo)
+            );
+
+
+            holder.tvAfterallContent.setText(
+                    OqDoUtil.getOqDoListAfterallStr(listOqDo)
+            );
+
+
+            holder.tvTs.setText(JT.str(OqDoUtil.getLastTs(listOqDo)));
+
 
             holder.ivMore.setImageDrawable(
                     JM.tintedDrawable(
-                            R.drawable.ic_expand_more_white_48dp,
-                            R.color.text_black_54,
+                            R.drawable.ic_more_vert_white_48dp,
+                            R.color.colorPrimary,
                             mActivity
                     ));
 
@@ -669,7 +693,7 @@ public class ProfileActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            if (mArlArlOqDoPerReferOid !=null) {
+            if (mArlArlOqDoPerReferOid != null) {
                 return mArlArlOqDoPerReferOid.size();
             } else {
                 return 0;
@@ -678,7 +702,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    void twoQueriesAndMore(){
+    void twoQueriesAndMore() {
 
 
         final ArrayList<OqDo> oqDoList = new ArrayList<>();
@@ -728,7 +752,7 @@ public class ProfileActivity extends BaseActivity {
                         if (dataSnapshot.exists()) {
 
 
-                            for (DataSnapshot d :  dataSnapshot.getChildren()) {
+                            for (DataSnapshot d : dataSnapshot.getChildren()) {
 
                                 OqDo oqDo = d.getValue(OqDo.class);
 
@@ -749,11 +773,7 @@ public class ProfileActivity extends BaseActivity {
                 });
 
 
-
     }
-
-
-
 
 
     void initRVAdapter(ArrayList<ArrayList<OqDo>> arlArlOqDoPerReferOid) {
@@ -800,8 +820,7 @@ public class ProfileActivity extends BaseActivity {
                 }
             }
         }, 3000);
-     }
-
+    }
 
 
     public void startActivityForResultToLoadSMS() {
@@ -831,21 +850,17 @@ public class ProfileActivity extends BaseActivity {
         ivChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //rid
-                String rid = ChatUtil.createRidWith2Ids(App.getUid(mActivity), profile.getUid());
-
-                //arlJsonProfilesInChat
-                String strProfile = new Gson().toJson(profile);
-                ArrayList<String> arlJsonProfilesInChat = new ArrayList();
-                arlJsonProfilesInChat.add(strProfile);
-
-                Intent intent = new Intent(mActivity, ChatActivity.class);
-                intent.putExtra("rid", rid);
-                intent.putStringArrayListExtra
-                        ("arlJsonProfilesInChat", arlJsonProfilesInChat);
-                startActivity(intent);
-
+                final String rid = ChatUtil.createRidWith2Ids(App.getUid(mActivity),
+                        profile.getUid());
+                Intent i = new Intent(App.getContext(), ChatActivity.class);
+                i.putExtra("rid", rid);
+                ArrayList<Profile> arl = new ArrayList<Profile>();
+                arl.add(profile);
+                i.putExtra("arlProfilesButMe", arl);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                App.getContext().startActivity(i);
             }
         });
 

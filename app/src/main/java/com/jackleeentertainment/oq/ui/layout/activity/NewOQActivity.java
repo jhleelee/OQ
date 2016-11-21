@@ -45,6 +45,8 @@ import com.jackleeentertainment.oq.object.types.OQT;
 import com.jackleeentertainment.oq.object.util.OqDoUtil;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.progress.NewOQProgressActivity;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempProAmt;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempSpent;
 import com.jackleeentertainment.oq.ui.layout.fragment.NewOQFrag0Neo;
 
 import java.io.ByteArrayOutputStream;
@@ -60,15 +62,7 @@ import java.util.List;
 
 public class NewOQActivity extends BaseFragmentContainFullDialogActivity {
 
-    public class TempProAmt implements Serializable {
-        public Profile profile;
-        public long ammount;
-    }
 
-    public class TempSpent implements Serializable {
-        public Profile profile;
-        public long ammount;
-    }
 
 
     public ArrayList<TempProAmt> tempArl = new ArrayList<>();

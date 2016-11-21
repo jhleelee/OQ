@@ -18,6 +18,7 @@ public class FBaseNode0 {
 
     public final static String MyOppoList = "my_oppolist";
     public final static String MyOqPerson = "my_oqperson";
+    public final static String Chatroom = "chroom";
 
 
 

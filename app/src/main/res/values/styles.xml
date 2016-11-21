@@ -421,9 +421,7 @@
 
         <item name="android:inputType">textMultiLine</item>
         <item name="android:lines">1</item>
-        <item name="android:maxLines">3</item>
 
-        <item name="android:minLines">1</item>
         <item name="android:paddingBottom">3dip</item>
         <item name="android:paddingTop">3dip</item>
         <item name="android:scrollbars">vertical</item>

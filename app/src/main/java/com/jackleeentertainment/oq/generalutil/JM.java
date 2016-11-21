@@ -64,7 +64,7 @@ public class JM {
 
         if (str.contains(res.getString(R.string.deed_req))) {
             if (mainOqDo.profilea.uid.equals(App.getUid(activity))) {
-//                tvContent.setTextColor(JM.colorById(R.color.getPrimary));
+//                tvAfterallContent.setTextColor(JM.colorById(R.color.getPrimary));
             }
         }
 
@@ -116,7 +116,7 @@ public class JM {
                 str
         );
 
-        //more
+        //more cases
 
 
      }
@@ -828,7 +828,9 @@ public class JM {
                     public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
                         iv.setVisibility(View.GONE);
                         tv.setVisibility(View.VISIBLE);
-                        tv.setText(uname.substring(0, 1));
+                        if (uname!=null) {
+                            tv.setText(uname.substring(0, 1));
+                        }
                         return false;
                     }
 

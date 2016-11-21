@@ -33,11 +33,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.jackleeentertainment.oq.App;
 import com.jackleeentertainment.oq.R;
-import com.jackleeentertainment.oq.Ram;
 import com.jackleeentertainment.oq.firebase.fcm.FCMSend;
 import com.jackleeentertainment.oq.generalutil.J;
 import com.jackleeentertainment.oq.generalutil.JM;
 import com.jackleeentertainment.oq.object.Chat;
+import com.jackleeentertainment.oq.object.ChatM;
 import com.jackleeentertainment.oq.object.Profile;
 import com.jackleeentertainment.oq.object.types.ChatAtchT;
 import com.jackleeentertainment.oq.object.util.ProfileUtil;
@@ -63,8 +63,7 @@ public class ChatActivity
     final public static int LOADER_MESSAGESLIST = 99;
 
     String rid;
-    ArrayList<String> arlJsonProfilesInChat = new ArrayList<>();
-    ArrayList<Profile> arlProfilesInChat = new ArrayList<>();
+    ArrayList<Profile> arlProfilesButMe = new ArrayList<>();
 
     Gson gson = new Gson();
     LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
@@ -109,25 +108,18 @@ public class ChatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        rid = getIntent().getStringExtra("rid");
-        arlJsonProfilesInChat = getIntent().getStringArrayListExtra("arlJsonProfilesInChat");
-
-        Log.d(TAG, "arlJsonProfilesInChat.size() : " + J.st(arlJsonProfilesInChat.size()));
-        for (int i = 0; i < arlJsonProfilesInChat.size(); i++) {
-            Log.d(TAG, "gson.fromJson(arlJsonProfilesInChat.get(i), Profile.class) : " + gson
-                    .fromJson(arlJsonProfilesInChat.get(i), Profile.class));
-            arlProfilesInChat.add(gson.fromJson(arlJsonProfilesInChat.get(i), Profile.class));
-        }
-
+        rid = getIntent().getStringExtra("rid"); //roomId
+        arlProfilesButMe = (ArrayList<Profile>)
+                getIntent().getSerializableExtra("arlProfilesButMe");
         ivSend__lo_chat_writesend.setOnClickListener(this);
         ivAttach__lo_chat_writesend.setOnClickListener(this);
         ivEmoji__lo_chat_writesend.setOnClickListener(this);
         roClose.setOnClickListener(this);
 
         //setChatRoomTitleAtToolBar
-        ArrayList<String> arlNames = ProfileUtil.getArlName(arlProfilesInChat);
+        ArrayList<String> arlNames = ProfileUtil.getArlName(arlProfilesButMe);
         arlNames.remove(App.getUname(this));
-        if (arlNames!=null){
+        if (arlNames != null) {
 
             if (arlNames.size() == 1) {
                 tvToolbarTitle.setText(arlNames.get(0));
@@ -156,6 +148,7 @@ public class ChatActivity
 
             case R.id.ivSend__lo_chat_writesend:
                 //Create Obj
+
                 Chat chat = new Chat();
                 chat.setRid(rid);
                 chat.setSid(App.getUid(this));
@@ -178,31 +171,23 @@ public class ChatActivity
                 /*****************************/
 
                 tryUpdateOrInsertMessageIntoChatRoomDB(
-                        chat,
-                        new Gson().toJson(arlProfilesInChat)
+                        chat
                 );
 
-                /*****************************/
-                // FCMAsyncTask
-                /*****************************/
+                if (arlProfilesButMe.size() == 1) {
+                    FCMSend.send(chat);
+                } else {
+                    ChatM chatM = new ChatM();
+                    chatM.setArlrids(ProfileUtil.getArlUid(arlProfilesButMe));
+                    chatM.setTxt(chat.getTxt());
+                    chatM.setSid(chat.getSid());
+                    chatM.setTs(chat.getTs());
+                    chatM.setAtch(chat.getAtch());
+                    chatM.setAtcht(chat.getAtcht());
+                    FCMSend.send(chatM);
+                }
 
-
-                //FCM
-                FCMSend.send(chat);
                 etSend__lo_chat_writesend.setText("");
-
-
-
-//                setArlRgs(arlSelectedProfile);
-//
-//                new FCMATask(
-//                        chat,
-//                        arlFriendRgs.get(0)
-//                )
-//                        .execute();
-
-
-
 
                 break;
 
@@ -211,30 +196,24 @@ public class ChatActivity
     }
 
 
-    private void tryUpdateOrInsertMessageIntoChatRoomDB(Chat chat, String StringJSONArrayFriendsInfo) {
+    private void tryUpdateOrInsertMessageIntoChatRoomDB(Chat chat) {
 
         Log.d(TAG, "tryUpdateOrInsertMessageIntoChatRoomDB");
 
         ContentValues cvUpdate = new ContentValues();
 
-//        cvUpdate.put(ChatroomDB_OpenHelper.OppUidOrRoomId, OppUidOrRoomId);
-//        cvUpdate.put(ChatroomDB_OpenHelper.FRIEND_UIDS, J.stFromArlWithComma(arlFriendUids));
-//        cvUpdate.put(ChatroomDB_OpenHelper.JSONSTR_arlFriendshipSA, jsonArrayFriends.toString()); //{id, name}
-//        cvUpdate.put(ChatroomDB_OpenHelper.RING_ONOFF, RING_ONOFF);
-//        cvUpdate.put(ChatroomDB_OpenHelper.ROOMSTATUS, ROOMSTATUS);
-//        cvUpdate.put(ChatroomDB_OpenHelper.intMulti, J.in(intMulti));
-
         cvUpdate.put(ChatroomDB_OpenHelper.LASTMESSAGE, chat.getTxt());
         cvUpdate.put(ChatroomDB_OpenHelper.LASTMESSAGE_TIME, chat.getTs());
 
 
-//                        cv.put(ChatroomDB_OpenHelper.intNotReadMessageNum, chat.getAA());
         int updatedRows = 0;
-        updatedRows = App.getContext().getContentResolver().update(
-                ChatroomDBCP.CONTENT_URI,
-                cvUpdate,
-                ChatroomDB_OpenHelper.RoomId + "= ?",
-                new String[]{chat.getRid()});
+        updatedRows = App.getContext().getContentResolver()
+                .update(
+                        ChatroomDBCP.CONTENT_URI,
+                        cvUpdate,
+                        ChatroomDB_OpenHelper.RoomId + "= ?",
+                        new String[]{chat.getRid()}
+                );
 
         //(1-2-b) if fails then get room information and insert into cursor
         if (updatedRows == 0) {
@@ -243,22 +222,16 @@ public class ChatActivity
             ContentValues cvInsert = new ContentValues();
 
             //chat info
+            cvInsert.put(ChatroomDB_OpenHelper.RoomId, chat.getRid());
             cvInsert.put(ChatroomDB_OpenHelper.LASTMESSAGE, chat.getTxt());
             cvInsert.put(ChatroomDB_OpenHelper.LASTMESSAGE_TIME, chat.getTs());
 
-            //room info
-            cvInsert.put(ChatroomDB_OpenHelper.RoomId, chat.getRid());
-                        cvInsert.put(
-                    ChatroomDB_OpenHelper.ChatMemberProfilesJson,
-                    new Gson().toJson(arlJsonProfilesInChat)); //{id, name}
 
-//            cvInsert.put(ChatroomDB_OpenHelper.isMulti, intMulti);
-//            cvInsert.put(ChatroomDB_OpenHelper.RING_ONOFF, RING_ONOFF);
-//            cvInsert.put(ChatroomDB_OpenHelper.ROOMSTATUS, ROOMSTATUS);
-            Uri uriChatroom = App.getContext().getContentResolver().insert(
-                    ChatroomDBCP.CONTENT_URI,
-                    cvInsert
-            );
+            Uri uriChatroom = App.getContext().getContentResolver()
+                    .insert(
+                            ChatroomDBCP.CONTENT_URI,
+                            cvInsert
+                    );
 
             Log.d(TAG, "uriChatroom " + uriChatroom.toString());
 
@@ -273,14 +246,14 @@ public class ChatActivity
 
         private static class ViewHolder_Chat {
 
-            RelativeLayout ro_person_photo_48dip__lo_chat_message,
+            RelativeLayout roAva,
                     roAttach__lo_attachts__lo_chat_message, ro_media__lo_attachts__lo_chat_message;
             LinearLayout loBody__lo_chat_message, lo_textts__lo_chat_message,
                     lo_attachts__lo_chat_message;
-            TextView ro_person_photo_tv;
-            ImageView ro_person_photo_iv;
-            TextView tvSenderName__lo_chat_message, tvTs__lo_textts__lo_chat_message,
-                    _tvTs__lo_textts__lo_chat_message, tvText__lo_textts__lo_chat_message, _tvTs__lo_attachts__lo_chat_message, tvTextBelow__lo_attachts__lo_chat_message, tvTs__lo_attachts__lo_chat_message, tvTextCenter__lo_attachts__lo_chat_message;
+            TextView tvAva;
+            ImageView ivAva;
+            TextView tvSenderName, tvTs,
+                    _tvTs, tvText, _tvTsAtch, tvTextBelowAtct, tvTsAtch, tvTextCenterAtch;
 
         }
 
@@ -293,40 +266,40 @@ public class ChatActivity
             View view = inflater.inflate(R.layout.lo_chat_message, parent, false);
             ViewHolder_Chat viewHolder_chat = new ViewHolder_Chat();
 
-            viewHolder_chat.ro_person_photo_48dip__lo_chat_message = (RelativeLayout) view.findViewById(R.id
+            viewHolder_chat.roAva = (RelativeLayout) view.findViewById(R.id
                     .ro_person_photo_48dip__lo_chat_message);
-            viewHolder_chat.ro_person_photo_tv = (TextView) viewHolder_chat
-                    .ro_person_photo_48dip__lo_chat_message.findViewById(R.id
-                    .tvAva);
-            viewHolder_chat.ro_person_photo_iv = (ImageView) viewHolder_chat.ro_person_photo_48dip__lo_chat_message.findViewById(R.id
+            viewHolder_chat.tvAva = (TextView) viewHolder_chat
+                    .roAva.findViewById(R.id
+                            .tvAva);
+            viewHolder_chat.ivAva = (ImageView) viewHolder_chat.roAva.findViewById(R.id
                     .ivAva);
 
             viewHolder_chat.loBody__lo_chat_message = (LinearLayout) view.findViewById(R.id
                     .loBody__lo_chat_message);
-            viewHolder_chat.tvSenderName__lo_chat_message = (TextView) view.findViewById(R.id
+            viewHolder_chat.tvSenderName = (TextView) view.findViewById(R.id
                     .tvSenderName__lo_chat_message);
 
             viewHolder_chat.lo_textts__lo_chat_message = (LinearLayout) view.findViewById(R.id
                     .lo_textts__lo_chat_message);
-            viewHolder_chat.tvTs__lo_textts__lo_chat_message = (TextView) viewHolder_chat.lo_textts__lo_chat_message.findViewById(R.id
+            viewHolder_chat.tvTs = (TextView) viewHolder_chat.lo_textts__lo_chat_message.findViewById(R.id
                     .tvTs__lo_textts__lo_chat_message);
-            viewHolder_chat._tvTs__lo_textts__lo_chat_message = (TextView) viewHolder_chat.lo_textts__lo_chat_message.findViewById(R.id
+            viewHolder_chat._tvTs = (TextView) viewHolder_chat.lo_textts__lo_chat_message.findViewById(R.id
                     ._tvTs__lo_textts__lo_chat_message);
-            viewHolder_chat.tvText__lo_textts__lo_chat_message = (TextView) viewHolder_chat.lo_textts__lo_chat_message.findViewById(R.id
+            viewHolder_chat.tvText = (TextView) viewHolder_chat.lo_textts__lo_chat_message.findViewById(R.id
                     .tvText__lo_textts__lo_chat_message);
 
             viewHolder_chat.lo_attachts__lo_chat_message = (LinearLayout) view.findViewById(R.id.lo_attachts__lo_chat_message);
-            viewHolder_chat._tvTs__lo_attachts__lo_chat_message = (TextView) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
+            viewHolder_chat._tvTsAtch = (TextView) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
                     ._tvTs__lo_attachts__lo_chat_message);
             viewHolder_chat.roAttach__lo_attachts__lo_chat_message = (RelativeLayout) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
                     .roAttach__lo_attachts__lo_chat_message);
             viewHolder_chat.ro_media__lo_attachts__lo_chat_message = (RelativeLayout) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
                     .ro_media__lo_attachts__lo_chat_message);
-            viewHolder_chat.tvTextCenter__lo_attachts__lo_chat_message = (TextView) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
+            viewHolder_chat.tvTextCenterAtch = (TextView) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
                     .tvTextCenter__lo_attachts__lo_chat_message);
-            viewHolder_chat.tvTs__lo_attachts__lo_chat_message = (TextView) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
+            viewHolder_chat.tvTsAtch = (TextView) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
                     .tvTs__lo_attachts__lo_chat_message);
-            viewHolder_chat.tvTextBelow__lo_attachts__lo_chat_message = (TextView) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
+            viewHolder_chat.tvTextBelowAtct = (TextView) viewHolder_chat.lo_attachts__lo_chat_message.findViewById(R.id
                     .tvTextBelow__lo_attachts__lo_chat_message);
 
             view.setTag(viewHolder_chat);
@@ -348,9 +321,14 @@ public class ChatActivity
 
 
                 // SENDER_NAME
-                final String senderName = Ram.hmapProfiles.get(senderId).getFull_name();
+                final String senderName = cursor.getString(
+                        cursor.getColumnIndex(ChatDB_OpenHelper.SenderName));
+
                 Log.d(TAG, "SenderName " + senderName);
-                vh.tvSenderName__lo_chat_message.setText(senderName);
+                vh.tvSenderName.setText(senderName);
+
+
+
 
 
                 // TIME
@@ -360,10 +338,10 @@ public class ChatActivity
                                         cursor.getColumnIndex(ChatDB_OpenHelper.TIMESTAMP))
                         )));
 
-                vh.tvTs__lo_attachts__lo_chat_message.setText(tsStr);
-                vh.tvTs__lo_textts__lo_chat_message.setText(tsStr);
-                vh._tvTs__lo_attachts__lo_chat_message.setText(tsStr);
-                vh._tvTs__lo_textts__lo_chat_message.setText(tsStr);
+                vh.tvTsAtch.setText(tsStr);
+                vh.tvTs.setText(tsStr);
+                vh._tvTsAtch.setText(tsStr);
+                vh._tvTs.setText(tsStr);
 
 
                 // ATTACH_SRC
@@ -378,6 +356,8 @@ public class ChatActivity
 
 
                 if (ATTACH_TYPE.equals(ChatAtchT.NONE)) {
+                    vh.tvText.setText(cursor.getString(
+                            cursor.getColumnIndex(ChatDB_OpenHelper.TXT)));
                     JM.V(vh.lo_textts__lo_chat_message);
                     JM.G(vh.lo_attachts__lo_chat_message);
                 } else if (ATTACH_TYPE.equals(ChatAtchT.PHOTO) || ATTACH_TYPE.equals(ChatAtchT.VIDEO)) {
@@ -394,39 +374,39 @@ public class ChatActivity
                     // it's me!
 
                     vh.loBody__lo_chat_message.setGravity(Gravity.RIGHT);
-                    JM.G(vh.ro_person_photo_48dip__lo_chat_message);
-                    JM.G(vh.tvSenderName__lo_chat_message);
+                    JM.G(vh.roAva);
+                    JM.G(vh.tvSenderName);
 
-                    JM.BGD(vh.tvText__lo_textts__lo_chat_message, R.drawable.rec_rad12_nostr_primary);
+                    JM.BGD(vh.tvText, R.drawable.rec_rad12_nostr_primary);
                     JM.BGD(vh.roAttach__lo_attachts__lo_chat_message, R.drawable.rec_rad12_nostr_primary);
 
-                    JM.G(vh.tvTs__lo_attachts__lo_chat_message);
-                    JM.G(vh.tvTs__lo_textts__lo_chat_message);
-                    JM.V(vh._tvTs__lo_attachts__lo_chat_message);
-                    JM.V(vh._tvTs__lo_textts__lo_chat_message);
+                    JM.G(vh.tvTsAtch);
+                    JM.G(vh.tvTs);
+                    JM.V(vh._tvTsAtch);
+                    JM.V(vh._tvTs);
 
                 } else {
 
                     // it's my friend!
 
                     vh.loBody__lo_chat_message.setGravity(Gravity.LEFT);
-                    JM.V(vh.ro_person_photo_48dip__lo_chat_message);
-                    JM.V(vh.tvSenderName__lo_chat_message);
+                    JM.V(vh.roAva);
+                    JM.V(vh.tvSenderName);
 
-                    JM.BGD(vh.tvText__lo_textts__lo_chat_message, R.drawable.rec_rad12_nostr_middlegrey);
+                    JM.BGD(vh.tvText, R.drawable.rec_rad12_nostr_middlegrey);
                     JM.BGD(vh.roAttach__lo_attachts__lo_chat_message, R.drawable.rec_rad12_nostr_middlegrey);
 
-                    JM.G(vh.tvTs__lo_attachts__lo_chat_message);
-                    JM.G(vh.tvTs__lo_textts__lo_chat_message);
-                    JM.V(vh._tvTs__lo_attachts__lo_chat_message);
-                    JM.V(vh._tvTs__lo_textts__lo_chat_message);
+                    JM.G(vh.tvTsAtch);
+                    JM.G(vh.tvTs);
+                    JM.V(vh._tvTsAtch);
+                    JM.V(vh._tvTs);
 
                     JM.glideProfileThumb(
                             senderId,
                             senderName,
-                            vh.ro_person_photo_iv,
-                            vh.ro_person_photo_tv,
-                            (Activity)context
+                            vh.ivAva,
+                            vh.tvAva,
+                            (Activity) context
                     );
 
                 }
@@ -452,7 +432,7 @@ public class ChatActivity
                         this,   // Parent activity context
                         ChatDBCP.CONTENT_URI,        // Table to query
                         null,     // Projection to return
-                        select_ROOM_OBJID,            // No selection clause
+                        null,            // No selection clause
                         null,            // No selection arguments
                         null             // Default sort order
                 );

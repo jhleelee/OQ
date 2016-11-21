@@ -46,6 +46,8 @@ import com.jackleeentertainment.oq.object.util.ProfileUtil;
 import com.jackleeentertainment.oq.ui.layout.activity.BaseActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.NewOQActivity;
 import com.jackleeentertainment.oq.ui.layout.activity.ProgressT;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempProAmt;
+import com.jackleeentertainment.oq.ui.layout.activity.uiobj.TempSpent;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -63,8 +65,8 @@ public class NewOQProgressActivity extends BaseActivity {
     Activity mActivity = this;
 
     //Variables
-    public ArrayList<NewOQActivity.TempProAmt> tempArl = new ArrayList<>();
-    public ArrayList<NewOQActivity.TempSpent> tempArlSpent = new ArrayList<>();
+    public ArrayList<TempProAmt> tempArl = new ArrayList<>();
+    public ArrayList<TempSpent> tempArlSpent = new ArrayList<>();
 
     public ArrayList<Uri> arlUriPhoto = new ArrayList<>();
     public String strPostText;
@@ -93,8 +95,8 @@ public class NewOQProgressActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        tempArl= (ArrayList<NewOQActivity.TempProAmt> )getIntent().getSerializableExtra("tempArl");
-        tempArlSpent= (ArrayList<NewOQActivity.TempSpent> )getIntent().getSerializableExtra("tempArlSpent");
+        tempArl= (ArrayList<TempProAmt> )getIntent().getSerializableExtra("tempArl");
+        tempArlSpent= (ArrayList<TempSpent> )getIntent().getSerializableExtra("tempArlSpent");
         arlUriPhoto= (ArrayList<Uri> )getIntent().getParcelableExtra("arlUriPhoto");
         strPostText=getIntent().getStringExtra("strPostText");
         mCurrency=getIntent().getStringExtra("mCurrency");
@@ -564,7 +566,7 @@ public class NewOQProgressActivity extends BaseActivity {
 
         if (mDoWhat.equals(OQT.DoWhat.GET)) {
 
-            for (NewOQActivity.TempProAmt t : tempArl) {
+            for (TempProAmt t : tempArl) {
 
                 final String oid = App.fbaseDbRef
                         .child("push").push().getKey();

@@ -265,14 +265,14 @@ public class SMSListActivity extends BaseActivity
                     vh.checkBoxJack.setChecked(true);
                     vh.tvContent.setText(body);
                     Log.d(TAG, "body " + body);
-//                    vh.tvContent
+//                    vh.tvAfterallContent
 //                            .setLayoutParams(new LinearLayout.LayoutParams(
 //                                    LinearLayout.LayoutParams.MATCH_PARENT,
 //                                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
-//                    ViewGroup.LayoutParams params =  vh.tvContent.getLayoutParams();
+//                    ViewGroup.LayoutParams params =  vh.tvAfterallContent.getLayoutParams();
 //                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//                    vh.tvContent.setLayoutParams(params);
+//                    vh.tvAfterallContent.setLayoutParams(params);
                     vh.tvContent.setMaxLines(Integer.MAX_VALUE);
 
                 } else {

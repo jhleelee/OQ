@@ -130,6 +130,7 @@ public class ChatDBCP extends ContentProvider {
         cv.put(ChatDB_OpenHelper.RoomId, chat.getRid());
         cv.put(ChatDB_OpenHelper.TIMESTAMP, chat.getTs());
         cv.put(ChatDB_OpenHelper.SenderId, chat.getSid());
+        cv.put(ChatDB_OpenHelper.SenderName, chat.getSname());
         cv.put(ChatDB_OpenHelper.TXT, chat.getTxt());
         cv.put(ChatDB_OpenHelper.ATTACH_SRC, chat.getAtch());
         cv.put(ChatDB_OpenHelper.ATTACH_TYPE, chat.getAtcht());

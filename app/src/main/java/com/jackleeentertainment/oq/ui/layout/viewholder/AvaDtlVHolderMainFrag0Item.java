@@ -30,7 +30,7 @@ public class AvaDtlVHolderMainFrag0Item extends RecyclerView.ViewHolder {
         tvAva = (TextView) mView.findViewById(R.id.tvAva);
         ivAva = (ImageView) mView.findViewById(R.id.ivAva);
         tvName = (TextView) mView.findViewById(R.id.tvName);
-        tvResultAmmount = (TextView) mView.findViewById(R.id.tvResultAmmount);
+        tvResultAmmount = (TextView) mView.findViewById(R.id.tvProfileActivityTs);
         tvResultAmmount2 = (TextView) mView.findViewById(R.id.tvResultAmmount2);
         tvContent = (TextView) mView.findViewById(R.id.tvContent);
         tvTs= (TextView) mView.findViewById(R.id.tvTs);
